@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "lint": "next lint",
     "prepare": "husky",
-    "commit": "npx cz",
+    "commit": "next lint && npx cz",
     "check-updates": "npx npm-check-updates"
   },
   "dependencies": {
@@ -17,6 +17,8 @@
     "@tanstack/react-query": "^5.67.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "nextra": "^4.2.16",
+    "nextra-theme-docs": "^4.2.16",
     "deepmerge": "^4.3.1",
     "lucide-react": "^0.479.0",
     "next": "15.2.1",
