@@ -5,6 +5,10 @@ import { NextConfig } from "next";
 const nextConfig: NextConfig = {};
 
 const withNextra = nextra({
+  latex: true,
+  search: {
+    codeblocks: true,
+  },
   contentDirBasePath: "/docs",
 });
 
