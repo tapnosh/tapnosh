@@ -6,9 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "format": "prettier --write .",
     "lint": "next lint",
     "prepare": "husky",
-    "commit": "npx cz"
+    "commit": "npx cz",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+    "check-updates": "npx npm-check-updates"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
@@ -21,6 +24,7 @@
     "next-intl": "^3.26.5",
     "nextra": "^4.2.16",
     "nextra-theme-docs": "^4.2.16",
+    "prettier": "^3.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.2",
@@ -40,6 +44,7 @@
     "eslint-config-next": "15.2.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
+    "pagefind": "1.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
