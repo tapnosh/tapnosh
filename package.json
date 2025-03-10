@@ -10,7 +10,6 @@
     "lint": "next lint",
     "prepare": "husky",
     "commit": "npx cz",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
     "check-updates": "npx npm-check-updates"
   },
   "dependencies": {
