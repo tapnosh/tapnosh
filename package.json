@@ -11,7 +11,8 @@
     "prepare": "husky",
     "test:e2e": "playwright test",
     "commit": "next lint && npx cz",
-    "check-updates": "npx npm-check-updates"
+    "check-updates": "npx npm-check-updates",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
