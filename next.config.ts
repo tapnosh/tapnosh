@@ -9,7 +9,6 @@ const withNextra = nextra({
   search: {
     codeblocks: true,
   },
-  contentDirBasePath: "/docs",
 });
 
 const withNextIntl = createNextIntlPlugin("./translations/config.ts");
