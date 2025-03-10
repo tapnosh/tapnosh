@@ -15,7 +15,7 @@ export default async function RootLayout({
     <Layout
       navbar={navbar}
       pageMap={await getPageMap()}
-      docsRepositoryBase="https://github.com/tapnosh/tapnosh"
+      docsRepositoryBase="https://github.com/tapnosh/tapnosh/tree/main"
       footer={footer}
     >
       {children}
