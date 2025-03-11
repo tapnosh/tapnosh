@@ -1,8 +1,23 @@
 @layer base {
   h1 {
-    font-size: var(--text-2xl);
+    @apply text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-display-median font-black leading-6 sm:leading-8 md:leading-9 lg:leading-11 xl:leading-14;
   }
   h2 {
-    font-size: var(--text-xl);
+    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-display font-bold;
+  }
+  h3 {
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-display font-medium;
+  }
+  h4 {
+    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl font-display font-medium;
+  }
+  h5,
+  h6 {
+    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl font-display font-light;
+    color: var(--muted-foreground);
+  }
+
+  .font-logo {
+    @apply font-display-median font-black tracking-tight;
   }
 }

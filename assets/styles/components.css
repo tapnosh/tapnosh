@@ -1,4 +1,7 @@
 @layer components {
+  .section {
+    @apply max-w-6xl w-full px-4 md:px-8 pt-4 pb-6 lg:px-16;
+  }
   .card {
     background-color: var(--color-white);
     border-radius: var(--rounded-lg);
