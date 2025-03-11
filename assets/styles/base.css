@@ -6,7 +6,7 @@
     @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-display font-bold;
   }
   h3 {
-    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-display font-medium;
+    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-display font-bold;
   }
   h4 {
     @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl font-display font-medium;

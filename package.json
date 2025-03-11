@@ -13,6 +13,7 @@
     "check-updates": "npx npm-check-updates"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-collapsible": "^1.1.3",
     "@radix-ui/react-dialog": "^1.1.6",

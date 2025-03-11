@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Check, ChevronDown, Globe } from "lucide-react";
 import {
   DropdownMenu,
@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { setUserLocale } from "@/services/locale";
+import { getUserLocale, setUserLocale } from "@/services/locale";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -26,10 +26,28 @@ const languages: Language[] = [
   { code: "pl", name: "Polski", flag: "🇵🇱" },
 ] as const;
 
+// Get the initial language asynchronously
+const getInitialLanguage = async (): Promise<Language> => {
+  const localeCode = await getUserLocale();
+  return languages.find((lang) => lang.code === localeCode) || languages[0];
+};
+
 export function LanguageSelector() {
+  // Use a loading state while fetching the initial language
+  const [loading, setLoading] = useState(true);
   const [currentLanguage, setCurrentLanguage] = useState<Language>(
     languages[0]
   );
+
+  useLayoutEffect(() => {
+    const initializeLanguage = async () => {
+      const initialLanguage = await getInitialLanguage();
+      setCurrentLanguage(initialLanguage);
+      setLoading(false);
+    };
+
+    initializeLanguage();
+  }, []);
 
   const handleLanguageChange = (language: Language) => {
     setCurrentLanguage(language);
@@ -43,7 +61,7 @@ export function LanguageSelector() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton>
               <Globe className="h-4 w-4" />
-              <span>{currentLanguage.name}</span>
+              <span>{loading ? "Loading..." : currentLanguage.name}</span>
               <ChevronDown className="h-3 w-3 opacity-50" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
