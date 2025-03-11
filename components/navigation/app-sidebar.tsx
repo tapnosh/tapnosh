@@ -16,7 +16,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const data = {
   user: {
@@ -135,8 +134,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const pathname = usePathname();
-  console.log(pathname);
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>

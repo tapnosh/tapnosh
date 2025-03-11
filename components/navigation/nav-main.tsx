@@ -46,7 +46,6 @@ export function NavMain({
             key={item.title}
             asChild
             defaultOpen={pathname.includes(item.url)}
-            open={pathname.includes(item.url)}
           >
             <SidebarMenuItem>
               <SidebarMenuButton
