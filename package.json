@@ -10,8 +10,7 @@
     "lint": "next lint",
     "prepare": "husky",
     "commit": "next lint && npx cz",
-    "check-updates": "npx npm-check-updates",
-    "test:e2e": "playwright test"
+    "check-updates": "npx npm-check-updates"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
@@ -34,7 +33,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@playwright/test": "^1.51.0",
     "@tailwindcss/postcss": "^4",
     "@types/deepmerge": "^2.2.3",
     "@types/node": "^22",
