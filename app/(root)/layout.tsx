@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Head as NextraHead } from "nextra/components";
-import "../assets/styles/globals.css";
+import "@/assets/styles/globals.css";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import Head from "next/head";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +32,10 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir="ltr">
+      <Head>
+        <link rel="icon" href="/favicon.svg" sizes="any" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </Head>
       <NextraHead
         color={{
           hue: { dark: 28, light: 357 },
@@ -40,9 +46,16 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
