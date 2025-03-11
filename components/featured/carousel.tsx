@@ -1,13 +1,11 @@
 "use client";
 
 import type React from "react";
-
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useSidebar } from "../ui/sidebar";
 
 interface CarouselProps {
   items: {
@@ -52,38 +50,59 @@ export default function Carousel({
   autoPlayInterval = 5000,
   indicators = false,
 }: CarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Number of real items and visible items (3) at a time.
+  const n = items.length;
+  const visibleCount = 4;
+  // Create clones: prepend the last 3 and append the first 3.
+  const extendedItems = [
+    ...items.slice(-visibleCount),
+    ...items,
+    ...items.slice(0, visibleCount),
+  ];
+
+  // Set initial index so that the visible slides are real items.
+  const [currentIndex, setCurrentIndex] = useState(visibleCount);
+  // Ref to always hold the latest index.
+  const currentIndexRef = useRef(currentIndex);
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
-  const { isMobile } = useSidebar();
-
-  // Create extended items array for infinite scroll effect
-  const extendedItems = [
-    ...items.slice(items.length),
-    ...items,
-    ...items.slice(0, 1),
-  ];
+  // Measure the width of a slide using getBoundingClientRect for accuracy.
+  useEffect(() => {
+    const updateSlideWidth = () => {
+      if (carouselRef.current && carouselRef.current.children.length > 0) {
+        const firstSlide = carouselRef.current.children[0] as HTMLElement;
+        const rect = firstSlide.getBoundingClientRect();
+        setSlideWidth(rect.width);
+      }
+    };
+    updateSlideWidth();
+    window.addEventListener("resize", updateSlideWidth);
+    return () => window.removeEventListener("resize", updateSlideWidth);
+  }, []);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
   };
 
   const nextSlide = () => {
-    const newIndex = (currentIndex + 1) % (items.length + 1);
-    goToSlide(newIndex);
+    goToSlide(currentIndexRef.current + 1);
   };
 
   const prevSlide = () => {
-    const newIndex = (currentIndex + items.length) % (items.length + 1);
-    goToSlide(newIndex);
+    goToSlide(currentIndexRef.current - 1);
   };
 
-  // Handle touch events
+  // --- Touch events ---
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
     setTouchEnd(null);
@@ -94,19 +113,13 @@ export default function Carousel({
   };
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (touchStart === null || touchEnd === null || slideWidth === 0) return;
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe) {
-      nextSlide();
-    } else if (isRightSwipe) {
-      prevSlide();
-    }
+    const movedSlides = Math.round(distance / slideWidth);
+    goToSlide(currentIndexRef.current + movedSlides);
   };
 
-  // Handle mouse drag events
+  // --- Mouse drag events ---
   const onMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setStartX(e.clientX);
@@ -117,20 +130,14 @@ export default function Carousel({
 
   const onMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
-    const currentX = e.clientX;
-    const diff = currentX - startX;
+    const diff = e.clientX - startX;
     setTranslateX(diff);
   };
 
   const onMouseUp = () => {
-    if (!isDragging) return;
-
-    if (translateX > 100) {
-      prevSlide();
-    } else if (translateX < -100) {
-      nextSlide();
-    }
-
+    if (!isDragging || slideWidth === 0) return;
+    const movedSlides = Math.round(translateX / slideWidth);
+    goToSlide(currentIndexRef.current - movedSlides);
     setIsDragging(false);
     setTranslateX(0);
     if (carouselRef.current) {
@@ -148,65 +155,53 @@ export default function Carousel({
     }
   };
 
-  // Auto play functionality
+  // --- Auto play ---
   useEffect(() => {
     let interval: NodeJS.Timeout;
-
     if (autoPlay) {
       interval = setInterval(() => {
         nextSlide();
       }, autoPlayInterval);
     }
-
     return () => {
       if (interval) clearInterval(interval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex, autoPlay]);
+  }, [autoPlay, autoPlayInterval]);
 
-  // Handle transition for infinite scroll
+  // --- Infinite loop handling ---
   useEffect(() => {
     const handleTransitionEnd = () => {
-      if (currentIndex === items.length + 1) {
-        // If we're at the clone of the first slide, jump to the actual first slide without transition
+      // Jump from the appended clone region back to real slides.
+      if (currentIndex >= visibleCount + n) {
+        if (carouselRef.current) {
+          carouselRef.current.style.transition = "none";
+        }
+        setCurrentIndex(currentIndex - n);
         setTimeout(() => {
           if (carouselRef.current) {
-            carouselRef.current.style.transition = "none";
-            setCurrentIndex(0);
-            // Re-enable transition after the jump
-            setTimeout(() => {
-              if (carouselRef.current) {
-                carouselRef.current.style.transition =
-                  "transform 0.5s ease-in-out";
-              }
-            }, 50);
+            carouselRef.current.style.transition = "transform 0.5s ease-in-out";
           }
-        }, 0);
-      } else if (currentIndex === -1) {
-        // If we're at the clone of the last slide, jump to the actual last slide without transition
+        }, 50);
+      }
+      // Jump from the prepended clone region forward to real slides.
+      else if (currentIndex < visibleCount) {
+        if (carouselRef.current) {
+          carouselRef.current.style.transition = "none";
+        }
+        setCurrentIndex(currentIndex + n);
         setTimeout(() => {
           if (carouselRef.current) {
-            carouselRef.current.style.transition = "none";
-            setCurrentIndex(items.length);
-            // Re-enable transition after the jump
-            setTimeout(() => {
-              if (carouselRef.current) {
-                carouselRef.current.style.transition =
-                  "transform 0.5s ease-in-out";
-              }
-            }, 50);
+            carouselRef.current.style.transition = "transform 0.5s ease-in-out";
           }
-        }, 0);
+        }, 50);
       }
     };
 
-    // Save the current ref value to avoid stale closures in cleanup function
     const currentElement = carouselRef.current;
-
     if (currentElement) {
       currentElement.addEventListener("transitionend", handleTransitionEnd);
     }
-
     return () => {
       if (currentElement) {
         currentElement.removeEventListener(
@@ -215,19 +210,23 @@ export default function Carousel({
         );
       }
     };
-  }, [currentIndex, items.length]);
+  }, [currentIndex, n, visibleCount]);
 
   return (
     <div className="relative w-full overflow-hidden px-4">
       <div
         ref={carouselRef}
         className={cn(
-          "flex w-full ease-in-out cursor-grab gap-2",
-          isDragging && "cursor-grabbing",
-          !isDragging && "transition-transform duration-500"
+          "flex ease-in-out",
+          isDragging
+            ? "cursor-grabbing"
+            : "cursor-grab transition-transform duration-500"
         )}
         style={{
-          transform: `translateX(calc(-${currentIndex * (100 / (isMobile ? 1.5 : 3.5))}% + ${translateX}px))`,
+          // Round the computed translate value to avoid fractional pixel shifts.
+          transform: slideWidth
+            ? `translateX(-${Math.round(currentIndex * slideWidth - translateX)}px)`
+            : "none",
         }}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
@@ -240,7 +239,7 @@ export default function Carousel({
         {extendedItems.map((item, index) => (
           <div
             key={`${item.id}-${index}`}
-            className="min-w-[66.666%] md:min-w-[40%] lg:min-w-[28.571%] h-[40vh] md:h-[45vh] lg:h-[50vh] relative flex-shrink-0"
+            className="min-w-[66.666%] md:min-w-[40%] lg:min-w-[28.571%] h-[40vh] md:h-[45vh] lg:h-[50vh] relative flex-shrink-0 px-2"
           >
             <div className="w-full h-full relative rounded-lg overflow-hidden">
               <Image
@@ -248,7 +247,7 @@ export default function Carousel({
                 alt={item.title}
                 fill
                 className="object-cover"
-                priority={index === currentIndex + 1}
+                priority={index === currentIndex}
               />
               <div className="absolute inset-0 bg-black/30 flex items-end">
                 <div className="p-4 text-white">
@@ -288,10 +287,10 @@ export default function Carousel({
           {items.map((_, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
+              onClick={() => goToSlide(index + visibleCount)}
               className={cn(
                 "w-3 h-3 rounded-full transition-all",
-                currentIndex === index
+                currentIndex - visibleCount === index
                   ? "bg-white scale-125"
                   : "bg-white/50 hover:bg-white/80"
               )}
