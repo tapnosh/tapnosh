@@ -1,76 +1,76 @@
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-Regular.otf") format("opentype");
+  src: url("/fonts/GTUltra-Regular.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-RegularItalic.otf") format("opentype");
+  src: url("/fonts/GTUltra-RegularItalic.otf") format("opentype");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-Light.otf") format("opentype");
+  src: url("/fonts/GTUltra-Light.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-LightItalic.otf") format("opentype");
+  src: url("/fonts/GTUltra-LightItalic.otf") format("opentype");
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-Thin.otf") format("opentype");
+  src: url("/fonts/GTUltra-Thin.otf") format("opentype");
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-ThinItalic.otf") format("opentype");
+  src: url("/fonts/GTUltra-ThinItalic.otf") format("opentype");
   font-weight: 200;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-Bold.otf") format("opentype");
+  src: url("/fonts/GTUltra-Bold.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-BoldItalic.otf") format("opentype");
+  src: url("/fonts/GTUltra-BoldItalic.otf") format("opentype");
   font-weight: bold;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-Black.otf") format("opentype");
+  src: url("/fonts/GTUltra-Black.otf") format("opentype");
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-BlackItalic.otf") format("opentype");
+  src: url("/fonts/GTUltra-BlackItalic.otf") format("opentype");
   font-weight: 900;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra";
-  src: url("@/assets/fonts/GTUltra-Ultra.otf") format("opentype");
+  src: url("/fonts/GTUltra-Ultra.otf") format("opentype");
   font-weight: 950;
   font-style: normal;
 }
@@ -78,77 +78,77 @@
 /* GT Ultra Fine */
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-Regular.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-Regular.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-RegularItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-RegularItalic.otf") format("opentype");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-Light.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-Light.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-LightItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-LightItalic.otf") format("opentype");
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-Thin.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-Thin.otf") format("opentype");
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-ThinItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-ThinItalic.otf") format("opentype");
   font-weight: 200;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-Bold.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-Bold.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-BoldItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-BoldItalic.otf") format("opentype");
   font-weight: bold;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-Black.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-Black.otf") format("opentype");
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-BlackItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-BlackItalic.otf") format("opentype");
   font-weight: 900;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Fine";
-  src: url("@/assets/fonts/GTUltraFine-Ultra.otf") format("opentype");
+  src: url("/fonts/GTUltraFine-Ultra.otf") format("opentype");
   font-weight: 950;
   font-style: normal;
 }
@@ -156,77 +156,77 @@
 /* GT Ultra Median */
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-Regular.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-Regular.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-RegularItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-RegularItalic.otf") format("opentype");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-Light.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-Light.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-LightItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-LightItalic.otf") format("opentype");
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-Thin.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-Thin.otf") format("opentype");
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-ThinItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-ThinItalic.otf") format("opentype");
   font-weight: 200;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-Bold.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-Bold.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-BoldItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-BoldItalic.otf") format("opentype");
   font-weight: bold;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-Black.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-Black.otf") format("opentype");
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-BlackItalic.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-BlackItalic.otf") format("opentype");
   font-weight: 900;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GT Ultra Median";
-  src: url("@/assets/fonts/GTUltraMedian-Ultra.otf") format("opentype");
+  src: url("/fonts/GTUltraMedian-Ultra.otf") format("opentype");
   font-weight: 950;
   font-style: normal;
 }
