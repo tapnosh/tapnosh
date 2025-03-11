@@ -9,7 +9,6 @@
     "format": "prettier --write .",
     "lint": "next lint",
     "prepare": "husky",
-    "test:e2e": "playwright test",
     "commit": "next lint && npx cz",
     "check-updates": "npx npm-check-updates",
     "test:e2e": "playwright test"
