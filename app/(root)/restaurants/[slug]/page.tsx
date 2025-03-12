@@ -1,6 +1,12 @@
+"use client";
 import Carousel from "@/components/featured/carousel";
+import { AddToTapDrawer } from "@/components/restaurant/menu/add-to-tap-drawer";
+import { RestaurantMenuItem } from "@/components/restaurant/menu/menu-item";
+import { useState } from "react";
 
 export default function Restaurant() {
+  const [open, setOpen] = useState(false);
+
   const carouselItems = [
     {
       id: 1,
@@ -29,6 +35,8 @@ export default function Restaurant() {
     },
   ];
 
+  const ingredients = ["chicken", "tomato", "onion", "garlic", "ginger"];
+
   return (
     <>
       <section className="section">
@@ -39,6 +47,24 @@ export default function Restaurant() {
         <h3>Chef Picks</h3>
       </section>
       <Carousel items={carouselItems} />
+
+      <section className="section mt-8">
+        <h3 className="mb-2">Menu</h3>
+
+        <article className="flex flex-col gap-4">
+          {Array(5)
+            .fill(null)
+            .map((_, index) => (
+              <RestaurantMenuItem
+                key={index}
+                ingredients={ingredients}
+                setOpen={setOpen}
+              />
+            ))}
+        </article>
+      </section>
+
+      <AddToTapDrawer setOpen={setOpen} open={open} />
     </>
   );
 }
