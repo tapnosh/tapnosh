@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -9,10 +10,12 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { useOrder } from "@/context/OrderContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Beef, ShoppingBasket } from "lucide-react";
 import { Dispatch, useState } from "react";
 
-const snapPoints = ["148px", "355px", 1];
+const snapPoints = ["148px", "355px", 0.9];
 
 export const AddToTapDrawer = ({
   open,
@@ -22,6 +25,7 @@ export const AddToTapDrawer = ({
   setOpen: Dispatch<boolean>;
 }) => {
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+  const { items } = useOrder();
 
   const isMobile = useIsMobile();
 
@@ -33,15 +37,49 @@ export const AddToTapDrawer = ({
       snapPoints={isMobile ? snapPoints : []}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
-      fadeFromIndex={0}
+      fadeFromIndex={1}
     >
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+          <DrawerTitle className="text-header font-black">My Tap</DrawerTitle>
+          <DrawerDescription>
+            This is a summary of your order.
+          </DrawerDescription>
         </DrawerHeader>
+        <article className="p-4 pb-0">
+          {items.map((item) => {
+            return (
+              <div key={item.id} className="flex justify-between items-center">
+                <div className="flex gap-4 py-2 flex-1 justify-between items-center">
+                  <div className="flex flex-col">
+                    <h6>{item.name}</h6>
+                    <span className="text-muted-foreground mb-1 text-wrap text-sm">
+                      {item.ingredients.join(" • ")}
+                    </span>
+                    <div className="flex gap-1">
+                      {item.tags.map((tag) => (
+                        <Badge key={tag} className="badge badge-destructive">
+                          <Beef /> {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <h6 className="font-display font-bold mt-1 text-primary">
+                      {(item.price * item.quantity).toLocaleString("pl-PL", {
+                        style: "currency",
+                        currency: item.currency,
+                      })}
+                    </h6>
+                  </div>
+                  <span className="font-black">{item.quantity}</span>
+                </div>
+              </div>
+            );
+          })}
+        </article>
         <DrawerFooter>
-          <Button>Submit</Button>
+          <Button>
+            <ShoppingBasket /> Checkout
+          </Button>
           {/* <DrawerClose>
             <Button variant="outline">Cancel</Button>
           </DrawerClose> */}

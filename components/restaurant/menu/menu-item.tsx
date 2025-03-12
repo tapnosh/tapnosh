@@ -1,46 +1,55 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Beef, Wheat } from "lucide-react";
+import { Beef } from "lucide-react";
 import { Dispatch } from "react";
+import { MenuItem } from "@/types/menu";
+import { useOrder } from "@/context/OrderContext";
 
 export const RestaurantMenuItem = ({
-  ingredients,
+  item,
   setOpen,
 }: {
-  ingredients: string[];
+  item: MenuItem;
   setOpen: Dispatch<boolean>;
 }) => {
+  const { addItem } = useOrder();
+
   return (
     <Button
       variant="ghost"
       className="h-auto justify-between items-start -mx-4"
+      onClick={() => {
+        addItem(item);
+        setOpen(true);
+      }}
       asChild
-      onClick={() => setOpen(true)}
     >
       <div className="flex gap-4 py-4 flex-1">
         <div className="flex flex-col max-w-sm">
-          <h4 className="text-header">Tikka masala</h4>
-          <p className="text-wrap leading-4">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          </p>
+          <h4 className="text-header text-wrap">{item.name}</h4>
+          <p className="text-wrap leading-4">{item.name}</p>
           <span className="text-muted-foreground mb-1 text-wrap">
-            {ingredients.join(" • ")}
+            {item.ingredients.join(" • ")}
           </span>
           <div className="flex gap-1">
-            <Badge variant="destructive">
-              <Beef /> Meat
-            </Badge>
-            <Badge variant="green">
-              <Wheat /> Gluten
-            </Badge>
+            {item.tags.map((tag) => (
+              <Badge key={tag} variant="destructive">
+                <Beef /> {tag}
+              </Badge>
+            ))}
           </div>
-          <h6 className="font-display font-bold mt-1 text-primary">34.00PLN</h6>
+          <h6 className="font-display font-bold mt-1 text-primary">
+            {item.price.toLocaleString("pl-PL", {
+              style: "currency",
+              currency: item.currency,
+            })}
+          </h6>
         </div>
 
-        <div className="relative aspect-square min-h-32 min-w-32 sm:min-h-36 sm:min-w-36 rounded-sm overflow-clip">
+        <div className="relative aspect-square min-h-28 min-w-28 sm:min-h-36 sm:min-w-36 rounded-sm overflow-clip">
           <Image
-            src="https://picsum.photos/500"
+            src={item.image}
             alt="Tikka masala"
             fill
             className="object-cover"

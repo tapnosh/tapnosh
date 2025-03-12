@@ -4,6 +4,7 @@
 @import "./fonts.css";
 @import "./components.css";
 @import "./base.css";
+@import "./overrides.css";
 
 @custom-variant dark (&:is(.dark *));
 
