@@ -99,12 +99,7 @@ const Carousel = ({
   return (
     <div className={cn(className)}>
       <div className="overflow-clip" ref={emblaRef}>
-        <div
-          className="flex touch-pan-y touch-pinch-zoom"
-          style={{
-            marginLeft: `calc(-1 * ${slideSpacing})`,
-          }}
-        >
+        <div className="flex touch-pan-y touch-pinch-zoom">
           {slides.map((index) => (
             <div
               className={cn("transform-3d flex min-w-0")}
