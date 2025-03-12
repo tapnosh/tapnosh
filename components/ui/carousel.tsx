@@ -114,7 +114,7 @@ const Carousel = ({
               }}
               key={index}
             >
-              <div className="rounded-lg overflow-clip h-full">
+              <div className="rounded-lg overflow-clip h-full w-full">
                 <div className="relative h-full w-full flex justify-center">
                   <Image
                     className="object-cover w-full block max-w-none embla__parallax__layer scale-125"
