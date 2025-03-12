@@ -65,7 +65,7 @@ export function LanguageSelector() {
               <ChevronDown className="h-3 w-3 opacity-50" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" side="right" className="w-40">
+          <DropdownMenuContent align="end" side="top" className="w-40">
             {languages.map((language) => (
               <DropdownMenuItem
                 key={language.code}
