@@ -38,7 +38,7 @@ export const RestaurantMenuItem = ({
           <h6 className="font-display font-bold mt-1 text-primary">34.00PLN</h6>
         </div>
 
-        <div className="relative aspect-square h-32 sm:h-36 rounded-sm overflow-clip">
+        <div className="relative aspect-square min-h-32 min-w-32 sm:min-h-36 sm:min-w-36 rounded-sm overflow-clip">
           <Image
             src="https://picsum.photos/500"
             alt="Tikka masala"
