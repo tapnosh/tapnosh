@@ -2,13 +2,11 @@
 import { OrderProvider } from "@/context/OrderContext";
 import React from "react";
 
-interface RestaurantLayoutProps {
+interface LayoutProps {
   children: React.ReactNode;
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
-export default function RestaurantLayout({ children }: RestaurantLayoutProps) {
+export default function RestaurantLayout({ children }: LayoutProps) {
   return <OrderProvider>{children}</OrderProvider>;
 }
