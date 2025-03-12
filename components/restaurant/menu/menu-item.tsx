@@ -18,13 +18,13 @@ export const RestaurantMenuItem = ({
       asChild
       onClick={() => setOpen(true)}
     >
-      <div className="flex gap-2 py-4 flex-1">
+      <div className="flex gap-4 py-4 flex-1">
         <div className="flex flex-col max-w-sm">
           <h4 className="text-header">Tikka masala</h4>
           <p className="text-wrap leading-4">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit.
           </p>
-          <span className="text-muted-foreground mb-1">
+          <span className="text-muted-foreground mb-1 text-wrap">
             {ingredients.join(" • ")}
           </span>
           <div className="flex gap-1">
@@ -38,7 +38,7 @@ export const RestaurantMenuItem = ({
           <h6 className="font-display font-bold mt-1 text-primary">34.00PLN</h6>
         </div>
 
-        <div className="relative aspect-square w-36 h-36 rounded-sm overflow-clip">
+        <div className="relative aspect-square h-28 w-28 sm:w-36 sm:h-36 rounded-sm overflow-clip">
           <Image
             src="https://picsum.photos/500"
             alt="Tikka masala"
