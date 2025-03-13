@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/drawer";
 import { useOrder } from "@/context/OrderContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 import { Beef, ShoppingBasket } from "lucide-react";
 import { Dispatch, useState } from "react";
 
-const snapPoints = ["148px", "355px", 0.9];
+const snapPoints = ["355px", 1];
 
 export const AddToTapDrawer = ({
   open,
@@ -37,7 +38,7 @@ export const AddToTapDrawer = ({
       snapPoints={isMobile ? snapPoints : []}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
-      fadeFromIndex={1}
+      fadeFromIndex={0}
     >
       <DrawerContent>
         <DrawerHeader>
@@ -46,7 +47,12 @@ export const AddToTapDrawer = ({
             This is a summary of your order.
           </DrawerDescription>
         </DrawerHeader>
-        <article className="p-4 pb-0">
+        <article
+          className={cn("p-4 pb-0", {
+            "overflow-y-auto": snap === 1,
+            "overflow-hidden": snap !== 1,
+          })}
+        >
           {items.map((item) => {
             return (
               <div key={item.id} className="flex justify-between items-center">
@@ -80,9 +86,6 @@ export const AddToTapDrawer = ({
           <Button>
             <ShoppingBasket /> Checkout
           </Button>
-          {/* <DrawerClose>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose> */}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
