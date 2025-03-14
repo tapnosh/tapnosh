@@ -262,15 +262,14 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-8 w-8", className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      <PanelLeftIcon />
+      <PanelLeftIcon className="size-6" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
@@ -677,12 +676,23 @@ function SidebarMenuSubButton({
   size = "md",
   isActive = false,
   className,
+  onClick,
   ...props
 }: React.ComponentProps<"a"> & {
   asChild?: boolean;
   size?: "sm" | "md";
   isActive?: boolean;
 }) {
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    console.log("onClick");
+    onClick?.(event);
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   const Comp = asChild ? Slot : "a";
 
   return (
@@ -699,6 +709,7 @@ function SidebarMenuSubButton({
         "group-data-[collapsible=icon]:hidden",
         className
       )}
+      onClick={handleClick}
       {...props}
     />
   );

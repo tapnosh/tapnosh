@@ -22,6 +22,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import getConfig from "next/config";
+import { ScanQrCode } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -92,7 +93,7 @@ export default async function RootLayout({
               <AppSidebar />
               <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2 sticky top-0 z-10 bg-background rounded-2xl">
-                  <div className="flex items-center gap-2 px-4">
+                  <div className="flex items-center gap-2 px-4 flex-1">
                     <SidebarTrigger className="-ml-1" />
                     <Separator orientation="vertical" className="mr-2 h-4" />
                     <Breadcrumb>
@@ -108,6 +109,8 @@ export default async function RootLayout({
                         </BreadcrumbItem>
                       </BreadcrumbList>
                     </Breadcrumb>
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                    <ScanQrCode className="ml-auto" />
                   </div>
                 </header>
                 {children}
