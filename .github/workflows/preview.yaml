@@ -10,6 +10,7 @@ on:
       - main
       - "dependabot/**"
       - "*dependabot*"
+      - "gh-readonly-queue*"
 
 jobs:
   #   Test:
