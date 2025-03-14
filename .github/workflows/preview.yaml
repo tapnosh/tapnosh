@@ -76,7 +76,7 @@ jobs:
             })
 
             // Set issue number for following calls from context (if on pull request event) or from above variable.
-            const issueNumber = context.issue.number || pullRequests.data[0].number
+            const issueNumber = context?.issue?.number || pullRequests?.data[0]?.number
 
             // Retrieve existing bot comments for the PR
             const {data: comments} = await github.rest.issues.listComments({
