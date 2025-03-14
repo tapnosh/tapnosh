@@ -21,6 +21,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import getConfig from "next/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,6 +54,8 @@ export const metadata: Metadata = {
     ],
   },
 };
+
+const { publicRuntimeConfig } = getConfig();
 
 export default async function RootLayout({
   children,
@@ -110,6 +113,7 @@ export default async function RootLayout({
                 {children}
               </SidebarInset>
             </SidebarProvider>
+            <small>{publicRuntimeConfig?.version}</small>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

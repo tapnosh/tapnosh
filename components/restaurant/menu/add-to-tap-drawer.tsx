@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { Beef, ShoppingBasket } from "lucide-react";
 import { Dispatch, useState } from "react";
 
-const snapPoints = ["355px", 1];
+const snapPoints = ["148px", 1];
 
 export const AddToTapDrawer = ({
   open,
@@ -39,6 +39,7 @@ export const AddToTapDrawer = ({
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
       fadeFromIndex={0}
+      modal={!isMobile}
     >
       <DrawerContent>
         <DrawerHeader>

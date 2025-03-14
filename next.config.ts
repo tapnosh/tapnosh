@@ -1,8 +1,13 @@
 import nextra from "nextra";
 import createNextIntlPlugin from "next-intl/plugin";
 import { NextConfig } from "next";
+import packageJson from "./package.json" assert { type: "json" };
+const { version } = packageJson;
 
 const nextConfig: NextConfig = {
+  publicRuntimeConfig: {
+    version,
+  },
   images: {
     remotePatterns: [
       {

@@ -115,7 +115,7 @@ const Carousel = ({
                     className="object-cover w-full block max-w-none embla__parallax__layer scale-125"
                     style={{
                       height: slideHeight,
-                      flex: `0 0 calc(115% + ${slideSpacing} * 2));`,
+                      flex: `0 0 calc(115% + ${slideSpacing} * 2))`,
                     }}
                     width={600}
                     height={350}
