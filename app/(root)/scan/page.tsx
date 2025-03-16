@@ -16,11 +16,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Restaurants() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [tapnoshCode, setTapnoshCode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -55,8 +56,24 @@ export default function Restaurants() {
 
     setTimeout(() => {
       router.push(`/order/restaurant-name/${code}`);
-    }, 1000);
+    }, 100);
   };
+
+  useLayoutEffect(() => {
+    const codeFromUrl = searchParams.get("tapnoshId");
+
+    if (codeFromUrl) {
+      if (validateCode(codeFromUrl)) {
+        setTapnoshCode(codeFromUrl);
+        handleAccept(codeFromUrl);
+      } else {
+        toast.error("Invalid code", {
+          description: "The code in the URL is invalid. Please try again.",
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <>
