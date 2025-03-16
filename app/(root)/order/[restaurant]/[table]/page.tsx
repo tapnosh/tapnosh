@@ -6,9 +6,11 @@ import { useState } from "react";
 import { Carousel } from "@/components/ui/carousel";
 import { EmblaOptionsType } from "embla-carousel";
 import { SampleDishes } from "@/mock/menu/dishes";
+import { MenuItem } from "@/types/menu";
 
-export default function Restaurant() {
+export default function Order() {
   const [open, setOpen] = useState(false);
+  const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
 
   const SLIDE_COUNT = 5;
   const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
@@ -16,6 +18,11 @@ export default function Restaurant() {
     dragFree: true,
     loop: true,
     align: "start",
+  };
+
+  const handleClick = (item: MenuItem) => {
+    setMenuItem(item);
+    setOpen(true);
   };
 
   return (
@@ -39,12 +46,16 @@ export default function Restaurant() {
 
         <article className="flex flex-col gap-4">
           {SampleDishes.map((dish) => (
-            <RestaurantMenuItem key={dish.id} item={dish} setOpen={setOpen} />
+            <RestaurantMenuItem
+              key={dish.id}
+              item={dish}
+              onClick={handleClick}
+            />
           ))}
         </article>
       </section>
 
-      <AddToTapDrawer setOpen={setOpen} open={open} />
+      <AddToTapDrawer setOpen={setOpen} open={open} menuItem={menuItem} />
     </>
   );
 }

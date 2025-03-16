@@ -1,3 +1,5 @@
+"use client";
+
 import React, { createContext, useState, useContext, ReactNode } from "react";
 import { MenuItem } from "@/types/menu";
 
@@ -7,7 +9,7 @@ type OrderItem = MenuItem & {
 
 interface OrderContextType {
   items: OrderItem[];
-  addItem: (item: Omit<OrderItem, "quantity">) => void;
+  addItem: (item: Omit<OrderItem, "quantity">, quantity?: number) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearOrder: () => void;
@@ -20,19 +22,19 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<OrderItem[]>([]);
 
-  const addItem = (item: Omit<OrderItem, "quantity">) => {
+  const addItem = (item: Omit<OrderItem, "quantity">, quantity: number = 1) => {
     setItems((currentItems) => {
       const existingItemIndex = currentItems.findIndex((i) => i.id === item.id);
 
       if (existingItemIndex > -1) {
         const updatedItems = [...currentItems];
         console.log(updatedItems[existingItemIndex]);
-        updatedItems[existingItemIndex].quantity++;
+        updatedItems[existingItemIndex].quantity += quantity;
         console.log(updatedItems[existingItemIndex]);
         return updatedItems;
       }
 
-      return [...currentItems, { ...item, quantity: 1 }];
+      return [...currentItems, { ...item, quantity }];
     });
   };
 
@@ -48,8 +50,8 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
     setItems((currentItems) =>
       currentItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
+        item.id === id ? { ...item, quantity } : item,
+      ),
     );
   };
 
@@ -61,7 +63,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
   const totalPrice = items.reduce(
     (total, item) => total + item.price * item.quantity,
-    0
+    0,
   );
 
   const value = {

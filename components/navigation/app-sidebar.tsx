@@ -1,7 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { BookOpen, Home, LifeBuoy, Send, Utensils } from "lucide-react";
+import {
+  BookOpen,
+  CircleDotDashed,
+  History,
+  Home,
+  LifeBuoy,
+  ListOrdered,
+  Map,
+  Palette,
+  PanelsTopLeft,
+  Send,
+  Utensils,
+} from "lucide-react";
 
 import { LanguageSelector } from "@/components/navigation/nav-language-selector";
 import { NavMain } from "@/components/navigation/nav-main";
@@ -16,6 +28,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { NavProjects } from "./nav-projects";
 
 const data = {
   user: {
@@ -45,15 +58,28 @@ const data = {
       // ],
     },
     {
-      title: "Restaurants",
-      url: "/restaurants",
+      title: "Scan menu",
+      url: "/scan",
       icon: Utensils,
       items: [
         {
-          title: "Some restaurant",
-          url: "/restaurants/some-restaurant",
+          title: "Scan",
+          url: "/scan",
+        },
+        {
+          title: "Menu",
+          url: "/order/some-restaurant/12341234",
+        },
+        {
+          title: "Order Status",
+          url: "/order/some-restaurant/12341234/order-status",
         },
       ],
+    },
+    {
+      title: "Order history",
+      url: "/history",
+      icon: History,
     },
     {
       title: "Documentation",
@@ -114,23 +140,33 @@ const data = {
       icon: Send,
     },
   ],
-  // projects: [
-  //   {
-  //     name: "Design Engineering",
-  //     url: "#",
-  //     icon: Frame,
-  //   },
-  //   {
-  //     name: "Sales & Marketing",
-  //     url: "#",
-  //     icon: PieChart,
-  //   },
-  //   {
-  //     name: "Travel",
-  //     url: "#",
-  //     icon: Map,
-  //   },
-  // ],
+  projects: [
+    {
+      name: "Overview",
+      url: "#",
+      icon: PanelsTopLeft,
+    },
+    {
+      name: "Brand Customization",
+      url: "#",
+      icon: Palette,
+    },
+    {
+      name: "Menu Editor",
+      url: "#",
+      icon: Map,
+    },
+    {
+      name: "Placed Orders",
+      url: "#",
+      icon: ListOrdered,
+    },
+    {
+      name: "Order Tracker", // maybe "Order Status" "Order Flow" "Order Status Board"
+      url: "#",
+      icon: CircleDotDashed,
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -142,7 +178,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-logo text-2xl">tapnosh.</span>
+                  <span className="font-logo truncate text-2xl">tapnosh.</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -151,7 +187,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavProjects projects={data.projects} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
         <LanguageSelector />
       </SidebarContent>

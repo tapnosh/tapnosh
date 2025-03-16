@@ -12,81 +12,166 @@ import {
 } from "@/components/ui/drawer";
 import { useOrder } from "@/context/OrderContext";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import { Beef, ShoppingBasket } from "lucide-react";
+import Image from "next/image";
+import {
+  Beef,
+  CirclePlus,
+  Minus,
+  Plus,
+  ShoppingBasket,
+  Wheat,
+} from "lucide-react";
 import { Dispatch, useState } from "react";
-
-const snapPoints = ["148px", 1];
+import { Input } from "@/components/ui/input";
+import { MenuItem } from "@/types/menu";
+import { useCurrency } from "@/hooks/useCurrency";
+import { toast } from "sonner";
 
 export const AddToTapDrawer = ({
   open,
   setOpen,
+  menuItem,
 }: {
   open: boolean;
   setOpen: Dispatch<boolean>;
+  menuItem?: MenuItem;
 }) => {
-  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
-  const { items } = useOrder();
+  const [amount, setAmount] = useState<number | string>(1);
+  const { addItem, removeItem } = useOrder();
 
   const isMobile = useIsMobile();
+
+  const { formatCurrency } = useCurrency();
+
+  const handleIncrement = () => {
+    setAmount((prev) => (+prev >= 9 ? prev : +prev + 1));
+  };
+
+  const handleDecrement = () => {
+    setAmount((prev) => (+prev <= 1 ? prev : +prev - 1));
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (newValue === "" || /^[1-9]$/.test(newValue)) {
+      setAmount(newValue === "" ? "" : +newValue);
+    }
+  };
+
+  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === "") {
+      setAmount(1);
+    }
+  };
+
+  const handleAddToTab = (item: MenuItem, amnt?: number | string) => {
+    const _amount = amnt ? +amnt : 1;
+    const price = formatCurrency(item.price * _amount, item.currency);
+
+    addItem(item, _amount);
+    setOpen(false);
+    toast("Added to your tab", {
+      description: `${_amount} x ${item.name} for ${price}`,
+      action: {
+        label: "Undo",
+        onClick: () => removeItem(item.id),
+      },
+    });
+  };
 
   return (
     <Drawer
       open={open}
       onOpenChange={setOpen}
       direction={isMobile ? "bottom" : "right"}
-      snapPoints={isMobile ? snapPoints : []}
-      activeSnapPoint={snap}
-      setActiveSnapPoint={setSnap}
-      fadeFromIndex={0}
-      modal={!isMobile}
     >
       <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle className="text-header font-black">My Tap</DrawerTitle>
-          <DrawerDescription>
-            This is a summary of your order.
-          </DrawerDescription>
+        <DrawerHeader className="flex-row justify-between gap-4">
+          <div className="overflow-clip">
+            <DrawerTitle className="text-header truncate font-black">
+              Add to tab
+            </DrawerTitle>
+            <DrawerDescription className="text-muted-foreground truncate">
+              Change amount or add to tab
+            </DrawerDescription>
+          </div>
         </DrawerHeader>
-        <article
-          className={cn("p-4 pb-0", {
-            "overflow-y-auto": snap === 1,
-            "overflow-hidden": snap !== 1,
-          })}
-        >
-          {items.map((item) => {
-            return (
-              <div key={item.id} className="flex justify-between items-center">
-                <div className="flex gap-4 py-2 flex-1 justify-between items-center">
-                  <div className="flex flex-col">
-                    <h6>{item.name}</h6>
-                    <span className="text-muted-foreground mb-1 text-wrap text-sm">
-                      {item.ingredients.join(" • ")}
-                    </span>
-                    <div className="flex gap-1">
-                      {item.tags.map((tag) => (
-                        <Badge key={tag} className="badge badge-destructive">
-                          <Beef /> {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <h6 className="font-display font-bold mt-1 text-primary">
-                      {(item.price * item.quantity).toLocaleString("pl-PL", {
-                        style: "currency",
-                        currency: item.currency,
-                      })}
-                    </h6>
-                  </div>
-                  <span className="font-black">{item.quantity}</span>
-                </div>
+        <article className="overflow-y-auto p-4 pb-0">
+          <div className="relative aspect-square min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
+            <Image
+              src={menuItem?.image || ""}
+              alt={menuItem?.name || ""}
+              fill
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-1 justify-between gap-4 py-4">
+            <div className="flex max-w-sm flex-col">
+              <span className="font-display-median text-header font-black text-wrap">
+                {menuItem?.name}
+              </span>
+              <p className="leading-4 text-wrap">Dish long description</p>
+              <span className="text-muted-foreground mb-1 text-wrap">
+                {["item", "item2", "item3"].join(" • ")}
+              </span>
+              <div className="flex gap-1">
+                <Badge variant="destructive">
+                  <Beef /> Meat
+                </Badge>
+                <Badge variant="secondary">
+                  <Wheat /> Gluten
+                </Badge>
               </div>
-            );
-          })}
+              <h6 className="font-display text-primary mt-1 font-bold">
+                {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
+              </h6>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <Button
+                size="icon"
+                onClick={() => handleDecrement()}
+                disabled={+amount <= 1}
+              >
+                <Minus />
+              </Button>
+              <Input
+                value={amount}
+                onChange={handleAmountChange}
+                className="max-w-9"
+                onBlur={handleBlur}
+              />
+              <Button
+                size="icon"
+                onClick={() => handleIncrement()}
+                disabled={+amount >= 9}
+              >
+                <Plus />
+              </Button>
+            </div>
+          </div>
         </article>
-        <DrawerFooter>
-          <Button>
-            <ShoppingBasket /> Checkout
-          </Button>
+        <DrawerFooter className="flex-row items-center justify-between">
+          <div>
+            <h6>Total price</h6>
+            <span className="font-display text-primary font-bold">
+              {formatCurrency(
+                +amount * (menuItem?.price || 0),
+                menuItem?.currency,
+              )}
+            </span>
+          </div>
+
+          <div className="flex gap-2">
+            <Button onClick={() => handleAddToTab(menuItem!, +amount)}>
+              <CirclePlus /> Add
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleAddToTab(menuItem!, +amount)}
+            >
+              <ShoppingBasket /> Add and finish
+            </Button>
+          </div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

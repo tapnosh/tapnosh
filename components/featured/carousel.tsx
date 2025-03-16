@@ -206,7 +206,7 @@ export default function Carousel({
       if (currentElement) {
         currentElement.removeEventListener(
           "transitionend",
-          handleTransitionEnd
+          handleTransitionEnd,
         );
       }
     };
@@ -220,7 +220,7 @@ export default function Carousel({
           "flex ease-in-out",
           isDragging
             ? "cursor-grabbing"
-            : "cursor-grab transition-transform duration-500"
+            : "cursor-grab transition-transform duration-500",
         )}
         style={{
           // Round the computed translate value to avoid fractional pixel shifts.
@@ -239,9 +239,9 @@ export default function Carousel({
         {extendedItems.map((item, index) => (
           <div
             key={`${item.id}-${index}`}
-            className="min-w-[66.666%] md:min-w-[40%] lg:min-w-[28.571%] h-[40vh] md:h-[45vh] lg:h-[50vh] relative flex-shrink-0 px-2"
+            className="relative h-[40vh] min-w-[66.666%] flex-shrink-0 px-2 md:h-[45vh] md:min-w-[40%] lg:h-[50vh] lg:min-w-[28.571%]"
           >
-            <div className="w-full h-full relative rounded-lg overflow-hidden">
+            <div className="relative h-full w-full overflow-hidden rounded-lg">
               <Image
                 src={item.image || "/placeholder.svg"}
                 alt={item.title}
@@ -249,9 +249,9 @@ export default function Carousel({
                 className="object-cover"
                 priority={index === currentIndex}
               />
-              <div className="absolute inset-0 bg-black/30 flex items-end">
+              <div className="absolute inset-0 flex items-end bg-black/30">
                 <div className="p-4 text-white">
-                  <h2 className="text-xl md:text-2xl font-bold">
+                  <h2 className="text-xl font-bold md:text-2xl">
                     {item.title}
                   </h2>
                 </div>
@@ -265,7 +265,7 @@ export default function Carousel({
       <Button
         variant="outline"
         size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full z-10"
+        className="absolute top-1/2 left-4 z-10 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white"
         onClick={prevSlide}
         aria-label="Previous slide"
       >
@@ -275,7 +275,7 @@ export default function Carousel({
       <Button
         variant="outline"
         size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white rounded-full z-10"
+        className="absolute top-1/2 right-4 z-10 -translate-y-1/2 rounded-full bg-white/80 hover:bg-white"
         onClick={nextSlide}
         aria-label="Next slide"
       >
@@ -283,16 +283,16 @@ export default function Carousel({
       </Button>
 
       {indicators && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+        <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 space-x-2">
           {items.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index + visibleCount)}
               className={cn(
-                "w-3 h-3 rounded-full transition-all",
+                "h-3 w-3 rounded-full transition-all",
                 currentIndex - visibleCount === index
-                  ? "bg-white scale-125"
-                  : "bg-white/50 hover:bg-white/80"
+                  ? "scale-125 bg-white"
+                  : "bg-white/50 hover:bg-white/80",
               )}
               aria-label={`Go to slide ${index + 1}`}
             />
