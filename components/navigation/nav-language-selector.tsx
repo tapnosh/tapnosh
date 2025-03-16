@@ -36,7 +36,7 @@ export function LanguageSelector() {
   // Use a loading state while fetching the initial language
   const [loading, setLoading] = useState(true);
   const [currentLanguage, setCurrentLanguage] = useState<Language>(
-    languages[0]
+    languages[0],
   );
 
   useLayoutEffect(() => {

@@ -7,21 +7,15 @@ import "@/assets/styles/globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Head from "next/head";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { Toaster } from "@/components/ui/sonner";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import getConfig from "next/config";
+import { OrderProvider } from "@/context/OrderContext";
+import { MyOrderNavigation } from "@/components/navigation/nav-my-order";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,8 +49,6 @@ export const metadata: Metadata = {
   },
 };
 
-const { publicRuntimeConfig } = getConfig();
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -89,31 +81,22 @@ export default async function RootLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset>
-                <header className="flex h-16 shrink-0 items-center gap-2 sticky top-0 z-10 bg-background rounded-2xl">
-                  <div className="flex items-center gap-2 px-4">
-                    <SidebarTrigger className="-ml-1" />
-                    <Separator orientation="vertical" className="mr-2 h-4" />
-                    <Breadcrumb>
-                      <BreadcrumbList>
-                        <BreadcrumbItem className="hidden md:block">
-                          <BreadcrumbLink href="#">
-                            Building Your Application
-                          </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator className="hidden md:block" />
-                        <BreadcrumbItem>
-                          <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                        </BreadcrumbItem>
-                      </BreadcrumbList>
-                    </Breadcrumb>
-                  </div>
-                </header>
-                {children}
-              </SidebarInset>
+              <OrderProvider>
+                <AppSidebar />
+                <SidebarInset>
+                  <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                    <div className="flex flex-1 items-center gap-2 px-4">
+                      <SidebarTrigger className="-ml-1" />
+                      <Separator orientation="vertical" className="mr-2 h-4" />
+                      <Separator orientation="vertical" className="mr-2 h-4" />
+                      <MyOrderNavigation />
+                    </div>
+                  </header>
+                  {children}
+                </SidebarInset>
+                <Toaster />
+              </OrderProvider>
             </SidebarProvider>
-            <small>{publicRuntimeConfig?.version}</small>
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

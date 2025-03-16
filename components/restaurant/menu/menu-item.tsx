@@ -2,33 +2,26 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Beef } from "lucide-react";
-import { Dispatch } from "react";
 import { MenuItem } from "@/types/menu";
-import { useOrder } from "@/context/OrderContext";
 
 export const RestaurantMenuItem = ({
   item,
-  setOpen,
+  onClick,
 }: {
   item: MenuItem;
-  setOpen: Dispatch<boolean>;
+  onClick: (item: MenuItem) => void;
 }) => {
-  const { addItem } = useOrder();
-
   return (
     <Button
       variant="ghost"
-      className="h-auto justify-between items-start -mx-4"
-      onClick={() => {
-        addItem(item);
-        setOpen(true);
-      }}
+      className="-mx-4 h-auto items-start justify-between"
+      onClick={() => onClick(item)}
       asChild
     >
-      <div className="flex gap-4 py-4 flex-1">
-        <div className="flex flex-col max-w-sm">
+      <div className="flex flex-1 gap-4 py-4">
+        <div className="flex max-w-sm flex-col">
           <h4 className="text-header text-wrap">{item.name}</h4>
-          <p className="text-wrap leading-4">{item.name}</p>
+          <p className="leading-4 text-wrap">{item.name}</p>
           <span className="text-muted-foreground mb-1 text-wrap">
             {item.ingredients.join(" • ")}
           </span>
@@ -39,7 +32,7 @@ export const RestaurantMenuItem = ({
               </Badge>
             ))}
           </div>
-          <h6 className="font-display font-bold mt-1 text-primary">
+          <h6 className="font-display text-primary mt-1 font-bold">
             {item.price.toLocaleString("pl-PL", {
               style: "currency",
               currency: item.currency,
@@ -47,7 +40,7 @@ export const RestaurantMenuItem = ({
           </h6>
         </div>
 
-        <div className="relative aspect-square min-h-28 min-w-28 sm:min-h-36 sm:min-w-36 rounded-sm overflow-clip">
+        <div className="relative aspect-square min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
           <Image
             src={item.image}
             alt="Tikka masala"

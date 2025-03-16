@@ -77,7 +77,7 @@ const Carousel = ({
         });
       });
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -102,17 +102,17 @@ const Carousel = ({
         <div className="flex touch-pan-y touch-pinch-zoom">
           {slides.map((index) => (
             <div
-              className={cn("transform-3d flex min-w-0")}
+              className={cn("flex min-w-0 transform-3d")}
               style={{
                 paddingLeft: slideSpacing,
                 flex: `0 0 ${slideSize}`,
               }}
               key={index}
             >
-              <div className="rounded-lg overflow-clip h-full w-full">
-                <div className="relative h-full w-full flex justify-center">
+              <div className="relative h-full w-full overflow-clip rounded-lg">
+                <div className="relative flex h-full w-full justify-center">
                   <Image
-                    className="object-cover w-full block max-w-none embla__parallax__layer scale-125"
+                    className="embla__parallax__layer block w-full max-w-none scale-125 object-cover brightness-75"
                     style={{
                       height: slideHeight,
                       flex: `0 0 calc(115% + ${slideSpacing} * 2))`,
@@ -125,6 +125,11 @@ const Carousel = ({
                     alt="Your alt text"
                     placeholder="empty"
                   />
+                </div>
+
+                <div className="absolute bottom-4 left-4 flex flex-col justify-center text-white">
+                  <h3>Dish {index}</h3>
+                  <p>Description of a dish</p>
                 </div>
               </div>
             </div>

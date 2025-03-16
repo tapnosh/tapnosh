@@ -1,26 +1,26 @@
 @layer base {
   h1 {
-    @apply text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-display-median font-black leading-6 sm:leading-8 md:leading-9 lg:leading-11 xl:leading-14;
+    @apply font-display-median text-3xl font-black sm:text-4xl lg:text-5xl xl:text-6xl;
   }
   h2 {
-    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-display font-bold;
+    @apply font-display text-2xl font-bold sm:text-3xl lg:text-4xl xl:text-5xl;
   }
   h3 {
-    @apply text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-display font-bold;
+    @apply font-display text-xl font-bold sm:text-2xl lg:text-3xl xl:text-4xl;
   }
   h4 {
-    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl font-display font-medium;
+    @apply font-display text-lg font-medium sm:text-xl lg:text-2xl xl:text-3xl;
   }
   h5 {
-    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl font-display font-light;
+    @apply font-display text-lg font-light sm:text-xl lg:text-2xl xl:text-3xl;
     color: var(--muted-foreground);
   }
   h6 {
-    @apply sm:text-lg lg:text-xl xl:text-2xl font-display font-light;
+    @apply font-display font-light sm:text-lg lg:text-xl;
     color: var(--muted-foreground);
   }
   .text-header {
-    @apply text-3xl sm:text-4xl font-display-median font-black leading-8 sm:leading-10;
+    @apply font-display-median text-3xl font-black sm:text-4xl;
   }
 
   .font-logo {

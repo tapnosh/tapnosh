@@ -28,7 +28,7 @@ export const metadata: Metadata = {
 const navbar = (
   <Navbar
     logo={
-      <span className="font-display-median font-black text-2xl">tapnosh</span>
+      <span className="font-display-median text-2xl font-black">tapnosh</span>
     }
     projectLink="https://github.com/tapnosh/tapnosh"
   />
