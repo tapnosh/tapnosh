@@ -59,13 +59,9 @@ const data = {
     },
     {
       title: "Scan menu",
-      url: "/scan",
+      url: "/order",
       icon: Utensils,
       items: [
-        {
-          title: "Scan",
-          url: "/scan",
-        },
         {
           title: "Menu",
           url: "/order/some-restaurant/12341234",

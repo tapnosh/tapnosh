@@ -126,26 +126,34 @@ export const AddToTapDrawer = ({
                 {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
               </h6>
             </div>
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="flex shrink-0 items-center">
               <Button
+                variant="outline"
                 size="icon"
+                className="h-8 w-8 rounded-r-none"
                 onClick={() => handleDecrement()}
                 disabled={+amount <= 1}
               >
-                <Minus />
+                <Minus className="h-3 w-3" />
+                <span className="sr-only">Decrease quantity</span>
               </Button>
               <Input
+                type="number"
+                min="1"
                 value={amount}
                 onChange={handleAmountChange}
-                className="max-w-9"
                 onBlur={handleBlur}
+                className="h-8 w-12 [appearance:textfield] rounded-none text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <Button
+                variant="outline"
                 size="icon"
+                className="h-8 w-8 rounded-l-none"
                 onClick={() => handleIncrement()}
                 disabled={+amount >= 9}
               >
-                <Plus />
+                <Plus className="h-3 w-3" />
+                <span className="sr-only">Increase quantity</span>
               </Button>
             </div>
           </div>
