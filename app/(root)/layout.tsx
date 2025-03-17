@@ -89,10 +89,14 @@ export default async function RootLayout({
                       <SidebarTrigger className="-ml-1" />
                       <Separator orientation="vertical" className="mr-2 h-4" />
                       <Separator orientation="vertical" className="mr-2 h-4" />
-                      <MyOrderNavigation />
                     </div>
                   </header>
                   {children}
+                  <footer className="sticky bottom-0 z-10 mt-auto flex shrink-0 items-center justify-center gap-2 p-4">
+                    <div className="bg-background flex-1 rounded-xl border-1 p-4 !shadow-lg">
+                      <MyOrderNavigation />
+                    </div>
+                  </footer>
                 </SidebarInset>
                 <Toaster />
               </OrderProvider>
