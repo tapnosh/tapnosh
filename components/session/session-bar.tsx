@@ -38,12 +38,17 @@ const sampleCartItems: CartItem[] = [
   { id: "1", name: "Burger", price: 8.99, quantity: 1 },
   { id: "2", name: "Fries", price: 3.99, quantity: 2 },
   { id: "3", name: "Soda", price: 1.99, quantity: 1 },
+  { id: "4", name: "Coca cola", price: 1.99, quantity: 1 },
+  { id: "5", name: "Test", price: 1.99, quantity: 1 },
 ];
 
 const sampleOrderItems: OrderItem[] = [
   { id: "101", name: "Pizza", price: 12.99, status: "delivered" },
   { id: "102", name: "Salad", price: 7.99, status: "ready" },
   { id: "103", name: "Ice Cream", price: 4.99, status: "preparing" },
+  { id: "234", name: "Ice Cream", price: 4.99, status: "preparing" },
+  { id: "345", name: "Ice Cream", price: 4.99, status: "preparing" },
+  { id: "546", name: "Ice Cream", price: 4.99, status: "preparing" },
 ];
 
 const statusColors = {
@@ -226,9 +231,9 @@ export function SessionBar() {
               {/* Tab Content */}
               <div className="p-4">
                 {activeTab === "cart" ? (
-                  <div className="flex flex-col">
+                  <div className="flex max-h-[40vh] flex-col">
                     {cartItems.length > 0 ? (
-                      <div className="mb-4 max-h-48 space-y-3 overflow-y-auto">
+                      <div className="mb-4 flex-1 space-y-3 overflow-y-auto">
                         {cartItems.map((item) => (
                           <div
                             key={item.id}
@@ -301,7 +306,7 @@ export function SessionBar() {
                     </div>
                   </div>
                 ) : (
-                  <div className="space-y-3">
+                  <div className="flex max-h-[40vh] flex-col space-y-3">
                     <div className="mb-3 flex items-center justify-between border-b pb-2">
                       <span className="text-muted-foreground text-sm">
                         {orderItems.length}{" "}
@@ -311,7 +316,7 @@ export function SessionBar() {
                         ${totalOrderAmount.toFixed(2)}
                       </span>
                     </div>
-                    <div className="space-y-2">
+                    <div className="flex flex-1 flex-col space-y-3 overflow-y-auto">
                       {(isOrderListExpanded
                         ? orderItems
                         : orderItems.slice(0, 2)
