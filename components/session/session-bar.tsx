@@ -76,11 +76,14 @@ export function SessionBar() {
   // Ref and state to measure content height
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number>(0);
+  const [startContentHeight, setStartContentHeight] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   // Re-measure height on state changes that affect content layout.
   useLayoutEffect(() => {
     if (contentRef.current) {
       setContentHeight(contentRef.current.offsetHeight);
+      setStartContentHeight(contentRef.current.offsetHeight);
     }
   }, [isBarExpanded, activeTab, isOrderListExpanded, cartItems, orderItems]);
 
@@ -150,7 +153,15 @@ export function SessionBar() {
       <motion.div
         // Animate container height changes based on measured content
         animate={{ height: contentHeight }}
-        transition={{ duration: 0.8, type: "spring" }}
+        transition={
+          !isDragging
+            ? {
+                duration: 0.5,
+                type: "spring",
+                damping: 16,
+              }
+            : { duration: 0 }
+        }
         className={cn(
           "bg-card overflow-hidden rounded-2xl border shadow-xl",
           isAnimating && "pointer-events-none",
@@ -161,7 +172,35 @@ export function SessionBar() {
             // Expanded view
             <div>
               {/* Header */}
-              <div className="flex items-center justify-between border-b p-3">
+              <motion.div
+                drag="y"
+                onDragStart={() => {
+                  setIsDragging(true);
+                  setStartContentHeight(contentHeight);
+                }}
+                onDrag={(_, info) => {
+                  const dragHeight = Math.max(
+                    startContentHeight - info.offset.y,
+                    90,
+                  );
+                  setContentHeight((prev) =>
+                    dragHeight < 90 || dragHeight > window.innerHeight - 12
+                      ? prev
+                      : dragHeight,
+                  );
+                }}
+                onDragEnd={(_, info) => {
+                  setIsDragging(false);
+                  if (info.velocity.y > 500 || contentHeight < 300) {
+                    handleCollapse();
+                  } else {
+                    setContentHeight(startContentHeight);
+                  }
+                }}
+                dragElastic={0}
+                dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                className="flex items-center justify-between border-b p-3"
+              >
                 <h3 className="text-lg font-semibold">
                   {activeTab === "cart" ? "Confirm Order" : "My Tab"}
                 </h3>
@@ -171,7 +210,7 @@ export function SessionBar() {
                 >
                   <X className="h-5 w-5" />
                 </button>
-              </div>
+              </motion.div>
               {/* Tab Navigation */}
               <div className="grid grid-cols-2 border-b">
                 <button
