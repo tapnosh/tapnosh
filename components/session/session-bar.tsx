@@ -137,7 +137,11 @@ export function SessionBar() {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: "100%" }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: "-100%" }}
+      transition={{ duration: 0.8, type: "spring" }}
       ref={barRef}
       className={cn(
         "sticky right-0 bottom-2 left-0 z-50 mx-auto mt-auto w-full max-w-lg px-2",
@@ -155,12 +159,7 @@ export function SessionBar() {
         <div ref={contentRef}>
           {isBarExpanded ? (
             // Expanded view
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, type: "spring" }}
-            >
+            <div>
               {/* Header */}
               <div className="flex items-center justify-between border-b p-3">
                 <h3 className="text-lg font-semibold">
@@ -365,7 +364,7 @@ export function SessionBar() {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
           ) : (
             // Collapsed view
             <motion.div
@@ -426,6 +425,6 @@ export function SessionBar() {
           )}
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
