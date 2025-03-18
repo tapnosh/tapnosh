@@ -62,7 +62,7 @@ export function MyOrderNavigation() {
             )}
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className="grid w-[calc(100vw-3.25rem)] list-none gap-3 p-4 md:w-[400px] lg:w-[500px]">
+            <ul className="grid w-[calc(100vw-5.25rem)] list-none gap-3 p-4 md:w-[400px] lg:w-[500px]">
               <li className="row-span-2 flex h-full flex-col gap-3">
                 <Link
                   href="/order/restaurant-name/12451245/order-status"

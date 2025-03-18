@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
-import { MyOrderNavigation } from "@/components/navigation/nav-my-order";
+import { SessionBar } from "@/components/session/session-bar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -89,10 +89,10 @@ export default async function RootLayout({
                       <SidebarTrigger className="-ml-1" />
                       <Separator orientation="vertical" className="mr-2 h-4" />
                       <Separator orientation="vertical" className="mr-2 h-4" />
-                      <MyOrderNavigation />
                     </div>
                   </header>
                   {children}
+                  <SessionBar />
                 </SidebarInset>
                 <Toaster />
               </OrderProvider>

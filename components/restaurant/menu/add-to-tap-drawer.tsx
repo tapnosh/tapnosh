@@ -97,7 +97,7 @@ export const AddToTapDrawer = ({
           </div>
         </DrawerHeader>
         <article className="overflow-y-auto p-4 pb-0">
-          <div className="relative aspect-square min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
+          <div className="relative aspect-square max-h-72 min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
             <Image
               src={menuItem?.image || ""}
               alt={menuItem?.name || ""}

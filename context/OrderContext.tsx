@@ -9,6 +9,8 @@ type OrderItem = MenuItem & {
 
 interface OrderContextType {
   items: OrderItem[];
+  isSessionActive: boolean;
+  toggleSession: (decision?: boolean) => void;
   addItem: (item: Omit<OrderItem, "quantity">, quantity?: number) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
@@ -21,6 +23,11 @@ const OrderContext = createContext<OrderContextType | undefined>(undefined);
 
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<OrderItem[]>([]);
+  const [isSessionActive, setSessionActive] = useState(true);
+
+  const toggleSession = (decision?: boolean) => {
+    setSessionActive((prev) => (decision ? decision : !prev));
+  };
 
   const addItem = (item: Omit<OrderItem, "quantity">, quantity: number = 1) => {
     setItems((currentItems) => {
@@ -68,6 +75,8 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     items,
+    isSessionActive,
+    toggleSession,
     addItem,
     removeItem,
     updateQuantity,
