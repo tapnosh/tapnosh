@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
-import { MyOrderNavigation } from "@/components/navigation/nav-my-order";
+import { SessionBar } from "@/components/session/session-bar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -92,11 +92,7 @@ export default async function RootLayout({
                     </div>
                   </header>
                   {children}
-                  <footer className="sticky bottom-0 z-10 mt-auto flex shrink-0 items-center justify-center gap-2 p-4">
-                    <div className="bg-background flex-1 rounded-xl border-1 p-4 !shadow-lg">
-                      <MyOrderNavigation />
-                    </div>
-                  </footer>
+                  <SessionBar />
                 </SidebarInset>
                 <Toaster />
               </OrderProvider>
