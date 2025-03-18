@@ -280,7 +280,7 @@ export function SessionBar() {
                         ))}
                       </div>
                     ) : (
-                      <div className="text-muted-foreground mb-4 rounded-lg border border-dashed py-8 text-center">
+                      <div className="text-muted-foreground mb-4 rounded-lg border border-dashed py-3 text-center text-sm">
                         Your cart is empty
                       </div>
                     )}
