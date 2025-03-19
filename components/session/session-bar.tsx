@@ -147,7 +147,7 @@ export function SessionBar() {
       transition={{ duration: 0.8, type: "spring" }}
       ref={barRef}
       className={cn(
-        "sticky right-0 bottom-2 left-0 z-50 mx-auto mt-auto w-full max-w-lg px-2",
+        "sticky right-0 bottom-0 left-0 z-50 mx-auto mt-auto w-full max-w-lg",
       )}
     >
       <motion.div
@@ -158,12 +158,12 @@ export function SessionBar() {
             ? {
                 duration: 0.5,
                 type: "spring",
-                damping: 16,
+                damping: 14,
               }
             : { duration: 0 }
         }
         className={cn(
-          "bg-card overflow-hidden rounded-2xl border shadow-xl",
+          "bg-card overflow-hidden rounded-t-2xl shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]",
           isAnimating && "pointer-events-none",
         )}
       >
@@ -191,7 +191,7 @@ export function SessionBar() {
                 }}
                 onDragEnd={(_, info) => {
                   setIsDragging(false);
-                  if (info.velocity.y > 500 || contentHeight < 300) {
+                  if (info.velocity.y > 500 || contentHeight < 150) {
                     handleCollapse();
                   } else {
                     setContentHeight(startContentHeight);
@@ -411,7 +411,7 @@ export function SessionBar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, type: "spring" }}
-              className="p-1.5"
+              className="p-2"
             >
               <div className="grid grid-cols-2 gap-1.5">
                 {/* "My Tab" summary */}

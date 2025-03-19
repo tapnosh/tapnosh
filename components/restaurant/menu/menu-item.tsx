@@ -20,7 +20,9 @@ export const RestaurantMenuItem = ({
     >
       <div className="flex flex-1 gap-4 py-4">
         <div className="flex max-w-sm flex-col">
-          <h4 className="text-header text-wrap">{item.name}</h4>
+          <h3 className="font-display-median font-black text-wrap">
+            {item.name}
+          </h3>
           <p className="leading-4 text-wrap">{item.name}</p>
           <span className="text-muted-foreground mb-1 text-wrap">
             {item.ingredients.join(" • ")}
