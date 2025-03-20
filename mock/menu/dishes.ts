@@ -6,7 +6,7 @@ export const SampleDishes = [
     id: "fried-pickles",
     currency: "USD",
     ingredients: ["pickles", "flour", "egg", "breadcrumbs"],
-    tags: ["gluten", "egg"],
+    categories: ["gluten", "egg"],
     image: "https://picsum.photos/600/400",
   },
   {
@@ -16,7 +16,7 @@ export const SampleDishes = [
     id: "onion-rings",
     currency: "USD",
     ingredients: ["onion", "flour", "egg", "breadcrumbs"],
-    tags: ["gluten", "egg"],
+    categories: ["gluten", "egg"],
     image: "https://picsum.photos/600/400",
   },
   {
@@ -26,7 +26,7 @@ export const SampleDishes = [
     id: "mozzarella-sticks",
     currency: "USD",
     ingredients: ["mozzarella", "flour", "egg", "breadcrumbs"],
-    tags: ["gluten", "egg"],
+    categories: ["gluten", "egg"],
     image: "https://picsum.photos/600/400",
   },
   {
@@ -36,7 +36,7 @@ export const SampleDishes = [
     id: "cheeseburger",
     currency: "USD",
     ingredients: ["beef", "cheese", "lettuce", "tomato", "onion"],
-    tags: ["meat"],
+    categories: ["meat"],
     image: "https://picsum.photos/600/400",
   },
   {
@@ -46,7 +46,7 @@ export const SampleDishes = [
     id: "tikka-masala",
     currency: "USD",
     ingredients: ["chicken", "tomato", "onion", "garlic", "ginger"],
-    tags: ["meat", "gluten"],
+    categories: ["meat", "gluten"],
     image: "https://picsum.photos/600/350",
   },
 ];

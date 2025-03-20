@@ -1,12 +1,13 @@
 "use client";
 // import Carousel from "@/components/featured/carousel";
 import { AddToTapDrawer } from "@/components/restaurant/menu/add-to-tap-drawer";
-import { RestaurantMenuItem } from "@/components/restaurant/menu/menu-item";
+import { MenuItemCard } from "@/components/restaurant/menu/menu-item";
 import { useState } from "react";
 import { Carousel } from "@/components/ui/carousel";
 import { EmblaOptionsType } from "embla-carousel";
 import { SampleDishes } from "@/mock/menu/dishes";
 import { MenuItem } from "@/types/menu";
+import Image from "next/image";
 
 export default function Order() {
   const [open, setOpen] = useState(false);
@@ -28,8 +29,20 @@ export default function Order() {
   return (
     <>
       <section className="section">
-        <h1>Restaurant name</h1>
-        <h5>Some restaurant description</h5>
+        <div className="flex shrink-0 grow-0 items-center self-start rounded-4xl py-4">
+          <Image
+            src="/images/sante-logo.svg"
+            alt="Restaurant logo"
+            width={300}
+            height={600}
+          />
+        </div>
+
+        {/* <h1>Restaurant name</h1> */}
+        <h5 className="max-w-3xl">
+          Talerzyki śródziemnomorskie 🌊 Na talerzu Francja, Hiszpania oraz
+          Włochy, w kieliszku cały świat
+        </h5>
       </section>
       <section className="section pb-2 lg:pb-4">
         <h3>Chef Picks</h3>
@@ -41,15 +54,17 @@ export default function Order() {
         slideSize="40vh"
       />
 
-      <section className="section mt-8">
+      <section className="section @container mt-8">
         <h3 className="mb-2">Appetizer</h3>
 
-        <article className="flex flex-col gap-4">
+        <article className="grid gap-4 @3xl:grid-cols-2 @6xl:grid-cols-3">
           {SampleDishes.map((dish) => (
-            <RestaurantMenuItem
+            <MenuItemCard
               key={dish.id}
               item={dish}
               onClick={handleClick}
+              onAddToCart={() => {}}
+              isAvailable
             />
           ))}
         </article>
