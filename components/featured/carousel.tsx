@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { CardContent, CardTitle } from "@/components/ui/card";
 
 interface CarouselProps {
   items: {
@@ -250,11 +251,12 @@ export default function Carousel({
                 priority={index === currentIndex}
               />
               <div className="absolute inset-0 flex items-end bg-black/30">
-                <div className="p-4 text-white">
-                  <h2 className="text-xl font-bold md:text-2xl">
-                    {item.title}
-                  </h2>
-                </div>
+                <CardContent>
+                  <CardTitle>{item.title}</CardTitle>
+                  <div className="p-4 text-white">
+                    <h2 className="text-xl font-bold md:text-2xl"></h2>
+                  </div>
+                </CardContent>
               </div>
             </div>
           </div>

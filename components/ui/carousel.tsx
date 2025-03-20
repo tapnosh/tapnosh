@@ -7,6 +7,9 @@ import {
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ShoppingBasket } from "lucide-react";
 
 const TWEEN_FACTOR_BASE = 0.05;
 
@@ -109,7 +112,7 @@ const Carousel = ({
               }}
               key={index}
             >
-              <div className="relative h-full w-full overflow-clip rounded-lg">
+              <div className="relative h-full w-full overflow-clip rounded-xl">
                 <div className="relative flex h-full w-full justify-center">
                   <Image
                     className="embla__parallax__layer block w-full max-w-none scale-125 object-cover brightness-75"
@@ -127,9 +130,18 @@ const Carousel = ({
                   />
                 </div>
 
-                <div className="absolute bottom-4 left-4 flex flex-col justify-center text-white">
-                  <h3>Dish {index}</h3>
-                  <p>Description of a dish</p>
+                <div className="absolute right-4 bottom-4 left-4 flex flex-col justify-center text-white">
+                  <CardTitle>Dish {index}</CardTitle>
+                  <CardDescription className="text-muted">
+                    Description of a dish
+                  </CardDescription>
+                  <div className="mt-4 flex items-center justify-between gap-2">
+                    <span className="font-bold">$12.99</span>
+                    <Button variant="secondary">
+                      <ShoppingBasket />
+                      Add to tab
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

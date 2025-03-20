@@ -140,7 +140,6 @@ export function MenuItemCard({
         <span className="font-bold">${item.price.toFixed(2)}</span>
         {isAvailable && (
           <Button
-            size="sm"
             onClick={(e) => {
               e.stopPropagation();
               onAddToCart(e, item);
