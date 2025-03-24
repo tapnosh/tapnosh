@@ -13,7 +13,7 @@ import {
 import { useOrder } from "@/context/OrderContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
-import { Beef, CirclePlus, Minus, Plus, Wheat, X } from "lucide-react";
+import { Beef, Minus, Plus, ShoppingBasket, Wheat, X } from "lucide-react";
 import { Dispatch, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { MenuItem } from "@/types/menu";
@@ -122,34 +122,6 @@ export const AddToTapDrawer = ({
                 {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
               </h6>
             </div>
-            <div className="flex shrink-0 items-center">
-              <Button
-                size="icon"
-                className="h-8 w-8 rounded-r-none"
-                onClick={() => handleDecrement()}
-                disabled={+amount <= 1}
-              >
-                <Minus className="h-3 w-3" />
-                <span className="sr-only">Decrease quantity</span>
-              </Button>
-              <Input
-                type="number"
-                min="1"
-                value={amount}
-                onChange={handleAmountChange}
-                onBlur={handleBlur}
-                className="h-8 w-12 [appearance:textfield] rounded-none text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-              />
-              <Button
-                size="icon"
-                className="h-8 w-8 rounded-l-none"
-                onClick={() => handleIncrement()}
-                disabled={+amount >= 9}
-              >
-                <Plus className="h-3 w-3" />
-                <span className="sr-only">Increase quantity</span>
-              </Button>
-            </div>
           </div>
 
           <Separator />
@@ -188,19 +160,47 @@ export const AddToTapDrawer = ({
           </div> */}
         </article>
         <DrawerFooter className="flex-row items-center justify-between">
-          <div>
-            <h6>Total price</h6>
-            <span className="font-display text-primary font-bold">
+          <div className="flex shrink-0 items-center">
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-10 w-10 rounded-r-none"
+              onClick={() => handleDecrement()}
+              disabled={+amount <= 1}
+            >
+              <Minus className="h-6 w-6" />
+              <span className="sr-only">Decrease quantity</span>
+            </Button>
+            <Input
+              type="number"
+              min="1"
+              value={amount}
+              onChange={handleAmountChange}
+              onBlur={handleBlur}
+              className="h-10 w-12 [appearance:textfield] rounded-none text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+            <Button
+              variant="outline"
+              size="lg"
+              className="h-10 w-10 rounded-l-none"
+              onClick={() => handleIncrement()}
+              disabled={+amount >= 9}
+            >
+              <Plus className="h-6 w-6" />
+              <span className="sr-only">Increase quantity</span>
+            </Button>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              size="lg"
+              onClick={() => handleAddToTab(menuItem!, +amount)}
+            >
+              <ShoppingBasket /> Add{" "}
               {formatCurrency(
                 +amount * (menuItem?.price || 0),
                 menuItem?.currency,
               )}
-            </span>
-          </div>
-
-          <div className="flex gap-2">
-            <Button onClick={() => handleAddToTab(menuItem!, +amount)}>
-              <CirclePlus /> Add to tab
             </Button>
           </div>
         </DrawerFooter>

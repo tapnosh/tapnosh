@@ -9,17 +9,12 @@ import {
   Fish,
   Leaf,
   Milk,
-  Plus,
+  ShoppingBasket,
   Wheat,
   Wine,
 } from "lucide-react";
 import { MenuItem } from "@/types/menu";
-import {
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 
 const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
@@ -100,10 +95,10 @@ export function MenuItemCard({
   return (
     <div
       role="button"
-      className="hover:bg-muted cursor-pointer space-y-4 rounded-2xl py-4 transition-shadow"
-      onClick={() => (isAvailable ? onClick(item) : undefined)}
+      className="hover:bg-muted cursor-pointer space-y-4 rounded-2xl border py-4 transition-shadow"
+      onClick={() => onClick(item)}
     >
-      <CardContent className="flex flex-row justify-between gap-4 px-4">
+      <CardContent className="flex flex-row items-start justify-between gap-4 px-4">
         <div className="flex flex-1 flex-col">
           <CardTitle>{item.name}</CardTitle>
           <CardDescription>{item.name}</CardDescription>
@@ -121,9 +116,22 @@ export function MenuItemCard({
               </Badge>
             ))}
           </div>
+          <span className="mt-3 font-bold">${item.price.toFixed(2)}</span>
         </div>
         {item.image && (
-          <div className="aspect-square">
+          <div className="relative aspect-square shrink-0">
+            {isAvailable && (
+              <Button
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddToCart(e, item);
+                }}
+                className="absolute right-0 bottom-0 translate-1/4 translate-y-1/4"
+              >
+                <ShoppingBasket className="h-4 w-4" />
+              </Button>
+            )}
             <Image
               src={item.image}
               alt={item.name}
@@ -136,26 +144,13 @@ export function MenuItemCard({
         )}
       </CardContent>
 
-      <CardFooter className="px-4">
-        <span className="font-bold">${item.price.toFixed(2)}</span>
-        {isAvailable && (
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart(e, item);
-            }}
-            className="ml-auto"
-          >
-            <Plus className="mr-1 h-4 w-4" />
-            Add to tab
-          </Button>
-        )}
+      {/* <CardFooter className="px-4">
         {!isAvailable && (
           <Badge variant="outline" className="text-muted-foreground">
             Not Available
           </Badge>
         )}
-      </CardFooter>
+      </CardFooter> */}
     </div>
   );
 }
