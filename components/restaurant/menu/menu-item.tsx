@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { MenuItem } from "@/types/menu";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
