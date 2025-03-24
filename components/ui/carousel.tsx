@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
+import React from "react";
+import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingBasket } from "lucide-react";
-
-const TWEEN_FACTOR_BASE = 0.05;
 
 type PropType = {
   slides: number[];
@@ -25,29 +23,7 @@ const Carousel = ({
   ...props
 }: React.ComponentProps<"div"> & PropType) => {
   const { slides, options } = props;
-  const [emblaRef, emblaApi] = useEmblaCarousel(options);
-  const tweenFactor = useRef(0);
-  const tweenNodes = useRef<HTMLElement[]>([]);
-
-  const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
-    tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
-      return slideNode.querySelector(".embla__parallax__layer") as HTMLElement;
-    });
-  }, []);
-
-  const setTweenFactor = useCallback((emblaApi: EmblaCarouselType) => {
-    tweenFactor.current = TWEEN_FACTOR_BASE * emblaApi.scrollSnapList().length;
-  }, []);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    setTweenNodes(emblaApi);
-    setTweenFactor(emblaApi);
-
-    emblaApi.on("reInit", setTweenNodes).on("reInit", setTweenFactor);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [emblaApi]);
+  const [emblaRef] = useEmblaCarousel(options);
 
   return (
     <div className={cn(className)}>
@@ -65,7 +41,7 @@ const Carousel = ({
               <div className="relative h-full w-full overflow-clip rounded-xl">
                 <div className="relative flex h-full w-full justify-center">
                   <Image
-                    className="embla__parallax__layer block w-full max-w-none scale-125 object-cover brightness-75"
+                    className="block w-full max-w-none scale-125 object-cover brightness-75"
                     style={{
                       height: slideHeight,
                       flex: `0 0 calc(115% + ${slideSpacing} * 2))`,
@@ -73,7 +49,7 @@ const Carousel = ({
                     width={600}
                     height={350}
                     quality={100}
-                    sizes="100vw"
+                    sizes="33vw"
                     src={`https://picsum.photos/600/350?v=${index}`}
                     alt="Your alt text"
                     placeholder="empty"

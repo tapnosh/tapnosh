@@ -2,7 +2,6 @@
 
 import { useState, useRef, useLayoutEffect } from "react";
 import { motion } from "motion/react";
-import { useClickAway } from "@uidotdev/usehooks";
 import {
   ChevronDown,
   Trash2,
@@ -82,16 +81,11 @@ export function SessionBar() {
   // Re-measure height on state changes that affect content layout.
   useLayoutEffect(() => {
     if (contentRef.current) {
-      setContentHeight(contentRef.current.offsetHeight);
-      setStartContentHeight(contentRef.current.offsetHeight);
+      const newHeight = contentRef.current.offsetHeight;
+      setContentHeight(newHeight);
+      setStartContentHeight(newHeight);
     }
   }, [isBarExpanded, activeTab, isOrderListExpanded, cartItems, orderItems]);
-
-  // Optional click-away handling
-  const barRef = useClickAway<HTMLDivElement>(() => {
-    // Uncomment to collapse on click-away:
-    // handleCollapse();
-  });
 
   // Totals
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -145,7 +139,6 @@ export function SessionBar() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: "-100%" }}
       transition={{ duration: 0.8, type: "spring" }}
-      ref={barRef}
       className={cn(
         "sticky right-0 bottom-0 left-0 z-50 mx-auto mt-auto w-full max-w-lg",
       )}
@@ -183,11 +176,13 @@ export function SessionBar() {
                     startContentHeight - info.offset.y,
                     90,
                   );
-                  setContentHeight((prev) =>
-                    dragHeight < 90 || dragHeight > window.innerHeight - 12
-                      ? prev
-                      : dragHeight,
-                  );
+                  if (
+                    dragHeight >= 90 &&
+                    dragHeight <= window.innerHeight - 12 &&
+                    Math.abs(dragHeight - contentHeight) > 2
+                  ) {
+                    setContentHeight(dragHeight);
+                  }
                 }}
                 onDragEnd={(_, info) => {
                   setIsDragging(false);
