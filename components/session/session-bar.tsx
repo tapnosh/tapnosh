@@ -199,7 +199,7 @@ export function SessionBar() {
                 }}
                 dragElastic={0}
                 dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
-                className="flex items-center justify-between border-b p-3"
+                className="flex items-center justify-between p-3"
               >
                 <h3 className="text-lg font-semibold">
                   {activeTab === "cart" ? "Confirm Order" : "My Tab"}
@@ -418,7 +418,6 @@ export function SessionBar() {
                 <button
                   className={cn(
                     "group hover:bg-muted/50 relative flex cursor-pointer flex-col overflow-hidden rounded-md p-3 transition-all",
-                    activeTab === "orders" && "bg-muted/30",
                   )}
                   onClick={() => expandWithTab("orders")}
                 >

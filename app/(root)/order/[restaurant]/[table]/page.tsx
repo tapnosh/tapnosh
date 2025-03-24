@@ -29,7 +29,7 @@ export default function Order() {
   return (
     <>
       <section className="section">
-        <div className="flex shrink-0 grow-0 items-center self-start rounded-4xl py-4">
+        <div className="flex max-w-48 shrink-0 grow-0 items-center self-start rounded-4xl py-4 sm:max-w-3xs">
           <Image
             src="/images/sante-logo.svg"
             alt="Restaurant logo"

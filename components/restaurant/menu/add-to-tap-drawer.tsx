@@ -13,19 +13,13 @@ import {
 import { useOrder } from "@/context/OrderContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
-import {
-  Beef,
-  CirclePlus,
-  Minus,
-  Plus,
-  ShoppingBasket,
-  Wheat,
-} from "lucide-react";
+import { Beef, CirclePlus, Minus, Plus, Wheat, X } from "lucide-react";
 import { Dispatch, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { MenuItem } from "@/types/menu";
 import { useCurrency } from "@/hooks/useCurrency";
 import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
 
 export const AddToTapDrawer = ({
   open,
@@ -86,18 +80,24 @@ export const AddToTapDrawer = ({
       direction={isMobile ? "bottom" : "right"}
     >
       <DrawerContent>
+        <button
+          onClick={() => setOpen(false)}
+          className="text-muted-foreground hover:bg-muted hover:text-foreground absolute top-4 right-4 rounded-full p-1 transition-colors"
+        >
+          <X className="h-5 w-5" />
+        </button>
         <DrawerHeader className="flex-row justify-between gap-4">
           <div className="overflow-clip">
             <DrawerTitle className="text-header truncate font-black">
-              Add to tab
+              {menuItem?.name}
             </DrawerTitle>
             <DrawerDescription className="text-muted-foreground truncate">
-              Change amount or add to tab
+              Dish long description
             </DrawerDescription>
           </div>
         </DrawerHeader>
-        <article className="overflow-y-auto p-4 pb-0">
-          <div className="relative aspect-square max-h-72 min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
+        <article className="overflow-y-auto px-4">
+          <div className="relative aspect-square min-h-28 w-full overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
             <Image
               src={menuItem?.image || ""}
               alt={menuItem?.name || ""}
@@ -107,10 +107,6 @@ export const AddToTapDrawer = ({
           </div>
           <div className="flex flex-1 justify-between gap-4 py-4">
             <div className="flex max-w-sm flex-col">
-              <span className="font-display-median text-header font-black text-wrap">
-                {menuItem?.name}
-              </span>
-              <p className="leading-4 text-wrap">Dish long description</p>
               <span className="text-muted-foreground mb-1 text-wrap">
                 {["item", "item2", "item3"].join(" • ")}
               </span>
@@ -128,7 +124,6 @@ export const AddToTapDrawer = ({
             </div>
             <div className="flex shrink-0 items-center">
               <Button
-                variant="outline"
                 size="icon"
                 className="h-8 w-8 rounded-r-none"
                 onClick={() => handleDecrement()}
@@ -146,7 +141,6 @@ export const AddToTapDrawer = ({
                 className="h-8 w-12 [appearance:textfield] rounded-none text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <Button
-                variant="outline"
                 size="icon"
                 className="h-8 w-8 rounded-l-none"
                 onClick={() => handleIncrement()}
@@ -157,6 +151,41 @@ export const AddToTapDrawer = ({
               </Button>
             </div>
           </div>
+
+          <Separator />
+
+          {/* <div className="pt-4">
+            <h3 className="text-lg font-semibold">Recommended Sides</h3>
+            <p className="text-muted-foreground mb-4 text-sm">
+              Select additional items to complement your meal
+            </p>
+
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {recommendedSides.map((side) => (
+                <div
+                  key={side.id}
+                  className={cn(
+                    "flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors",
+                  )}
+                >
+                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
+                    <Image
+                      src={side.image || "/placeholder.svg"}
+                      alt={side.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-medium">{side.name}</h4>
+                    <p className="text-muted-foreground text-sm">
+                      ${side.price.toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div> */}
         </article>
         <DrawerFooter className="flex-row items-center justify-between">
           <div>
@@ -171,13 +200,7 @@ export const AddToTapDrawer = ({
 
           <div className="flex gap-2">
             <Button onClick={() => handleAddToTab(menuItem!, +amount)}>
-              <CirclePlus /> Add
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleAddToTab(menuItem!, +amount)}
-            >
-              <ShoppingBasket /> Add and finish
+              <CirclePlus /> Add to tab
             </Button>
           </div>
         </DrawerFooter>
