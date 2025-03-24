@@ -31,7 +31,7 @@ const Carousel = ({
         <div className="flex touch-pan-y touch-pinch-zoom">
           {slides.map((index) => (
             <div
-              className={cn("flex min-w-0 transform-3d")}
+              className="flex min-w-0"
               style={{
                 paddingLeft: slideSpacing,
                 flex: `0 0 ${slideSize}`,
@@ -41,33 +41,35 @@ const Carousel = ({
               <div className="relative h-full w-full overflow-clip rounded-xl">
                 <div className="relative flex h-full w-full justify-center">
                   <Image
-                    className="block w-full max-w-none scale-125 object-cover brightness-75"
+                    className="block w-full object-cover"
                     style={{
                       height: slideHeight,
                       flex: `0 0 calc(115% + ${slideSpacing} * 2))`,
                     }}
-                    width={600}
-                    height={350}
-                    quality={100}
+                    width={200}
+                    height={200}
+                    quality={80}
                     sizes="33vw"
-                    src={`https://picsum.photos/600/350?v=${index}`}
+                    src={`https://picsum.photos/350/350?v=${index}`}
                     alt="Your alt text"
                     placeholder="empty"
                   />
                 </div>
 
-                <div className="absolute right-4 bottom-4 left-4 flex flex-col justify-center text-white">
-                  <CardTitle>Dish {index}</CardTitle>
-                  <CardDescription className="text-muted">
-                    Description of a dish
-                  </CardDescription>
-                  <div className="mt-4 flex items-center justify-between gap-2">
-                    <span className="font-bold">$12.99</span>
-                    <Button variant="secondary">
-                      <ShoppingBasket />
-                      Add to tab
-                    </Button>
-                  </div>
+                <div className="bg-primary/50 absolute inset-0 flex flex-col justify-end p-4 text-white">
+                  <article>
+                    <CardTitle>Dish {index}</CardTitle>
+                    <CardDescription className="text-muted">
+                      Description of a dish
+                    </CardDescription>
+                    <div className="mt-4 flex items-center justify-between gap-2">
+                      <span className="font-bold">$12.99</span>
+                      <Button variant="secondary">
+                        <ShoppingBasket />
+                        Add to tab
+                      </Button>
+                    </div>
+                  </article>
                 </div>
               </div>
             </div>

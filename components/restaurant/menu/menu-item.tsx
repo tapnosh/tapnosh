@@ -99,12 +99,12 @@ export function MenuItemCard({
   onClick: (item: MenuItem) => void;
 }) {
   return (
-    <Card
+    <div
       role="button"
-      className="cursor-pointer transition-shadow hover:shadow-lg"
+      className="hover:bg-muted cursor-pointer space-y-4 rounded-2xl py-4 transition-shadow"
       onClick={() => (isAvailable ? onClick(item) : undefined)}
     >
-      <CardContent className="flex flex-row justify-between gap-4">
+      <CardContent className="flex flex-row justify-between gap-4 px-4">
         <div className="flex flex-1 flex-col">
           <CardTitle>{item.name}</CardTitle>
           <CardDescription>{item.name}</CardDescription>
@@ -130,13 +130,14 @@ export function MenuItemCard({
               alt={item.name}
               width={80}
               height={80}
+              quality={50}
               className="h-full w-full rounded-md object-cover"
             />
           </div>
         )}
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="px-4">
         <span className="font-bold">${item.price.toFixed(2)}</span>
         {isAvailable && (
           <Button
@@ -156,6 +157,6 @@ export function MenuItemCard({
           </Badge>
         )}
       </CardFooter>
-    </Card>
+    </div>
   );
 }
