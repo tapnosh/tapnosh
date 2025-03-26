@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { ReceiptText } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { OrderItem } from "./session-bar";
+import { OrderItem } from "./nosh-bar";
 
 export function MyTabSummary({
   orderItems,

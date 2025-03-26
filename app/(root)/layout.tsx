@@ -15,7 +15,8 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
-import { SessionBar } from "@/components/session/session-bar";
+import { NoshBar } from "@/components/nosh-bar/nosh-bar";
+import { NotificationProvider } from "@/context/NotificationBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -81,22 +82,30 @@ export default async function RootLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <SidebarProvider>
-              <OrderProvider>
-                <AppSidebar />
-                <SidebarInset>
-                  <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
-                    <div className="flex flex-1 items-center gap-2 px-4">
-                      <SidebarTrigger className="-ml-1" />
-                      <Separator orientation="vertical" className="mr-2 h-4" />
-                      <Separator orientation="vertical" className="mr-2 h-4" />
-                    </div>
-                  </header>
-                  {/* <MorphButtonModal /> */}
-                  {children}
-                  <SessionBar />
-                </SidebarInset>
-                <Toaster />
-              </OrderProvider>
+              <NotificationProvider>
+                <OrderProvider>
+                  <AppSidebar />
+                  <SidebarInset>
+                    <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                      <div className="flex flex-1 items-center gap-2 px-4">
+                        <SidebarTrigger className="-ml-1" />
+                        <Separator
+                          orientation="vertical"
+                          className="mr-2 h-4"
+                        />
+                        <Separator
+                          orientation="vertical"
+                          className="mr-2 h-4"
+                        />
+                      </div>
+                    </header>
+                    {/* <MorphButtonModal /> */}
+                    {children}
+                    <NoshBar />
+                  </SidebarInset>
+                  <Toaster />
+                </OrderProvider>
+              </NotificationProvider>
             </SidebarProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

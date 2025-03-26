@@ -18,8 +18,8 @@ import { Dispatch, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { MenuItem } from "@/types/menu";
 import { useCurrency } from "@/hooks/useCurrency";
-import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+import { useNotification } from "@/context/NotificationBar";
 
 export const AddToTapDrawer = ({
   open,
@@ -31,7 +31,8 @@ export const AddToTapDrawer = ({
   menuItem?: MenuItem;
 }) => {
   const [amount, setAmount] = useState<number | string>(1);
-  const { addItem, removeItem } = useOrder();
+  const { openNotification } = useNotification();
+  const { addItem } = useOrder();
 
   const isMobile = useIsMobile();
 
@@ -64,13 +65,17 @@ export const AddToTapDrawer = ({
 
     addItem(item, _amount);
     setOpen(false);
-    toast("Added to your tab", {
-      description: `${_amount} x ${item.name} for ${price}`,
-      action: {
-        label: "Undo",
-        onClick: () => removeItem(item.id),
-      },
-    });
+
+    openNotification(
+      <div className="flex w-full items-center justify-between gap-4 px-6">
+        <div className="flex flex-col">
+          <span className="text-primary-foreground font-semibold">
+            Added {item.name}
+          </span>
+          <span className="text-sm">For {price}</span>
+        </div>
+      </div>,
+    );
   };
 
   return (

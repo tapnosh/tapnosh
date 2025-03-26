@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "../ui/separator";
 import { MyTabSummary } from "./my-tab";
 import { ConfirmationStatus } from "./confirmation-status";
+import { useNotification } from "@/context/NotificationBar";
 
 // Types for our cart and order items
 export type CartItem = {
@@ -66,7 +67,9 @@ const statusText = {
   cancelled: "Cancelled",
 };
 
-export function SessionBar() {
+export function NoshBar() {
+  const { notifications, openNotification, closeNotification } =
+    useNotification();
   const [activeTab, setActiveTab] = useState<"cart" | "orders">("cart");
   const [cartItems, setCartItems] = useState<CartItem[]>(sampleCartItems);
   // const [orderItems] = useState<OrderItem[]>(sampleOrderItems);
@@ -75,7 +78,6 @@ export function SessionBar() {
   const [isOrderListExpanded, setIsOrderListExpanded] = useState(false);
   const [isBarExpanded, setIsBarExpanded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [isNotifcation, setIsNotification] = useState(false);
 
   // Ref and state to measure content height
   const contentRef = useRef<HTMLDivElement>(null);
@@ -144,7 +146,6 @@ export function SessionBar() {
     setTimeout(() => {
       setStatus("confirmed");
       setOrderItems(sampleOrderItems);
-      setIsNotification(false);
       setActiveTab("orders");
     }, 2000);
   };
@@ -152,7 +153,7 @@ export function SessionBar() {
   return (
     <>
       <AnimatePresence>
-        {isNotifcation ? (
+        {notifications.length ? (
           <motion.div
             layout
             layoutId="morph"
@@ -166,15 +167,22 @@ export function SessionBar() {
               backgroundColor: "var(--primary)",
               borderRadius: "3rem",
               height: "4rem",
+              width: "auto",
+              minWidth: "16rem",
             }}
-            className="text-primary-foreground sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto flex w-[calc(100%-2rem)] max-w-lg items-center overflow-hidden shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
+            style={{ width: "calc(100% - 2rem)" }}
+            className="text-primary-foreground sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto flex items-center overflow-hidden whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
           >
-            <div className="flex w-full items-center justify-between gap-4 px-6">
-              <span className="text-primary-foreground font-semibold">
-                Order confirmed
-              </span>
-              <ConfirmationStatus status={status} />
-            </div>
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ duration: 0.3, type: "spring" }}
+              style={{ flex: 1 }}
+              onClick={() => closeNotification(notifications[0].id)}
+            >
+              {notifications.map(({ content }) => content)}
+            </motion.div>
           </motion.div>
         ) : (
           <motion.div
@@ -182,9 +190,14 @@ export function SessionBar() {
               height: contentHeight,
               y: 0,
               backgroundColor: "var(--primary)",
+              width: "calc(100% - 2rem)",
+              boxShadow: "0 0 0.5rem rgba(0,0,0,0.25)",
+            }}
+            style={{
+              maxWidth: "32rem",
               borderRadius: "2rem",
             }}
-            initial={{ y: "100%" }}
+            initial={{ y: "100%", boxShadow: "0 0 0 rgba(0,0,0,0)" }}
             exit={{ y: "100%" }}
             transition={{
               ...(!isDragging
@@ -198,7 +211,7 @@ export function SessionBar() {
               layout: { duration: 0.5, type: "spring", damping: 16 },
             }}
             className={cn(
-              "sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto w-[calc(100%-2rem)] max-w-lg overflow-hidden shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]",
+              "sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto overflow-hidden",
               isAnimating && "pointer-events-none",
             )}
           >
@@ -390,7 +403,15 @@ export function SessionBar() {
                             className="group gap-2 px-6"
                             disabled={cartItems.length === 0}
                             onClick={() => {
-                              setIsNotification(true);
+                              openNotification(
+                                <div className="flex w-full items-center justify-between gap-4 px-6">
+                                  <span className="text-primary-foreground font-semibold">
+                                    Order confirmed
+                                  </span>
+                                  <ConfirmationStatus status={status} />
+                                </div>,
+                                { persistent: true },
+                              );
                               handleStatusChange();
                             }}
                           >
@@ -469,7 +490,7 @@ export function SessionBar() {
                   initial={{ y: 20 }}
                   animate={{ y: 0 }}
                   exit={{ y: -20 }}
-                  transition={{ duration: 0.3, type: "spring" }}
+                  transition={{ duration: 0.2, type: "spring", damping: 16 }}
                   className="flex justify-between gap-1.5 p-2"
                 >
                   {orderItems.length > 0 && (
