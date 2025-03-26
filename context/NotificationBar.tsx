@@ -16,7 +16,7 @@ interface NotificationsContextType {
   openNotification: (
     content: ReactNode,
     options?: { timeout?: number; persistent?: boolean },
-  ) => void;
+  ) => string;
   closeNotification: (id: string) => void;
 }
 
@@ -60,6 +60,8 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
         closeNotification(id);
       }, timeout);
     }
+
+    return id;
   };
 
   // Function to close a notification manually

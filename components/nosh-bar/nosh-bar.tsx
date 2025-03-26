@@ -140,12 +140,13 @@ export function NoshBar() {
     setTimeout(() => setIsAnimating(false), 300);
   };
 
-  const handleStatusChange = () => {
+  const handleStatusChange = (id: string) => {
     setStatus("in-progress");
 
     setTimeout(() => {
       setStatus("confirmed");
       setOrderItems(sampleOrderItems);
+      closeNotification(id);
       setActiveTab("orders");
     }, 2000);
   };
@@ -165,12 +166,13 @@ export function NoshBar() {
             }}
             animate={{
               backgroundColor: "var(--primary)",
-              borderRadius: "3rem",
               height: "4rem",
-              width: "auto",
-              minWidth: "16rem",
             }}
-            style={{ width: "calc(100% - 2rem)" }}
+            style={{
+              borderRadius: "3rem",
+              minWidth: "16rem",
+              width: "auto",
+            }}
             className="text-primary-foreground sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto flex items-center overflow-hidden whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
           >
             <motion.div
@@ -179,7 +181,6 @@ export function NoshBar() {
               exit={{ y: "100%" }}
               transition={{ duration: 0.3, type: "spring" }}
               style={{ flex: 1 }}
-              onClick={() => closeNotification(notifications[0].id)}
             >
               {notifications.map(({ content }) => content)}
             </motion.div>
@@ -403,16 +404,16 @@ export function NoshBar() {
                             className="group gap-2 px-6"
                             disabled={cartItems.length === 0}
                             onClick={() => {
-                              openNotification(
+                              const id = openNotification(
                                 <div className="flex w-full items-center justify-between gap-4 px-6">
-                                  <span className="text-primary-foreground font-semibold">
-                                    Order confirmed
+                                  <span className="text-wave font-semibold">
+                                    Sending to kitchen
                                   </span>
                                   <ConfirmationStatus status={status} />
                                 </div>,
                                 { persistent: true },
                               );
-                              handleStatusChange();
+                              handleStatusChange(id);
                             }}
                           >
                             Confirm Order
