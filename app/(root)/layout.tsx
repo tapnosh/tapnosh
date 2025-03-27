@@ -8,15 +8,12 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Head from "next/head";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
 import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
+import stc from "string-to-color";
+import fontColorContrast from "font-color-contrast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,10 +48,17 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
+  params,
   children,
 }: Readonly<{
+  params: Promise<{ restaurant?: string }>;
   children: React.ReactNode;
 }>) {
+  const { restaurant } = await params;
+  console.log(restaurant);
+  const color = true ? stc(Math.random().toString()) : "";
+  const text = fontColorContrast(color);
+
   const locale = await getLocale();
   const messages = await getMessages();
 
@@ -74,6 +78,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <style>{`
+          :root {
+            --primary: ${color};
+            --primary-foreground: ${text};
+          }
+        `}</style>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -86,7 +96,7 @@ export default async function RootLayout({
                 <OrderProvider>
                   <AppSidebar />
                   <SidebarInset>
-                    <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                    {/* <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
                       <div className="flex flex-1 items-center gap-2 px-4">
                         <SidebarTrigger className="-ml-1" />
                         <Separator
@@ -98,8 +108,7 @@ export default async function RootLayout({
                           className="mr-2 h-4"
                         />
                       </div>
-                    </header>
-                    {/* <MorphButtonModal /> */}
+                    </header> */}
                     {children}
                     <NoshBar />
                   </SidebarInset>
