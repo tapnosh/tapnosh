@@ -13,7 +13,7 @@ import { OrderProvider } from "@/context/OrderContext";
 import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
 import stc from "string-to-color";
-import fontColorContrast from "font-color-contrast";
+import Color from "color";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,8 +56,17 @@ export default async function RootLayout({
 }>) {
   const { restaurant } = await params;
   console.log(restaurant);
-  const color = true ? stc(Math.random().toString()) : "";
-  const text = fontColorContrast(color);
+  const color = new Color(stc(Math.random().toString()));
+  let accent = color;
+  let foreground = color;
+
+  if (color.isDark()) {
+    accent = accent.lighten(0.6);
+    foreground = foreground.lighten(0.95);
+  } else {
+    accent = accent.darken(0.6);
+    foreground = foreground.darken(0.95);
+  }
 
   const locale = await getLocale();
   const messages = await getMessages();
@@ -80,8 +89,9 @@ export default async function RootLayout({
       >
         <style>{`
           :root {
-            --primary: ${color};
-            --primary-foreground: ${text};
+            --primary: ${color.hex()};
+            --primary-foreground: ${foreground.hex()};
+            --accent: ${accent.hex()};
           }
         `}</style>
         <ThemeProvider

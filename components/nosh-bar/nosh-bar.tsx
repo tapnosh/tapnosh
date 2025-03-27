@@ -257,20 +257,20 @@ export function NoshBar() {
                     </h3>
                     <button
                       onClick={handleCollapse}
-                      className="text-primary-foreground hover:bg-muted hover:text-secondary rounded-full p-1 transition-colors"
+                      className="text-primary-foreground hover:bg-accent hover:text-secondary rounded-full p-1 transition-colors"
                     >
                       <X className="h-5 w-5" />
                     </button>
                   </motion.div>
                   {/* Tab Navigation */}
-                  <div className="text-primary-foreground grid grid-cols-2 border-b">
+                  <div className="text-primary-foreground border-accent grid grid-cols-2 border-b">
                     <button
                       onClick={() => setActiveTab("orders")}
                       className={cn(
                         "group relative flex flex-col items-center justify-center overflow-hidden py-3 text-sm font-medium transition-colors",
                         activeTab === "orders"
                           ? "text-primary-foreground"
-                          : "text-muted-foreground hover:text-foreground",
+                          : "text-accent hover:text-foreground",
                       )}
                     >
                       <div className="flex items-center gap-1">
@@ -279,7 +279,10 @@ export function NoshBar() {
                       </div>
                       <div className="mt-1 flex items-center gap-1.5 text-xs">
                         <span>{orderItems.length} items</span>
-                        <Separator orientation="vertical" />
+                        <Separator
+                          orientation="vertical"
+                          className="bg-accent"
+                        />
                         <span className="font-bold">
                           ${totalOrderAmount.toFixed(2)}
                         </span>
@@ -299,7 +302,7 @@ export function NoshBar() {
                         "group relative flex flex-col items-center justify-center overflow-hidden py-3 text-sm font-medium transition-colors",
                         activeTab === "cart"
                           ? "text-primary-foreground"
-                          : "text-muted-foreground hover:text-foreground",
+                          : "text-accent hover:text-foreground",
                       )}
                     >
                       <div className="flex items-center gap-1">
@@ -308,7 +311,10 @@ export function NoshBar() {
                       </div>
                       <div className="mt-1 flex items-center gap-1.5 text-xs">
                         <span>{totalItems} items</span>
-                        <Separator orientation="vertical" />
+                        <Separator
+                          orientation="vertical"
+                          className="bg-accent"
+                        />
                         <span className="font-bold">
                           ${totalAmount.toFixed(2)}
                         </span>
@@ -339,13 +345,13 @@ export function NoshBar() {
                                     <span className="font-medium">
                                       {item.name}
                                     </span>
-                                    <span className="text-secondary text-sm">
+                                    <span className="text-accent text-sm">
                                       ${item.price.toFixed(2)}
                                     </span>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  <div className="flex items-center rounded-md border">
+                                  <div className="border-accent flex items-center rounded-md border">
                                     <button
                                       onClick={() =>
                                         updateQuantity(
@@ -353,7 +359,7 @@ export function NoshBar() {
                                           item.quantity - 1,
                                         )
                                       }
-                                      className="hover:bg-muted p-1 transition-colors"
+                                      className="hover:bg-accent p-1 transition-colors"
                                     >
                                       <Minus className="h-4 w-4" />
                                     </button>
@@ -367,30 +373,30 @@ export function NoshBar() {
                                           item.quantity + 1,
                                         )
                                       }
-                                      className="hover:bg-muted p-1 transition-colors"
+                                      className="hover:bg-accent p-1 transition-colors"
                                     >
                                       <Plus className="h-4 w-4" />
                                     </button>
                                   </div>
                                   <button
                                     onClick={() => removeCartItem(item.id)}
-                                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-md p-1 transition-colors"
+                                    className="text-accent hover:bg-destructive/10 hover:text-destructive rounded-md p-1 transition-colors"
                                     aria-label="Remove item"
                                   >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="h-5 w-5" />
                                   </button>
                                 </div>
                               </div>
                             ))}
                           </div>
                         ) : (
-                          <div className="text-muted-foreground mb-4 rounded-lg border border-dashed py-3 text-center text-sm">
+                          <div className="text-accent-foreground border-accent mb-4 rounded-lg border border-dashed py-3 text-center text-sm">
                             Your cart is empty
                           </div>
                         )}
-                        <div className="flex items-center justify-between border-t pt-3">
+                        <div className="border-accent flex items-center justify-between border-t pt-3">
                           <div className="flex flex-col">
-                            <span className="text-muted-foreground text-sm">
+                            <span className="text-accent text-sm">
                               {totalItems} {totalItems === 1 ? "item" : "items"}{" "}
                               in cart
                             </span>
@@ -401,7 +407,7 @@ export function NoshBar() {
                           <Button
                             size="lg"
                             variant="secondary"
-                            className="group gap-2 px-6"
+                            className="group bg-primary-foreground text-primary gap-2 px-6"
                             disabled={cartItems.length === 0}
                             onClick={() => {
                               const id = openNotification(
@@ -423,8 +429,8 @@ export function NoshBar() {
                       </div>
                     ) : (
                       <div className="flex max-h-[40vh] flex-col space-y-3">
-                        <div className="mb-3 flex items-center justify-between border-b pb-2">
-                          <span className="text-muted-foreground text-sm">
+                        <div className="border-accent mb-3 flex items-center justify-between border-b pb-2">
+                          <span className="text-accent text-sm">
                             {orderItems.length}{" "}
                             {orderItems.length === 1 ? "item" : "items"} ordered
                           </span>
@@ -453,7 +459,7 @@ export function NoshBar() {
                                   <span className="font-medium">
                                     {item.name}
                                   </span>
-                                  <span className="text-muted-foreground text-xs">
+                                  <span className="text-accent text-xs">
                                     {statusText[item.status]}
                                   </span>
                                 </div>
@@ -512,7 +518,7 @@ export function NoshBar() {
                     </div>
                     <div className="flex w-full flex-1 items-end justify-between">
                       <div className="flex flex-col items-start">
-                        <span className="text-muted text-xs leading-3">
+                        <span className="text-accent text-xs leading-3">
                           {totalItems} items
                         </span>
                         <span className="text-sm font-medium">

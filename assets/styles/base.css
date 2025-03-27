@@ -43,9 +43,9 @@
     background: linear-gradient(
       to right,
       var(--color-primary-foreground) 20%,
-      var(--color-muted-foreground) 30%,
+      var(--color-accent) 30%,
       var(--color-primary-foreground) 70%,
-      var(--color-muted-foreground) 80%
+      var(--color-accent) 80%
     );
     background-size: 500% auto;
     @apply animate-wave inline-block bg-clip-text text-transparent;
