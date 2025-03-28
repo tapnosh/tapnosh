@@ -4,24 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useOrder } from "@/context/OrderContext";
 import Image from "next/image";
-import { Beef, Minus, Plus, ShoppingBasket, Wheat } from "lucide-react";
+import { Minus, Plus, ShoppingBasket } from "lucide-react";
 import { Dispatch, useState } from "react";
 import { MenuItem } from "@/types/menu";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useNotification } from "@/context/NotificationBar";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { RemoveScroll } from "react-remove-scroll";
-
-const MotionCardTitle = motion(CardTitle);
-const MotionCardDescription = motion(CardDescription);
-const MotionButton = motion(Button);
+import { categoryIcons } from "./menu-item";
 
 export const AddToTabModal = ({
   open,
@@ -89,73 +79,79 @@ export const AddToTabModal = ({
               type: "spring",
               duration: 0.6,
             }}
-            className="text-primary-foreground fixed top-4 right-4 bottom-32 left-4 z-50 m-auto flex flex-col items-stretch py-6 whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
+            className="text-primary-foreground fixed top-4 right-4 bottom-32 left-4 z-50 m-auto flex flex-col items-stretch p-4 shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
           >
-            <CardHeader>
-              <MotionCardTitle layoutId={`item-title-${menuItem?.id}`}>
+            <header>
+              <div className="flex flex-wrap gap-1.5">
+                {menuItem?.categories.map((category) => (
+                  <Badge key={category} variant="secondary" className="text-xs">
+                    <span className="mr-1">
+                      {categoryIcons[category as keyof typeof categoryIcons]}
+                    </span>
+                    {category}
+                  </Badge>
+                ))}
+              </div>
+              <motion.h2
+                className="font-display-median mt-2 font-normal"
+                layoutId={`item-title-${menuItem?.id}`}
+              >
                 {menuItem?.name}
-              </MotionCardTitle>
-              <MotionCardDescription
-                className="text-accent"
+              </motion.h2>
+              <motion.span
+                className="text-accent italic"
                 layoutId={`item-description-${menuItem?.id}`}
               >
-                Dish long description
-              </MotionCardDescription>
-            </CardHeader>
-            <CardContent className="overflow-y-auto px-4 pt-4">
-              <motion.div
-                layoutId={`item-image-${menuItem?.id}`}
-                className="relative aspect-square min-h-28 w-full max-w-3xs overflow-clip rounded-sm sm:min-h-36 sm:min-w-36"
-              >
-                <Image
-                  src={menuItem?.image || ""}
-                  alt={menuItem?.name || ""}
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-              <div className="flex flex-1 justify-between gap-4 py-4">
-                <div className="flex flex-col">
-                  <motion.span
-                    layoutId={`item-ingredients-${menuItem?.id}`}
-                    className="text-accent mb-1 text-wrap"
-                  >
-                    {menuItem?.ingredients.join(" • ")}
-                  </motion.span>
-                  <div className="flex gap-1">
-                    <Badge variant="destructive">
-                      <Beef /> Meat
-                    </Badge>
-                    <Badge variant="secondary">
-                      <Wheat /> Gluten
-                    </Badge>
-                  </div>
-                  <h6 className="font-display text-primary mt-1 font-bold">
-                    {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
-                  </h6>
-                </div>
+                {menuItem?.description}
+              </motion.span>
+            </header>
+            <article>
+              <div className="flex flex-col pt-2">
+                <h6 className="text-accent uppercase">Ingredients</h6>
+                <span className="text-primary-foreground mb-1">
+                  {menuItem?.ingredients.join(" • ")}
+                </span>
               </div>
-            </CardContent>
-            <CardFooter className="mt-auto flex-row items-center justify-between">
-              <div className="border-accent flex items-center rounded-md border">
-                <button
-                  onClick={() => handleDecrement()}
-                  className="hover:bg-accent p-2 transition-colors"
+              {menuItem?.image && (
+                <motion.div
+                  layoutId={`item-image-${menuItem?.id}`}
+                  className="relative aspect-square flex-1 pt-2"
                 >
-                  <Minus className="h-5 w-5" />
-                </button>
-                <span className="px-3">{amount}</span>
-                <button
-                  onClick={() => handleIncrement()}
-                  className="hover:bg-accent p-2 transition-colors"
-                >
-                  <Plus className="h-5 w-5" />
-                </button>
+                  <Image
+                    src={menuItem.image}
+                    alt={menuItem.name}
+                    width={80}
+                    height={80}
+                    quality={50}
+                    className="h-full w-full rounded-md object-cover"
+                  />
+                </motion.div>
+              )}
+            </article>
+            <footer className="border-accent sticky bottom-0 mt-auto flex items-end justify-between border-t pt-2">
+              <div className="flex flex-col gap-2">
+                <h3 className="font-display text-primary-foreground mt-1 font-normal">
+                  {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
+                </h3>
+                <div className="border-accent flex items-center rounded-md border">
+                  <button
+                    onClick={() => handleDecrement()}
+                    className="hover:bg-accent p-2 transition-colors"
+                  >
+                    <Minus className="h-5 w-5" />
+                  </button>
+                  <span className="px-3">{amount}</span>
+                  <button
+                    onClick={() => handleIncrement()}
+                    className="hover:bg-accent p-2 transition-colors"
+                  >
+                    <Plus className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
 
               <div className="flex gap-2">
-                <MotionButton
-                  layoutId={`item-add-to-cart-${menuItem?.id}`}
+                <Button
                   size="lg"
                   className="bg-primary-foreground hover:bg-primary-foreground/75 text-primary"
                   onClick={() => handleAddToTab(menuItem!, +amount)}
@@ -165,9 +161,9 @@ export const AddToTabModal = ({
                     +amount * (menuItem?.price || 0),
                     menuItem?.currency,
                   )}
-                </MotionButton>
+                </Button>
               </div>
-            </CardFooter>
+            </footer>
           </motion.div>
         </RemoveScroll>
       )}

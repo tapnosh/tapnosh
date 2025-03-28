@@ -11,15 +11,14 @@ import {
   Fish,
   Leaf,
   Milk,
-  ShoppingBasket,
+  Plus,
   Wheat,
   Wine,
 } from "lucide-react";
 import { MenuItem } from "@/types/menu";
-import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { motion } from "motion/react";
 
-const categoryIcons = {
+export const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
   vegan: <Leaf className="h-4 w-4" />,
   vegetarian: <Leaf className="h-4 w-4" />,
@@ -32,8 +31,6 @@ const categoryIcons = {
   cold: <Beer className="h-4 w-4" />,
 };
 
-const MotionCardTitle = motion(CardTitle);
-const MotionCardDescription = motion(CardDescription);
 const MotionButton = motion(Button);
 
 // Menu Item Card Component
@@ -58,57 +55,15 @@ export function MenuItemCard({
         type: "spring",
         duration: 0.4,
       }}
-      className="hover:bg-muted cursor-pointer space-y-4 border py-4"
+      className="cursor-pointer space-y-4"
       onClick={() => onClick(item)}
     >
-      <CardContent className="flex flex-row items-start justify-between gap-4 px-4">
-        <div className="flex flex-1 flex-col">
-          <MotionCardTitle layoutId={`item-title-${item?.id}`}>
-            {item.name}
-          </MotionCardTitle>
-          <MotionCardDescription layoutId={`item-description-${item?.id}`}>
-            {item.name}
-          </MotionCardDescription>
-          <div className="mt-3">
-            <motion.span
-              layoutId={`item-ingredients-${item?.id}`}
-              className="text-sm"
-            >
-              {item.ingredients.join(" • ")}
-            </motion.span>
-          </div>
-
-          <div className="mt-3 flex flex-wrap gap-1">
-            {item.categories.map((category) => (
-              <Badge key={category} variant="secondary" className="text-xs">
-                <span className="mr-1">
-                  {categoryIcons[category as keyof typeof categoryIcons]}
-                </span>
-                {category}
-              </Badge>
-            ))}
-          </div>
-          <span className="mt-3 font-bold">${item.price.toFixed(2)}</span>
-        </div>
+      <div className="flex flex-row items-start justify-between gap-4 border-b pb-4">
         {item.image && (
           <motion.div
             layoutId={`item-image-${item?.id}`}
-            className="relative aspect-square shrink-0"
+            className="relative aspect-square max-w-24 flex-1 sm:max-w-32 md:max-w-40 xl:max-w-52"
           >
-            {isAvailable && (
-              <MotionButton
-                layoutId={`item-add-to-cart-${item?.id}`}
-                size="icon"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onAddToCart(e, item);
-                }}
-                className="absolute right-0 bottom-0 translate-1/4 translate-y-1/4"
-              >
-                <ShoppingBasket className="h-4 w-4" />
-              </MotionButton>
-            )}
             <Image
               src={item.image}
               alt={item.name}
@@ -119,7 +74,56 @@ export function MenuItemCard({
             />
           </motion.div>
         )}
-      </CardContent>
+        <div className="flex flex-1 flex-col">
+          <motion.header
+            className="flex items-start justify-between"
+            layoutId={`item-title-${item?.id}`}
+          >
+            <motion.span className="font-display-median text-lg">
+              {item.name}
+            </motion.span>
+            <span className="font-display-median text-lg font-semibold">
+              ${item.price.toFixed(2)}
+            </span>
+          </motion.header>
+          <motion.span
+            className="text-muted-foreground pr-15 text-sm italic"
+            layoutId={`item-description-${item?.id}`}
+          >
+            {item?.description}
+          </motion.span>
+          <footer className="mt-2 flex items-center justify-between gap-2">
+            <div className="flex flex-1 flex-col gap-2">
+              <span className="text-sm">{item.ingredients.join(" • ")}</span>
+              <div className="flex flex-wrap gap-1.5">
+                {item.categories.map((category) => (
+                  <Badge key={category} variant="secondary" className="text-xs">
+                    <span className="mr-1">
+                      {categoryIcons[category as keyof typeof categoryIcons]}
+                    </span>
+                    {category}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+
+            {isAvailable && (
+              <MotionButton
+                layoutId={`item-add-to-cart-${item?.id}`}
+                size="icon"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onAddToCart(e, item);
+                }}
+                className="shrink-0"
+              >
+                <Plus className="h-4 w-4" />
+              </MotionButton>
+            )}
+          </footer>
+        </div>
+      </div>
 
       {/* <CardFooter className="px-4">
         {!isAvailable && (

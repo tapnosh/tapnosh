@@ -55,7 +55,7 @@ export default function Order() {
       <section className="section @container mt-8">
         <h3 className="mb-2">Appetizer</h3>
 
-        <article className="grid gap-4 @3xl:grid-cols-2 @6xl:grid-cols-3">
+        <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
           <AnimatePresence>
             {SampleDishes.map((dish) => (
               <MenuItemCard

@@ -9,7 +9,7 @@ export const MenuItemSchema = z.object({
   currency: z.string(),
   ingredients: z.array(z.string()),
   categories: z.array(z.string()),
-  image: z.string().url(),
+  image: z.string().url().optional(),
   confirmed: z.boolean().optional(),
 });
 
