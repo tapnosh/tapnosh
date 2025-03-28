@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +17,7 @@ import {
 } from "lucide-react";
 import { MenuItem } from "@/types/menu";
 import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
+import { motion } from "motion/react";
 
 const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
@@ -93,9 +96,16 @@ export function MenuItemCard({
   onClick: (item: MenuItem) => void;
 }) {
   return (
-    <div
+    <motion.div
+      layout
+      layoutId={`item-${item?.id}`}
       role="button"
-      className="hover:bg-muted cursor-pointer space-y-4 rounded-2xl border py-4 transition-shadow"
+      style={{ borderRadius: "1rem" }}
+      transition={{
+        type: "tween",
+        duration: 0.2,
+      }}
+      className="hover:bg-muted cursor-pointer space-y-4 border py-4"
       onClick={() => onClick(item)}
     >
       <CardContent className="flex flex-row items-start justify-between gap-4 px-4">
@@ -124,6 +134,7 @@ export function MenuItemCard({
               <Button
                 size="icon"
                 onClick={(e) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   onAddToCart(e, item);
                 }}
@@ -151,6 +162,6 @@ export function MenuItemCard({
           </Badge>
         )}
       </CardFooter> */}
-    </div>
+    </motion.div>
   );
 }

@@ -158,11 +158,11 @@ export function NoshBar() {
           <motion.div
             layout
             layoutId="morph"
+            whileTap={{ scale: 0.95 }}
             transition={{
               duration: 0.3,
               type: "spring",
               damping: 16,
-              layout: { duration: 0.3, type: "spring", damping: 16 },
             }}
             animate={{
               backgroundColor: "var(--primary)",
@@ -172,6 +172,7 @@ export function NoshBar() {
               borderRadius: "3rem",
               minWidth: "16rem",
               width: "auto",
+              maxWidth: "32rem",
             }}
             className="text-primary-foreground sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto flex items-center overflow-hidden whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
           >
@@ -187,6 +188,7 @@ export function NoshBar() {
           </motion.div>
         ) : (
           <motion.div
+            whileTap={!isBarExpanded ? { scale: 0.95 } : {}}
             animate={{
               height: contentHeight,
               y: 0,
@@ -407,7 +409,7 @@ export function NoshBar() {
                           <Button
                             size="lg"
                             variant="secondary"
-                            className="group bg-primary-foreground text-primary gap-2 px-6"
+                            className="group bg-primary-foreground hover:bg-primary-foreground/75 text-primary gap-2 px-6"
                             disabled={cartItems.length === 0}
                             onClick={() => {
                               const id = openNotification(

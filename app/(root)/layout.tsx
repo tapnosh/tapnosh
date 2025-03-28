@@ -8,12 +8,17 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Head from "next/head";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
 import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
 import stc from "string-to-color";
 import Color from "color";
+import { Separator } from "@/components/ui/separator";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -106,7 +111,7 @@ export default async function RootLayout({
                 <OrderProvider>
                   <AppSidebar />
                   <SidebarInset>
-                    {/* <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                    <header className="bg-background z-10 flex h-16 shrink-0 items-center gap-2">
                       <div className="flex flex-1 items-center gap-2 px-4">
                         <SidebarTrigger className="-ml-1" />
                         <Separator
@@ -118,7 +123,7 @@ export default async function RootLayout({
                           className="mr-2 h-4"
                         />
                       </div>
-                    </header> */}
+                    </header>
                     {children}
                     <NoshBar />
                   </SidebarInset>

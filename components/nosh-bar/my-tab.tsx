@@ -20,7 +20,7 @@ export function MyTabSummary({
   return (
     <motion.button
       className={cn(
-        "group text-primary hover:bg-muted/50 bg-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-3xl p-3 transition-all",
+        "group text-primary hover:bg-primary-foreground/75 bg-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-3xl p-3 transition-all",
       )}
       onClick={() => expandWithTab("orders")}
     >

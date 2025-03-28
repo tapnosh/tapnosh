@@ -1,18 +1,18 @@
 "use client";
 // import Carousel from "@/components/featured/carousel";
-import { AddToTapDrawer } from "@/components/restaurant/menu/add-to-tap-drawer";
 import { MenuItemCard } from "@/components/restaurant/menu/menu-item";
-import { useState } from "react";
 import { Carousel } from "@/components/ui/carousel";
 import { EmblaOptionsType } from "embla-carousel";
 import { SampleDishes } from "@/mock/menu/dishes";
-import { MenuItem } from "@/types/menu";
 import Image from "next/image";
+import { AnimatePresence } from "motion/react";
+import { useState } from "react";
+import { MenuItem } from "@/types/menu";
+import { AddToTabModal } from "@/components/restaurant/menu/add-to-tab-modal";
 
 export default function Order() {
   const [open, setOpen] = useState(false);
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
-
   const SLIDE_COUNT = 5;
   const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
   const OPTIONS: EmblaOptionsType = {
@@ -24,7 +24,6 @@ export default function Order() {
     setMenuItem(item);
     setOpen(true);
   };
-
   return (
     <>
       <section className="section">
@@ -57,19 +56,21 @@ export default function Order() {
         <h3 className="mb-2">Appetizer</h3>
 
         <article className="grid gap-4 @3xl:grid-cols-2 @6xl:grid-cols-3">
-          {SampleDishes.map((dish) => (
-            <MenuItemCard
-              key={dish.id}
-              item={dish}
-              onClick={handleClick}
-              onAddToCart={() => {}}
-              isAvailable
-            />
-          ))}
+          <AnimatePresence>
+            {SampleDishes.map((dish) => (
+              <MenuItemCard
+                key={dish.id}
+                item={dish}
+                onClick={handleClick}
+                onAddToCart={() => {}}
+                isAvailable
+              />
+            ))}
+          </AnimatePresence>
         </article>
       </section>
 
-      <AddToTapDrawer setOpen={setOpen} open={open} menuItem={menuItem} />
+      <AddToTabModal menuItem={menuItem} open={open} setOpen={setOpen} />
     </>
   );
 }
