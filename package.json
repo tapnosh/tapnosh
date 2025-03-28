@@ -42,6 +42,7 @@
     "nextra-theme-docs": "^4.2.16",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-remove-scroll": "^2.6.3",
     "sonner": "^2.0.1",
     "string-to-color": "^2.2.2",
     "tailwind-merge": "^3.0.2",

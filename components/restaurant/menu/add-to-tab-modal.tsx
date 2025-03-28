@@ -4,12 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useOrder } from "@/context/OrderContext";
 import Image from "next/image";
-import { Beef, Minus, Plus, ShoppingBasket, Wheat, X } from "lucide-react";
+import { Beef, Minus, Plus, ShoppingBasket, Wheat } from "lucide-react";
 import { Dispatch, useState } from "react";
-import { Input } from "@/components/ui/input";
 import { MenuItem } from "@/types/menu";
 import { useCurrency } from "@/hooks/useCurrency";
-import { Separator } from "@/components/ui/separator";
 import { useNotification } from "@/context/NotificationBar";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -19,6 +17,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { RemoveScroll } from "react-remove-scroll";
+
+const MotionCardTitle = motion(CardTitle);
+const MotionCardDescription = motion(CardDescription);
+const MotionButton = motion(Button);
 
 export const AddToTabModal = ({
   open,
@@ -43,19 +46,6 @@ export const AddToTabModal = ({
     setAmount((prev) => (+prev <= 1 ? prev : +prev - 1));
   };
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    if (newValue === "" || /^[1-9]$/.test(newValue)) {
-      setAmount(newValue === "" ? "" : +newValue);
-    }
-  };
-
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value === "") {
-      setAmount(1);
-    }
-  };
-
   const handleAddToTab = (item: MenuItem, amnt?: number | string) => {
     const _amount = amnt ? +amnt : 1;
     const price = formatCurrency(item.price * _amount, item.currency);
@@ -78,50 +68,60 @@ export const AddToTabModal = ({
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
-          layoutId={`item-${menuItem?.id}`}
-          style={{
-            borderRadius: "16px",
-            maxHeight: "calc(100vh - 6rem)",
-            maxWidth: "32rem",
-          }}
-          transition={{
-            type: "spring",
-            duration: 0.6,
-          }}
-          className="bg-background fixed top-4 right-4 bottom-32 left-4 z-50 m-auto flex items-center whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
-        >
-          <CardContent>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-muted-foreground hover:bg-muted hover:text-foreground absolute top-4 right-4 rounded-full p-1 transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <CardHeader className="flex-row justify-between gap-4">
-              <div className="overflow-clip">
-                <CardTitle className="text-header truncate font-black">
-                  {menuItem?.name}
-                </CardTitle>
-                <CardDescription className="text-muted-foreground truncate">
-                  Dish long description
-                </CardDescription>
-              </div>
+        <RemoveScroll forwardProps>
+          <motion.div
+            layout
+            drag="y"
+            dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
+            onDragEnd={(_, info) => {
+              if (info.offset.y > 100) {
+                setOpen(false);
+              }
+            }}
+            layoutId={`item-${menuItem?.id}`}
+            style={{
+              borderRadius: "32px",
+              maxHeight: "calc(100vh - 6rem)",
+              maxWidth: "32rem",
+              backgroundColor: "var(--primary)",
+            }}
+            transition={{
+              type: "spring",
+              duration: 0.6,
+            }}
+            className="text-primary-foreground fixed top-4 right-4 bottom-32 left-4 z-50 m-auto flex flex-col items-stretch py-6 whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
+          >
+            <CardHeader>
+              <MotionCardTitle layoutId={`item-title-${menuItem?.id}`}>
+                {menuItem?.name}
+              </MotionCardTitle>
+              <MotionCardDescription
+                className="text-accent"
+                layoutId={`item-description-${menuItem?.id}`}
+              >
+                Dish long description
+              </MotionCardDescription>
             </CardHeader>
-            <article className="overflow-y-auto px-4">
-              <div className="relative aspect-square min-h-28 w-full overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
+            <CardContent className="overflow-y-auto px-4 pt-4">
+              <motion.div
+                layoutId={`item-image-${menuItem?.id}`}
+                className="relative aspect-square min-h-28 w-full max-w-3xs overflow-clip rounded-sm sm:min-h-36 sm:min-w-36"
+              >
                 <Image
                   src={menuItem?.image || ""}
                   alt={menuItem?.name || ""}
                   fill
                   className="object-cover"
                 />
-              </div>
+              </motion.div>
               <div className="flex flex-1 justify-between gap-4 py-4">
-                <div className="flex max-w-sm flex-col">
-                  <span className="text-muted-foreground mb-1 text-wrap">
-                    {["item", "item2", "item3"].join(" • ")}
-                  </span>
+                <div className="flex flex-col">
+                  <motion.span
+                    layoutId={`item-ingredients-${menuItem?.id}`}
+                    className="text-accent mb-1 text-wrap"
+                  >
+                    {menuItem?.ingredients.join(" • ")}
+                  </motion.span>
                   <div className="flex gap-1">
                     <Badge variant="destructive">
                       <Beef /> Meat
@@ -135,77 +135,29 @@ export const AddToTabModal = ({
                   </h6>
                 </div>
               </div>
-
-              <Separator />
-
-              {/* <div className="pt-4">
-            <h3 className="text-lg font-semibold">Recommended Sides</h3>
-            <p className="text-muted-foreground mb-4 text-sm">
-              Select additional items to complement your meal
-            </p>
-
-            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {recommendedSides.map((side) => (
-                <div
-                  key={side.id}
-                  className={cn(
-                    "flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors",
-                  )}
-                >
-                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md">
-                    <Image
-                      src={side.image || "/placeholder.svg"}
-                      alt={side.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-medium">{side.name}</h4>
-                    <p className="text-muted-foreground text-sm">
-                      ${side.price.toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div> */}
-            </article>
-            <CardFooter className="flex-row items-center justify-between">
-              <div className="flex shrink-0 items-center">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-10 w-10 rounded-r-none"
+            </CardContent>
+            <CardFooter className="mt-auto flex-row items-center justify-between">
+              <div className="border-accent flex items-center rounded-md border">
+                <button
                   onClick={() => handleDecrement()}
-                  disabled={+amount <= 1}
+                  className="hover:bg-accent p-2 transition-colors"
                 >
-                  <Minus className="h-6 w-6" />
-                  <span className="sr-only">Decrease quantity</span>
-                </Button>
-                <Input
-                  type="number"
-                  min="1"
-                  value={amount}
-                  onChange={handleAmountChange}
-                  onBlur={handleBlur}
-                  className="h-10 w-12 [appearance:textfield] rounded-none text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                />
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-10 w-10 rounded-l-none"
+                  <Minus className="h-5 w-5" />
+                </button>
+                <span className="px-3">{amount}</span>
+                <button
                   onClick={() => handleIncrement()}
-                  disabled={+amount >= 9}
+                  className="hover:bg-accent p-2 transition-colors"
                 >
-                  <Plus className="h-6 w-6" />
-                  <span className="sr-only">Increase quantity</span>
-                </Button>
+                  <Plus className="h-5 w-5" />
+                </button>
               </div>
 
               <div className="flex gap-2">
-                <Button
+                <MotionButton
+                  layoutId={`item-add-to-cart-${menuItem?.id}`}
                   size="lg"
+                  className="bg-primary-foreground hover:bg-primary-foreground/75 text-primary"
                   onClick={() => handleAddToTab(menuItem!, +amount)}
                 >
                   <ShoppingBasket /> Add{" "}
@@ -213,11 +165,11 @@ export const AddToTabModal = ({
                     +amount * (menuItem?.price || 0),
                     menuItem?.currency,
                   )}
-                </Button>
+                </MotionButton>
               </div>
             </CardFooter>
-          </CardContent>
-        </motion.div>
+          </motion.div>
+        </RemoveScroll>
       )}
     </AnimatePresence>
   );

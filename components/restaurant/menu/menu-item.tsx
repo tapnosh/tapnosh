@@ -32,56 +32,9 @@ const categoryIcons = {
   cold: <Beer className="h-4 w-4" />,
 };
 
-export const RestaurantMenuItem = ({
-  item,
-  onClick,
-}: {
-  item: MenuItem;
-  onClick: (item: MenuItem) => void;
-}) => {
-  return (
-    <Button
-      variant="ghost"
-      className="-mx-4 h-auto items-start justify-between"
-      onClick={() => onClick(item)}
-      asChild
-    >
-      <div className="flex flex-1 gap-4 py-4">
-        <div className="flex max-w-sm flex-col">
-          <h3 className="font-display-median font-black text-wrap">
-            {item.name}
-          </h3>
-          <p className="leading-4 text-wrap">{item.name}</p>
-          <span className="text-muted-foreground mb-1 text-wrap">
-            {item.ingredients.join(" • ")}
-          </span>
-          <div className="flex gap-1">
-            {item.categories.map((tag) => (
-              <Badge key={tag} variant="destructive">
-                <Beef /> {tag}
-              </Badge>
-            ))}
-          </div>
-          <h6 className="font-display text-primary mt-1 font-bold">
-            {item.price.toLocaleString("pl-PL", {
-              style: "currency",
-              currency: item.currency,
-            })}
-          </h6>
-        </div>
-
-        <div className="relative aspect-square min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
-          <Image
-            src={item.image}
-            alt="Tikka masala"
-            fill
-            className="object-cover"
-          />
-        </div>
-      </div>
-    </Button>
-  );
-};
+const MotionCardTitle = motion(CardTitle);
+const MotionCardDescription = motion(CardDescription);
+const MotionButton = motion(Button);
 
 // Menu Item Card Component
 export function MenuItemCard({
@@ -102,18 +55,27 @@ export function MenuItemCard({
       role="button"
       style={{ borderRadius: "1rem" }}
       transition={{
-        type: "tween",
-        duration: 0.2,
+        type: "spring",
+        duration: 0.4,
       }}
       className="hover:bg-muted cursor-pointer space-y-4 border py-4"
       onClick={() => onClick(item)}
     >
       <CardContent className="flex flex-row items-start justify-between gap-4 px-4">
         <div className="flex flex-1 flex-col">
-          <CardTitle>{item.name}</CardTitle>
-          <CardDescription>{item.name}</CardDescription>
+          <MotionCardTitle layoutId={`item-title-${item?.id}`}>
+            {item.name}
+          </MotionCardTitle>
+          <MotionCardDescription layoutId={`item-description-${item?.id}`}>
+            {item.name}
+          </MotionCardDescription>
           <div className="mt-3">
-            <p className="text-sm">{item.ingredients.join(" • ")}</p>
+            <motion.span
+              layoutId={`item-ingredients-${item?.id}`}
+              className="text-sm"
+            >
+              {item.ingredients.join(" • ")}
+            </motion.span>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-1">
@@ -129,9 +91,13 @@ export function MenuItemCard({
           <span className="mt-3 font-bold">${item.price.toFixed(2)}</span>
         </div>
         {item.image && (
-          <div className="relative aspect-square shrink-0">
+          <motion.div
+            layoutId={`item-image-${item?.id}`}
+            className="relative aspect-square shrink-0"
+          >
             {isAvailable && (
-              <Button
+              <MotionButton
+                layoutId={`item-add-to-cart-${item?.id}`}
                 size="icon"
                 onClick={(e) => {
                   e.preventDefault();
@@ -141,7 +107,7 @@ export function MenuItemCard({
                 className="absolute right-0 bottom-0 translate-1/4 translate-y-1/4"
               >
                 <ShoppingBasket className="h-4 w-4" />
-              </Button>
+              </MotionButton>
             )}
             <Image
               src={item.image}
@@ -151,7 +117,7 @@ export function MenuItemCard({
               quality={50}
               className="h-full w-full rounded-md object-cover"
             />
-          </div>
+          </motion.div>
         )}
       </CardContent>
 
