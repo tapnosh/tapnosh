@@ -42,12 +42,13 @@ export function MenuItemCard({
 }: {
   item: MenuItem;
   isAvailable: boolean;
-  onAddToCart: (e: React.MouseEvent, item: MenuItem) => void;
+  onAddToCart: (item: MenuItem) => void;
   onClick: (item: MenuItem) => void;
 }) {
   return (
     <motion.div
       layout
+      key={item.id}
       layoutId={`item-${item?.id}`}
       role="button"
       style={{ borderRadius: "1rem" }}
@@ -75,23 +76,15 @@ export function MenuItemCard({
           </motion.div>
         )}
         <div className="flex flex-1 flex-col">
-          <motion.header
-            className="flex items-start justify-between"
-            layoutId={`item-title-${item?.id}`}
-          >
-            <motion.span className="font-display-median text-lg">
-              {item.name}
-            </motion.span>
+          <header className="flex items-start justify-between">
+            <span className="font-display-median text-lg">{item.name}</span>
             <span className="font-display-median text-lg font-semibold">
               ${item.price.toFixed(2)}
             </span>
-          </motion.header>
-          <motion.span
-            className="text-muted-foreground pr-15 text-sm italic"
-            layoutId={`item-description-${item?.id}`}
-          >
+          </header>
+          <span className="text-muted-foreground pr-15 text-sm italic">
             {item?.description}
-          </motion.span>
+          </span>
           <footer className="mt-2 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col gap-2">
               <span className="text-sm">{item.ingredients.join(" • ")}</span>
@@ -114,7 +107,7 @@ export function MenuItemCard({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  onAddToCart(e, item);
+                  onAddToCart(item);
                 }}
                 className="shrink-0"
               >

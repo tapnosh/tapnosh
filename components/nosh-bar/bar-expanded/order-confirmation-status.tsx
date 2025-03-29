@@ -1,7 +1,7 @@
 import { Check, Loader2Icon } from "lucide-react";
 import { motion } from "motion/react";
 
-export const ConfirmationStatus = ({ status }: { status: string }) => {
+export const OrderConfirmationStatus = ({ status }: { status: string }) => {
   if (status === "confirmed") {
     return (
       <motion.div

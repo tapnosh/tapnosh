@@ -1,24 +1,16 @@
 "use client";
-// import Carousel from "@/components/featured/carousel";
-import { MenuItemCard } from "@/components/restaurant/menu/menu-item";
-import { Carousel } from "@/components/ui/carousel";
-import { EmblaOptionsType } from "embla-carousel";
+import { MenuItemCard } from "@/components/menu/menu-item";
+import { Featured } from "@/components/menu/featured";
 import { SampleDishes } from "@/mock/menu/dishes";
 import Image from "next/image";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { MenuItem } from "@/types/menu";
-import { AddToTabModal } from "@/components/restaurant/menu/add-to-tab-modal";
+import { MenuItemModal } from "@/components/menu/menu-item-modal";
 
 export default function Order() {
   const [open, setOpen] = useState(false);
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
-  const SLIDE_COUNT = 5;
-  const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
-  const OPTIONS: EmblaOptionsType = {
-    loop: true,
-    align: "start",
-  };
 
   const handleClick = (item: MenuItem) => {
     setMenuItem(item);
@@ -45,11 +37,16 @@ export default function Order() {
       <section className="section pb-2 lg:pb-4">
         <h3>Chef Picks</h3>
       </section>
-      <Carousel
-        slides={SLIDES}
-        options={OPTIONS}
+      <Featured
+        items={SampleDishes.slice(0, 3)}
+        options={{
+          loop: true,
+          align: "start",
+          dragFree: true,
+        }}
         slideHeight="40vh"
         slideSize="40vh"
+        onAddToCart={handleClick}
       />
 
       <section className="section @container mt-8">
@@ -62,7 +59,7 @@ export default function Order() {
                 key={dish.id}
                 item={dish}
                 onClick={handleClick}
-                onAddToCart={() => {}}
+                onAddToCart={handleClick}
                 isAvailable
               />
             ))}
@@ -70,7 +67,7 @@ export default function Order() {
         </article>
       </section>
 
-      <AddToTabModal menuItem={menuItem} open={open} setOpen={setOpen} />
+      <MenuItemModal menuItem={menuItem} open={open} setOpen={setOpen} />
     </>
   );
 }

@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { RemoveScroll } from "react-remove-scroll";
 import { categoryIcons } from "./menu-item";
 
-export const AddToTabModal = ({
+export const MenuItemModal = ({
   open,
   setOpen,
   menuItem,
@@ -44,7 +44,7 @@ export const AddToTabModal = ({
     setOpen(false);
 
     openNotification(
-      <div className="flex w-full items-center justify-between gap-4 px-6">
+      <div className="flex items-center justify-between gap-4 px-6">
         <div className="flex flex-col">
           <span className="text-primary-foreground font-semibold">
             Added {item.name}
@@ -91,15 +91,15 @@ export const AddToTabModal = ({
                 type: "spring",
                 duration: 0.6,
               }}
-              className="sticky right-4 bottom-32 left-4 z-50 m-auto flex flex-col items-stretch overflow-clip border p-4 pb-0 shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
+              className="sticky right-4 bottom-32 left-4 z-50 m-auto flex flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
             >
               <button
                 onClick={() => setOpen(false)}
-                className="text-muted-foreground hover:bg-muted-foreground hover:text-secondary absolute top-4 right-4 rounded-full p-1 transition-colors"
+                className="text-muted-foreground hover:bg-muted-foreground hover:text-secondary absolute top-4 right-4 z-10 rounded-full p-1 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
-              <article className="flex flex-col overflow-auto">
+              <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
                   <div className="flex flex-wrap gap-1.5">
                     {menuItem?.categories.map((category) => (
@@ -120,26 +120,44 @@ export const AddToTabModal = ({
                     ))}
                   </div>
                   <motion.h2
-                    className="font-display-median mt-2 font-normal"
-                    layoutId={`item-title-${menuItem?.id}`}
+                    className="font-display-median mt-3 font-normal"
+                    initial={{ opacity: 0, y: "50%" }}
+                    animate={{ opacity: 1, y: "0%" }}
+                    exit={{ opacity: 0, y: "50%" }}
+                    transition={{ delay: 0.2, type: "tween", duration: 0.3 }}
                   >
                     {menuItem?.name}
                   </motion.h2>
                   <motion.span
-                    className="text-muted-foreground italic"
-                    layoutId={`item-description-${menuItem?.id}`}
+                    className="text-muted-foreground mt-1 block italic"
+                    initial={{ opacity: 0, y: "50%" }}
+                    animate={{ opacity: 1, y: "0%" }}
+                    exit={{ opacity: 0, y: "50%" }}
+                    transition={{ delay: 0.3, type: "tween", duration: 0.3 }}
                   >
                     {menuItem?.description}
                   </motion.span>
                 </header>
                 <div className="pb-4">
-                  <div className="flex flex-col pt-2">
-                    <h6 className="text-muted-foreground font-display-median uppercase">
+                  <div className="flex flex-col pt-3">
+                    <motion.h6
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: "0%" }}
+                      exit={{ opacity: 0, y: "50%" }}
+                      transition={{ delay: 0.4, type: "tween", duration: 0.3 }}
+                      className="font-display-median text-foreground block uppercase"
+                    >
                       Ingredients
-                    </h6>
-                    <span className="mb-1">
+                    </motion.h6>
+                    <motion.span
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: "0%" }}
+                      exit={{ opacity: 0, y: "50%" }}
+                      transition={{ delay: 0.5, type: "tween", duration: 0.3 }}
+                      className="text-muted-foreground mb-1 block"
+                    >
                       {menuItem?.ingredients.join(" • ")}
-                    </span>
+                    </motion.span>
                   </div>
                   {menuItem?.image && (
                     <motion.div
@@ -157,9 +175,15 @@ export const AddToTabModal = ({
                     </motion.div>
                   )}
                 </div>
-                <footer className="border-muted bg-background sticky bottom-0 mt-auto flex items-end justify-between border-t pt-2 pb-4">
+                <motion.footer
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: 0.2, type: "tween", duration: 0.3 }}
+                  className="border-muted bg-background sticky bottom-0 mt-auto flex items-end justify-between border-t pt-2 pb-4"
+                >
                   <div className="flex flex-col items-start gap-2">
-                    <h3 className="font-display mt-1 font-normal">
+                    <h3 className="font-display mt-1 font-normal md:text-2xl">
                       {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
                     </h3>
                     <div className="border-muted-foreground flex items-center overflow-clip rounded-md border">
@@ -192,7 +216,7 @@ export const AddToTabModal = ({
                       )}
                     </Button>
                   </div>
-                </footer>
+                </motion.footer>
               </article>
             </motion.div>
           </RemoveScroll>
