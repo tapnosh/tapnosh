@@ -6,7 +6,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Loader2Icon } from "lucide-react";
+import { Camera, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +19,7 @@ import {
 import { useLayoutEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useCamera } from "@/hooks/useCamera";
 
 export default function Restaurants() {
   const searchParams = useSearchParams();
@@ -75,6 +76,8 @@ export default function Restaurants() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  const { isCameraAllowed, requestCamera } = useCamera();
+
   return (
     <>
       <section className="section items-center">
@@ -95,29 +98,39 @@ export default function Restaurants() {
             </CardHeader>
             <CardContent className="flex justify-center">
               <div className="bg-muted relative flex aspect-square w-full max-w-md justify-center overflow-clip rounded-lg">
+                {!isCameraAllowed && (
+                  <div className="absolute inset-0 z-[2] flex items-center justify-center">
+                    <Button onClick={() => requestCamera()}>
+                      Allow Camera <Camera />
+                    </Button>
+                  </div>
+                )}
+
                 <div className="border-primary-foreground absolute inset-[15%] z-[1] flex justify-center rounded-lg border-2">
                   <div className="text-primary-foreground font-display-median absolute bottom-0 m-auto flex h-[22%] translate-y-full items-center text-lg font-black sm:text-xl">
                     Tapnosh
                   </div>
                 </div>
 
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 -z-10 flex items-center justify-center">
                   <Loader2Icon className="animate-spin" />
                 </div>
 
-                <Scanner
-                  styles={{
-                    finderBorder: 0,
-                    container: {
-                      width: "100%",
-                      borderRadius: "2rem",
-                    },
-                  }}
-                  components={{
-                    finder: false,
-                  }}
-                  onScan={handleScan}
-                />
+                {isCameraAllowed && (
+                  <Scanner
+                    styles={{
+                      finderBorder: 0,
+                      container: {
+                        width: "100%",
+                        borderRadius: "2rem",
+                      },
+                    }}
+                    components={{
+                      finder: false,
+                    }}
+                    onScan={handleScan}
+                  />
+                )}
               </div>
             </CardContent>
           </Card>

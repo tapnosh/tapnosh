@@ -3,10 +3,11 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // Define the shape of a notification
-interface Notification {
+export interface Notification {
   id: string;
   content: ReactNode;
   persistent: boolean;
+  open: boolean;
   timeout?: number;
 }
 
@@ -51,7 +52,13 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     const persistent = options?.persistent ?? false;
     const timeout = options?.timeout ?? 2000;
 
-    const newNotification: Notification = { id, content, persistent, timeout };
+    const newNotification: Notification = {
+      id,
+      content,
+      persistent,
+      timeout,
+      open: true,
+    };
     setNotifications((prev) => [...prev, newNotification]);
 
     // If notification is not persistent and timeout is provided, auto close it
@@ -66,7 +73,12 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
 
   // Function to close a notification manually
   const closeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    setNotifications((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, open: false } : item)),
+    );
+    setTimeout(() => {
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    }, 600);
   };
 
   return (
