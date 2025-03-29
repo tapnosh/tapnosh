@@ -81,7 +81,7 @@ export function NoshBarWrapper() {
         layoutId="morph"
         whileTap={{ scale: 0.95 }}
         transition={{
-          duration: 0.2,
+          duration: 0.1,
           type: "spring",
           damping: 16,
         }}
@@ -90,14 +90,25 @@ export function NoshBarWrapper() {
         }}
         style={{
           backgroundColor: "var(--primary)",
-          borderRadius: "3rem",
-          minWidth: "16rem",
-          maxWidth: "32rem",
+          borderRadius: "2rem",
+          minWidth: "8rem",
+          maxWidth: "24rem",
         }}
         onClick={() => closeNotification(notifications[0].id)}
         className="text-primary-foreground sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto flex items-center justify-center overflow-hidden whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
       >
-        <motion.div layout>
+        <div className="invisible">
+          {notifications.map(({ content }) => content)}
+        </div>
+        <motion.div
+          layout
+          key="morph-notification"
+          transition={{ type: "tween", delay: 0.1 }}
+          initial={{ bottom: "-100%" }}
+          animate={{ bottom: 0 }}
+          exit={{ bottom: -150 }}
+          className="absolute right-0 flex h-full w-full items-center justify-center"
+        >
           {notifications.map(({ content }) => content)}
         </motion.div>
       </motion.div>
