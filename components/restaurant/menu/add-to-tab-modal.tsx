@@ -61,7 +61,7 @@ export const AddToTabModal = ({
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-50 bg-black/40"
+            className="fixed inset-0 z-50 bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -85,7 +85,7 @@ export const AddToTabModal = ({
                 maxHeight: "calc(100dvh - 9rem)",
                 maxWidth: "32rem",
                 backgroundColor: "var(--background)",
-                width: "100%",
+                width: "calc(100% - 2rem)",
               }}
               transition={{
                 type: "spring",
