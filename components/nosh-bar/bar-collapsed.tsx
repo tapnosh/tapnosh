@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowRight, ReceiptText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { OrderItem } from "./nosh-bar";
@@ -52,38 +52,41 @@ export function CollapsedBar({
   totalAmount: number;
 }) {
   return (
-    <motion.div
-      layout
-      initial={{ y: 20 }}
-      animate={{ y: 0 }}
-      exit={{ y: -20 }}
-      transition={{ duration: 0.2, type: "spring", damping: 16 }}
-      className="flex justify-between gap-1.5 p-2"
-    >
-      {orderItems.length > 0 && (
-        <MyTabSummary expandWithTab={expandWithTab} orderItems={orderItems} />
-      )}
-      <motion.button
-        className={cn(
-          "group hover:bg-primary/90 bg-primary text-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-lg p-3 transition-all",
-        )}
-        onClick={() => expandWithTab("cart")}
+    <AnimatePresence>
+      <motion.div
+        layout
+        key="collapsed-bar"
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: "0%" }}
+        exit={{ opacity: 0, y: 100 }}
+        transition={{ duration: 0.2, type: "spring", damping: 16 }}
+        className="flex justify-between gap-1.5 p-2"
       >
-        <div className="flex items-center gap-2">
-          <span className="font-bold whitespace-nowrap">Confirm Order</span>
-        </div>
-        <div className="flex w-full flex-1 items-end justify-between">
-          <div className="flex flex-col items-start">
-            <span className="text-accent text-xs leading-3">
-              {totalItems} items
-            </span>
-            <span className="text-sm font-medium">
-              ${totalAmount.toFixed(2)}
-            </span>
+        {orderItems.length > 0 && (
+          <MyTabSummary expandWithTab={expandWithTab} orderItems={orderItems} />
+        )}
+        <motion.button
+          className={cn(
+            "group hover:bg-primary/90 bg-primary text-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-lg p-3 transition-all",
+          )}
+          onClick={() => expandWithTab("cart")}
+        >
+          <div className="flex items-center gap-2">
+            <span className="font-bold whitespace-nowrap">Confirm Order</span>
           </div>
-          <ArrowRight />
-        </div>
-      </motion.button>
-    </motion.div>
+          <div className="flex w-full flex-1 items-end justify-between">
+            <div className="flex flex-col items-start">
+              <span className="text-accent text-xs leading-3">
+                {totalItems} items
+              </span>
+              <span className="text-sm font-medium">
+                ${totalAmount.toFixed(2)}
+              </span>
+            </div>
+            <ArrowRight />
+          </div>
+        </motion.button>
+      </motion.div>
+    </AnimatePresence>
   );
 }

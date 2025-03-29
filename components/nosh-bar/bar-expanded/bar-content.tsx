@@ -117,7 +117,7 @@ export function CartContent({
           disabled={cartItems.length === 0}
           onClick={() => {
             const id = openNotification(
-              <div className="flex w-full items-center justify-between gap-4 px-4">
+              <div className="flex w-full items-center justify-between gap-4 px-6">
                 <span className="text-wave font-semibold">
                   Sending to kitchen
                 </span>
