@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Trash2, Minus, Plus, ArrowRight } from "lucide-react";
+import { Trash2, Minus, Plus, ArrowRight, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -169,41 +169,35 @@ type OrdersContentProps = {
 
 export function OrdersContent({
   orderItems,
-  isOrderListExpanded,
-  setIsOrderListExpanded,
   totalOrderAmount,
 }: OrdersContentProps) {
   return (
     <div className="flex max-h-[40vh] flex-col space-y-3">
-      <div className="border-accent mb-3 flex items-center justify-between border-b pb-2">
-        <span className="text-accent text-sm">
-          {orderItems.length} {orderItems.length === 1 ? "item" : "items"}{" "}
-          ordered
-        </span>
-        <span className="text-xl font-bold">
-          ${totalOrderAmount.toFixed(2)}
-        </span>
-      </div>
       <div className="flex flex-1 flex-col space-y-3 overflow-y-auto">
-        {(isOrderListExpanded ? orderItems : orderItems.slice(0, 2)).map(
-          (item) => (
-            <OrderItemRow key={item.id} item={item} />
-          ),
-        )}
+        {orderItems.map((item) => (
+          <OrderItemRow key={item.id} item={item} />
+        ))}
       </div>
-      {orderItems.length > 2 && (
-        <button
-          onClick={() => setIsOrderListExpanded(!isOrderListExpanded)}
-          className="text-primary-foreground hover:bg-primary/10 flex w-full items-center justify-center gap-1 rounded-md py-2 text-sm font-medium transition-colors"
-        >
-          {isOrderListExpanded ? "See Less" : "See More"}
-          <ChevronDown
-            className={cn(
-              "h-4 w-4 transition-transform duration-300",
-              isOrderListExpanded ? "rotate-180" : "",
-            )}
-          />
-        </button>
+      {orderItems.length > 0 && (
+        <div className="border-accent flex items-center justify-between border-t pt-3">
+          <div className="flex flex-col">
+            <span className="text-accent text-sm">
+              {orderItems.length} {orderItems.length === 1 ? "item" : "items"}{" "}
+              ordered
+            </span>
+            <span className="text-xl font-bold">
+              ${totalOrderAmount.toFixed(2)}
+            </span>
+          </div>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="group bg-primary-foreground hover:bg-primary-foreground/75 text-primary gap-2 px-6"
+          >
+            Pay ${totalOrderAmount.toFixed(2)}
+            <Wallet className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
+        </div>
       )}
     </div>
   );
