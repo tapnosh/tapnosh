@@ -686,7 +686,6 @@ function SidebarMenuSubButton({
   const { isMobile, setOpenMobile } = useSidebar();
 
   const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    console.log("onClick");
     onClick?.(event);
     if (isMobile) {
       setOpenMobile(false);
