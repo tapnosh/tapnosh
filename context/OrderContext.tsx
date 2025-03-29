@@ -35,9 +35,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
       if (existingItemIndex > -1) {
         const updatedItems = [...currentItems];
-        console.log(updatedItems[existingItemIndex]);
         updatedItems[existingItemIndex].quantity += quantity;
-        console.log(updatedItems[existingItemIndex]);
         return updatedItems;
       }
 

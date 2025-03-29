@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
@@ -52,15 +52,24 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "oklch(1 0 0)",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "oklch(0.147 0.004 49.25)",
+    },
+  ],
+};
+
 export default async function RootLayout({
-  params,
   children,
 }: Readonly<{
-  params: Promise<{ restaurant?: string }>;
   children: React.ReactNode;
 }>) {
-  const { restaurant } = await params;
-  console.log(restaurant);
   const color = new Color(stc(Math.random().toString()));
   let accent = color;
   let foreground = color;
