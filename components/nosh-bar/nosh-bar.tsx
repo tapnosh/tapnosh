@@ -174,6 +174,7 @@ export function NoshBar() {
               width: "auto",
               maxWidth: "32rem",
             }}
+            onClick={() => closeNotification(notifications[0].id)}
             className="text-primary-foreground sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto flex items-center overflow-hidden whitespace-nowrap shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
           >
             <motion.div
@@ -516,7 +517,9 @@ export function NoshBar() {
                     onClick={() => expandWithTab("cart")}
                   >
                     <div className="flex items-center gap-2">
-                      <span className="font-bold">Confirm Order</span>
+                      <span className="font-bold whitespace-nowrap">
+                        Confirm Order
+                      </span>
                     </div>
                     <div className="flex w-full flex-1 items-end justify-between">
                       <div className="flex flex-col items-start">

@@ -25,7 +25,7 @@ export function MyTabSummary({
       onClick={() => expandWithTab("orders")}
     >
       <div className="flex items-center gap-2">
-        <span className="font-bold">My Tab</span>
+        <span className="font-bold whitespace-nowrap">My Tab</span>
       </div>
       <div className="flex w-full items-end justify-between">
         <div className="flex flex-col items-start">
