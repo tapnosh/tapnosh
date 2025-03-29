@@ -1,3 +1,15 @@
+@theme {
+  --animate-wave: wave 5s ease-in-out infinite alternate;
+  @keyframes wave {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+}
+
 @layer base {
   h1 {
     @apply font-display-median text-3xl font-black sm:text-4xl lg:text-5xl xl:text-6xl;
@@ -25,5 +37,17 @@
 
   .font-logo {
     @apply font-display-median font-black tracking-tight;
+  }
+
+  .text-wave {
+    background: linear-gradient(
+      to right,
+      var(--color-primary-foreground) 20%,
+      var(--color-accent) 30%,
+      var(--color-primary-foreground) 70%,
+      var(--color-accent) 80%
+    );
+    background-size: 500% auto;
+    @apply animate-wave inline-block bg-clip-text text-transparent;
   }
 }

@@ -1,54 +1,137 @@
+"use client";
+
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Beef } from "lucide-react";
+import {
+  Beef,
+  Beer,
+  Coffee,
+  Droplets,
+  Fish,
+  Leaf,
+  Milk,
+  Plus,
+  Wheat,
+  Wine,
+} from "lucide-react";
 import { MenuItem } from "@/types/menu";
+import { motion } from "motion/react";
 
-export const RestaurantMenuItem = ({
+export const categoryIcons = {
+  meat: <Beef className="h-4 w-4" />,
+  vegan: <Leaf className="h-4 w-4" />,
+  vegetarian: <Leaf className="h-4 w-4" />,
+  "gluten-free": <Wheat className="h-4 w-4 line-through" />,
+  "dairy-free": <Milk className="h-4 w-4 line-through" />,
+  seafood: <Fish className="h-4 w-4" />,
+  alcoholic: <Wine className="h-4 w-4" />,
+  "non-alcoholic": <Droplets className="h-4 w-4" />,
+  hot: <Coffee className="h-4 w-4" />,
+  cold: <Beer className="h-4 w-4" />,
+};
+
+const MotionButton = motion(Button);
+
+// Menu Item Card Component
+export function MenuItemCard({
   item,
+  isAvailable,
+  onAddToCart,
   onClick,
 }: {
   item: MenuItem;
+  isAvailable: boolean;
+  onAddToCart: (e: React.MouseEvent, item: MenuItem) => void;
   onClick: (item: MenuItem) => void;
-}) => {
+}) {
   return (
-    <Button
-      variant="ghost"
-      className="-mx-4 h-auto items-start justify-between"
+    <motion.div
+      layout
+      layoutId={`item-${item?.id}`}
+      role="button"
+      style={{ borderRadius: "1rem" }}
+      transition={{
+        type: "spring",
+        duration: 0.4,
+      }}
+      className="cursor-pointer space-y-4"
       onClick={() => onClick(item)}
-      asChild
     >
-      <div className="flex flex-1 gap-4 py-4">
-        <div className="flex max-w-sm flex-col">
-          <h4 className="text-header text-wrap">{item.name}</h4>
-          <p className="leading-4 text-wrap">{item.name}</p>
-          <span className="text-muted-foreground mb-1 text-wrap">
-            {item.ingredients.join(" • ")}
-          </span>
-          <div className="flex gap-1">
-            {item.tags.map((tag) => (
-              <Badge key={tag} variant="destructive">
-                <Beef /> {tag}
-              </Badge>
-            ))}
-          </div>
-          <h6 className="font-display text-primary mt-1 font-bold">
-            {item.price.toLocaleString("pl-PL", {
-              style: "currency",
-              currency: item.currency,
-            })}
-          </h6>
-        </div>
+      <div className="flex flex-row items-start justify-between gap-4 border-b pb-4">
+        {item.image && (
+          <motion.div
+            layoutId={`item-image-${item?.id}`}
+            className="relative aspect-square max-w-24 flex-1 sm:max-w-32 md:max-w-40 xl:max-w-52"
+          >
+            <Image
+              src={item.image}
+              alt={item.name}
+              width={80}
+              height={80}
+              quality={50}
+              className="h-full w-full rounded-md object-cover"
+            />
+          </motion.div>
+        )}
+        <div className="flex flex-1 flex-col">
+          <motion.header
+            className="flex items-start justify-between"
+            layoutId={`item-title-${item?.id}`}
+          >
+            <motion.span className="font-display-median text-lg">
+              {item.name}
+            </motion.span>
+            <span className="font-display-median text-lg font-semibold">
+              ${item.price.toFixed(2)}
+            </span>
+          </motion.header>
+          <motion.span
+            className="text-muted-foreground pr-15 text-sm italic"
+            layoutId={`item-description-${item?.id}`}
+          >
+            {item?.description}
+          </motion.span>
+          <footer className="mt-2 flex items-center justify-between gap-2">
+            <div className="flex flex-1 flex-col gap-2">
+              <span className="text-sm">{item.ingredients.join(" • ")}</span>
+              <div className="flex flex-wrap gap-1.5">
+                {item.categories.map((category) => (
+                  <Badge key={category} variant="secondary" className="text-xs">
+                    <span className="mr-1">
+                      {categoryIcons[category as keyof typeof categoryIcons]}
+                    </span>
+                    {category}
+                  </Badge>
+                ))}
+              </div>
+            </div>
 
-        <div className="relative aspect-square min-h-28 min-w-28 overflow-clip rounded-sm sm:min-h-36 sm:min-w-36">
-          <Image
-            src={item.image}
-            alt="Tikka masala"
-            fill
-            className="object-cover"
-          />
+            {isAvailable && (
+              <MotionButton
+                layoutId={`item-add-to-cart-${item?.id}`}
+                size="icon"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onAddToCart(e, item);
+                }}
+                className="shrink-0"
+              >
+                <Plus className="h-4 w-4" />
+              </MotionButton>
+            )}
+          </footer>
         </div>
       </div>
-    </Button>
+
+      {/* <CardFooter className="px-4">
+        {!isAvailable && (
+          <Badge variant="outline" className="text-muted-foreground">
+            Not Available
+          </Badge>
+        )}
+      </CardFooter> */}
+    </motion.div>
   );
-};
+}

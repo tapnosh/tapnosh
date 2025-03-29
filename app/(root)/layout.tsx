@@ -8,14 +8,17 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Head from "next/head";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
-import { SessionBar } from "@/components/session/session-bar";
+import { NoshBar } from "@/components/nosh-bar/nosh-bar";
+import { NotificationProvider } from "@/context/NotificationBar";
+import stc from "string-to-color";
+import Color from "color";
+import { Separator } from "@/components/ui/separator";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,10 +53,26 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
+  params,
   children,
 }: Readonly<{
+  params: Promise<{ restaurant?: string }>;
   children: React.ReactNode;
 }>) {
+  const { restaurant } = await params;
+  console.log(restaurant);
+  const color = new Color(stc(Math.random().toString()));
+  let accent = color;
+  let foreground = color;
+
+  if (color.isDark()) {
+    accent = accent.lighten(0.6);
+    foreground = foreground.lighten(0.95);
+  } else {
+    accent = accent.darken(0.6);
+    foreground = foreground.darken(0.95);
+  }
+
   const locale = await getLocale();
   const messages = await getMessages();
 
@@ -73,6 +92,13 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <style>{`
+          :root {
+            --primary: ${color.hex()};
+            --primary-foreground: ${foreground.hex()};
+            --accent: ${accent.hex()};
+          }
+        `}</style>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -81,21 +107,29 @@ export default async function RootLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <SidebarProvider>
-              <OrderProvider>
-                <AppSidebar />
-                <SidebarInset>
-                  <header className="bg-background sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
-                    <div className="flex flex-1 items-center gap-2 px-4">
-                      <SidebarTrigger className="-ml-1" />
-                      <Separator orientation="vertical" className="mr-2 h-4" />
-                      <Separator orientation="vertical" className="mr-2 h-4" />
-                    </div>
-                  </header>
-                  {children}
-                  <SessionBar />
-                </SidebarInset>
-                <Toaster />
-              </OrderProvider>
+              <NotificationProvider>
+                <OrderProvider>
+                  <AppSidebar />
+                  <SidebarInset>
+                    <header className="bg-background z-10 flex h-16 shrink-0 items-center gap-2">
+                      <div className="flex flex-1 items-center gap-2 px-4">
+                        <SidebarTrigger className="-ml-1" />
+                        <Separator
+                          orientation="vertical"
+                          className="mr-2 h-4"
+                        />
+                        <Separator
+                          orientation="vertical"
+                          className="mr-2 h-4"
+                        />
+                      </div>
+                    </header>
+                    {children}
+                    <NoshBar />
+                  </SidebarInset>
+                  <Toaster />
+                </OrderProvider>
+              </NotificationProvider>
             </SidebarProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

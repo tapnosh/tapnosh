@@ -1,21 +1,21 @@
 "use client";
 // import Carousel from "@/components/featured/carousel";
-import { AddToTapDrawer } from "@/components/restaurant/menu/add-to-tap-drawer";
-import { RestaurantMenuItem } from "@/components/restaurant/menu/menu-item";
-import { useState } from "react";
+import { MenuItemCard } from "@/components/restaurant/menu/menu-item";
 import { Carousel } from "@/components/ui/carousel";
 import { EmblaOptionsType } from "embla-carousel";
 import { SampleDishes } from "@/mock/menu/dishes";
+import Image from "next/image";
+import { AnimatePresence } from "motion/react";
+import { useState } from "react";
 import { MenuItem } from "@/types/menu";
+import { AddToTabModal } from "@/components/restaurant/menu/add-to-tab-modal";
 
 export default function Order() {
   const [open, setOpen] = useState(false);
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
-
   const SLIDE_COUNT = 5;
   const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
   const OPTIONS: EmblaOptionsType = {
-    dragFree: true,
     loop: true,
     align: "start",
   };
@@ -24,12 +24,23 @@ export default function Order() {
     setMenuItem(item);
     setOpen(true);
   };
-
   return (
     <>
       <section className="section">
-        <h1>Restaurant name</h1>
-        <h5>Some restaurant description</h5>
+        <div className="flex max-w-48 shrink-0 grow-0 items-center self-start rounded-4xl py-4 sm:max-w-3xs">
+          <Image
+            src="/images/sante-logo.svg"
+            alt="Restaurant logo"
+            width={300}
+            height={600}
+          />
+        </div>
+
+        {/* <h1>Restaurant name</h1> */}
+        <h5 className="max-w-3xl">
+          Talerzyki śródziemnomorskie 🌊 Na talerzu Francja, Hiszpania oraz
+          Włochy, w kieliszku cały świat
+        </h5>
       </section>
       <section className="section pb-2 lg:pb-4">
         <h3>Chef Picks</h3>
@@ -41,21 +52,25 @@ export default function Order() {
         slideSize="40vh"
       />
 
-      <section className="section mt-8">
+      <section className="section @container mt-8">
         <h3 className="mb-2">Appetizer</h3>
 
-        <article className="flex flex-col gap-4">
-          {SampleDishes.map((dish) => (
-            <RestaurantMenuItem
-              key={dish.id}
-              item={dish}
-              onClick={handleClick}
-            />
-          ))}
+        <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
+          <AnimatePresence>
+            {SampleDishes.map((dish) => (
+              <MenuItemCard
+                key={dish.id}
+                item={dish}
+                onClick={handleClick}
+                onAddToCart={() => {}}
+                isAvailable
+              />
+            ))}
+          </AnimatePresence>
         </article>
       </section>
 
-      <AddToTapDrawer setOpen={setOpen} open={open} menuItem={menuItem} />
+      <AddToTabModal menuItem={menuItem} open={open} setOpen={setOpen} />
     </>
   );
 }

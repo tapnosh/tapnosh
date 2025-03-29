@@ -121,7 +121,7 @@
 }
 
 button {
-  cursor: "pointer";
+  cursor: pointer;
 }
 
 @layer base {
