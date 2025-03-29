@@ -6,7 +6,7 @@ import Image from "next/image";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { MenuItem } from "@/types/menu";
-import { AddToTabModal } from "@/components/menu/add-to-tab-modal";
+import { MenuItemModal } from "@/components/menu/menu-item-modal";
 
 export default function Order() {
   const [open, setOpen] = useState(false);
@@ -67,7 +67,7 @@ export default function Order() {
         </article>
       </section>
 
-      <AddToTabModal menuItem={menuItem} open={open} setOpen={setOpen} />
+      <MenuItemModal menuItem={menuItem} open={open} setOpen={setOpen} />
     </>
   );
 }

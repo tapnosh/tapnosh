@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { RemoveScroll } from "react-remove-scroll";
 import { categoryIcons } from "./menu-item";
 
-export const AddToTabModal = ({
+export const MenuItemModal = ({
   open,
   setOpen,
   menuItem,
