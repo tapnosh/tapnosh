@@ -29,133 +29,147 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { NavProjects } from "./nav-projects";
-
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Home",
-      url: "/",
-      icon: Home,
-      isActive: true,
-      // items: [
-      //   {
-      //     title: "History",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Starred",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Settings",
-      //     url: "#",
-      //   },
-      // ],
-    },
-    {
-      title: "Restaurants",
-      url: "/restaurants",
-      icon: Utensils,
-    },
-    {
-      title: "Order history",
-      url: "/history",
-      icon: History,
-    },
-    {
-      title: "Documentation",
-      url: "/docs",
-      icon: BookOpen,
-      // items: [
-      //   {
-      //     title: "Introduction",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Get Started",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Tutorials",
-      //     url: "#",
-      //   },
-      //   {
-      //     title: "Changelog",
-      //     url: "#",
-      //   },
-      // ],
-    },
-    // {
-    //   title: "Settings",
-    //   url: "#",
-    //   icon: Settings2,
-    //   items: [
-    //     {
-    //       title: "General",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Team",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Billing",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Limits",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Overview",
-      url: "#",
-      icon: PanelsTopLeft,
-    },
-    {
-      name: "Brand Customization",
-      url: "#",
-      icon: Palette,
-    },
-    {
-      name: "Menu Editor",
-      url: "#",
-      icon: Map,
-    },
-    {
-      name: "Placed Orders",
-      url: "#",
-      icon: ListOrdered,
-    },
-    {
-      name: "Order Tracker", // maybe "Order Status" "Order Flow" "Order Status Board"
-      url: "#",
-      icon: CircleDotDashed,
-    },
-  ],
-};
+import { useParams } from "next/navigation";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const params = useParams<{ restaurant: string }>();
+
+  const data = React.useMemo(
+    () => ({
+      user: {
+        name: "shadcn",
+        email: "m@example.com",
+        avatar: "/avatars/shadcn.jpg",
+      },
+      navMain: [
+        {
+          title: "Home",
+          url: "/",
+          icon: Home,
+          isActive: true,
+          // items: [
+          //   {
+          //     title: "History",
+          //     url: "#",
+          //   },
+          //   {
+          //     title: "Starred",
+          //     url: "#",
+          //   },
+          //   {
+          //     title: "Settings",
+          //     url: "#",
+          //   },
+          // ],
+        },
+        {
+          title: "Restaurants",
+          url: "/restaurants",
+          icon: Utensils,
+          items: params.restaurant
+            ? [
+                {
+                  title: `Restaurant ${params.restaurant}`,
+                  url: `/restaurants/${params.restaurant}`,
+                },
+              ]
+            : undefined,
+        },
+        {
+          title: "Order history",
+          url: "/history",
+          icon: History,
+        },
+        {
+          title: "Documentation",
+          url: "/docs",
+          icon: BookOpen,
+          // items: [
+          //   {
+          //     title: "Introduction",
+          //     url: "#",
+          //   },
+          //   {
+          //     title: "Get Started",
+          //     url: "#",
+          //   },
+          //   {
+          //     title: "Tutorials",
+          //     url: "#",
+          //   },
+          //   {
+          //     title: "Changelog",
+          //     url: "#",
+          //   },
+          // ],
+        },
+        // {
+        //   title: "Settings",
+        //   url: "#",
+        //   icon: Settings2,
+        //   items: [
+        //     {
+        //       title: "General",
+        //       url: "#",
+        //     },
+        //     {
+        //       title: "Team",
+        //       url: "#",
+        //     },
+        //     {
+        //       title: "Billing",
+        //       url: "#",
+        //     },
+        //     {
+        //       title: "Limits",
+        //       url: "#",
+        //     },
+        //   ],
+        // },
+      ],
+      navSecondary: [
+        {
+          title: "Support",
+          url: "#",
+          icon: LifeBuoy,
+        },
+        {
+          title: "Feedback",
+          url: "#",
+          icon: Send,
+        },
+      ],
+      projects: [
+        {
+          name: "Overview",
+          url: "#",
+          icon: PanelsTopLeft,
+        },
+        {
+          name: "Brand Customization",
+          url: "#",
+          icon: Palette,
+        },
+        {
+          name: "Menu Editor",
+          url: "#",
+          icon: Map,
+        },
+        {
+          name: "Placed Orders",
+          url: "#",
+          icon: ListOrdered,
+        },
+        {
+          name: "Order Tracker", // maybe "Order Status" "Order Flow" "Order Status Board"
+          url: "#",
+          icon: CircleDotDashed,
+        },
+      ],
+    }),
+    [params],
+  );
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>

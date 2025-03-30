@@ -81,36 +81,27 @@ function NoshBarMain({
 }: BarMainProps) {
   if (notifications.some(({ open }) => open)) {
     return (
-      <div
-        className="max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
-        onClick={() => closeNotification(notifications[0].id)}
-      >
-        {notifications.map(({ content, animation }, index) => (
-          <React.Fragment key={`notification-${index}`}>
+      <AnimatePresence>
+        <motion.div
+          layout
+          key="morph-notification"
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: "0%" }}
+          exit={{ opacity: 0, y: 100 }}
+          transition={{ duration: 0.2, type: "spring", damping: 16 }}
+          className="max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
+          onClick={() => closeNotification(notifications[0].id)}
+        >
+          {notifications.map(({ content }, index) => (
             <div
-              className={cn(
-                "flex h-full w-full items-center justify-center",
-                animation && "invisible",
-              )}
+              key={`notification-${index}`}
+              className="flex h-full w-full items-center justify-center"
             >
               {content}
             </div>
-            {animation && (
-              <motion.div
-                layout
-                key="morph-notification"
-                transition={{ type: "tween", delay: 0.1 }}
-                initial={{ bottom: "-100%" }}
-                animate={{ bottom: 0 }}
-                exit={{ bottom: -150 }}
-                className="absolute inset-0 flex h-full w-full items-center justify-center p-4"
-              >
-                {content}
-              </motion.div>
-            )}
-          </React.Fragment>
-        ))}
-      </div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
     );
   }
   if (isBarExpanded) {
@@ -211,9 +202,6 @@ function NoshBarWrapper() {
         height: contentHeight,
         y: 0,
         borderRadius: "2rem",
-        // ...(notifications.length > 0
-        //   ? { borderRadius: "3rem" }
-        //   : { borderRadius: "2rem" }),
       }}
       style={{
         maxWidth: "32rem",

@@ -2,6 +2,9 @@
   .section {
     @apply w-full px-4 pt-2 pb-4 md:px-8 lg:px-16 lg:pt-4 lg:pb-6;
   }
+  .section-primary {
+    @apply text-primary-foreground bg-primary after:bg-primary mb-6 rounded-b-4xl pb-6 after:absolute after:top-0 after:left-0 after:h-16 after:w-full lg:pb-12;
+  }
   .card {
     background-color: var(--color-white);
     border-radius: var(--rounded-lg);

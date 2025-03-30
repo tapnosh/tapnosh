@@ -40,7 +40,7 @@ export function CodeScanner({
   const { isCameraAllowed, requestCamera } = useCamera();
 
   return (
-    <div className="relative flex aspect-square w-screen justify-center overflow-clip rounded-4xl sm:max-w-md">
+    <div className="relative flex aspect-square w-screen justify-center overflow-clip rounded-3xl sm:max-w-md">
       {!isCameraAllowed && (
         <div className="absolute inset-0 z-[2] flex items-center justify-center">
           <Button
