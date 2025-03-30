@@ -1,4 +1,6 @@
+import { MenuItemCard } from "@/components/menu/menu-item";
 import { RestaurantAbout } from "@/components/restuaurant/restaurant-about";
+import { SampleDishes } from "@/mock/menu/dishes";
 import { unstable_ViewTransition as ViewTransition } from "react";
 
 export default async function Restaurant({
@@ -37,6 +39,15 @@ export default async function Restaurant({
       </section>
       <section className="section">
         <RestaurantAbout />
+      </section>
+      <section className="section @container mt-8">
+        <h3 className="mb-4">Appetizer</h3>
+
+        <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
+          {SampleDishes.map((dish) => (
+            <MenuItemCard key={dish.id} item={dish} isAvailable />
+          ))}
+        </article>
       </section>
     </ViewTransition>
   );

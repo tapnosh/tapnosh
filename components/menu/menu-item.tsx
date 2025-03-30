@@ -42,8 +42,8 @@ export function MenuItemCard({
 }: {
   item: MenuItem;
   isAvailable: boolean;
-  onAddToCart: (item: MenuItem) => void;
-  onClick: (item: MenuItem) => void;
+  onAddToCart?: (item: MenuItem) => void;
+  onClick?: (item: MenuItem) => void;
 }) {
   return (
     <motion.div
@@ -57,7 +57,7 @@ export function MenuItemCard({
         duration: 0.4,
       }}
       className="cursor-pointer space-y-4"
-      onClick={() => onClick(item)}
+      onClick={() => onClick?.(item)}
     >
       <div className="flex flex-row items-start justify-between gap-4 border-b pb-4">
         {item.image && (
@@ -107,7 +107,7 @@ export function MenuItemCard({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  onAddToCart(item);
+                  onAddToCart?.(item);
                 }}
                 className="shrink-0"
               >
