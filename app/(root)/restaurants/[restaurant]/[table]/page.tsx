@@ -59,7 +59,7 @@ export default function Order() {
         onAddToCart={handleClick}
       />
 
-      <section className="section @container mt-8">
+      <section className="section @container my-8">
         <h3 className="mb-4">Appetizer</h3>
 
         <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
