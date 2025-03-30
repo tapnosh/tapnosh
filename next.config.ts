@@ -5,6 +5,9 @@ import packageJson from "./package.json" assert { type: "json" };
 const { version } = packageJson;
 
 const nextConfig: NextConfig = {
+  experimental: {
+    viewTransition: true,
+  },
   publicRuntimeConfig: {
     version,
   },

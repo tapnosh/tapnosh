@@ -58,19 +58,9 @@ const data = {
       // ],
     },
     {
-      title: "Scan menu",
-      url: "/order",
+      title: "Restaurants",
+      url: "/restaurants",
       icon: Utensils,
-      items: [
-        {
-          title: "Menu",
-          url: "/order/some-restaurant/12341234",
-        },
-        {
-          title: "Order Status",
-          url: "/order/some-restaurant/12341234/order-status",
-        },
-      ],
     },
     {
       title: "Order history",

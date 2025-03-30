@@ -2,7 +2,7 @@
 
 import { CartItem, OrderItem } from "@/components/nosh-bar/nosh-bar";
 import { BarHeader } from "./bar-header";
-import { TabNavigation } from "./bar-tab-navigation";
+import { TabNavigation } from "./bar-tabs";
 import { CartContent, OrdersContent } from "./bar-content";
 
 type ExpandedBarProps = {
@@ -53,7 +53,7 @@ export function ExpandedBar({
   handleStatusChange,
 }: ExpandedBarProps) {
   return (
-    <div>
+    <div className="w-[calc(100vw-2rem)] max-w-md">
       <BarHeader
         activeTab={activeTab}
         handleCollapse={handleCollapse}
