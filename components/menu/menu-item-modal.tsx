@@ -44,7 +44,7 @@ export const MenuItemModal = ({
     setOpen(false);
 
     openNotification(
-      <div className="flex items-center justify-between gap-4 px-6">
+      <div className="flex items-center justify-between gap-4 px-2">
         <div className="flex flex-col">
           <span className="text-primary-foreground font-semibold">
             Added {item.name}

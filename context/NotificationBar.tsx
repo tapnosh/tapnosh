@@ -9,6 +9,7 @@ export interface Notification {
   persistent: boolean;
   open: boolean;
   timeout?: number;
+  animation: boolean;
 }
 
 // Define the context type
@@ -16,7 +17,7 @@ interface NotificationsContextType {
   notifications: Notification[];
   openNotification: (
     content: ReactNode,
-    options?: { timeout?: number; persistent?: boolean },
+    options?: { timeout?: number; persistent?: boolean; animation?: boolean },
   ) => string;
   closeNotification: (id: string) => void;
 }
@@ -46,7 +47,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   // Function to open a new notification
   const openNotification = (
     content: ReactNode,
-    options?: { timeout?: number; persistent?: boolean },
+    options?: { timeout?: number; persistent?: boolean; animation?: boolean },
   ) => {
     const id = Date.now().toString(); // simple id generation using current time
     const persistent = options?.persistent ?? false;
@@ -58,6 +59,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
       persistent,
       timeout,
       open: true,
+      animation: options?.animation ?? true,
     };
     setNotifications((prev) => [...prev, newNotification]);
 

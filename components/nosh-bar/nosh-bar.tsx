@@ -3,7 +3,7 @@
 import { useLayoutEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
-import { useNotification } from "@/context/NotificationBar";
+import { Notification, useNotification } from "@/context/NotificationBar";
 import { CollapsedBar } from "./bar-collapsed";
 import { ExpandedBar } from "./bar-expanded/bar-expanded";
 import { useNoshBar } from "@/hooks/useNoshBar";
@@ -47,7 +47,7 @@ type BarMainProps = {
   totalAmount: number;
   totalOrderAmount: number;
   handleStatusChange: (id: string) => void;
-  notifications: { open: boolean; content: React.ReactNode }[];
+  notifications: Notification[];
   isBarExpanded: boolean;
   closeNotification: (id: string) => void;
 };
@@ -77,32 +77,39 @@ function NoshBarMain({
   notifications,
   isBarExpanded,
   expandWithTab,
+  closeNotification,
 }: BarMainProps) {
   if (notifications.some(({ open }) => open)) {
     return (
-      <div className="p-4">
-        <div className="invisible">
-          {notifications.map(({ content }, index) => (
-            <React.Fragment key={`notification-${index}`}>
+      <div
+        className="max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
+        onClick={() => closeNotification(notifications[0].id)}
+      >
+        {notifications.map(({ content, animation }, index) => (
+          <React.Fragment key={`notification-${index}`}>
+            <div
+              className={cn(
+                "flex h-full w-full items-center justify-center",
+                animation && "invisible",
+              )}
+            >
               {content}
-            </React.Fragment>
-          ))}
-        </div>
-        <motion.div
-          layout
-          key="morph-notification"
-          transition={{ type: "tween", delay: 0.1 }}
-          initial={{ bottom: "-100%" }}
-          animate={{ bottom: 0 }}
-          exit={{ bottom: -150 }}
-          className="absolute right-0 flex h-full w-full items-center justify-center"
-        >
-          {notifications.map(({ content }, index) => (
-            <React.Fragment key={`notification-${index}`}>
-              {content}
-            </React.Fragment>
-          ))}
-        </motion.div>
+            </div>
+            {animation && (
+              <motion.div
+                layout
+                key="morph-notification"
+                transition={{ type: "tween", delay: 0.1 }}
+                initial={{ bottom: "-100%" }}
+                animate={{ bottom: 0 }}
+                exit={{ bottom: -150 }}
+                className="absolute inset-0 flex h-full w-full items-center justify-center p-4"
+              >
+                {content}
+              </motion.div>
+            )}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
@@ -203,9 +210,10 @@ function NoshBarWrapper() {
         opacity: 1,
         height: contentHeight,
         y: 0,
-        ...(notifications.length > 0
-          ? { borderRadius: "3rem" }
-          : { borderRadius: "2rem" }),
+        borderRadius: "2rem",
+        // ...(notifications.length > 0
+        //   ? { borderRadius: "3rem" }
+        //   : { borderRadius: "2rem" }),
       }}
       style={{
         maxWidth: "32rem",
@@ -232,7 +240,6 @@ function NoshBarWrapper() {
           duration: 0.3,
           type: "spring",
           damping: 16,
-          borderRadius: { type: "tween" },
         },
       }}
       className={cn(
