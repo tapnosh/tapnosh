@@ -60,7 +60,7 @@ export function CollapsedBar({
         animate={{ opacity: 1, y: "0%" }}
         exit={{ opacity: 0, y: 100 }}
         transition={{ duration: 0.2, type: "spring", damping: 16 }}
-        className="flex justify-between gap-1.5 p-2"
+        className="flex w-[calc(100vw-2rem)] max-w-md justify-between gap-1.5 p-2"
       >
         {orderItems.length > 0 && (
           <MyTabSummary expandWithTab={expandWithTab} orderItems={orderItems} />

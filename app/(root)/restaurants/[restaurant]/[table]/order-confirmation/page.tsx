@@ -24,7 +24,7 @@ export default function ConfirmOrder() {
             Add some items to your cart to continue shopping
           </p>
           <Button asChild>
-            <Link href="/order/restaurant-name/12341234">
+            <Link href="/restaurants/restaurant-name/12341234">
               Continue Shopping
             </Link>
           </Button>
@@ -133,12 +133,12 @@ export default function ConfirmOrder() {
 
             <CardFooter className="flex flex-col items-stretch justify-end gap-4 sm:flex-row">
               <Button asChild variant="outline">
-                <Link href="/order/restaurant-name/12341234">
+                <Link href="/restaurants/restaurant-name/12341234">
                   Go Back to Menu
                 </Link>
               </Button>
               <Button>
-                <Link href="/order/restaurant-name/12341234/order-status">
+                <Link href="/restaurants/restaurant-name/12341234/order-status">
                   Confirm Order
                 </Link>
               </Button>

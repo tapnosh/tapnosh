@@ -64,7 +64,7 @@ export default function MultiStatusDemo() {
           <CardDescription>Track the status of multiple orders</CardDescription>
         </div>
         <Button asChild className="flex items-center gap-1">
-          <Link href="/order/restaurant-name/123452">
+          <Link href="/restaurants/restaurant-name/123452">
             <PlusCircle className="h-4 w-4" />
             <span>Order Again</span>
           </Link>

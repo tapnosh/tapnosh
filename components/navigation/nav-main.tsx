@@ -17,6 +17,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -35,6 +36,7 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
 
   return (
@@ -52,6 +54,7 @@ export function NavMain({
                 isActive={pathname === item.url}
                 asChild
                 tooltip={item.title}
+                onClick={() => setOpenMobile(false)}
               >
                 <Link href={item.url}>
                   <item.icon />

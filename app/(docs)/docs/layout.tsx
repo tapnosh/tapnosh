@@ -40,6 +40,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pageMap = (await getPageMap()).filter(
+    (ele) => !("name" in ele && ele.name === "restaurants"),
+  );
+
   return (
     <html lang="en" dir="ltr">
       <Head>
@@ -56,7 +60,7 @@ export default async function RootLayout({
       <body className={`antialiased`}>
         <Layout
           navbar={navbar}
-          pageMap={await getPageMap()}
+          pageMap={pageMap}
           docsRepositoryBase="https://github.com/tapnosh/tapnosh/tree/main"
           footer={footer}
           sidebar={{ defaultMenuCollapseLevel: 1 }}
