@@ -83,7 +83,6 @@ export const MenuItemModal = ({
               style={{
                 borderRadius: "32px",
                 maxHeight: "calc(100dvh - 9rem)",
-                maxWidth: "32rem",
                 backgroundColor: "var(--background)",
                 width: "calc(100% - 2rem)",
               }}
@@ -91,7 +90,7 @@ export const MenuItemModal = ({
                 type: "spring",
                 duration: 0.6,
               }}
-              className="sticky right-4 bottom-32 left-4 z-50 m-auto flex flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)]"
+              className="sticky right-4 bottom-32 left-4 z-50 m-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-md"
             >
               <button
                 onClick={() => setOpen(false)}
