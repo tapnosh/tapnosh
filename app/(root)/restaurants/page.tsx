@@ -1,9 +1,8 @@
-import { unstable_ViewTransition as ViewTransition } from "react";
 import { RestaurantList } from "@/components/restuaurant/restaurant-list";
 
 export default function Restaurants() {
   return (
-    <ViewTransition>
+    <>
       <section className="section items-center">
         <h1>Restaurants</h1>
         <h6>
@@ -15,6 +14,6 @@ export default function Restaurants() {
       <section className="section items-center pb-8 lg:mt-12">
         <RestaurantList />
       </section>
-    </ViewTransition>
+    </>
   );
 }

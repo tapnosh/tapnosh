@@ -1,6 +1,5 @@
 "use client";
 
-import { unstable_ViewTransition as ViewTransition } from "react";
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import {
   InputOTP,
@@ -81,7 +80,7 @@ export default function Restaurants() {
   const { isCameraAllowed, requestCamera } = useCamera();
 
   return (
-    <ViewTransition>
+    <>
       <section className="section items-center">
         <h1>Hungry?</h1>
         <h6>Start by scanning the QR code or typing the code below it</h6>
@@ -176,6 +175,6 @@ export default function Restaurants() {
           </Card>
         </article>
       </section>
-    </ViewTransition>
+    </>
   );
 }
