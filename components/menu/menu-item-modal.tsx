@@ -61,7 +61,7 @@ export const MenuItemModal = ({
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-50 bg-black/50"
+            className="fixed inset-0 z-50 bg-black/80"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -90,6 +90,8 @@ export const MenuItemModal = ({
                 type: "spring",
                 duration: 0.6,
               }}
+              role="dialog"
+              aria-modal="true"
               className="sticky right-4 bottom-32 left-4 z-50 m-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-md"
             >
               <button
