@@ -15,31 +15,31 @@ export function FiltersBar() {
         <TabsList className="bg-primary-foreground text-primary/75">
           <TabsTrigger
             value="all"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4"
+            className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
           >
             All
           </TabsTrigger>
           <TabsTrigger
             value="appetizers"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4"
+            className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
           >
             Appetizers
           </TabsTrigger>
           <TabsTrigger
             value="pasta"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4"
+            className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
           >
             Pasta
           </TabsTrigger>
           <TabsTrigger
             value="mains"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4"
+            className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
           >
             Main Courses
           </TabsTrigger>
           <TabsTrigger
             value="desserts"
-            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground px-4"
+            className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
           >
             Desserts
           </TabsTrigger>
