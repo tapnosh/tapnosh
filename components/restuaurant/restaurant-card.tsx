@@ -1,13 +1,10 @@
-"use client";
-
 import { unstable_ViewTransition as ViewTransition } from "react";
 import { Badge } from "@/components/ui/badge";
 import { MapPin } from "lucide-react";
 import { RestaurantCarousel } from "./restaurant-carousel";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { useNotification } from "@/context/NotificationBar";
-import { CodeScanner } from "@/components/scan/code-scanner";
+import { ButtonScanner } from "@/components/scan/code-scanner-button";
 
 interface Restaurant {
   id: number;
@@ -25,7 +22,6 @@ interface RestaurantCardProps {
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
-  const { openNotification } = useNotification();
   return (
     <div className="group mb-2 border-b pb-4 last:border-0">
       <RestaurantCarousel restaurant={restaurant} />
@@ -55,17 +51,8 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         </div>
 
         <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              openNotification(<CodeScanner />, {
-                persistent: true,
-                animation: false,
-              });
-            }}
-          >
-            Order
-          </Button>
-          <Button variant="outline" asChild>
+          <ButtonScanner size="lg">Order</ButtonScanner>
+          <Button size="lg" variant="outline" asChild>
             <Link href={`/restaurants/${restaurant.id}`}> View Menu</Link>
           </Button>
         </div>

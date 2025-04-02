@@ -10,7 +10,7 @@ export default async function Restaurant({
 }) {
   const { restaurant } = await params;
   return (
-    <ViewTransition>
+    <>
       <section className="section section-primary">
         <svg
           width="258"
@@ -49,6 +49,6 @@ export default async function Restaurant({
           ))}
         </article>
       </section>
-    </ViewTransition>
+    </>
   );
 }

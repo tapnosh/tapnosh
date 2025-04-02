@@ -10,6 +10,7 @@ import { useState } from "react";
 import { MenuItem } from "@/types/menu";
 import { MenuItemModal } from "@/components/menu/menu-item-modal";
 import { useParams } from "next/navigation";
+import { FiltersBar } from "@/components/filters/filters-bar";
 
 export default function Order() {
   const { restaurant, table } = useParams();
@@ -60,7 +61,10 @@ export default function Order() {
       />
 
       <section className="section @container my-8">
-        <h3 className="mb-4">Appetizer</h3>
+        <h3 className="mb-4">Menu</h3>
+        <FiltersBar />
+
+        <h4 className="mb-4">Appetizer</h4>
 
         <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
           <AnimatePresence>
