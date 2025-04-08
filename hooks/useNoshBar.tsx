@@ -1,26 +1,15 @@
-import { CartItem, OrderItem } from "@/components/nosh-bar/nosh-bar";
+import { OrderItem } from "@/components/nosh-bar/nosh-bar";
+import { useOrder } from "@/context/OrderContext";
 import { useState } from "react";
-
-const sampleCartItems: CartItem[] = [
-  { id: "1", name: "Burger", price: 8.99, quantity: 1 },
-  { id: "2", name: "Fries", price: 3.99, quantity: 2 },
-  { id: "3", name: "Soda", price: 1.99, quantity: 1 },
-  { id: "4", name: "Coca cola", price: 1.99, quantity: 1 },
-  { id: "5", name: "Test", price: 1.99, quantity: 1 },
-];
-
-const sampleOrderItems: OrderItem[] = [
-  { id: "101", name: "Pizza", price: 12.99, status: "delivered" },
-  { id: "102", name: "Salad", price: 7.99, status: "ready" },
-  { id: "103", name: "Ice Cream", price: 4.99, status: "preparing" },
-  { id: "234", name: "Ice Cream", price: 4.99, status: "preparing" },
-  { id: "345", name: "Ice Cream", price: 4.99, status: "preparing" },
-  { id: "546", name: "Ice Cream", price: 4.99, status: "preparing" },
-];
 
 export function useNoshBar() {
   const [activeTab, setActiveTab] = useState<"cart" | "orders">("cart");
-  const [cartItems, setCartItems] = useState<CartItem[]>(sampleCartItems);
+  const {
+    items: cartItems,
+    clearOrder,
+    removeItem,
+    updateQuantity,
+  } = useOrder();
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [status, setStatus] = useState<string>("in-progress");
   const [isOrderListExpanded, setIsOrderListExpanded] = useState(false);
@@ -38,19 +27,7 @@ export function useNoshBar() {
   );
 
   const removeCartItem = (id: string) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-  };
-
-  const updateQuantity = (id: string, newQuantity: number) => {
-    if (newQuantity < 1) {
-      removeCartItem(id);
-      return;
-    }
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item,
-      ),
-    );
+    removeItem(id);
   };
 
   const expandWithTab = (tab: "cart" | "orders") => {
@@ -75,7 +52,11 @@ export function useNoshBar() {
     setStatus("in-progress");
     setTimeout(() => {
       setStatus("confirmed");
-      setOrderItems(sampleOrderItems);
+      setOrderItems((prev) => [
+        ...cartItems.map((item) => ({ ...item, status: "preparing" as const })),
+        ...prev,
+      ]);
+      clearOrder();
       closeNotification(id);
       setActiveTab("orders");
     }, 2000);

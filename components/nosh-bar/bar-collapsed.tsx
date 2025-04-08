@@ -40,6 +40,38 @@ export function MyTabSummary({
   );
 }
 
+export function AddToTabSummary({
+  totalItems,
+  totalAmount,
+  expandWithTab,
+}: {
+  totalItems: number;
+  totalAmount: number;
+  expandWithTab: (tab: "cart") => void;
+}) {
+  return (
+    <motion.button
+      className={cn(
+        "group hover:bg-primary/90 bg-primary text-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-lg p-3 transition-all",
+      )}
+      onClick={() => expandWithTab("cart")}
+    >
+      <div className="flex items-center gap-2">
+        <span className="font-bold whitespace-nowrap">Confirm Order</span>
+      </div>
+      <div className="flex w-full flex-1 items-end justify-between">
+        <div className="flex flex-col items-start">
+          <span className="text-accent text-xs leading-3">
+            {totalItems} items
+          </span>
+          <span className="text-sm font-medium">${totalAmount.toFixed(2)}</span>
+        </div>
+        <ArrowRight />
+      </div>
+    </motion.button>
+  );
+}
+
 export function CollapsedBar({
   totalItems,
   expandWithTab,
@@ -65,27 +97,14 @@ export function CollapsedBar({
         {orderItems.length > 0 && (
           <MyTabSummary expandWithTab={expandWithTab} orderItems={orderItems} />
         )}
-        <motion.button
-          className={cn(
-            "group hover:bg-primary/90 bg-primary text-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-lg p-3 transition-all",
-          )}
-          onClick={() => expandWithTab("cart")}
-        >
-          <div className="flex items-center gap-2">
-            <span className="font-bold whitespace-nowrap">Confirm Order</span>
-          </div>
-          <div className="flex w-full flex-1 items-end justify-between">
-            <div className="flex flex-col items-start">
-              <span className="text-accent text-xs leading-3">
-                {totalItems} items
-              </span>
-              <span className="text-sm font-medium">
-                ${totalAmount.toFixed(2)}
-              </span>
-            </div>
-            <ArrowRight />
-          </div>
-        </motion.button>
+
+        {totalItems > 0 && (
+          <AddToTabSummary
+            expandWithTab={expandWithTab}
+            totalItems={totalItems}
+            totalAmount={totalAmount}
+          />
+        )}
       </motion.div>
     </AnimatePresence>
   );

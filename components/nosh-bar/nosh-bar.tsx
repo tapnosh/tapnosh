@@ -9,6 +9,7 @@ import { ExpandedBar } from "./bar-expanded/bar-expanded";
 import { useNoshBar } from "@/hooks/useNoshBar";
 import { useContentHeight } from "@/hooks/useContentHeight";
 import React from "react";
+import { useOrder } from "@/context/OrderContext";
 
 export type CartItem = {
   id: string;
@@ -89,7 +90,7 @@ function NoshBarMain({
           animate={{ opacity: 1, y: "0%" }}
           exit={{ opacity: 0, y: 100 }}
           transition={{ duration: 0.2, type: "spring", damping: 16 }}
-          className="max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
+          className="text-primary-foreground max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
           onClick={() => closeNotification(notifications[0].id)}
         >
           {notifications.map(({ content }, index) => (
@@ -147,15 +148,12 @@ function NoshBarWrapper() {
   const {
     activeTab,
     setActiveTab,
-    cartItems,
     orderItems,
     status,
     isOrderListExpanded,
     setIsOrderListExpanded,
     isBarExpanded,
     isAnimating,
-    totalItems,
-    totalAmount,
     totalOrderAmount,
     removeCartItem,
     updateQuantity,
@@ -163,6 +161,8 @@ function NoshBarWrapper() {
     handleCollapse,
     handleStatusChange,
   } = useNoshBar();
+
+  const { items: cartItems, totalItems, totalPrice } = useOrder();
 
   const {
     contentRef,
@@ -191,6 +191,10 @@ function NoshBarWrapper() {
     setStartContentHeight,
     notifications,
   ]);
+
+  if (totalItems === 0 && orderItems.length === 0) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -255,7 +259,7 @@ function NoshBarWrapper() {
           updateQuantity={updateQuantity}
           openNotification={openNotification}
           totalItems={totalItems}
-          totalAmount={totalAmount}
+          totalAmount={totalPrice}
           totalOrderAmount={totalOrderAmount}
           handleStatusChange={(id) => handleStatusChange(id, closeNotification)}
           notifications={notifications.filter(({ open }) => open)}

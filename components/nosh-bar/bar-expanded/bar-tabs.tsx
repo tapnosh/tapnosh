@@ -53,6 +53,7 @@ export function TabNavigation({
       )}
       <button
         onClick={() => setActiveTab("cart")}
+        disabled={totalItems === 0}
         className={cn(
           "group relative flex flex-1 flex-col items-center justify-center overflow-hidden py-3 text-sm font-medium transition-colors",
           activeTab === "cart"
