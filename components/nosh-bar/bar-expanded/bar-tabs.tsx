@@ -4,6 +4,59 @@ import { ReceiptText, ShoppingBasket } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { OrderItem } from "@/components/nosh-bar/nosh-bar";
+import { LucideIcon } from "lucide-react";
+
+type TabButtonProps = {
+  icon: LucideIcon;
+  label: string;
+  itemCount: number;
+  amount: number;
+  isActive: boolean;
+  onClick: () => void;
+  disabled?: boolean;
+};
+
+function TabButton({
+  icon: Icon,
+  label,
+  itemCount,
+  amount,
+  isActive,
+  onClick,
+  disabled,
+}: TabButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={cn(
+        "group relative flex flex-1 flex-col items-center justify-center overflow-hidden py-3 text-sm font-medium transition-colors",
+        isActive
+          ? "text-primary-foreground"
+          : "text-accent hover:text-primary-foreground disabled:text-accent/50",
+      )}
+    >
+      <div className="flex items-center gap-1">
+        <Icon className="h-4 w-4" />
+        <span>{label}</span>
+      </div>
+      <div className="mt-1 flex items-center gap-1.5 text-xs">
+        <span>{itemCount} items</span>
+        <Separator
+          orientation="vertical"
+          className="bg-accent group-disabled:bg-accent/50 group-hover:bg-primary-foreground"
+        />
+        <span className="font-bold">${amount.toFixed(2)}</span>
+      </div>
+      <div
+        className={cn(
+          "bg-primary absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-300",
+          isActive ? "w-full" : "group-hover:w-full",
+        )}
+      />
+    </button>
+  );
+}
 
 type TabNavigationProps = {
   activeTab: "cart" | "orders";
@@ -25,58 +78,24 @@ export function TabNavigation({
   return (
     <menu className="text-primary-foreground border-accent flex justify-center border-b">
       {orderItems.length > 0 && (
-        <button
+        <TabButton
+          icon={ReceiptText}
+          label="My Tab"
+          itemCount={orderItems.length}
+          amount={totalOrderAmount}
+          isActive={activeTab === "orders"}
           onClick={() => setActiveTab("orders")}
-          className={cn(
-            "group relative flex flex-1 flex-col items-center justify-center overflow-hidden py-3 text-sm font-medium transition-colors",
-            activeTab === "orders"
-              ? "text-primary-foreground"
-              : "text-accent hover:text-foreground",
-          )}
-        >
-          <div className="flex items-center gap-1">
-            <ReceiptText className="h-4 w-4" />
-            <span>My Tab</span>
-          </div>
-          <div className="mt-1 flex items-center gap-1.5 text-xs">
-            <span>{orderItems.length} items</span>
-            <Separator orientation="vertical" className="bg-accent" />
-            <span className="font-bold">${totalOrderAmount.toFixed(2)}</span>
-          </div>
-          <div
-            className={cn(
-              "bg-primary absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-300",
-              activeTab === "orders" ? "w-full" : "group-hover:w-full",
-            )}
-          />
-        </button>
+        />
       )}
-      <button
+      <TabButton
+        icon={ShoppingBasket}
+        label="Confirm Order"
+        itemCount={totalItems}
+        amount={totalAmount}
+        isActive={activeTab === "cart"}
         onClick={() => setActiveTab("cart")}
         disabled={totalItems === 0}
-        className={cn(
-          "group relative flex flex-1 flex-col items-center justify-center overflow-hidden py-3 text-sm font-medium transition-colors",
-          activeTab === "cart"
-            ? "text-primary-foreground"
-            : "text-accent hover:text-foreground",
-        )}
-      >
-        <div className="flex items-center gap-1">
-          <ShoppingBasket className="h-4 w-4" />
-          <span>Confirm Order</span>
-        </div>
-        <div className="mt-1 flex items-center gap-1.5 text-xs">
-          <span>{totalItems} items</span>
-          <Separator orientation="vertical" className="bg-accent" />
-          <span className="font-bold">${totalAmount.toFixed(2)}</span>
-        </div>
-        <div
-          className={cn(
-            "bg-primary absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-300",
-            activeTab === "cart" ? "w-full" : "group-hover:w-full",
-          )}
-        />
-      </button>
+      />
     </menu>
   );
 }
