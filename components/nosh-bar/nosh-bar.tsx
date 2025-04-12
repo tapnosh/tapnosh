@@ -86,11 +86,11 @@ function NoshBarMain({
         <motion.div
           layout
           key="morph-notification"
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: "0%" }}
-          exit={{ opacity: 0, y: 100 }}
+          initial={{ opacity: 0, y: 100, padding: "0rem" }}
+          animate={{ opacity: 1, y: "0%", padding: "1rem" }}
+          exit={{ opacity: 0, y: 100, padding: "0rem" }}
           transition={{ duration: 0.2, type: "spring", damping: 16 }}
-          className="text-primary-foreground max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
+          className="text-primary-foreground max-w-[calc(100vw-2rem)] sm:max-w-md"
           onClick={() => closeNotification(notifications[0].id)}
         >
           {notifications.map(({ content }, index) => (
@@ -192,7 +192,7 @@ function NoshBarWrapper() {
     notifications,
   ]);
 
-  if (totalItems === 0 && orderItems.length === 0) {
+  if (totalItems === 0 && orderItems.length === 0 && !notifications.length) {
     return null;
   }
 
