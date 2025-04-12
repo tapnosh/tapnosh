@@ -100,7 +100,7 @@ export function MenuItemCard({
               </div>
             </div>
 
-            {isAvailable && (
+            {isAvailable && onClick && (
               <MotionButton
                 layoutId={`item-add-to-cart-${item?.id}`}
                 size="icon"

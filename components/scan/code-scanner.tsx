@@ -1,27 +1,34 @@
 "use client";
 
 import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
-import { Camera, Loader2Icon } from "lucide-react";
+import { Camera, CircleAlert, Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { useCamera } from "@/hooks/useCamera";
 import { useRouter } from "next/navigation";
+import { useNotification } from "@/context/NotificationBar";
 
 export function CodeScanner({
   handleAccept,
 }: {
   handleAccept?: (code: string) => void;
 }) {
+  const { notifications, openNotification, closeNotification } =
+    useNotification();
   const router = useRouter();
 
   const validateCode = (code: string) => {
-    const codeRegex = /([a-zA-Z0-9]{6})/;
+    const codeRegex = /^([0-9]{6})$/;
     return codeRegex.test(code);
   };
 
   const handleScan = (result: IDetectedBarcode[]) => {
     const code =
       new URL(result[0].rawValue).searchParams.get("tapnoshId") ?? "";
+
+    closeNotification(notifications[0].id);
+
+    console.log(code);
+    console.log(validateCode(code));
 
     if (validateCode(code)) {
       handleAccept?.(code);
@@ -31,9 +38,22 @@ export function CodeScanner({
         router.push(`/restaurants/restaurant-name/${code}`);
       }, 100);
     } else {
-      toast.error("Invalid code", {
-        description: "The code you scanned is invalid. Please try again.",
-      });
+      openNotification(
+        <div className="flex w-full items-center justify-between gap-4 px-2">
+          <span className="font-semibold">Invalid code. Please try again.</span>
+          <CircleAlert />
+        </div>,
+        {
+          animation: false,
+          timeout: 2000,
+        },
+      );
+      setTimeout(() => {
+        openNotification(<CodeScanner />, {
+          persistent: true,
+          animation: false,
+        });
+      }, 2000);
     }
   };
 
