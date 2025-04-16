@@ -86,11 +86,11 @@ function NoshBarMain({
         <motion.div
           layout
           key="morph-notification"
-          initial={{ opacity: 0, y: 100, padding: "0rem" }}
-          animate={{ opacity: 1, y: "0%", padding: "1rem" }}
-          exit={{ opacity: 0, y: 100, padding: "0rem" }}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: "0%" }}
+          exit={{ opacity: 0, y: 100 }}
           transition={{ duration: 0.2, type: "spring", damping: 16 }}
-          className="text-primary-foreground max-w-[calc(100vw-2rem)] sm:max-w-md"
+          className="text-primary-foreground max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
           onClick={() => closeNotification(notifications[0].id)}
         >
           {notifications.map(({ content }, index) => (
@@ -142,7 +142,7 @@ function NoshBarMain({
   );
 }
 
-function NoshBarWrapper() {
+export function NoshBar() {
   const { notifications, openNotification, closeNotification } =
     useNotification();
   const {
@@ -192,90 +192,86 @@ function NoshBarWrapper() {
     notifications,
   ]);
 
-  if (totalItems === 0 && orderItems.length === 0 && !notifications.length) {
-    return null;
-  }
-
-  return (
-    <motion.div
-      layout
-      layoutId="morph"
-      whileTap={!isBarExpanded ? { scale: 0.95 } : {}}
-      animate={{
-        opacity: 1,
-        height: contentHeight,
-        y: 0,
-        borderRadius: "2rem",
-      }}
-      style={{
-        maxWidth: "32rem",
-        backgroundColor: "var(--primary)",
-        boxShadow: "0 0 0.5rem rgba(0,0,0,0.25)",
-      }}
-      initial={{
-        opacity: 0,
-        y: "100%",
-        boxShadow: "0 0 0 rgba(0,0,0,0)",
-      }}
-      exit={{ opacity: 0, y: "100%" }}
-      transition={{
-        default: {
-          ...(!isDragging
-            ? {
-                duration: 0.3,
-                type: "spring",
-                damping: 16,
-              }
-            : { duration: 0 }),
-        },
-        layout: {
-          duration: 0.3,
-          type: "spring",
-          damping: 16,
-        },
-      }}
-      className={cn(
-        "sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto overflow-hidden",
-        isAnimating && "pointer-events-none",
-      )}
-    >
-      <div ref={contentRef}>
-        <NoshBarMain
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          cartItems={cartItems}
-          orderItems={orderItems}
-          status={status}
-          isOrderListExpanded={isOrderListExpanded}
-          setIsOrderListExpanded={setIsOrderListExpanded}
-          contentHeight={contentHeight}
-          startContentHeight={startContentHeight}
-          isDragging={isDragging}
-          setIsDragging={setIsDragging}
-          setStartContentHeight={setStartContentHeight}
-          setContentHeight={setContentHeight}
-          handleCollapse={handleCollapse}
-          removeCartItem={removeCartItem}
-          updateQuantity={updateQuantity}
-          openNotification={openNotification}
-          totalItems={totalItems}
-          totalAmount={totalPrice}
-          totalOrderAmount={totalOrderAmount}
-          handleStatusChange={(id) => handleStatusChange(id, closeNotification)}
-          notifications={notifications.filter(({ open }) => open)}
-          isBarExpanded={isBarExpanded}
-          closeNotification={closeNotification}
-          expandWithTab={expandWithTab}
-        />
-      </div>
-    </motion.div>
-  );
-}
-
-export function NoshBar() {
   return (
     <AnimatePresence>
-      <NoshBarWrapper />
+      {totalItems === 0 && orderItems.length === 0 && !notifications.length ? (
+        <></>
+      ) : (
+        <motion.div
+          key="nosh-bar-morph"
+          layout
+          layoutId="morph"
+          whileTap={!isBarExpanded ? { scale: 0.95 } : {}}
+          animate={{
+            opacity: 1,
+            height: contentHeight,
+            y: 0,
+            borderRadius: "2rem",
+          }}
+          style={{
+            maxWidth: "32rem",
+            backgroundColor: "var(--primary)",
+            boxShadow: "0 0 0.5rem rgba(0,0,0,0.25)",
+          }}
+          initial={{
+            y: "100%",
+            boxShadow: "0 0 0 rgba(0,0,0,0)",
+          }}
+          exit={{ opacity: 0, y: "100%" }}
+          transition={{
+            default: {
+              ...(!isDragging
+                ? {
+                    duration: 0.3,
+                    type: "spring",
+                    damping: 16,
+                  }
+                : { duration: 0 }),
+            },
+            layout: {
+              duration: 0.3,
+              type: "spring",
+              damping: 16,
+            },
+          }}
+          className={cn(
+            "sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto overflow-hidden",
+            isAnimating && "pointer-events-none",
+          )}
+        >
+          <div ref={contentRef}>
+            <NoshBarMain
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              cartItems={cartItems}
+              orderItems={orderItems}
+              status={status}
+              isOrderListExpanded={isOrderListExpanded}
+              setIsOrderListExpanded={setIsOrderListExpanded}
+              contentHeight={contentHeight}
+              startContentHeight={startContentHeight}
+              isDragging={isDragging}
+              setIsDragging={setIsDragging}
+              setStartContentHeight={setStartContentHeight}
+              setContentHeight={setContentHeight}
+              handleCollapse={handleCollapse}
+              removeCartItem={removeCartItem}
+              updateQuantity={updateQuantity}
+              openNotification={openNotification}
+              totalItems={totalItems}
+              totalAmount={totalPrice}
+              totalOrderAmount={totalOrderAmount}
+              handleStatusChange={(id) =>
+                handleStatusChange(id, closeNotification)
+              }
+              notifications={notifications.filter(({ open }) => open)}
+              isBarExpanded={isBarExpanded}
+              closeNotification={closeNotification}
+              expandWithTab={expandWithTab}
+            />
+          </div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }
