@@ -78,9 +78,9 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     setNotifications((prev) =>
       prev.map((item) => (item.id === id ? { ...item, open: false } : item)),
     );
-    setTimeout(() => {
-      setNotifications((prev) => prev.filter((n) => n.id !== id));
-    }, 600);
+    // setTimeout(() => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    // }, 600);
   };
 
   return (
