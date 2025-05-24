@@ -90,7 +90,7 @@ function NoshBarMain({
           animate={{ opacity: 1, y: "0%" }}
           exit={{ opacity: 0, y: 100 }}
           transition={{ duration: 0.2, type: "spring", damping: 16 }}
-          className="text-primary-foreground max-w-[calc(100vw-2rem)] p-4 sm:max-w-md"
+          className="text-primary-foreground flex max-w-[calc(100vw-2rem)] flex-col gap-4 p-4 sm:max-w-md"
           onClick={() => closeNotification(notifications[0].id)}
         >
           {notifications.map(({ content }, index) => (

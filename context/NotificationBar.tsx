@@ -51,7 +51,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
   ) => {
     const id = Date.now().toString(); // simple id generation using current time
     const persistent = options?.persistent ?? false;
-    const timeout = options?.timeout ?? 2000;
+    const timeout = options?.timeout ?? 4000;
 
     const newNotification: Notification = {
       id,
