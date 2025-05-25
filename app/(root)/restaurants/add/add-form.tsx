@@ -25,9 +25,9 @@ import { BasicNotificationBody } from "@/components/ui/basic-notification";
 
 const restaurantSchema = z.object({
   name: z.string().min(1, "Restaurant name is required"),
-  description: z.string().min(1, "Description is required"),
-  theme_id: z.string().uuid("Invalid theme ID format"),
-  address: z.string().min(1, "Address is required"),
+  description: z.string().optional(),
+  //   theme_id: z.string().uuid("Invalid theme ID format"),
+  //   address: z.string().min(1, "Address is required"),
   images: z
     .array(z.string().url("Invalid image URL"))
     .min(1, "At least one image is required"),
@@ -84,8 +84,8 @@ export function RestaurantForm() {
     defaultValues: {
       name: "",
       description: "",
-      theme_id: "",
-      address: "",
+      //   theme_id: "",
+      //   address: "",
       images: [],
       category_ids: [],
     },
@@ -194,7 +194,7 @@ export function RestaurantForm() {
           )}
         />
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="address"
           render={({ field }) => (
@@ -206,9 +206,9 @@ export function RestaurantForm() {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
-        <FormField
+        {/* <FormField
           control={form.control}
           name="theme_id"
           render={({ field }) => (
@@ -226,7 +226,7 @@ export function RestaurantForm() {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <div className="space-y-4">
           <FormLabel>Restaurant Images</FormLabel>

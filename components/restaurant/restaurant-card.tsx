@@ -1,21 +1,11 @@
 import { unstable_ViewTransition as ViewTransition } from "react";
-import { Badge } from "@/components/ui/badge";
+// import { Badge } from "@/components/ui/badge";
 import { MapPin } from "lucide-react";
 import { RestaurantCarousel } from "./restaurant-carousel";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ButtonScanner } from "@/components/scan/code-scanner-button";
-
-interface Restaurant {
-  id: number;
-  name: string;
-  description: string;
-  address: string;
-  district: string;
-  foodType: string;
-  images: string[];
-  rating: number;
-}
+import { Restaurant } from "@/types/restaurant";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -31,14 +21,14 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           <ViewTransition name={`title-${restaurant.id}`}>
             <h3>{restaurant.name}</h3>
           </ViewTransition>
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <Badge variant="outline" className="font-medium">
               {restaurant.foodType}
             </Badge>
             <Badge variant="secondary" className="font-medium">
               {restaurant.district}
             </Badge>
-          </div>
+          </div> */}
         </div>
         <ViewTransition name={`description-${restaurant.id}`}>
           <p className="text-muted-foreground mb-3 italic">

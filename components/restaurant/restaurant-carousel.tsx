@@ -2,18 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-
-interface Restaurant {
-  id: number;
-  name: string;
-  description: string;
-  address: string;
-  district: string;
-  foodType: string;
-  images: string[];
-  rating: number;
-}
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Restaurant } from "@/types/restaurant";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -33,6 +23,20 @@ export function RestaurantCarousel({ restaurant }: RestaurantCardProps) {
       prev === 0 ? restaurant.images.length - 1 : prev - 1,
     );
   };
+
+  if (!restaurant.images?.length) {
+    return (
+      <div className="relative mb-4 h-64 overflow-hidden rounded-lg bg-gray-200">
+        <div className="flex h-full items-center justify-center">
+          <span className="text-gray-500">No images available</span>
+        </div>
+        {/* <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 text-sm font-medium text-gray-800">
+          <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+          {restaurant.rating}
+        </div> */}
+      </div>
+    );
+  }
 
   return (
     <div className="relative mb-4 h-64 overflow-hidden rounded-lg">
@@ -78,10 +82,10 @@ export function RestaurantCarousel({ restaurant }: RestaurantCardProps) {
           </div>
         </>
       )}
-      <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 text-sm font-medium text-gray-800">
+      {/* <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/80 px-3 py-1 text-sm font-medium text-gray-800">
         <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
         {restaurant.rating}
-      </div>
+      </div> */}
     </div>
   );
 }

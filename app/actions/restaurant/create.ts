@@ -4,9 +4,9 @@ import { z } from "zod";
 
 const restaurantSchema = z.object({
   name: z.string().min(1, "Restaurant name is required"),
-  description: z.string().min(1, "Description is required"),
-  theme_id: z.string().uuid("Invalid theme ID format"),
-  address: z.string().min(1, "Address is required"),
+  description: z.string().optional(),
+  //   theme_id: z.string().uuid("Invalid theme ID format"),
+  //   address: z.string().min(1, "Address is required"),
   images: z
     .array(z.string().url("Invalid image URL"))
     .min(1, "At least one image is required"),
@@ -28,6 +28,8 @@ export async function createRestaurant(data: RestaurantFormData) {
       },
       body: JSON.stringify(validatedData),
     });
+
+    console.log(response);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
