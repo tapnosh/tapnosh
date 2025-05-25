@@ -1,14 +1,35 @@
 import { unstable_ViewTransition as ViewTransition } from "react";
 // import { Badge } from "@/components/ui/badge";
-import { MapPin } from "lucide-react";
+// import { MapPin } from "lucide-react";
 import { RestaurantCarousel } from "./restaurant-carousel";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ButtonScanner } from "@/components/scan/code-scanner-button";
-import { Restaurant } from "@/types/restaurant";
+import { Restaurant, RestaurantCategory } from "@/types/restaurant";
+import { Badge } from "../ui/badge";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
+}
+
+function RestaurantBadges({
+  categories,
+}: {
+  categories?: RestaurantCategory[];
+}) {
+  if (!categories) {
+    return <></>;
+  }
+
+  return (
+    <div className="flex gap-2">
+      {categories.map(({ category, id }) => (
+        <Badge key={id} variant="outline" className="font-medium">
+          {category.name}
+        </Badge>
+      ))}
+    </div>
+  );
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
@@ -21,24 +42,17 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           <ViewTransition name={`title-${restaurant.id}`}>
             <h3>{restaurant.name}</h3>
           </ViewTransition>
-          {/* <div className="flex gap-2">
-            <Badge variant="outline" className="font-medium">
-              {restaurant.foodType}
-            </Badge>
-            <Badge variant="secondary" className="font-medium">
-              {restaurant.district}
-            </Badge>
-          </div> */}
+          <RestaurantBadges categories={restaurant.categories} />
         </div>
         <ViewTransition name={`description-${restaurant.id}`}>
           <p className="text-muted-foreground mb-3 italic">
             {restaurant.description}
           </p>
         </ViewTransition>
-        <div className="text-muted-foreground mb-4 flex items-center text-sm">
+        {/* <div className="text-muted-foreground mb-4 flex items-center text-sm">
           <MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
           <span>{restaurant.address}</span>
-        </div>
+        </div> */}
 
         <div className="flex gap-2">
           <ButtonScanner size="lg">Order</ButtonScanner>
