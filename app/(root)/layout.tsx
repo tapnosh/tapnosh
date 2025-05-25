@@ -113,6 +113,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* <SWRConfig value={{ fetcher }}> */}
           <NextIntlClientProvider messages={messages}>
             <SidebarProvider>
               <NotificationProvider>
@@ -132,6 +133,7 @@ export default async function RootLayout({
               </NotificationProvider>
             </SidebarProvider>
           </NextIntlClientProvider>
+          {/* </SWRConfig> */}
         </ThemeProvider>
       </body>
     </html>

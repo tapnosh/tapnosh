@@ -1,5 +1,5 @@
 import { MenuItemCard } from "@/components/menu/menu-item";
-import { RestaurantAbout } from "@/components/restuaurant/restaurant-about";
+import { RestaurantAbout } from "@/components/restaurant/restaurant-about";
 import { SampleDishes } from "@/mock/menu/dishes";
 import { unstable_ViewTransition as ViewTransition } from "react";
 

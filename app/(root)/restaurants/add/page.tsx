@@ -1,18 +1,18 @@
-import { RestaurantList } from "@/components/restaurant/restaurant-list";
+import { RestaurantForm } from "./add-form";
 
 export default function Restaurants() {
   return (
     <>
       <section className="section items-center">
-        <h1>Restaurants</h1>
+        <h1>Add new restaurant</h1>
         <h6>
-          Explore restaurants supporting the{" "}
+          Add a new restaurant to the{" "}
           <span className="font-logo">tapnosh.</span> app
         </h6>
       </section>
 
       <section className="section items-center pb-8 lg:mt-12">
-        <RestaurantList />
+        <RestaurantForm />
       </section>
     </>
   );
