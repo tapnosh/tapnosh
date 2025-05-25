@@ -26,7 +26,7 @@ import { BasicNotificationBody } from "@/components/ui/basic-notification";
 const restaurantSchema = z.object({
   name: z.string().min(1, "Restaurant name is required"),
   description: z.string().optional(),
-  //   theme_id: z.string().uuid("Invalid theme ID format"),
+  theme_id: z.string().uuid("Invalid theme ID format"),
   //   address: z.string().min(1, "Address is required"),
   images: z
     .array(z.string().url("Invalid image URL"))
@@ -84,7 +84,7 @@ export function RestaurantForm() {
     defaultValues: {
       name: "",
       description: "",
-      //   theme_id: "",
+      theme_id: "8016d67b-75e0-41ff-afa4-0ef3ef2afe2e",
       //   address: "",
       images: [],
       category_ids: [],
