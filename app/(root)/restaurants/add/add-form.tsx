@@ -349,7 +349,7 @@ export function RestaurantForm() {
                 Creating...
               </>
             ) : (
-              "Create Restaurant"
+              "Add Restaurant"
             )}
           </Button>
         </div>

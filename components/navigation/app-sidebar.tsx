@@ -4,7 +4,7 @@ import * as React from "react";
 import {
   BookOpen,
   CircleDotDashed,
-  History,
+  CirclePlus,
   Home,
   LifeBuoy,
   ListOrdered,
@@ -71,9 +71,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             : undefined,
         },
         {
-          title: "Order history",
-          url: "/history",
-          icon: History,
+          title: "Add restaurant",
+          url: "/restaurants/add",
+          icon: CirclePlus,
+          isAuth: true,
         },
         {
           title: "Documentation",
@@ -182,7 +183,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
         <LanguageSelector />
       </SidebarContent>
