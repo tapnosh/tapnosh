@@ -19,6 +19,7 @@ import { NotificationProvider } from "@/context/NotificationBar";
 import stc from "string-to-color";
 import Color from "color";
 import { ClerkProvider } from "@clerk/nextjs";
+import { SWRProvider } from "@/components/providers/SWRProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -109,34 +110,34 @@ export default async function RootLayout({
             --accent: ${accent.hex()};
           }
         `}</style>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {/* <SWRConfig value={{ fetcher }}> */}
-            <NextIntlClientProvider messages={messages}>
-              <SidebarProvider>
-                <NotificationProvider>
-                  <OrderProvider>
-                    <AppSidebar />
-                    <SidebarInset>
-                      <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
-                        <div className="flex flex-1 items-center gap-2 px-4">
-                          <SidebarTrigger className="-ml-1" />
-                        </div>
-                      </header>
-                      {children}
-                      <NoshBar />
-                    </SidebarInset>
-                    <Toaster />
-                  </OrderProvider>
-                </NotificationProvider>
-              </SidebarProvider>
-            </NextIntlClientProvider>
-            {/* </SWRConfig> */}
-          </ThemeProvider>
+          <SWRProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <NextIntlClientProvider messages={messages}>
+                <SidebarProvider>
+                  <NotificationProvider>
+                    <OrderProvider>
+                      <AppSidebar />
+                      <SidebarInset>
+                        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                          <div className="flex flex-1 items-center gap-2 px-4">
+                            <SidebarTrigger className="-ml-1" />
+                          </div>
+                        </header>
+                        {children}
+                        <NoshBar />
+                      </SidebarInset>
+                      <Toaster />
+                    </OrderProvider>
+                  </NotificationProvider>
+                </SidebarProvider>
+              </NextIntlClientProvider>
+            </ThemeProvider>
+          </SWRProvider>
         </body>
       </html>
     </ClerkProvider>

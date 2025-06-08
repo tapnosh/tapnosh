@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import useSWR from "swr";
 import { Plus, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,21 +21,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useNotification } from "@/context/NotificationBar";
 import { createRestaurant } from "@/app/actions/restaurant/create";
 import { BasicNotificationBody } from "@/components/ui/basic-notification";
-
-const restaurantSchema = z.object({
-  name: z.string().min(1, "Restaurant name is required"),
-  description: z.string().optional(),
-  theme_id: z.string().uuid("Invalid theme ID format"),
-  //   address: z.string().min(1, "Address is required"),
-  images: z
-    .array(z.string().url("Invalid image URL"))
-    .min(1, "At least one image is required"),
-  category_ids: z
-    .array(z.string().uuid())
-    .min(1, "At least one category must be selected"),
-});
-
-type RestaurantFormData = z.infer<typeof restaurantSchema>;
+import {
+  RestaurantFormData,
+  RestaurantSchema,
+} from "@/types/restaurants/Create";
 
 interface Category {
   id: string;
@@ -44,31 +32,18 @@ interface Category {
   description?: string;
 }
 
-// Fetcher function for SWR
-const fetcher = async (url: string): Promise<Category[]> => {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch categories: ${response.status}`);
-  }
-  return response.json();
-};
-
 export function RestaurantForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageInputs, setImageInputs] = useState<string[]>([""]);
   const { openNotification } = useNotification();
 
-  console.log("refetch");
-
-  // Use SWR to fetch categories
   const {
     data: categories = [],
     error: categoriesError,
     isLoading: isLoadingCategories,
     mutate: mutateCategories,
-  } = useSWR("https://noshtap.onrender.com/restaurants/categories", fetcher, {
-    onError: (error) => {
-      console.error("Error fetching categories:", error);
+  } = useSWR<Category[]>("restaurants/categories", {
+    onError: () => {
       openNotification(
         <BasicNotificationBody
           title="Error"
@@ -80,11 +55,11 @@ export function RestaurantForm() {
   });
 
   const form = useForm<RestaurantFormData>({
-    resolver: zodResolver(restaurantSchema),
+    resolver: zodResolver(RestaurantSchema),
     defaultValues: {
       name: "",
       description: "",
-      theme_id: "8016d67b-75e0-41ff-afa4-0ef3ef2afe2e",
+      theme_id: "b6c52d55-ddd1-4d2c-a9af-49c0605e7e2e",
       //   address: "",
       images: [],
       category_ids: [],
@@ -320,7 +295,7 @@ export function RestaurantForm() {
                                 onCheckedChange={(checked) => {
                                   return checked
                                     ? field.onChange([
-                                        ...field.value,
+                                        ...(field.value || []),
                                         category.id,
                                       ])
                                     : field.onChange(
