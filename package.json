@@ -13,6 +13,7 @@
     "check-updates": "npx npm-check-updates"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.21.0",
     "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-avatar": "^1.1.3",

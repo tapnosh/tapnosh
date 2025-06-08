@@ -18,6 +18,7 @@ import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
 import stc from "string-to-color";
 import Color from "color";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -85,57 +86,59 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} dir="ltr">
-      <Head>
-        <link rel="icon" href="/favicon.svg" sizes="any" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </Head>
-      <NextraHead
-        color={{
-          hue: { dark: 28, light: 357 },
-          saturation: { dark: 100, light: 18 },
-          lightness: { dark: 92, light: 40 },
-        }}
-      />
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <style>{`
+    <ClerkProvider>
+      <html lang={locale} dir="ltr">
+        <Head>
+          <link rel="icon" href="/favicon.svg" sizes="any" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </Head>
+        <NextraHead
+          color={{
+            hue: { dark: 28, light: 357 },
+            saturation: { dark: 100, light: 18 },
+            lightness: { dark: 92, light: 40 },
+          }}
+        />
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <style>{`
           :root {
             --primary: ${color.hex()};
             --primary-foreground: ${foreground.hex()};
             --accent: ${accent.hex()};
           }
         `}</style>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* <SWRConfig value={{ fetcher }}> */}
-          <NextIntlClientProvider messages={messages}>
-            <SidebarProvider>
-              <NotificationProvider>
-                <OrderProvider>
-                  <AppSidebar />
-                  <SidebarInset>
-                    <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
-                      <div className="flex flex-1 items-center gap-2 px-4">
-                        <SidebarTrigger className="-ml-1" />
-                      </div>
-                    </header>
-                    {children}
-                    <NoshBar />
-                  </SidebarInset>
-                  <Toaster />
-                </OrderProvider>
-              </NotificationProvider>
-            </SidebarProvider>
-          </NextIntlClientProvider>
-          {/* </SWRConfig> */}
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {/* <SWRConfig value={{ fetcher }}> */}
+            <NextIntlClientProvider messages={messages}>
+              <SidebarProvider>
+                <NotificationProvider>
+                  <OrderProvider>
+                    <AppSidebar />
+                    <SidebarInset>
+                      <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                        <div className="flex flex-1 items-center gap-2 px-4">
+                          <SidebarTrigger className="-ml-1" />
+                        </div>
+                      </header>
+                      {children}
+                      <NoshBar />
+                    </SidebarInset>
+                    <Toaster />
+                  </OrderProvider>
+                </NotificationProvider>
+              </SidebarProvider>
+            </NextIntlClientProvider>
+            {/* </SWRConfig> */}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
