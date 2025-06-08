@@ -16,10 +16,9 @@ import {
 import { OrderProvider } from "@/context/OrderContext";
 import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
-import stc from "string-to-color";
-import Color from "color";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SWRProvider } from "@/components/providers/SWRProvider";
+import { ThemeColorProvider } from "@/context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,18 +70,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const color = new Color(stc(Math.random().toString()));
-  let accent = color;
-  let foreground = color;
-
-  if (color.isDark()) {
-    accent = accent.lighten(0.6);
-    foreground = foreground.lighten(0.95);
-  } else {
-    accent = accent.darken(0.6);
-    foreground = foreground.darken(0.95);
-  }
-
   const locale = await getLocale();
   const messages = await getMessages();
 
@@ -103,40 +90,35 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <style>{`
-          :root {
-            --primary: ${color.hex()};
-            --primary-foreground: ${foreground.hex()};
-            --accent: ${accent.hex()};
-          }
-        `}</style>
           <SWRProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <NextIntlClientProvider messages={messages}>
-                <SidebarProvider>
-                  <NotificationProvider>
-                    <OrderProvider>
-                      <AppSidebar />
-                      <SidebarInset>
-                        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
-                          <div className="flex flex-1 items-center gap-2 px-4">
-                            <SidebarTrigger className="-ml-1" />
-                          </div>
-                        </header>
-                        {children}
-                        <NoshBar />
-                      </SidebarInset>
-                      <Toaster />
-                    </OrderProvider>
-                  </NotificationProvider>
-                </SidebarProvider>
-              </NextIntlClientProvider>
-            </ThemeProvider>
+            <ThemeColorProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <NextIntlClientProvider messages={messages}>
+                  <SidebarProvider>
+                    <NotificationProvider>
+                      <OrderProvider>
+                        <AppSidebar />
+                        <SidebarInset>
+                          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
+                            <div className="flex flex-1 items-center gap-2 px-4">
+                              <SidebarTrigger className="-ml-1" />
+                            </div>
+                          </header>
+                          {children}
+                          <NoshBar />
+                        </SidebarInset>
+                        <Toaster />
+                      </OrderProvider>
+                    </NotificationProvider>
+                  </SidebarProvider>
+                </NextIntlClientProvider>
+              </ThemeProvider>
+            </ThemeColorProvider>
           </SWRProvider>
         </body>
       </html>

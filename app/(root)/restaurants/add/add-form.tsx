@@ -25,6 +25,7 @@ import {
   RestaurantFormData,
   RestaurantSchema,
 } from "@/types/restaurants/Create";
+import { ThemePicker } from "@/components/theme/theme-picker";
 
 interface Category {
   id: string;
@@ -325,6 +326,8 @@ export function RestaurantForm() {
             </FormItem>
           )}
         />
+
+        <ThemePicker />
 
         <div className="flex gap-4 pt-6">
           <Button
