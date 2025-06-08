@@ -4,7 +4,7 @@ import * as React from "react";
 import {
   BookOpen,
   CircleDotDashed,
-  History,
+  CirclePlus,
   Home,
   LifeBuoy,
   ListOrdered,
@@ -28,7 +28,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { NavProjects } from "./nav-projects";
 import { useParams } from "next/navigation";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -36,11 +35,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const data = React.useMemo(
     () => ({
-      user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
-      },
       navMain: [
         {
           title: "Home",
@@ -76,9 +70,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             : undefined,
         },
         {
-          title: "Order history",
-          url: "/history",
-          icon: History,
+          title: "Add restaurant",
+          url: "/restaurants/add",
+          icon: CirclePlus,
+          isAuth: true,
         },
         {
           title: "Documentation",
@@ -187,12 +182,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
         <LanguageSelector />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

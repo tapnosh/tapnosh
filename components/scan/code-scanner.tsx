@@ -27,9 +27,6 @@ export function CodeScanner({
 
     closeNotification(notifications[0].id);
 
-    console.log(code);
-    console.log(validateCode(code));
-
     if (validateCode(code)) {
       handleAccept?.(code);
 

@@ -4,7 +4,7 @@ export default function Restaurants() {
   return (
     <>
       <section className="section items-center">
-        <h1>Add new restaurant</h1>
+        <h1>Add new Restaurant</h1>
         <h6>
           Add a new restaurant to the{" "}
           <span className="font-logo">tapnosh.</span> app

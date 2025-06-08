@@ -1,35 +1,23 @@
 "use server";
 
+import { authFetch } from "@/lib/api/client";
+import {
+  RestaurantFormData,
+  RestaurantSchema,
+} from "@/types/restaurants/Create";
 import { z } from "zod";
-
-const restaurantSchema = z.object({
-  name: z.string().min(1, "Restaurant name is required"),
-  description: z.string().optional(),
-  theme_id: z.string().uuid("Invalid theme ID format"),
-  //   address: z.string().min(1, "Address is required"),
-  images: z
-    .array(z.string().url("Invalid image URL"))
-    .min(1, "At least one image is required"),
-  category_ids: z
-    .array(z.string().uuid())
-    .min(1, "At least one category must be selected"),
-});
-
-type RestaurantFormData = z.infer<typeof restaurantSchema>;
 
 export async function createRestaurant(data: RestaurantFormData) {
   try {
-    const validatedData = restaurantSchema.parse(data);
+    const validatedData = RestaurantSchema.parse(data);
 
-    const response = await fetch("https://noshtap.onrender.com/restaurants", {
+    const response = await authFetch("restaurants", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(validatedData),
     });
-
-    console.log(response);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
