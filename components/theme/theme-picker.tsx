@@ -78,37 +78,49 @@ export function ThemePicker({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [createStatus]);
 
-  const { setColor, color } = useThemeColor();
-  const [hexColor, setHexColor] = useState<string>(color);
+  const [theme, setTheme] = useState<RestaurantTheme | undefined>();
+  const { setColor } = useThemeColor();
+  const [hexColor, setHexColor] = useState<string | undefined>();
 
   const throttleColor = useThrottle(hexColor, 300);
 
+  const isValidColor = useMemo(
+    () => /^#[0-9a-fA-F]{6}$/.test(hexColor ?? ""),
+    [hexColor],
+  );
+
   useEffect(() => {
-    if (throttleColor) setColor(throttleColor);
+    if (throttleColor && isValidColor) setColor(throttleColor);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [throttleColor]);
 
+  const handleThemeChange = (t: RestaurantTheme) => {
+    setHexColor(t.color);
+    onChange?.(t);
+    setTheme(t);
+  };
+
   return (
     <div
-      className="preview flex h-full w-full items-center justify-center rounded bg-cover bg-center p-10 transition-all"
+      className="preview bg-muted flex h-full w-full items-center justify-center rounded bg-cover bg-center p-10 transition-all"
       style={{ background: hexColor }}
     >
       <ColorPicker
+        theme={theme}
         themes={data}
-        background={color}
+        background={hexColor}
         setBackground={setHexColor}
         onCreate={(color) => startTransition(() => action({ color }))}
         isPending={isPending || isLoading}
-        onThemeChange={(t) => {
-          setHexColor(t.color);
-          onChange?.(t);
-        }}
+        isValidColor={isValidColor}
+        onThemeChange={handleThemeChange}
       />
     </div>
   );
 }
 
 export function ColorPicker({
+  theme,
   themes,
   background,
   setBackground,
@@ -116,18 +128,21 @@ export function ColorPicker({
   onCreate,
   isPending,
   onThemeChange,
+  isValidColor,
 }: {
+  theme: RestaurantTheme | undefined;
   themes: RestaurantTheme[];
-  background: string;
+  background?: string;
   setBackground: (color: string) => void;
   className?: string;
   onCreate: (color: string) => void;
   isPending: boolean;
   onThemeChange: (theme: RestaurantTheme) => void;
+  isValidColor: boolean;
 }) {
-  const isColorDefined = useMemo(
-    () => !themes.find(({ color }) => color === background),
-    [background, themes],
+  const canBeCreated = useMemo(
+    () => !themes.find(({ color }) => color === background) && isValidColor,
+    [background, isValidColor, themes],
   );
 
   const defaultTab = useMemo(() => {
@@ -135,7 +150,11 @@ export function ColorPicker({
   }, []);
 
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) =>
+        !open && canBeCreated && theme && onThemeChange(theme)
+      }
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -160,47 +179,38 @@ export function ColorPicker({
           </div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64">
+      <PopoverContent side="top" className="w-64">
         <Tabs defaultValue={defaultTab} className="w-full">
           <TabsContent value="solid" className="mt-0 flex flex-wrap gap-1">
+            <Button
+              className="relative size-6 shrink-0 cursor-pointer rounded-md"
+              size="icon"
+            >
+              <Palette />
+              <Input
+                id="custom-picker"
+                type="color"
+                value={background}
+                className="absolute inset-0 size-full p-0 opacity-0"
+                aria-invalid={!isValidColor}
+                onChange={(e) => setBackground(e.currentTarget.value)}
+              />
+            </Button>
             {themes.map((s) => (
               <div
                 key={s.id}
                 style={{ background: s.color }}
-                className="h-6 w-6 cursor-pointer rounded-md active:scale-105"
+                className="size-6 cursor-pointer rounded-md active:scale-105"
                 onClick={() => onThemeChange(s)}
               />
             ))}
           </TabsContent>
         </Tabs>
-        <div className="mt-4 flex w-full max-w-sm items-center gap-2">
-          <Button
-            className="relative shrink-0 cursor-pointer rounded-md"
-            size="icon"
-          >
-            <Palette />
-            <Input
-              id="custom-picker"
-              type="color"
-              value={background}
-              className="absolute inset-0 size-full p-0 opacity-0"
-              onChange={(e) => setBackground(e.currentTarget.value)}
-            />
-          </Button>
-
-          <Input
-            id="custom"
-            value={background}
-            onChange={(e) => setBackground(e.currentTarget.value)}
-            disabled={isPending}
-          />
-
-          {isColorDefined && (
+        {canBeCreated && (
+          <div className="mt-4 flex w-full max-w-sm items-center gap-2">
             <Button
-              className="relative shrink-0 cursor-pointer rounded-md"
-              size="icon"
-              variant="secondary"
-              onClick={() => onCreate(background)}
+              className="relative w-full shrink-0 cursor-pointer rounded-md"
+              onClick={() => background && onCreate(background)}
               disabled={isPending}
             >
               {isPending ? (
@@ -208,9 +218,10 @@ export function ColorPicker({
               ) : (
                 <CirclePlus />
               )}
+              Create this theme color
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );
