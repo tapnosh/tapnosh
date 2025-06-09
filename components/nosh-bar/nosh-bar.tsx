@@ -235,7 +235,7 @@ export function NoshBar() {
             },
           }}
           className={cn(
-            "sticky right-4 bottom-4 left-4 z-50 mx-auto mt-auto overflow-hidden",
+            "sticky right-4 bottom-4 left-4 z-[5000] mx-auto mt-auto overflow-hidden",
             isAnimating && "pointer-events-none",
           )}
         >
