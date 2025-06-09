@@ -60,7 +60,7 @@ export function RestaurantForm() {
     defaultValues: {
       name: "",
       description: "",
-      theme_id: "b6c52d55-ddd1-4d2c-a9af-49c0605e7e2e",
+      theme_id: "",
       //   address: "",
       images: [],
       category_ids: [],
@@ -327,10 +327,23 @@ export function RestaurantForm() {
           )}
         />
 
-        <FormItem>
-          <FormLabel>Theme</FormLabel>
-          <ThemePicker onChange={({ id }) => form.setValue("theme_id", id)} />
-        </FormItem>
+        <FormField
+          control={form.control}
+          name="theme_id"
+          render={() => (
+            <FormItem>
+              <FormLabel>Theme</FormLabel>
+              <FormControl>
+                <ThemePicker
+                  onChange={({ id }) =>
+                    form.setValue("theme_id", id, { shouldValidate: true })
+                  }
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <div className="flex gap-4 pt-6">
           <Button
