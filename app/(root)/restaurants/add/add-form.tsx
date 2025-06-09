@@ -327,7 +327,10 @@ export function RestaurantForm() {
           )}
         />
 
-        <ThemePicker />
+        <FormItem>
+          <FormLabel>Theme</FormLabel>
+          <ThemePicker onChange={({ id }) => form.setValue("theme_id", id)} />
+        </FormItem>
 
         <div className="flex gap-4 pt-6">
           <Button
