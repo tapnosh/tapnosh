@@ -7,6 +7,15 @@ if (!BASE_URL) {
   throw new Error("Missing NEXT_PUBLIC_API_BASE_URL in environment variables.");
 }
 
+/**
+ * Fetches a resource from the API with server-side authentication and error handling.
+ *
+ * @template T The expected response type.
+ * @param {string} resource - The API endpoint or resource path.
+ * @param {RequestInit} [init={}] - Optional fetch options.
+ * @returns {Promise<T>} The parsed JSON response.
+ * @throws {TranslatedError} Throws a translated error if the response is not ok.
+ */
 export async function authFetch<T>(
   resource: string,
   init: RequestInit = {},
