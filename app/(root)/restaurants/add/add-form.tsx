@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useSWR from "swr";
 import { Plus, X, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,22 +18,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useNotification } from "@/context/NotificationBar";
-import { createRestaurant } from "@/app/actions/restaurant/create";
 import { BasicNotificationBody } from "@/components/ui/basic-notification";
 import {
   RestaurantFormData,
-  RestaurantSchema,
-} from "@/types/restaurants/Create";
+  RestaurantFormSchema,
+} from "@/types/restaurant/Create";
 import { ThemePicker } from "@/components/theme/theme-picker";
-
-interface Category {
-  id: string;
-  name: string;
-  description?: string;
-}
+import { useCategoriesQuery } from "@/hooks/api/categories/useCategories";
+import { useCreateRestaurant } from "@/hooks/api/restaurant/useCreateRestaurant";
 
 export function RestaurantForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutateAsync, isPending } = useCreateRestaurant();
   const [imageInputs, setImageInputs] = useState<string[]>([""]);
   const { openNotification } = useNotification();
 
@@ -42,21 +36,11 @@ export function RestaurantForm() {
     data: categories = [],
     error: categoriesError,
     isLoading: isLoadingCategories,
-    mutate: mutateCategories,
-  } = useSWR<Category[]>("restaurants/categories", {
-    onError: () => {
-      openNotification(
-        <BasicNotificationBody
-          title="Error"
-          description="Failed to load categories. Please try again."
-          variant="error"
-        />,
-      );
-    },
-  });
+    refetch: refetchCategories,
+  } = useCategoriesQuery();
 
   const form = useForm<RestaurantFormData>({
-    resolver: zodResolver(RestaurantSchema),
+    resolver: zodResolver(RestaurantFormSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -94,31 +78,19 @@ export function RestaurantForm() {
   };
 
   const onSubmit = async (data: RestaurantFormData) => {
-    setIsSubmitting(true);
     try {
-      const result = await createRestaurant(data);
+      await mutateAsync(data);
 
-      if (result.success) {
-        openNotification(
-          <BasicNotificationBody
-            title="Success"
-            description="Restaurant created successfully!"
-            variant="success"
-          />,
-        );
-        form.reset();
-        setImageInputs([""]);
-      } else {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description={result.error || "Failed to create restaurant"}
-            variant="error"
-          />,
-        );
-      }
-    } catch (error) {
-      console.error("Error creating restaurant:", error);
+      openNotification(
+        <BasicNotificationBody
+          title="Success"
+          description="Restaurant created successfully!"
+          variant="success"
+        />,
+      );
+      form.reset();
+      setImageInputs([""]);
+    } catch {
       openNotification(
         <BasicNotificationBody
           title="Error"
@@ -126,13 +98,11 @@ export function RestaurantForm() {
           variant="error"
         />,
       );
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   const retryLoadCategories = () => {
-    mutateCategories();
+    refetchCategories();
   };
 
   return (
@@ -359,10 +329,10 @@ export function RestaurantForm() {
           </Button>
           <Button
             type="submit"
-            disabled={isSubmitting || isLoadingCategories}
+            disabled={isPending || isLoadingCategories}
             className="flex-1"
           >
-            {isSubmitting ? (
+            {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Creating...

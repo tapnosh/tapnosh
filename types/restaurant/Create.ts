@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const RestaurantSchema = z.object({
+export const RestaurantFormSchema = z.object({
   name: z.string().min(1, "Restaurant name is required"),
   description: z.string().optional(),
   theme_id: z.string().uuid("Theme color is required"),
@@ -14,4 +14,4 @@ export const RestaurantSchema = z.object({
     .optional(),
 });
 
-export type RestaurantFormData = z.infer<typeof RestaurantSchema>;
+export type RestaurantFormData = z.infer<typeof RestaurantFormSchema>;
