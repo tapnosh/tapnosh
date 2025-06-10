@@ -5,8 +5,9 @@ import { RestaurantCarousel } from "./restaurant-carousel";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ButtonScanner } from "@/components/scan/code-scanner-button";
-import { Restaurant, RestaurantCategory } from "@/types/restaurant";
+import { Restaurant } from "@/types/restaurant/Restaurant";
 import { Badge } from "../ui/badge";
+import { RestaurantCategory } from "@/types/category/Category";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
