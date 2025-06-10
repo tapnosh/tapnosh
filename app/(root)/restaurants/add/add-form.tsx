@@ -54,7 +54,6 @@ export function RestaurantForm() {
 
   useEffect(() => {
     form.setValue("images", files);
-    console.log(files);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 

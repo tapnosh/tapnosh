@@ -60,8 +60,6 @@ export default function ImageUploadDropzone({
       setTimeout(() => setErrors([]), 5000);
     }
 
-    console.log(validFiles);
-
     if (validFiles.length === 0) return;
 
     setFiles((prev) => [...prev, ...validFiles]);

@@ -33,9 +33,7 @@ export async function POST(request: Request): Promise<NextResponse> {
           // }),
         };
       },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        console.log("blob upload completed", blob, tokenPayload);
-      },
+      onUploadCompleted: async () => {},
     });
 
     return NextResponse.json(jsonResponse);
