@@ -18,7 +18,7 @@ import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeColorProvider } from "@/context/ThemeContext";
-import { QueryProvider } from "@/providers/SWRProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
