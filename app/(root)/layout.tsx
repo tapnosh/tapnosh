@@ -17,8 +17,8 @@ import { OrderProvider } from "@/context/OrderContext";
 import { NoshBar } from "@/components/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
 import { ClerkProvider } from "@clerk/nextjs";
-import { SWRProvider } from "@/components/providers/SWRProvider";
 import { ThemeColorProvider } from "@/context/ThemeContext";
+import { QueryProvider } from "@/providers/SWRProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -90,7 +90,7 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <SWRProvider>
+          <QueryProvider>
             <ThemeColorProvider>
               <ThemeProvider
                 attribute="class"
@@ -119,7 +119,7 @@ export default async function RootLayout({
                 </NextIntlClientProvider>
               </ThemeProvider>
             </ThemeColorProvider>
-          </SWRProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

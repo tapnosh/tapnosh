@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Restaurant } from "@/types/restaurant";
+import { Restaurant } from "@/types/restaurant/Restaurant";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -48,7 +48,6 @@ export function RestaurantCarousel({ restaurant }: RestaurantCardProps) {
         fill
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
-      {JSON.stringify(restaurant.categories)}
       {restaurant.images.length > 1 && (
         <>
           <button

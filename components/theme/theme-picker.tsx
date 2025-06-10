@@ -11,19 +11,14 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useThemeColor } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
 import { CirclePlus, Loader2Icon, Paintbrush, Palette } from "lucide-react";
-import {
-  startTransition,
-  useActionState,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useThrottle } from "@uidotdev/usehooks";
-import useSWR from "swr";
 import { useNotification } from "@/context/NotificationBar";
 import { BasicNotificationBody } from "../ui/basic-notification";
 import { RestaurantTheme } from "@/types/theme/Theme";
-import { createTheme } from "@/app/actions/theme/create";
+import { useRestaurantThemesQuery } from "../../hooks/api/theme/useRestaurantThemes";
+import { useCreateRestaurantTheme } from "@/hooks/api/theme/useCreateRestaurantTheme";
+import { TranslatedError } from "@/types/api/Error";
 
 export function ThemePicker({
   onChange,
@@ -31,52 +26,9 @@ export function ThemePicker({
   onChange?: (theme: RestaurantTheme) => void;
 }) {
   const { openNotification } = useNotification();
-  const [createStatus, action, isPending] = useActionState(createTheme, null);
 
-  const { data = [], isLoading } = useSWR<RestaurantTheme[]>(
-    "restaurant-theme",
-    {
-      onError: () => {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description="Failed to load themes. Please try again."
-            variant="error"
-          />,
-        );
-      },
-    },
-  );
-
-  useEffect(() => {
-    if (!createStatus) return;
-    if (createStatus.success) {
-      if (createStatus?.data) {
-        onChange?.(createStatus.data);
-      }
-      openNotification(
-        <BasicNotificationBody
-          title="Success"
-          description="Theme created successfully"
-          variant="success"
-        />,
-      );
-      return;
-    }
-
-    openNotification(
-      <BasicNotificationBody
-        title="Error"
-        description={
-          createStatus instanceof Error
-            ? createStatus.message
-            : "Unknown error occurred"
-        }
-        variant="error"
-      />,
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createStatus]);
+  const { data = [], isLoading, refetch } = useRestaurantThemesQuery();
+  const { mutateAsync, isPending } = useCreateRestaurantTheme();
 
   const [theme, setTheme] = useState<RestaurantTheme | undefined>();
   const { setColor } = useThemeColor();
@@ -100,6 +52,28 @@ export function ThemePicker({
     setTheme(t);
   };
 
+  const handleThemeCreate = async (color: string) => {
+    try {
+      await mutateAsync({ color });
+      refetch();
+      openNotification(
+        <BasicNotificationBody
+          title="Success"
+          description="Theme created successfully"
+          variant="success"
+        />,
+      );
+    } catch (error) {
+      openNotification(
+        <BasicNotificationBody
+          title="Error"
+          description={(error as TranslatedError).message}
+          variant="error"
+        />,
+      );
+    }
+  };
+
   return (
     <div
       className="preview bg-muted flex h-full w-full items-center justify-center rounded bg-cover bg-center p-10 transition-all"
@@ -110,7 +84,7 @@ export function ThemePicker({
         themes={data}
         background={hexColor}
         setBackground={setHexColor}
-        onCreate={(color) => startTransition(() => action({ color }))}
+        onCreate={handleThemeCreate}
         isPending={isPending || isLoading}
         isValidColor={isValidColor}
         onThemeChange={handleThemeChange}
