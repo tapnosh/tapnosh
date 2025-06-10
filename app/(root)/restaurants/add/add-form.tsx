@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, X, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,10 +26,11 @@ import {
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { useCategoriesQuery } from "@/hooks/api/categories/useCategories";
 import { useCreateRestaurant } from "@/hooks/api/restaurant/useCreateRestaurant";
+import ImageUploadDropzone from "@/components/ui/image-upload-drop-zone";
 
 export function RestaurantForm() {
+  const [files, setFiles] = useState<File[]>([]);
   const { mutateAsync, isPending } = useCreateRestaurant();
-  const [imageInputs, setImageInputs] = useState<string[]>([""]);
   const { openNotification } = useNotification();
 
   const {
@@ -51,31 +52,10 @@ export function RestaurantForm() {
     },
   });
 
-  const addImageInput = () => {
-    setImageInputs([...imageInputs, ""]);
-  };
-
-  const removeImageInput = (index: number) => {
-    if (imageInputs.length > 1) {
-      const newInputs = imageInputs.filter((_, i) => i !== index);
-      setImageInputs(newInputs);
-
-      // Update form values
-      const currentImages = form.getValues("images");
-      const newImages = currentImages.filter((_, i) => i !== index);
-      form.setValue("images", newImages);
-    }
-  };
-
-  const updateImageInput = (index: number, value: string) => {
-    const newInputs = [...imageInputs];
-    newInputs[index] = value;
-    setImageInputs(newInputs);
-
-    // Update form values
-    const validImages = newInputs.filter((img) => img.trim() !== "");
-    form.setValue("images", validImages);
-  };
+  useEffect(() => {
+    form.setValue("images", files);
+    console.log(files);
+  }, [files]);
 
   const onSubmit = async (data: RestaurantFormData) => {
     try {
@@ -89,7 +69,7 @@ export function RestaurantForm() {
         />,
       );
       form.reset();
-      setImageInputs([""]);
+      setFiles([]);
     } catch {
       openNotification(
         <BasicNotificationBody
@@ -140,72 +120,11 @@ export function RestaurantForm() {
           )}
         />
 
-        {/* <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter restaurant address" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-
-        {/* <FormField
-          control={form.control}
-          name="theme_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Theme ID</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter theme UUID (e.g., 20260cfc-d1b6-47c0-8946-01f0f238eaeb)"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                Enter the UUID of the theme for this restaurant
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-
         <div className="space-y-4">
           <FormLabel>Restaurant Images</FormLabel>
           <FormDescription>Add URLs for restaurant images</FormDescription>
-          {imageInputs.map((imageUrl, index) => (
-            <div key={index} className="flex gap-2">
-              <Input
-                placeholder="https://example.com/image.jpg"
-                value={imageUrl}
-                onChange={(e) => updateImageInput(index, e.target.value)}
-                className="flex-1"
-              />
-              {imageInputs.length > 1 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={() => removeImageInput(index)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={addImageInput}
-            className="w-full"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Add Another Image
-          </Button>
+
+          <ImageUploadDropzone files={files} setFiles={setFiles} />
           {form.formState.errors.images && (
             <p className="text-destructive text-sm font-medium">
               {form.formState.errors.images.message}
