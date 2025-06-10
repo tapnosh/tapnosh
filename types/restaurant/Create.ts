@@ -10,8 +10,10 @@ export const RestaurantImageSchema = z
         "image/png",
         "image/jpeg",
         "image/jpg",
+        "image/png",
+        "image/webp",
+        "image/svg",
         "image/svg+xml",
-        "image/gif",
       ].includes(file.type),
     { message: "Invalid image file type" },
   )
@@ -24,7 +26,9 @@ export const RestaurantFormSchema = z.object({
   description: z.string().optional(),
   theme_id: z.string().uuid("Theme color is required"),
   //   address: z.string().min(1, "Address is required"),
-  images: z.array(RestaurantImageSchema),
+  images: z
+    .array(RestaurantImageSchema)
+    .min(1, "At least one image must be added"),
   category_ids: z
     .array(z.string().uuid())
     // .min(1, "At least one category must be selected")

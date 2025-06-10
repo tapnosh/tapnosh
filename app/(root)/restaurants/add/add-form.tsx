@@ -55,6 +55,7 @@ export function RestaurantForm() {
   useEffect(() => {
     form.setValue("images", files);
     console.log(files);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files]);
 
   const onSubmit = async (data: RestaurantFormData) => {
@@ -240,7 +241,7 @@ export function RestaurantForm() {
             variant="outline"
             onClick={() => {
               form.reset();
-              setImageInputs([""]);
+              setFiles([]);
             }}
             className="flex-1"
           >

@@ -16,10 +16,10 @@ const validateFiles = (fileList: File[]) => {
   const invalidFiles: string[] = [];
 
   fileList.forEach((file) => {
-    RestaurantImageSchema.parse(file);
-    if (file.type && file.type.startsWith("image/")) {
+    try {
+      RestaurantImageSchema.parse(file);
       validFiles.push(file);
-    } else {
+    } catch {
       invalidFiles.push(file.name);
     }
   });
@@ -219,7 +219,6 @@ export default function ImageUploadDropzone({
             {files.map((file, index) => {
               const isDragging = draggedIndex === index;
               const isDragTarget = dragOverIndex === index;
-              console.log(file.name);
 
               return (
                 <Card

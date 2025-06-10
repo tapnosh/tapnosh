@@ -24,21 +24,17 @@ export async function POST(request: Request): Promise<NextResponse> {
             "image/jpeg",
             "image/png",
             "image/webp",
+            "image/svg+xml",
             "image/svg",
           ],
           addRandomSuffix: true,
-          tokenPayload: JSON.stringify({
-            authToken: token,
-          }),
+          // tokenPayload: JSON.stringify({
+          //   authToken: token,
+          // }),
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
         console.log("blob upload completed", blob, tokenPayload);
-
-        try {
-        } catch {
-          throw new Error("Could not update user");
-        }
       },
     });
 
@@ -46,7 +42,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
-      { status: 400 }, // The webhook will retry 5 times waiting for a 200
+      { status: 400 },
     );
   }
 }
