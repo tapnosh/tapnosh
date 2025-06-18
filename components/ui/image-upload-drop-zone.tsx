@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Upload, X, GripVertical, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { RestaurantImageSchema } from "@/types/restaurant/Create";
+import { ImageUploadSchema } from "@/types/restaurant/Create";
+import { useFormField } from "./form";
 
 const validateFiles = (fileList: File[]) => {
   const validFiles: File[] = [];
@@ -17,7 +18,7 @@ const validateFiles = (fileList: File[]) => {
 
   fileList.forEach((file) => {
     try {
-      RestaurantImageSchema.parse(file);
+      ImageUploadSchema.parse(file);
       validFiles.push(file);
     } catch {
       invalidFiles.push(file.name);
@@ -49,6 +50,8 @@ export default function ImageUploadDropzone({
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { error } = useFormField();
 
   const addFiles = useCallback((newFiles: File[]) => {
     const { validFiles, invalidFiles } = validateFiles(newFiles);
@@ -137,77 +140,10 @@ export default function ImageUploadDropzone({
 
   return (
     <div className="mx-auto flex w-full flex-col gap-6">
-      {/* Drop Zone */}
-      <Card
-        className={cn(
-          "cursor-pointer border-2 border-dashed transition-colors",
-          isDragOver
-            ? "border-primary bg-primary/5"
-            : "border-muted-foreground/25 hover:border-muted-foreground/50",
-        )}
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onClick={() => fileInputRef.current?.click()}
-      >
-        <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
-          <div
-            className={cn(
-              "mb-4 rounded-full p-4 transition-colors",
-              isDragOver ? "bg-primary/10" : "bg-muted",
-            )}
-          >
-            <Upload
-              className={cn(
-                "h-8 w-8 transition-colors",
-                isDragOver ? "text-primary" : "text-muted-foreground",
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <p className="text-lg font-medium">
-              {isDragOver ? "Drop images here" : "Drag & drop images here"}
-            </p>
-            <p className="text-muted-foreground text-sm">
-              or click to browse image files (JPG, PNG, SVG etc.)
-            </p>
-          </div>
-          <Button variant="outline" className="mt-4" asChild>
-            <span>
-              <Plus className="mr-2 h-4 w-4" />
-              Choose Files
-            </span>
-          </Button>
-        </CardContent>
-      </Card>
-
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        className="hidden"
-        onChange={handleFileSelect}
-        accept="image/*"
-      />
-
-      {errors.length > 0 && (
-        <div className="space-y-2">
-          {errors.map((error, index) => (
-            <div
-              key={index}
-              className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-            >
-              {error}
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* File List */}
       {files.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg">Uploaded images ({files.length})</h3>
             <Button variant="outline" size="sm" onClick={() => setFiles([])}>
               Clear All
             </Button>
@@ -281,6 +217,76 @@ export default function ImageUploadDropzone({
               );
             })}
           </div>
+        </div>
+      )}
+
+      {/* Drop Zone */}
+
+      {!files.length && (
+        <Card
+          className={cn(
+            "cursor-pointer border border-dashed shadow-none transition-colors",
+            isDragOver
+              ? "border-primary bg-primary/5"
+              : "border-muted-foreground/25 hover:border-foreground/50 hover:bg-foreground/5",
+            error ? "border-red-500 bg-red-50" : "",
+          )}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
+            <div
+              className={cn(
+                "mb-4 rounded-full p-4 transition-colors",
+                isDragOver ? "bg-primary/10" : "bg-muted",
+              )}
+            >
+              <Upload
+                className={cn(
+                  "h-8 w-8 transition-colors",
+                  isDragOver ? "text-primary" : "text-muted-foreground",
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <p className="text-lg font-medium">
+                {isDragOver ? "Drop images here" : "Drag & drop images here"}
+              </p>
+              <p className="text-muted-foreground text-sm">
+                or click to browse image files (JPG, PNG, SVG etc.)
+              </p>
+            </div>
+            <Button variant="outline" className="mt-4" asChild>
+              <span>
+                <Plus className="mr-2 h-4 w-4" />
+                Choose Files
+              </span>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        className="hidden"
+        onChange={handleFileSelect}
+        accept="image/*"
+      />
+
+      {errors.length > 0 && (
+        <div className="space-y-2">
+          {errors.map((error, index) => (
+            <div
+              key={index}
+              className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            >
+              {error}
+            </div>
+          ))}
         </div>
       )}
     </div>

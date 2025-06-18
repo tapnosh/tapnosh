@@ -15,8 +15,8 @@ import {
   Wheat,
   Wine,
 } from "lucide-react";
-import { MenuItem } from "@/types/menu";
 import { motion } from "motion/react";
+import { MenuItem } from "@/types/menu/Menu";
 
 export const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
@@ -100,7 +100,7 @@ export function MenuItemCard({
               </div>
             </div>
 
-            {isAvailable && onClick && (
+            {isAvailable && onAddToCart && (
               <MotionButton
                 layoutId={`item-add-to-cart-${item?.id}`}
                 size="icon"

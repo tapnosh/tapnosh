@@ -3,8 +3,6 @@ import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ShoppingBasket } from "lucide-react";
 import { MenuItem } from "@/types/menu";
 import { useCurrency } from "@/hooks/useCurrency";
 
@@ -73,7 +71,7 @@ const Featured = ({
                       <h6 className="text-primary-foreground font-display-median font-bold">
                         {formatCurrency(item.price)}
                       </h6>
-                      <Button
+                      {/* <Button
                         onClick={() =>
                           onAddToCart ? onAddToCart(item) : undefined
                         }
@@ -81,7 +79,7 @@ const Featured = ({
                       >
                         <ShoppingBasket />
                         Add to tab
-                      </Button>
+                      </Button> */}
                     </div>
                   </article>
                 </div>

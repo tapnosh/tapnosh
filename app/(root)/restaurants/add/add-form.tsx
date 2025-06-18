@@ -120,17 +120,19 @@ export function RestaurantForm() {
           )}
         />
 
-        <div className="space-y-4">
-          <FormLabel>Restaurant Images</FormLabel>
-          <FormDescription>Add URLs for restaurant images</FormDescription>
-
-          <ImageUploadDropzone files={files} setFiles={setFiles} />
-          {form.formState.errors.images && (
-            <p className="text-destructive text-sm font-medium">
-              {form.formState.errors.images.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="images"
+          render={() => (
+            <FormItem>
+              <div className="space-y-2">
+                <FormLabel>Restaurant Images</FormLabel>
+                <ImageUploadDropzone files={files} setFiles={setFiles} />
+              </div>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         <FormField
           control={form.control}

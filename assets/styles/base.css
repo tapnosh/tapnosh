@@ -11,6 +11,9 @@
 }
 
 @layer base {
+  button {
+    @apply cursor-pointer;
+  }
   h1 {
     @apply font-display-median text-3xl font-black sm:text-4xl lg:text-5xl xl:text-6xl;
   }

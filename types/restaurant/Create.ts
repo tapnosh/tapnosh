@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const fileSizeLimit = 5 * 1024 * 1024; // 5MB
 
-export const RestaurantImageSchema = z
+export const ImageUploadSchema = z
   .instanceof(File)
   .refine(
     (file) =>
@@ -26,9 +26,7 @@ export const RestaurantFormSchema = z.object({
   description: z.string().optional(),
   theme_id: z.string().uuid("Theme color is required"),
   //   address: z.string().min(1, "Address is required"),
-  images: z
-    .array(RestaurantImageSchema)
-    .min(1, "At least one image must be added"),
+  images: z.array(ImageUploadSchema).min(1, "At least one image must be added"),
   category_ids: z
     .array(z.string().uuid())
     // .min(1, "At least one category must be selected")

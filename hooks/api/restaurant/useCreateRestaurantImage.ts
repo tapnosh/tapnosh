@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { TranslatedError } from "@/types/api/Error";
-import { RestaurantImageSchema } from "@/types/restaurant/Create";
+import { ImageUploadSchema } from "@/types/restaurant/Create";
 import { upload } from "@vercel/blob/client";
 import { type PutBlobResult } from "@vercel/blob";
 
@@ -12,7 +12,7 @@ export const useCreateRestaurantImage = () => {
       try {
         const result = await Promise.allSettled(
           data.map(async (image) => {
-            RestaurantImageSchema.parse(image);
+            ImageUploadSchema.parse(image);
             return await upload(image.name, image, {
               access: "public",
               handleUploadUrl: "/api/restaurant/image/upload",
