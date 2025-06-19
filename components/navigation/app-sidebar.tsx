@@ -3,13 +3,10 @@
 import * as React from "react";
 import {
   BookOpen,
-  CircleDotDashed,
   CirclePlus,
   Home,
   LifeBuoy,
-  ListOrdered,
   Map,
-  Palette,
   PanelsTopLeft,
   Send,
   Utensils,

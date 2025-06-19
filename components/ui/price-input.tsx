@@ -9,11 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ControllerRenderProps,
-  useFormContext,
-  useWatch,
-} from "react-hook-form";
+import { ControllerRenderProps, useFormContext } from "react-hook-form";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useFormField } from "./form";
 import { useMemo } from "react";

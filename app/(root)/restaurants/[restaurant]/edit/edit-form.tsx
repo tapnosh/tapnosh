@@ -76,7 +76,6 @@ export function MenuForm() {
     fields: headerFields,
     append,
     remove,
-    move,
   } = useFieldArray({
     control,
     name: "header",
@@ -98,20 +97,21 @@ export function MenuForm() {
       timeTo: "12:00",
       items: [],
     } as const;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     appendField(newGroup as any);
   };
 
-  const addText = () => {
-    const newGroup = {
-      type: "text",
-      id: `text-${Date.now()}`,
-      name: "",
-      timeFrom: "07:00",
-      timeTo: "12:00",
-      items: [],
-    } as const;
-    appendField(newGroup as any);
-  };
+  // const addText = () => {
+  //   const newGroup = {
+  //     type: "text",
+  //     id: `text-${Date.now()}`,
+  //     name: "",
+  //     timeFrom: "07:00",
+  //     timeTo: "12:00",
+  //     items: [],
+  //   } as const;
+  //   appendField(newGroup as any);
+  // };
 
   const handleGroupDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

@@ -28,7 +28,9 @@ export function BuilderElementSortable({
     append,
     remove,
   }: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fields: any[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     append?: (value: any) => void;
     remove?: (index: number | number[]) => void;
   }) => React.ReactNode;

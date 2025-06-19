@@ -87,7 +87,6 @@ export default function ImageUploadDropzone({
       append(
         validFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
       );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [limit, files.length, append],
   );
@@ -126,7 +125,6 @@ export default function ImageUploadDropzone({
   const removeFile = useCallback(
     (i: number) => {
       remove(i);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [remove],
   );
@@ -192,11 +190,11 @@ export default function ImageUploadDropzone({
           </div>
 
           <div className="flex flex-col gap-2">
+            {/* eslint-disable @typescript-eslint/no-explicit-any */}
             {files.map(({ file, url }: any, index: number) => {
               const isDragging = draggedIndex === index;
               const isDragTarget = dragOverIndex === index;
               const isFile = file instanceof File;
-              const isBlobImage = !isFile;
 
               return (
                 <Card
