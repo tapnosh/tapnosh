@@ -6,7 +6,7 @@ import { useOrder } from "@/context/OrderContext";
 import Image from "next/image";
 import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
 import { Dispatch, useState } from "react";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types/menu/Menu";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useNotification } from "@/context/NotificationBar";
 import { AnimatePresence, motion } from "motion/react";
@@ -40,7 +40,10 @@ export const MenuItemModal = ({
 
   const handleAddToTab = (item: MenuItem, amnt?: number | string) => {
     const _amount = amnt ? +amnt : 1;
-    const price = formatCurrency(item.price * _amount, item.currency);
+    const price = formatCurrency(
+      item.price.amount * _amount,
+      item.price.currency,
+    );
 
     addItem(item, _amount);
     setOpen(false);
@@ -105,7 +108,7 @@ export const MenuItemModal = ({
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
                   <div className="flex flex-wrap gap-1.5">
-                    {menuItem?.categories.map((category) => (
+                    {menuItem?.categories?.map((category) => (
                       <Badge
                         key={category}
                         variant="secondary"
@@ -159,7 +162,7 @@ export const MenuItemModal = ({
                       transition={{ delay: 0.5, type: "tween", duration: 0.3 }}
                       className="text-muted-foreground mb-1 block"
                     >
-                      {menuItem?.ingredients.join(" • ")}
+                      {menuItem?.ingredients?.join(" • ")}
                     </motion.span>
                   </div>
                   {menuItem?.image && (
@@ -168,7 +171,11 @@ export const MenuItemModal = ({
                       className="relative aspect-square flex-1 pt-2"
                     >
                       <Image
-                        src={menuItem.image}
+                        src={
+                          Array.isArray(menuItem.image)
+                            ? menuItem.image[0].url
+                            : menuItem.image
+                        }
                         alt={menuItem.name}
                         width={80}
                         height={80}
@@ -189,8 +196,8 @@ export const MenuItemModal = ({
                     <div className="flex flex-col items-start gap-2">
                       <h3 className="font-display mt-1 font-normal md:text-2xl">
                         {formatCurrency(
-                          menuItem?.price || 0,
-                          menuItem?.currency,
+                          menuItem?.price.amount || 0,
+                          menuItem?.price.currency,
                         )}
                       </h3>
                       <div className="border-muted-foreground flex items-center overflow-clip rounded-md border">
@@ -218,8 +225,8 @@ export const MenuItemModal = ({
                       >
                         <ShoppingBasket /> Add{" "}
                         {formatCurrency(
-                          +amount * (menuItem?.price || 0),
-                          menuItem?.currency,
+                          +amount * (menuItem?.price.amount || 0),
+                          menuItem?.price.currency,
                         )}
                       </Button>
                     </div>
