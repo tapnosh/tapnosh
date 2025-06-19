@@ -127,7 +127,7 @@ export function RestaurantForm() {
             <FormItem>
               <div className="space-y-2">
                 <FormLabel>Restaurant Images</FormLabel>
-                <ImageUploadDropzone files={files} setFiles={setFiles} />
+                <ImageUploadDropzone />
               </div>
               <FormMessage />
             </FormItem>
