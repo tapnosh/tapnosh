@@ -25,12 +25,6 @@ export function withBuilderElementWrapper<P extends object>(
 ) {
   const componentName = Component.displayName || Component.name || "Component";
 
-  if (!componentName.startsWith("BuilderElement")) {
-    throw new Error(
-      `Component name must start with "BuilderElement" prefix. Got "${componentName}"`,
-    );
-  }
-
   const WrappedComponent = ({
     id,
     index,
