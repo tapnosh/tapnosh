@@ -59,7 +59,7 @@ export function withBuilderElementWrapper<P extends object>(
       <Card ref={setNodeRef} style={style} className="relative flex-row gap-0">
         <div className="absolute flex shrink-0 items-center pl-1">
           <div {...attributes} {...listeners}>
-            <GripVertical className="size-4 cursor-grab" />
+            <GripVertical className="size-4 cursor-grab touch-none" />
           </div>
         </div>
         <Button

@@ -77,6 +77,10 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang={locale} dir="ltr">
         <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          />
           <link rel="icon" href="/favicon.svg" sizes="any" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         </Head>

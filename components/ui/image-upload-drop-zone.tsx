@@ -48,6 +48,8 @@ export default function ImageUploadDropzone({
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchCurrentY, setTouchCurrentY] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { error, name } = useFormField();
@@ -162,6 +164,63 @@ export default function ImageUploadDropzone({
     setDragOverIndex(null);
   };
 
+  // Touch handlers for mobile drag functionality
+  const handleTouchStart = (e: React.TouchEvent, index: number) => {
+    const touch = e.touches[0];
+    setTouchStartY(touch.clientY);
+    setDraggedIndex(index);
+    setTouchCurrentY(touch.clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (draggedIndex === null || touchStartY === null) return;
+
+    e.preventDefault(); // Prevent scrolling
+    const touch = e.touches[0];
+    setTouchCurrentY(touch.clientY);
+
+    // Calculate which item we're hovering over
+    const cardElements = document.querySelectorAll("[data-card-index]");
+    const touchY = touch.clientY;
+
+    let closestIndex = draggedIndex;
+    let closestDistance = Infinity;
+
+    cardElements.forEach((element, idx) => {
+      const rect = element.getBoundingClientRect();
+      const centerY = rect.top + rect.height / 2;
+      const distance = Math.abs(touchY - centerY);
+
+      if (distance < closestDistance && idx !== draggedIndex) {
+        closestDistance = distance;
+        closestIndex = idx;
+      }
+    });
+
+    setDragOverIndex(closestIndex);
+  };
+
+  const handleTouchEnd = () => {
+    if (draggedIndex === null || dragOverIndex === null) {
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      setTouchStartY(null);
+      setTouchCurrentY(null);
+      return;
+    }
+
+    const newFiles = [...files];
+    const draggedFile = newFiles[draggedIndex];
+    newFiles.splice(draggedIndex, 1);
+    newFiles.splice(dragOverIndex, 0, draggedFile);
+
+    replace(newFiles);
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+    setTouchStartY(null);
+    setTouchCurrentY(null);
+  };
+
   return (
     <div className="mx-auto flex w-full flex-col gap-6">
       {/* File List */}
@@ -196,21 +255,38 @@ export default function ImageUploadDropzone({
               const isDragTarget = dragOverIndex === index;
               const isFile = file instanceof File;
 
+              // Calculate touch offset for visual feedback
+              const touchOffset =
+                isDragging && touchStartY !== null && touchCurrentY !== null
+                  ? touchCurrentY - touchStartY
+                  : 0;
+
               return (
                 <Card
                   key={index}
+                  data-card-index={index}
                   className={cn(
-                    "transform p-0 transition-all duration-300 ease-in-out",
-                    isDragging && "scale-95 rotate-2 opacity-50 shadow-lg",
+                    "transform touch-none p-0 transition-all duration-300 ease-in-out",
+                    isDragging && "z-10 scale-95 rotate-2 opacity-50 shadow-lg",
                     isDragTarget && "border-primary bg-primary/5 scale-105",
                     !isDragging && !isDragTarget && "hover:shadow-md",
                   )}
+                  style={{
+                    transform:
+                      isDragging && touchOffset !== 0
+                        ? `translateY(${touchOffset}px) scale(0.95) rotate(2deg)`
+                        : undefined,
+                    zIndex: isDragging ? 10 : 1,
+                  }}
                   draggable
                   onDragStart={(e) => handleDragStart(e, index)}
                   onDragEnd={handleDragEnd}
                   onDrop={(e) => handleReorderDrop(e, index)}
                   onDragOver={(e) => handleReorderDragOver(e, index)}
                   onDragLeave={handleReorderDragLeave}
+                  onTouchStart={(e) => handleTouchStart(e, index)}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
                 >
                   <CardContent className="flex flex-wrap items-center gap-3 p-4">
                     <div className="flex items-center gap-2">
@@ -224,11 +300,11 @@ export default function ImageUploadDropzone({
                     </div>
 
                     <div className="flex">
-                      <div className="bg-muted flex size-24 max-w-full items-center justify-center rounded-lg p-2">
+                      <div className="bg-muted flex size-12 max-w-full items-center justify-center rounded-lg p-2 sm:size-24">
                         <Image
                           width={128}
                           height={128}
-                          className="max-w-full"
+                          className="max-h-full max-w-full rounded-lg object-cover"
                           src={url}
                           alt={isFile ? file.name : file.pathname}
                         />

@@ -75,7 +75,11 @@ export default function MultiChipInput({
             ))}
             <input
               {...props}
-              placeholder={fields.length === 0 ? "Add items..." : "Add more..."}
+              placeholder={
+                fields.length === 0
+                  ? "Type to add, submit with enter"
+                  : "Add more..."
+              }
               onKeyDown={handleKeyPress}
               onBlur={handleAppend}
               className="flex min-w-12 flex-1 py-0.5 pl-1 outline-none"

@@ -91,7 +91,7 @@ export function BuilderElementMenuGroup({
           </FormItem>
         )}
       />
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-4 flex flex-wrap items-center gap-4">
         <span className="text-sm text-gray-600">Served from:</span>
         <FormField
           control={control}
