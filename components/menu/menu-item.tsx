@@ -66,7 +66,7 @@ export function MenuItemCard({
             className="relative aspect-square max-w-24 flex-1 sm:max-w-32 md:max-w-40 xl:max-w-52"
           >
             <Image
-              src={item.image}
+              src={Array.isArray(item.image) ? item.image[0].url : item.image}
               alt={item.name}
               width={80}
               height={80}

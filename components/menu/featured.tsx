@@ -3,7 +3,7 @@ import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types/menu/Menu";
 import { useCurrency } from "@/hooks/useCurrency";
 
 type PropType = {

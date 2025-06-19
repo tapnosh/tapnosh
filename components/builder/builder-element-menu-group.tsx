@@ -65,10 +65,11 @@ export function BuilderElementMenuGroup({
 
   const handleAdd = () => {
     appendChild({
+      version: "v1",
       id: `item-${Date.now()}`,
       name: "",
       description: "",
-      price: 0,
+      price: { amount: 0, currency: "PLN" },
       ingredients: [],
       categories: [],
       image: "",
@@ -76,7 +77,7 @@ export function BuilderElementMenuGroup({
   };
 
   return (
-    <>
+    <div className="space-y-2">
       <FormField
         control={control}
         name={`${groupKey}.name`}
@@ -151,6 +152,6 @@ export function BuilderElementMenuGroup({
           </div>
         </SortableContext>
       </DndContext>
-    </>
+    </div>
   );
 }

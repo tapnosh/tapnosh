@@ -1,44 +1,27 @@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import {
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import ImageUploadDropzone from "@/components/ui/image-upload-drop-zone";
-import { useEffect, useState } from "react";
 import { useBuilder } from "@/context/BuilderContext";
 import { MenuItemCard } from "@/components/menu/menu-item";
 import {
   BuilderElementProps,
   withBuilderElementWrapper,
 } from "./builder-element-wrapper";
-import { Builder } from "@/types/builder/BuilderSchema";
+import PriceInput from "@/components/ui/price-input";
+import MultiChipInput from "../ui/multi-chip-input";
 
 function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
   const data = useWatch({ name: elementKey });
-  const form = useFormContext<Builder>();
-  const [files, setFiles] = useState<File[]>([]);
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
   const { previewMode } = useBuilder();
-
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    form.setValue(`${elementKey}.image` as any, files);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files]);
-
-  const imageErrors = useWatch({
-    name: `${elementKey}.image`,
-    control,
-  });
-
-  console.log("form.formState.errors.menu");
-  console.log(imageErrors);
 
   if (previewMode) {
     return <MenuItemCard item={data} isAvailable />;
@@ -81,9 +64,8 @@ function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
           <FormItem>
             <FormLabel>Price</FormLabel>
             <FormControl>
-              <Input type="number" placeholder="Price" {...field} />
+              <PriceInput {...field} />
             </FormControl>
-            <FormMessage />
           </FormItem>
         )}
       />
@@ -95,7 +77,20 @@ function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
           <FormItem>
             <FormLabel>Ingredients</FormLabel>
             <FormControl>
-              <Input placeholder="Ingredients (comma separated)" {...field} />
+              <MultiChipInput
+                fields={field.value}
+                append={(value) =>
+                  setValue(`${elementKey}.ingredients`, [
+                    ...[...field.value, value],
+                  ])
+                }
+                remove={(value) =>
+                  setValue(
+                    `${elementKey}.ingredients`,
+                    field.value.filter((item: string) => item !== value),
+                  )
+                }
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -109,7 +104,20 @@ function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
           <FormItem>
             <FormLabel>Categories</FormLabel>
             <FormControl>
-              <Input placeholder="Categories (comma separated)" {...field} />
+              <MultiChipInput
+                fields={field.value}
+                append={(value) =>
+                  setValue(`${elementKey}.categories`, [
+                    ...[...field.value, value],
+                  ])
+                }
+                remove={(value) =>
+                  setValue(
+                    `${elementKey}.categories`,
+                    field.value.filter((item: string) => item !== value),
+                  )
+                }
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -123,7 +131,7 @@ function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
           <FormItem>
             <div className="space-y-2">
               <FormLabel>Item image</FormLabel>
-              <ImageUploadDropzone files={files} setFiles={setFiles} />
+              <ImageUploadDropzone />
             </div>
             <FormMessage />
           </FormItem>

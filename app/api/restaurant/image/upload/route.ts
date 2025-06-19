@@ -1,16 +1,25 @@
 import { auth } from "@clerk/nextjs/server";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
+import { rateLimit } from "@/lib/api/rateLimit";
 
 export async function POST(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as HandleUploadBody;
-  const { getToken } = await auth();
+  const { getToken, userId } = await auth();
   const token = await getToken();
 
-  if (!token) {
+  if (!token || !userId) {
     return NextResponse.json(
       { error: "User Unauthorized to upload an image" },
       { status: 401 },
+    );
+  }
+
+  const allowed = await rateLimit(userId, "restaurant-image-upload");
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Rate limit exceeded. Try again later." },
+      { status: 429 },
     );
   }
 
@@ -18,21 +27,16 @@ export async function POST(request: Request): Promise<NextResponse> {
     const jsonResponse = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async () => {
-        return {
-          allowedContentTypes: [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "image/svg+xml",
-            "image/svg",
-          ],
-          addRandomSuffix: true,
-          // tokenPayload: JSON.stringify({
-          //   authToken: token,
-          // }),
-        };
-      },
+      onBeforeGenerateToken: async () => ({
+        allowedContentTypes: [
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+          "image/svg+xml",
+          "image/svg",
+        ],
+        addRandomSuffix: true,
+      }),
       onUploadCompleted: async () => {},
     });
 

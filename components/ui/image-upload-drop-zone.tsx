@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { ImageUploadSchema } from "@/types/restaurant/Create";
 import { useFormField } from "./form";
+import { useFieldArray } from "react-hook-form";
 
 const validateFiles = (fileList: File[]) => {
   const validFiles: File[] = [];
@@ -39,11 +40,9 @@ const formatFileSize = (bytes: number) => {
 };
 
 export default function ImageUploadDropzone({
-  files,
-  setFiles,
+  limit = 10,
 }: {
-  files: File[];
-  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  limit?: number;
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -51,23 +50,47 @@ export default function ImageUploadDropzone({
   const [errors, setErrors] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { error } = useFormField();
+  const { error, name } = useFormField();
 
-  const addFiles = useCallback((newFiles: File[]) => {
-    const { validFiles, invalidFiles } = validateFiles(newFiles);
+  const {
+    fields: files,
+    append,
+    remove,
+    replace,
+  } = useFieldArray({
+    name,
+  });
 
-    if (invalidFiles.length > 0) {
-      setErrors(
-        invalidFiles.map((name) => `${name} is not a valid image file`),
+  const addFiles = useCallback(
+    (newFiles: File[]) => {
+      const { validFiles, invalidFiles } = validateFiles(newFiles);
+
+      if (invalidFiles.length > 0) {
+        setErrors(
+          invalidFiles.map((name) => `${name} is not a valid image file`),
+        );
+        setTimeout(() => setErrors([]), 5000);
+      }
+
+      if (validFiles.length === 0) return;
+
+      // Check limit
+      if (files.length + validFiles.length > limit) {
+        setErrors([`Cannot add more than ${limit} images`]);
+        setTimeout(() => setErrors([]), 5000);
+        return;
+      }
+
+      console.log("validFiles");
+      console.log(validFiles.map((file) => console.log(file)));
+
+      append(
+        validFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
       );
-      setTimeout(() => setErrors([]), 5000);
-    }
-
-    if (validFiles.length === 0) return;
-
-    setFiles((prev) => [...prev, ...validFiles]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [limit, files.length, append],
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -100,10 +123,13 @@ export default function ImageUploadDropzone({
     [addFiles],
   );
 
-  const removeFile = useCallback((i: number) => {
-    setFiles((prev) => prev.toSpliced(i, 1));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const removeFile = useCallback(
+    (i: number) => {
+      remove(i);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [remove],
+  );
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     setDraggedIndex(index);
@@ -133,7 +159,7 @@ export default function ImageUploadDropzone({
     newFiles.splice(draggedIndex, 1);
     newFiles.splice(dropIndex, 0, draggedFile);
 
-    setFiles(newFiles);
+    replace(newFiles);
     setDraggedIndex(null);
     setDragOverIndex(null);
   };
@@ -142,17 +168,35 @@ export default function ImageUploadDropzone({
     <div className="mx-auto flex w-full flex-col gap-6">
       {/* File List */}
       {files.length > 0 && (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <Button variant="outline" size="sm" onClick={() => setFiles([])}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => replace([])}
+              type="button"
+            >
+              <X />
               Clear All
             </Button>
+            {files.length < limit && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <Plus />
+                Add more
+              </Button>
+            )}
           </div>
 
-          <div className="space-y-2">
-            {files.map((file, index) => {
+          <div className="flex flex-col gap-2">
+            {files.map(({ file, url }: any, index: number) => {
               const isDragging = draggedIndex === index;
               const isDragTarget = dragOverIndex === index;
+              const isFile = file instanceof File;
+              const isBlobImage = !isFile;
 
               return (
                 <Card
@@ -170,7 +214,7 @@ export default function ImageUploadDropzone({
                   onDragOver={(e) => handleReorderDragOver(e, index)}
                   onDragLeave={handleReorderDragLeave}
                 >
-                  <CardContent className="flex items-center gap-3 p-4">
+                  <CardContent className="flex flex-wrap items-center gap-3 p-4">
                     <div className="flex items-center gap-2">
                       <Badge
                         variant="outline"
@@ -181,25 +225,33 @@ export default function ImageUploadDropzone({
                       <GripVertical className="text-muted-foreground h-4 w-4 cursor-grab active:cursor-grabbing" />
                     </div>
 
-                    <div className="flex-shrink-0">
-                      <div className="bg-muted flex size-24 items-center justify-center rounded-lg p-2">
+                    <div className="flex">
+                      <div className="bg-muted flex size-24 max-w-full items-center justify-center rounded-lg p-2">
                         <Image
                           width={128}
                           height={128}
-                          src={URL.createObjectURL(file)}
-                          alt={file.name}
+                          className="max-w-full"
+                          src={url}
+                          alt={isFile ? file.name : file.pathname}
                         />
                       </div>
                     </div>
 
-                    <div className="min-w-0 flex-1 space-y-1">
+                    <div className="min-w-24 flex-1 space-y-1">
                       <div className="flex items-center gap-2">
-                        <p className="truncate text-sm font-medium">
-                          {file.name || "Unnamed file"}
+                        <p
+                          title={
+                            isFile ? file.name : file.pathname || "Unnamed file"
+                          }
+                          className="truncate text-sm font-medium"
+                        >
+                          {isFile ? file.name : file.pathname || "Unnamed file"}
                         </p>
-                        <Badge variant="secondary" className="text-xs">
-                          {formatFileSize(file.size)}
-                        </Badge>
+                        {isFile && (
+                          <Badge variant="secondary" className="text-xs">
+                            {formatFileSize(file.size)}
+                          </Badge>
+                        )}
                       </div>
                     </div>
 
@@ -236,7 +288,7 @@ export default function ImageUploadDropzone({
           onDragLeave={handleDragLeave}
           onClick={() => fileInputRef.current?.click()}
         >
-          <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
+          <CardContent className="flex flex-col items-center justify-center px-4 py-8 text-center">
             <div
               className={cn(
                 "mb-4 rounded-full p-4 transition-colors",

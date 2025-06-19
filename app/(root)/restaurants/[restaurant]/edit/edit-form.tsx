@@ -97,9 +97,8 @@ export function MenuForm() {
       timeFrom: "07:00",
       timeTo: "12:00",
       items: [],
-    };
-    // setGroups([...groups, newGroup]);
-    appendField(newGroup);
+    } as const;
+    appendField(newGroup as any);
   };
 
   const addText = () => {
@@ -110,9 +109,8 @@ export function MenuForm() {
       timeFrom: "07:00",
       timeTo: "12:00",
       items: [],
-    };
-    // setGroups([...groups, newGroup]);
-    appendField(newGroup);
+    } as const;
+    appendField(newGroup as any);
   };
 
   const handleGroupDragEnd = (event: DragEndEvent) => {
@@ -132,10 +130,6 @@ export function MenuForm() {
     // For example: api.post('/menu', data)
   };
 
-  // log all form errors
-  form.formState.errors && console.log(JSON.stringify(form.formState.errors));
-  console.log(JSON.stringify(form.getValues()));
-
   return (
     <>
       <BuilderProvider>
@@ -151,7 +145,7 @@ export function MenuForm() {
                   items={fields.map((group) => group.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <div className="space-y-2" ref={groupsParent}>
+                  <div className="mb-2 flex flex-col gap-2" ref={groupsParent}>
                     {headerFields.map((group, i) => {
                       const Component =
                         PageElementMap[group.type as "menu-group"];
@@ -182,10 +176,7 @@ export function MenuForm() {
                         onClick={() =>
                           append({
                             type: "text",
-                            id: `text-${Date.now()}`,
-                            name: "",
-                            timeFrom: "07:00",
-                            timeTo: "12:00",
+                            description: "",
                           })
                         }
                       >
@@ -202,7 +193,7 @@ export function MenuForm() {
                   items={fields.map((group) => group.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <div ref={groupsParent}>
+                  <div className="flex flex-col gap-2" ref={groupsParent}>
                     {fields.map((group, i) => {
                       const Component =
                         PageElementMap[group.type as "menu-group" | "text"];
