@@ -57,7 +57,11 @@ const Featured = ({
                       height={200}
                       quality={80}
                       sizes="33vw"
-                      src={item.image}
+                      src={
+                        Array.isArray(item.image)
+                          ? item.image[0].url
+                          : item.image
+                      }
                       alt={item.name}
                     />
                   )}
@@ -69,7 +73,7 @@ const Featured = ({
                     <span className="italic">{item.description}</span>
                     <div className="mt-4 flex items-center justify-between gap-2">
                       <h6 className="text-primary-foreground font-display-median font-bold">
-                        {formatCurrency(item.price)}
+                        {formatCurrency(item.price.amount, item.price.currency)}
                       </h6>
                       {/* <Button
                         onClick={() =>
