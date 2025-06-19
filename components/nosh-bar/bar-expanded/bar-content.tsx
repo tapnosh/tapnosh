@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CartItem, OrderItem } from "@/components/nosh-bar/nosh-bar";
 import { OrderConfirmationStatus } from "@/components/nosh-bar/bar-expanded/order-confirmation-status";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const statusColors = {
   preparing: "bg-amber-500",
@@ -28,12 +29,15 @@ type CartItemProps = {
 };
 
 function CartItemRow({ item, updateQuantity, removeCartItem }: CartItemProps) {
+  const { formatCurrency } = useCurrency();
   return (
     <div className="flex items-center justify-between rounded-lg transition-all">
       <div className="flex items-center gap-3">
         <div className="flex flex-col">
           <span className="font-medium">{item.name}</span>
-          <span className="text-accent text-sm">${item.price.toFixed(2)}</span>
+          <span className="text-accent text-sm">
+            {formatCurrency(item.price.amount, item.price.currency)}
+          </span>
         </div>
       </div>
       <div className="flex items-center gap-2">

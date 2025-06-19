@@ -14,7 +14,10 @@ import { useOrder } from "@/context/OrderContext";
 export type CartItem = {
   id: string;
   name: string;
-  price: number;
+  price: {
+    amount: number;
+    currency: string;
+  };
   quantity: number;
 };
 
