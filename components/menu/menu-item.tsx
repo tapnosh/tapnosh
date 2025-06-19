@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { MenuItem } from "@/types/menu/Menu";
+import { useCurrency } from "@/hooks/useCurrency";
 
 export const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
@@ -45,6 +46,7 @@ export function MenuItemCard({
   onAddToCart?: (item: MenuItem) => void;
   onClick?: (item: MenuItem) => void;
 }) {
+  const { formatCurrency } = useCurrency();
   return (
     <motion.div
       layout
@@ -79,7 +81,7 @@ export function MenuItemCard({
           <header className="flex items-start justify-between">
             <span className="font-display-median text-lg">{item.name}</span>
             <span className="font-display-median text-lg font-semibold">
-              ${item.price.toFixed(2)}
+              {formatCurrency(item.price.amount, item.price.currency)}
             </span>
           </header>
           <span className="text-muted-foreground pr-15 text-sm italic">
@@ -87,9 +89,9 @@ export function MenuItemCard({
           </span>
           <footer className="mt-2 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col gap-2">
-              <span className="text-sm">{item.ingredients.join(" • ")}</span>
+              <span className="text-sm">{item?.ingredients?.join(" • ")}</span>
               <div className="flex flex-wrap gap-1.5">
-                {item.categories.map((category) => (
+                {item?.categories?.map((category) => (
                   <Badge key={category} variant="secondary" className="text-xs">
                     <span className="mr-1">
                       {categoryIcons[category as keyof typeof categoryIcons]}

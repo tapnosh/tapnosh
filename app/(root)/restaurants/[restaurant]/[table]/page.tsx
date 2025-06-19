@@ -7,7 +7,7 @@ import { SampleDishes } from "@/mock/menu/dishes";
 import Image from "next/image";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types/menu/Menu";
 import { MenuItemModal } from "@/components/menu/menu-item-modal";
 import { useParams } from "next/navigation";
 import { FiltersBar } from "@/components/filters/filters-bar";
