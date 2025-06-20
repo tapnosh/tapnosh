@@ -9,13 +9,24 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
 import { useUploadImage } from "./useUploadImage";
 
-export const useCreateRestaurant = () => {
+export const useRestaurantMutation = (
+  method: "POST" | "PUT" | "DELETE" = "POST",
+) => {
   const { fetchClient } = useFetchClient();
   const { mutateAsync: uploadImages } = useUploadImage();
 
   return useMutation<Restaurant, TranslatedError, RestaurantFormData>({
     mutationFn: async (data) => {
       try {
+        if ((method === "PUT" || method === "DELETE") && !data.id) {
+          throw {
+            translationKey: "restaurant.id.required",
+            status: 400,
+            message:
+              "Restaurant ID is required for update and delete operations",
+          };
+        }
+
         const validatedData = RestaurantFormSchema.parse(data);
 
         const images = data.images
@@ -24,8 +35,11 @@ export const useCreateRestaurant = () => {
 
         const imageBlobs = await uploadImages(images);
 
-        return await fetchClient<Restaurant>("restaurants", {
-          method: "POST",
+        const endpoint =
+          method === "POST" ? "restaurants" : `restaurants/${data.id}`;
+
+        return await fetchClient<Restaurant>(endpoint, {
+          method,
           body: JSON.stringify({
             ...validatedData,
             images: imageBlobs,

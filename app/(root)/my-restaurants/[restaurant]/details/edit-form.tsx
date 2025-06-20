@@ -11,8 +11,8 @@ import {
 import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutation";
 import { RestaurantDetailsForm } from "@/components/forms/restaurant-details-form";
 
-export function RestaurantFormCreate() {
-  const { mutateAsync, isPending } = useRestaurantMutation();
+export function RestaurantFormEdit() {
+  const { mutateAsync, isPending } = useRestaurantMutation("PUT");
   const { openNotification } = useNotification();
 
   const form = useForm<RestaurantFormData>({
