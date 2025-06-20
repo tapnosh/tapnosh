@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -29,7 +28,6 @@ import { useCreateRestaurant } from "@/hooks/api/restaurant/useCreateRestaurant"
 import ImageUploadDropzone from "@/components/ui/image-upload-drop-zone";
 
 export function RestaurantForm() {
-  const [files, setFiles] = useState<File[]>([]);
   const { mutateAsync, isPending } = useCreateRestaurant();
   const { openNotification } = useNotification();
 
@@ -46,16 +44,10 @@ export function RestaurantForm() {
       name: "",
       description: "",
       theme_id: "",
-      //   address: "",
       images: [],
       category_ids: [],
     },
   });
-
-  useEffect(() => {
-    form.setValue("images", files);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files]);
 
   const onSubmit = async (data: RestaurantFormData) => {
     try {
@@ -69,7 +61,6 @@ export function RestaurantForm() {
         />,
       );
       form.reset();
-      setFiles([]);
     } catch {
       openNotification(
         <BasicNotificationBody
@@ -111,7 +102,7 @@ export function RestaurantForm() {
               <FormControl>
                 <Textarea
                   placeholder="Describe your restaurant..."
-                  className="min-h-[100px]"
+                  className="min-h-32"
                   {...field}
                 />
               </FormControl>
@@ -120,17 +111,19 @@ export function RestaurantForm() {
           )}
         />
 
-        <div className="space-y-4">
-          <FormLabel>Restaurant Images</FormLabel>
-          <FormDescription>Add URLs for restaurant images</FormDescription>
-
-          <ImageUploadDropzone files={files} setFiles={setFiles} />
-          {form.formState.errors.images && (
-            <p className="text-destructive text-sm font-medium">
-              {form.formState.errors.images.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="images"
+          render={() => (
+            <FormItem>
+              <div className="space-y-2">
+                <FormLabel>Restaurant Images</FormLabel>
+                <ImageUploadDropzone />
+              </div>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         <FormField
           control={form.control}
@@ -240,7 +233,6 @@ export function RestaurantForm() {
             variant="outline"
             onClick={() => {
               form.reset();
-              setFiles([]);
             }}
             className="flex-1"
           >

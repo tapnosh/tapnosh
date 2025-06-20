@@ -15,8 +15,10 @@ import {
   Wheat,
   Wine,
 } from "lucide-react";
-import { MenuItem } from "@/types/menu";
 import { motion } from "motion/react";
+import { MenuItem } from "@/types/menu/Menu";
+import { useCurrency } from "@/hooks/useCurrency";
+import { useMemo } from "react";
 
 export const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
@@ -45,6 +47,12 @@ export function MenuItemCard({
   onAddToCart?: (item: MenuItem) => void;
   onClick?: (item: MenuItem) => void;
 }) {
+  const { formatCurrency } = useCurrency();
+
+  const imgSrc = useMemo(() => {
+    return Array.isArray(item.image) ? item.image[0]?.url : item.image;
+  }, [item.image]);
+
   return (
     <motion.div
       layout
@@ -60,13 +68,13 @@ export function MenuItemCard({
       onClick={() => onClick?.(item)}
     >
       <div className="flex flex-row items-start justify-between gap-4 border-b pb-4">
-        {item.image && (
+        {imgSrc && (
           <motion.div
             layoutId={`item-image-${item?.id}`}
             className="relative aspect-square max-w-24 flex-1 sm:max-w-32 md:max-w-40 xl:max-w-52"
           >
             <Image
-              src={item.image}
+              src={imgSrc}
               alt={item.name}
               width={80}
               height={80}
@@ -79,7 +87,7 @@ export function MenuItemCard({
           <header className="flex items-start justify-between">
             <span className="font-display-median text-lg">{item.name}</span>
             <span className="font-display-median text-lg font-semibold">
-              ${item.price.toFixed(2)}
+              {formatCurrency(item.price.amount, item.price.currency)}
             </span>
           </header>
           <span className="text-muted-foreground pr-15 text-sm italic">
@@ -87,9 +95,9 @@ export function MenuItemCard({
           </span>
           <footer className="mt-2 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col gap-2">
-              <span className="text-sm">{item.ingredients.join(" • ")}</span>
+              <span className="text-sm">{item?.ingredients?.join(" • ")}</span>
               <div className="flex flex-wrap gap-1.5">
-                {item.categories.map((category) => (
+                {item?.categories?.map((category) => (
                   <Badge key={category} variant="secondary" className="text-xs">
                     <span className="mr-1">
                       {categoryIcons[category as keyof typeof categoryIcons]}
@@ -100,7 +108,7 @@ export function MenuItemCard({
               </div>
             </div>
 
-            {isAvailable && onClick && (
+            {isAvailable && onAddToCart && (
               <MotionButton
                 layoutId={`item-add-to-cart-${item?.id}`}
                 size="icon"

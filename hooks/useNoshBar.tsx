@@ -18,7 +18,7 @@ export function useNoshBar() {
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.price.amount * item.quantity,
     0,
   );
   const totalOrderAmount = orderItems.reduce(
@@ -53,7 +53,11 @@ export function useNoshBar() {
     setTimeout(() => {
       setStatus("confirmed");
       setOrderItems((prev) => [
-        ...cartItems.map((item) => ({ ...item, status: "preparing" as const })),
+        ...cartItems.map((item) => ({
+          ...item,
+          status: "preparing" as const,
+          price: item.price.amount,
+        })),
         ...prev,
       ]);
       clearOrder();

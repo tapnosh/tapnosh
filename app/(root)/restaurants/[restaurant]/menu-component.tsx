@@ -1,19 +1,15 @@
 "use client";
 
-import { unstable_ViewTransition as ViewTransition } from "react";
 import { MenuItemCard } from "@/components/menu/menu-item";
 import { Featured } from "@/components/menu/featured";
 import { SampleDishes } from "@/mock/menu/dishes";
-import Image from "next/image";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { MenuItem } from "@/types/menu/Menu";
 import { MenuItemModal } from "@/components/menu/menu-item-modal";
-import { useParams } from "next/navigation";
 import { FiltersBar } from "@/components/filters/filters-bar";
 
-export default function Order() {
-  const { restaurant, table } = useParams();
+export function MenuComponent() {
   const [open, setOpen] = useState(false);
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
 
@@ -23,31 +19,10 @@ export default function Order() {
   };
   return (
     <>
-      <section className="section section-primary">
-        <div className="flex max-w-48 shrink-0 grow-0 items-center self-start rounded-4xl py-4 sm:max-w-3xs">
-          <Image
-            src="/images/sante-logo.svg"
-            alt="Restaurant logo"
-            width={300}
-            height={600}
-          />
-        </div>
-
-        <ViewTransition name={`title-${restaurant}`}>
-          <h1>
-            Restaurant {restaurant} - {table}
-          </h1>
-        </ViewTransition>
-        <ViewTransition name={`description-${restaurant}`}>
-          <h5 className="text-primary-foreground">
-            Talerzyki śródziemnomorskie 🌊 Na talerzu Francja, Hiszpania oraz
-            Włochy, w kieliszku cały świat
-          </h5>
-        </ViewTransition>
-      </section>
       <section className="section pb-2 lg:pb-4">
         <h3>Chef Picks</h3>
       </section>
+
       <Featured
         items={SampleDishes.slice(0, 3)}
         options={{
@@ -64,10 +39,7 @@ export default function Order() {
         <h3 className="mb-4">Menu</h3>
         <FiltersBar />
 
-        <h4>Appetizer</h4>
-        <p className="text-muted-foreground mb-4">
-          Served from 11:00 AM to 3:00 PM
-        </p>
+        <h4 className="mb-4">Appetizer</h4>
 
         <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
           <AnimatePresence>
@@ -76,7 +48,6 @@ export default function Order() {
                 key={dish.id}
                 item={dish}
                 onClick={handleClick}
-                onAddToCart={handleClick}
                 isAvailable
               />
             ))}

@@ -6,7 +6,7 @@ import { useOrder } from "@/context/OrderContext";
 import Image from "next/image";
 import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
 import { Dispatch, useState } from "react";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types/menu/Menu";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useNotification } from "@/context/NotificationBar";
 import { AnimatePresence, motion } from "motion/react";
@@ -17,10 +17,12 @@ export const MenuItemModal = ({
   open,
   setOpen,
   menuItem,
+  canBeAddedToTab = false,
 }: {
   open: boolean;
   setOpen: Dispatch<boolean>;
   menuItem?: MenuItem;
+  canBeAddedToTab?: boolean;
 }) => {
   const [amount, setAmount] = useState<number | string>(1);
   const { openNotification } = useNotification();
@@ -38,7 +40,10 @@ export const MenuItemModal = ({
 
   const handleAddToTab = (item: MenuItem, amnt?: number | string) => {
     const _amount = amnt ? +amnt : 1;
-    const price = formatCurrency(item.price * _amount, item.currency);
+    const price = formatCurrency(
+      item.price.amount * _amount,
+      item.price.currency,
+    );
 
     addItem(item, _amount);
     setOpen(false);
@@ -82,7 +87,7 @@ export const MenuItemModal = ({
               layoutId={`item-${menuItem?.id}`}
               style={{
                 borderRadius: "32px",
-                maxHeight: "calc(100dvh - 9rem)",
+                maxHeight: "calc(100dvh - 2rem)",
                 backgroundColor: "var(--background)",
                 width: "calc(100% - 2rem)",
               }}
@@ -92,7 +97,7 @@ export const MenuItemModal = ({
               }}
               role="dialog"
               aria-modal="true"
-              className="sticky right-4 bottom-32 left-4 z-50 m-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-md"
+              className="sticky top-4 right-4 bottom-4 left-4 z-50 mx-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-md"
             >
               <button
                 onClick={() => setOpen(false)}
@@ -103,7 +108,7 @@ export const MenuItemModal = ({
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
                   <div className="flex flex-wrap gap-1.5">
-                    {menuItem?.categories.map((category) => (
+                    {menuItem?.categories?.map((category) => (
                       <Badge
                         key={category}
                         variant="secondary"
@@ -157,7 +162,7 @@ export const MenuItemModal = ({
                       transition={{ delay: 0.5, type: "tween", duration: 0.3 }}
                       className="text-muted-foreground mb-1 block"
                     >
-                      {menuItem?.ingredients.join(" • ")}
+                      {menuItem?.ingredients?.join(" • ")}
                     </motion.span>
                   </div>
                   {menuItem?.image && (
@@ -166,58 +171,67 @@ export const MenuItemModal = ({
                       className="relative aspect-square flex-1 pt-2"
                     >
                       <Image
-                        src={menuItem.image}
+                        src={
+                          Array.isArray(menuItem.image)
+                            ? menuItem.image[0]?.url
+                            : menuItem.image
+                        }
                         alt={menuItem.name}
                         width={80}
                         height={80}
                         quality={50}
-                        className="h-full w-full rounded-md object-cover"
+                        className="pointer-events-none h-full w-full rounded-md object-cover"
                       />
                     </motion.div>
                   )}
                 </div>
-                <motion.footer
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: 0.2, type: "tween", duration: 0.3 }}
-                  className="border-muted bg-background sticky bottom-0 mt-auto flex items-end justify-between border-t pt-2 pb-4"
-                >
-                  <div className="flex flex-col items-start gap-2">
-                    <h3 className="font-display mt-1 font-normal md:text-2xl">
-                      {formatCurrency(menuItem?.price || 0, menuItem?.currency)}
-                    </h3>
-                    <div className="border-muted-foreground flex items-center overflow-clip rounded-md border">
-                      <button
-                        onClick={() => handleDecrement()}
-                        className="hover:bg-muted p-2 transition-colors"
-                      >
-                        <Minus className="h-5 w-5" />
-                      </button>
-                      <span className="px-3">{amount}</span>
-                      <button
-                        onClick={() => handleIncrement()}
-                        className="hover:bg-muted p-2 transition-colors"
-                      >
-                        <Plus className="h-5 w-5" />
-                      </button>
+                {canBeAddedToTab && (
+                  <motion.footer
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: 0.2, type: "tween", duration: 0.3 }}
+                    className="border-muted bg-background sticky bottom-0 mt-auto flex items-end justify-between border-t pt-2 pb-4"
+                  >
+                    <div className="flex flex-col items-start gap-2">
+                      <h3 className="font-display mt-1 font-normal md:text-2xl">
+                        {formatCurrency(
+                          menuItem?.price.amount || 0,
+                          menuItem?.price.currency,
+                        )}
+                      </h3>
+                      <div className="border-muted-foreground flex items-center overflow-clip rounded-md border">
+                        <button
+                          onClick={() => handleDecrement()}
+                          className="hover:bg-muted p-2 transition-colors"
+                        >
+                          <Minus className="h-5 w-5" />
+                        </button>
+                        <span className="px-3">{amount}</span>
+                        <button
+                          onClick={() => handleIncrement()}
+                          className="hover:bg-muted p-2 transition-colors"
+                        >
+                          <Plus className="h-5 w-5" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex gap-2">
-                    <Button
-                      size="lg"
-                      className="bg-primary hover:bg-primary/75 text-primary-foreground"
-                      onClick={() => handleAddToTab(menuItem!, +amount)}
-                    >
-                      <ShoppingBasket /> Add{" "}
-                      {formatCurrency(
-                        +amount * (menuItem?.price || 0),
-                        menuItem?.currency,
-                      )}
-                    </Button>
-                  </div>
-                </motion.footer>
+                    <div className="flex gap-2">
+                      <Button
+                        size="lg"
+                        className="bg-primary hover:bg-primary/75 text-primary-foreground"
+                        onClick={() => handleAddToTab(menuItem!, +amount)}
+                      >
+                        <ShoppingBasket /> Add{" "}
+                        {formatCurrency(
+                          +amount * (menuItem?.price.amount || 0),
+                          menuItem?.price.currency,
+                        )}
+                      </Button>
+                    </div>
+                  </motion.footer>
+                )}
               </article>
             </motion.div>
           </RemoveScroll>

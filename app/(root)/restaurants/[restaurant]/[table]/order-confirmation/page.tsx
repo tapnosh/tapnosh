@@ -8,9 +8,11 @@ import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useOrder } from "@/context/OrderContext";
+import { useCurrency } from "@/hooks/useCurrency";
 
 export default function ConfirmOrder() {
   const { items } = useOrder();
+  const { formatCurrency } = useCurrency();
 
   return (
     <section className="section">
@@ -51,14 +53,17 @@ export default function ConfirmOrder() {
                         <div>
                           <span className="font-black">{item.name}</span>
                           <p className="text-muted-foreground text-sm md:hidden">
-                            ${item.price.toFixed(2)}
+                            {formatCurrency(
+                              item.price.amount,
+                              item.price.currency,
+                            )}
                           </p>
                         </div>
                       </div>
                     </div>
 
                     <div className="hidden md:col-span-2 md:block">
-                      ${item.price.toFixed(2)}
+                      {formatCurrency(item.price.amount, item.price.currency)}
                     </div>
 
                     <div className="col-span-1 flex md:col-span-2">
@@ -93,7 +98,10 @@ export default function ConfirmOrder() {
                     </div>
 
                     <div className="col-span-1 text-right md:col-span-2">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatCurrency(
+                        item.price.amount * item.quantity,
+                        item.price.currency,
+                      )}
                     </div>
 
                     <div className="col-span-1 text-right">

@@ -77,6 +77,10 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang={locale} dir="ltr">
         <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          />
           <link rel="icon" href="/favicon.svg" sizes="any" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         </Head>
@@ -105,9 +109,10 @@ export default async function RootLayout({
                         <AppSidebar />
                         <SidebarInset>
                           <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2">
-                            <div className="flex flex-1 items-center gap-2 px-4">
+                            <div className="flex items-center gap-2 px-4">
                               <SidebarTrigger className="-ml-1" />
                             </div>
+                            <div id="header-actions-container" />
                           </header>
                           {children}
                           <NoshBar />

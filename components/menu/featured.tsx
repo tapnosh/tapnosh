@@ -3,9 +3,7 @@ import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ShoppingBasket } from "lucide-react";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types/menu/Menu";
 import { useCurrency } from "@/hooks/useCurrency";
 
 type PropType = {
@@ -59,7 +57,11 @@ const Featured = ({
                       height={200}
                       quality={80}
                       sizes="33vw"
-                      src={item.image}
+                      src={
+                        Array.isArray(item.image)
+                          ? item.image[0]?.url
+                          : item.image
+                      }
                       alt={item.name}
                     />
                   )}
@@ -71,9 +73,9 @@ const Featured = ({
                     <span className="italic">{item.description}</span>
                     <div className="mt-4 flex items-center justify-between gap-2">
                       <h6 className="text-primary-foreground font-display-median font-bold">
-                        {formatCurrency(item.price)}
+                        {formatCurrency(item.price.amount, item.price.currency)}
                       </h6>
-                      <Button
+                      {/* <Button
                         onClick={() =>
                           onAddToCart ? onAddToCart(item) : undefined
                         }
@@ -81,7 +83,7 @@ const Featured = ({
                       >
                         <ShoppingBasket />
                         Add to tab
-                      </Button>
+                      </Button> */}
                     </div>
                   </article>
                 </div>

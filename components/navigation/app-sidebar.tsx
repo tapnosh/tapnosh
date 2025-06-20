@@ -3,13 +3,10 @@
 import * as React from "react";
 import {
   BookOpen,
-  CircleDotDashed,
   CirclePlus,
   Home,
   LifeBuoy,
-  ListOrdered,
   Map,
-  Palette,
   PanelsTopLeft,
   Send,
   Utensils,
@@ -29,6 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { NavProjects } from "./nav-projects";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const params = useParams<{ restaurant: string }>();
@@ -68,12 +66,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 },
               ]
             : undefined,
-        },
-        {
-          title: "Add restaurant",
-          url: "/restaurants/add",
-          icon: CirclePlus,
-          isAuth: true,
         },
         {
           title: "Documentation",
@@ -141,25 +133,49 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           icon: PanelsTopLeft,
         },
         {
-          name: "Brand Customization",
-          url: "#",
-          icon: Palette,
+          name: "Add a restaurant",
+          url: "/restaurants/add",
+          icon: CirclePlus,
+          isAuth: true,
         },
         {
-          name: "Menu Editor",
+          name: "My restaurants",
           url: "#",
           icon: Map,
+          items: [
+            {
+              title: "General",
+              url: "#",
+            },
+            {
+              title: "Team",
+              url: "#",
+            },
+            {
+              title: "Billing",
+              url: "#",
+            },
+            {
+              title: "Limits",
+              url: "#",
+            },
+          ],
         },
-        {
-          name: "Placed Orders",
-          url: "#",
-          icon: ListOrdered,
-        },
-        {
-          name: "Order Tracker", // maybe "Order Status" "Order Flow" "Order Status Board"
-          url: "#",
-          icon: CircleDotDashed,
-        },
+        // {
+        //   name: "Brand Customization",
+        //   url: "#",
+        //   icon: Palette,
+        // },
+        // {
+        //   name: "Placed Orders",
+        //   url: "#",
+        //   icon: ListOrdered,
+        // },
+        // {
+        //   name: "Order Tracker", // maybe "Order Status" "Order Flow" "Order Status Board"
+        //   url: "#",
+        //   icon: CircleDotDashed,
+        // },
       ],
     }),
     [params],
@@ -182,7 +198,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavProjects projects={data.projects} />
         {/* <NavSecondary items={data.navSecondary} className="mt-auto" /> */}
         <LanguageSelector />
       </SidebarContent>

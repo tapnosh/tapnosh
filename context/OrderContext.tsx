@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import { MenuItem } from "@/types/menu";
+import { MenuItem } from "@/types/menu/Menu";
 
 type OrderItem = MenuItem & {
   quantity: number;
@@ -67,7 +67,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   const totalPrice = items.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.price.amount * item.quantity,
     0,
   );
 

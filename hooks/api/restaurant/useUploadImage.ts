@@ -1,21 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import { TranslatedError } from "@/types/api/Error";
-import { RestaurantImageSchema } from "@/types/restaurant/Create";
 import { upload } from "@vercel/blob/client";
 import { type PutBlobResult } from "@vercel/blob";
 
 import { z } from "zod";
+import { ImageValidationSchema } from "@/types/image/BlobImage";
 
-export const useCreateRestaurantImage = () => {
+export const useUploadImage = () => {
   return useMutation<PutBlobResult[], TranslatedError, File[]>({
     mutationFn: async (data) => {
       try {
         const result = await Promise.allSettled(
           data.map(async (image) => {
-            RestaurantImageSchema.parse(image);
+            ImageValidationSchema.parse(image);
             return await upload(image.name, image, {
               access: "public",
-              handleUploadUrl: "/api/restaurant/image/upload",
+              handleUploadUrl: "/api/image/upload",
             });
           }),
         );

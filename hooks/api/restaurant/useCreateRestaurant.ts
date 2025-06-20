@@ -7,24 +7,28 @@ import {
 } from "@/types/restaurant/Create";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
-import { useCreateRestaurantImage } from "./useCreateRestaurantImage";
+import { useUploadImage } from "./useUploadImage";
 
 export const useCreateRestaurant = () => {
   const { fetchClient } = useFetchClient();
-  const { mutateAsync } = useCreateRestaurantImage();
+  const { mutateAsync: uploadImages } = useUploadImage();
 
   return useMutation<Restaurant, TranslatedError, RestaurantFormData>({
     mutationFn: async (data) => {
       try {
         const validatedData = RestaurantFormSchema.parse(data);
 
-        const imageBlobs = await mutateAsync(data.images);
+        const images = data.images
+          .filter((image) => "file" in image)
+          .map(({ file }) => file);
+
+        const imageBlobs = await uploadImages(images);
 
         return await fetchClient<Restaurant>("restaurants", {
           method: "POST",
           body: JSON.stringify({
             ...validatedData,
-            images: imageBlobs.map(({ url }) => url),
+            images: imageBlobs,
           }),
         });
       } catch (error) {
