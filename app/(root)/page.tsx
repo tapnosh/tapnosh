@@ -26,8 +26,9 @@ export default function RestaurantLanding() {
                   variant="secondary"
                   size="lg"
                   className="px-8 py-6 text-lg"
+                  asChild
                 >
-                  List Your Restaurant
+                  <Link href="/restaurants/add"> List Your Restaurant</Link>
                 </Button>
                 <Button
                   variant="secondary"
