@@ -53,7 +53,7 @@ const PreviewModeSwitcher = () => {
   );
 };
 
-function MenuFormContent() {
+function PageBuilderFields() {
   const [groupsParent] = useAutoAnimate();
 
   const { previewMode } = useBuilder();
@@ -253,10 +253,10 @@ function MenuFormContent() {
   );
 }
 
-export function MenuForm() {
+export function PageBuilder() {
   return (
     <BuilderProvider>
-      <MenuFormContent />
+      <PageBuilderFields />
     </BuilderProvider>
   );
 }

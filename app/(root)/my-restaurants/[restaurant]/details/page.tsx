@@ -1,21 +1,24 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { RestaurantFormCreate } from "./add-form";
+import { RestaurantFormEdit } from "./edit-form";
 
-export default function RestaurantCreate() {
+export default async function RestaurantEdit({
+  params,
+}: {
+  params: Promise<{ restaurant: string }>;
+}) {
+  const { restaurant } = await params;
+
   return (
     <>
       <section className="section items-center">
-        <h1>Add new Restaurant</h1>
-        <h6>
-          Add a new restaurant to the{" "}
-          <span className="font-logo">tapnosh.</span> app
-        </h6>
+        <h1>{restaurant}</h1>
+        <h6>Edit {restaurant} detail information</h6>
       </section>
 
       <section className="section items-center pb-8 lg:mt-12">
         <Card>
           <CardContent>
-            <RestaurantFormCreate />
+            <RestaurantFormEdit />
           </CardContent>
         </Card>
       </section>

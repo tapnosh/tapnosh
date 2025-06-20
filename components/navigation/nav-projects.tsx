@@ -97,6 +97,8 @@ export function NavProjects() {
     return null;
   }
 
+  console.log(pathname, allItems);
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Management</SidebarGroupLabel>
@@ -105,7 +107,10 @@ export function NavProjects() {
           <Collapsible
             key={item.title}
             asChild
-            defaultOpen={pathname.includes(item.url)}
+            defaultOpen={
+              pathname.includes(item.url) ||
+              item.items?.some((subItem) => pathname.includes(subItem.url))
+            }
           >
             <SidebarMenuItem>
               <SidebarMenuButton

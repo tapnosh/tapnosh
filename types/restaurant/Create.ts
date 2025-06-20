@@ -2,6 +2,7 @@ import { z } from "zod";
 import { BlobImageSchema, UploadImageSchema } from "../image/BlobImage";
 
 export const RestaurantFormSchema = z.object({
+  id: z.string().uuid().optional(),
   name: z
     .string()
     .min(1, "Restaurant name is required")

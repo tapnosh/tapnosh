@@ -1,180 +1,131 @@
-"use client";
-
-import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { Camera, Loader2Icon } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useLayoutEffect, useState } from "react";
-import { toast } from "sonner";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useCamera } from "@/hooks/useCamera";
+import { Users, ChefHat, Utensils } from "lucide-react";
+import { RestaurantList } from "@/components/restaurant/restaurant-list";
 
-export default function Restaurants() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [tapnoshCode, setTapnoshCode] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const validateCode = (code: string) => {
-    const codeRegex = /([a-zA-Z0-9]{6})/;
-    return codeRegex.test(code);
-  };
-
-  const handleScan = (result: IDetectedBarcode[]) => {
-    const code =
-      new URL(result[0].rawValue).searchParams.get("tapnoshId") ?? "";
-
-    if (validateCode(code)) {
-      setTapnoshCode(code);
-      handleAccept(code);
-    } else {
-      toast.error("Invalid code", {
-        description: "The code you scanned is invalid. Please try again.",
-      });
-    }
-  };
-
-  const handleAccept = (code: string) => {
-    if (validateCode(code)) {
-      setLoading(true);
-    } else {
-      toast.error("Invalid code", {
-        description: "The code you've provided is invalid. Please try again.",
-      });
-    }
-
-    setTimeout(() => {
-      router.push(`/restaurants/restaurant-name/${code}`);
-    }, 100);
-  };
-
-  useLayoutEffect(() => {
-    const codeFromUrl = searchParams.get("tapnoshId");
-
-    if (codeFromUrl) {
-      if (validateCode(codeFromUrl)) {
-        setTapnoshCode(codeFromUrl);
-        handleAccept(codeFromUrl);
-      } else {
-        toast.error("Invalid code", {
-          description: "The code in the URL is invalid. Please try again.",
-        });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-
-  const { isCameraAllowed, requestCamera } = useCamera();
-
+export default function RestaurantLanding() {
   return (
     <>
-      <section className="section items-center">
-        <h1>Hungry?</h1>
-        <h6>Start by scanning the QR code or typing the code below it</h6>
-      </section>
-
-      <section className="section items-center lg:mt-12">
-        <article className="lg:gap:12 flex flex-col items-center gap-6 lg:flex-row lg:justify-center xl:gap-24 2xl:gap-32">
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle>Scan the code</CardTitle>
-              <CardDescription>
-                Scan restaurants code with{" "}
-                <span className="font-display-median font-black">tapnosh</span>{" "}
-                logo below it.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
-              <div className="bg-muted relative flex aspect-square w-full max-w-md justify-center overflow-clip rounded-lg">
-                {!isCameraAllowed && (
-                  <div className="absolute inset-0 z-[2] flex items-center justify-center">
-                    <Button onClick={() => requestCamera()}>
-                      Allow Camera <Camera />
-                    </Button>
-                  </div>
-                )}
-
-                <div className="border-primary-foreground absolute inset-[15%] z-[1] flex justify-center rounded-lg border-2">
-                  <div className="text-primary-foreground font-display-median absolute bottom-0 m-auto flex h-[22%] translate-y-full items-center text-lg font-black sm:text-xl">
-                    Tapnosh
-                  </div>
-                </div>
-
-                <div className="absolute inset-0 -z-10 flex items-center justify-center">
-                  <Loader2Icon className="animate-spin" />
-                </div>
-
-                {isCameraAllowed && (
-                  <Scanner
-                    styles={{
-                      finderBorder: 0,
-                      container: {
-                        width: "100%",
-                        borderRadius: "2rem",
-                      },
-                    }}
-                    components={{
-                      finder: false,
-                    }}
-                    onScan={handleScan}
-                  />
-                )}
+      {/* Hero Section */}
+      <section className="section section-primary">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid items-center gap-8 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+                  Discover Amazing Restaurants Near You
+                </h1>
+                <p className="text-primary-foreground/80 text-lg md:text-xl">
+                  Join our platform to explore the best dining experiences in
+                  your city. Restaurant owners can showcase their venues and
+                  connect with food lovers.
+                </p>
               </div>
-            </CardContent>
-          </Card>
-
-          <div className="bg-muted flex h-0.5 w-full max-w-3xs shrink-0 md:my-0 lg:mx-4 lg:h-40 lg:w-0.5" />
-
-          <Card className="w-full">
-            <CardHeader>
-              <CardTitle>Type it</CardTitle>
-              <CardDescription>
-                Input 6 character long code below.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
-              <InputOTP
-                onChange={setTapnoshCode}
-                value={tapnoshCode}
-                maxLength={6}
-              >
-                <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-                </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup>
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-                </InputOTPGroup>
-              </InputOTP>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button
-                onClick={() => handleAccept(tapnoshCode)}
-                isLoading={loading}
-              >
-                Accept
-              </Button>
-            </CardFooter>
-          </Card>
-        </article>
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="px-8 py-6 text-lg"
+                >
+                  List Your Restaurant
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="px-8 py-6 text-lg"
+                  asChild
+                >
+                  <Link href="/restaurants">Browse Restaurants</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
+
+      {/* Features Section */}
+      <section className="section mt-12 mb-12">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="mb-16 space-y-4">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Why tapnosh?
+            </h2>
+            <p className="text-muted-foreground max-w-2xl text-xl">
+              Whether you&apos;re a food lover or restaurant owner, we provide
+              the tools and community to enhance your dining experience.
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            <div className="space-y-4 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-orange-100">
+                <Utensils className="h-8 w-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-semibold">Discover Great Food</h3>
+              <p className="text-muted-foreground">
+                Browse through hundreds of restaurants with detailed menus,
+                photos, and authentic reviews from fellow diners.
+              </p>
+            </div>
+
+            <div className="space-y-4 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+                <ChefHat className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold">For Restaurant Owners</h3>
+              <p className="text-muted-foreground">
+                Showcase your restaurant with beautiful photos, manage your
+                menu, and connect with customers in your area.
+              </p>
+            </div>
+
+            <div className="space-y-4 text-center">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                <Users className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold">Community Driven</h3>
+              <p className="text-muted-foreground">
+                Join a community of food enthusiasts sharing honest reviews and
+                discovering hidden culinary gems together.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Restaurant Listings Section */}
+      <section className="section">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="mb-12 space-y-4">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Featured Restaurants
+            </h2>
+            <p className="text-muted-foreground text-xl">
+              Explore some of the amazing restaurants already on our platform
+            </p>
+          </div>
+
+          <RestaurantList />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-primary text-primary-foreground mt-16 py-12">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid gap-8 md:grid-cols-4">
+            <div className="">
+              <h3 className="font-logo text-lg font-semibold">tapnosh</h3>
+              <p className="text-primary-foreground/80">
+                Connecting food lovers with amazing restaurants in their
+                community.
+              </p>
+            </div>
+          </div>
+          <div className="text-primary-foreground/80 border-primary-foreground/50 mt-8 border-t pt-8 text-center">
+            <p>&copy; 2025 tapnosh. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
