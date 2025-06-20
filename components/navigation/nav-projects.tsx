@@ -1,20 +1,15 @@
 "use client";
 
 import {
-  Folder,
-  MoreHorizontal,
-  Share,
-  Trash2,
+  ChevronRight,
+  CirclePlus,
+  PanelsTopLeft,
+  Store,
+  QrCode,
+  FileText,
+  Palette,
   type LucideIcon,
 } from "lucide-react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -22,61 +17,136 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useSession } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string;
+const restaurants = [
+  { id: 1, name: "Restaurant One" },
+  { id: 2, name: "Restaurant Two" },
+  { id: 3, name: "Pizza Palace" },
+];
+
+type MyRestaurantsSidebarItem = {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  items?: {
+    title: string;
     url: string;
-    icon: LucideIcon;
   }[];
-}) {
-  const { isMobile } = useSidebar();
+};
+
+const staticItems = [
+  {
+    title: "Overview",
+    url: "/my-restaurants",
+    icon: PanelsTopLeft,
+  },
+  {
+    title: "Create Restaurant",
+    url: "/restaurants/add",
+    icon: CirclePlus,
+  },
+];
+
+const getRestaurantSubItems = (restaurantId: number) => [
+  {
+    title: "Scannable Menu",
+    url: `/my-restaurants/${restaurantId}/scannable-menu`,
+    icon: QrCode,
+  },
+  {
+    title: "Details",
+    url: `/my-restaurants/${restaurantId}/details`,
+    icon: FileText,
+  },
+  {
+    title: "Page Builder",
+    url: `/my-restaurants/${restaurantId}/builder`,
+    icon: Palette,
+  },
+];
+
+export function NavProjects() {
+  const { isSignedIn } = useSession();
+  const { setOpenMobile } = useSidebar();
+  const pathname = usePathname();
+
+  const allItems: MyRestaurantsSidebarItem[] = [
+    ...staticItems,
+    ...restaurants.map((restaurant) => ({
+      title: restaurant.name,
+      url: `/restaurants/${restaurant.id}`,
+      icon: Store,
+      items: getRestaurantSubItems(restaurant.id),
+    })),
+  ];
+
+  if (!isSignedIn) {
+    return null;
+  }
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup>
       <SidebarGroupLabel>Management</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <Link href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </Link>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+        {allItems.map((item) => (
+          <Collapsible
+            key={item.title}
+            asChild
+            defaultOpen={pathname.includes(item.url)}
+          >
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={pathname === item.url}
+                asChild
+                tooltip={item.title}
+                onClick={() => setOpenMobile(false)}
               >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Share className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
+                <Link href={item.url}>
+                  <item.icon />
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+              {item.items?.length ? (
+                <>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuAction className="data-[state=open]:rotate-90">
+                      <ChevronRight />
+                      <span className="sr-only">Toggle</span>
+                    </SidebarMenuAction>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {item.items?.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubButton
+                            isActive={pathname === subItem.url}
+                            asChild
+                          >
+                            <Link href={subItem.url}>
+                              <span>{subItem.title}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </>
+              ) : null}
+            </SidebarMenuItem>
+          </Collapsible>
         ))}
       </SidebarMenu>
     </SidebarGroup>
