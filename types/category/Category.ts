@@ -1,16 +1,9 @@
 export interface RestaurantCategory {
   id: string;
-  restaurant_id: string;
-  category_id: string;
+  name: string;
+  description: string;
   createdAt: string;
   updatedAt: string;
-  category: {
-    id: string;
-    name: string;
-    description: string;
-    createdAt: string;
-    updatedAt: string;
-  };
 }
 
 export interface Category {

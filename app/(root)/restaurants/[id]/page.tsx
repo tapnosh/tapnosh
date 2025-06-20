@@ -1,13 +1,24 @@
 import { RestaurantAbout } from "@/components/restaurant/restaurant-about";
 import { unstable_ViewTransition as ViewTransition } from "react";
 import { MenuComponent } from "./menu-component";
+import { Restaurant as RestaurantType } from "@/types/restaurant/Restaurant";
+
+export async function generateStaticParams() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const restaurants = await fetch(new URL("restaurants", baseUrl), {
+    next: { revalidate: 3600 },
+  }).then((res) => res.json());
+  return restaurants.map((restaurant: RestaurantType) => ({
+    id: restaurant.id,
+  }));
+}
 
 export default async function Restaurant({
   params,
 }: {
-  params: Promise<{ restaurant: string }>;
+  params: Promise<{ id: string }>;
 }) {
-  const { restaurant } = await params;
+  const { id } = await params;
   return (
     <>
       <section className="section section-primary">
@@ -27,12 +38,12 @@ export default async function Restaurant({
           />
         </svg>
 
-        <ViewTransition name={`title-${restaurant}`}>
-          <h1>Restaurant {restaurant}</h1>
+        <ViewTransition name={`title-${id}`}>
+          <h1>Restaurant {id}</h1>
         </ViewTransition>
-        <ViewTransition name={`description-${restaurant}`}>
+        <ViewTransition name={`description-${id}`}>
           <h5 className="text-primary-foreground">
-            Some restaurant {restaurant} description
+            Some restaurant {id} description
           </h5>
         </ViewTransition>
       </section>

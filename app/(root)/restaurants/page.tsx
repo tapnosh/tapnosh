@@ -1,6 +1,6 @@
 import { RestaurantList } from "@/components/restaurant/restaurant-list";
 
-export default function Restaurants() {
+export default async function Restaurants() {
   return (
     <>
       <section className="section items-center">
