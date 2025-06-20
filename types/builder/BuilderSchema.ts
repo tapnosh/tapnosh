@@ -1,16 +1,10 @@
-import { BlobImageSchema } from "./BlobImage";
 import { z } from "zod";
 import { MenuItemSchema } from "../menu/Menu";
-import { ImageUploadSchema } from "../restaurant/Create";
-
-const BuilderImageSchema = z.object({
-  file: ImageUploadSchema,
-  url: z.string().url(),
-});
+import { BlobImageSchema, UploadImageSchema } from "../image/BlobImage";
 
 const BuilderMenuItemSchema = MenuItemSchema.extend({
   image: z
-    .array(z.union([BuilderImageSchema, BlobImageSchema]))
+    .array(z.union([UploadImageSchema, BlobImageSchema]))
     .max(1, "Only one image is allowed"),
 });
 

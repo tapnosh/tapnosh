@@ -9,9 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Upload, X, GripVertical, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ImageUploadSchema } from "@/types/restaurant/Create";
 import { useFormField } from "./form";
 import { useFieldArray } from "react-hook-form";
+import { ImageValidationSchema } from "@/types/image/BlobImage";
 
 const validateFiles = (fileList: File[]) => {
   const validFiles: File[] = [];
@@ -19,7 +19,7 @@ const validateFiles = (fileList: File[]) => {
 
   fileList.forEach((file) => {
     try {
-      ImageUploadSchema.parse(file);
+      ImageValidationSchema.parse(file);
       validFiles.push(file);
     } catch {
       invalidFiles.push(file.name);

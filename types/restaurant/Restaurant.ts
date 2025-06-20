@@ -1,14 +1,6 @@
 import { RestaurantTheme } from "@/types/theme/Theme";
 import { RestaurantCategory } from "@/types/category/Category";
-
-export interface RestaurantImage {
-  id: string;
-  restaurant_id: string;
-  image_url: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
+import { PutBlobResult } from "@vercel/blob";
 export interface Restaurant {
   id: string;
   name: string;
@@ -18,6 +10,6 @@ export interface Restaurant {
   updatedAt: string;
   theme: RestaurantTheme;
   address: string | null;
-  images: RestaurantImage[];
+  images: PutBlobResult[];
   categories: RestaurantCategory[];
 }
