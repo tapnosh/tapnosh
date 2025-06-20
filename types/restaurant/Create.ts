@@ -22,13 +22,20 @@ export const ImageUploadSchema = z
   });
 
 export const RestaurantFormSchema = z.object({
-  name: z.string().min(1, "Restaurant name is required"),
-  description: z.string().optional(),
+  name: z
+    .string()
+    .min(1, "Restaurant name is required")
+    .max(100, "Name must be less than 100 characters"),
+  description: z.string().max(500).optional(),
   theme_id: z.string().uuid("Theme color is required"),
   //   address: z.string().min(1, "Address is required"),
-  images: z.array(ImageUploadSchema).min(1, "At least one image must be added"),
+  images: z
+    .array(ImageUploadSchema)
+    .min(1, "At least one image must be added")
+    .max(5, "You can upload up to 5 images"),
   category_ids: z
     .array(z.string().uuid())
+    .max(5, "You can select up to 5 categories")
     // .min(1, "At least one category must be selected")
     .optional(),
 });

@@ -59,7 +59,7 @@ const Featured = ({
                       sizes="33vw"
                       src={
                         Array.isArray(item.image)
-                          ? item.image[0].url
+                          ? item.image[0]?.url
                           : item.image
                       }
                       alt={item.name}

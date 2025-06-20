@@ -83,9 +83,6 @@ export default function ImageUploadDropzone({
         return;
       }
 
-      console.log("validFiles");
-      console.log(validFiles.map((file) => console.log(file)));
-
       append(
         validFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
       );

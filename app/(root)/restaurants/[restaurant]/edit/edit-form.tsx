@@ -31,10 +31,12 @@ import { BuilderElementText } from "@/components/builder/builder-element-text";
 import { BuilderProvider, useBuilder } from "@/context/BuilderContext";
 import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { BuilderElementHeading } from "@/components/builder/builder-element-heading";
 
 const PageElementMap = {
   "menu-group": withBuilderElementWrapper(BuilderElementMenuGroup),
   text: withBuilderElementWrapper(BuilderElementText),
+  heading: withBuilderElementWrapper(BuilderElementHeading),
 } as const;
 
 const PreviewModeSwitcher = () => {
@@ -51,8 +53,10 @@ const PreviewModeSwitcher = () => {
   );
 };
 
-export function MenuForm() {
+function MenuFormContent() {
   const [groupsParent] = useAutoAnimate();
+
+  const { previewMode } = useBuilder();
 
   const form = useForm<Builder>({
     mode: "onChange",
@@ -76,6 +80,7 @@ export function MenuForm() {
     fields: headerFields,
     append,
     remove,
+    move,
   } = useFieldArray({
     control,
     name: "header",
@@ -89,29 +94,15 @@ export function MenuForm() {
   );
 
   const addGroup = () => {
-    const newGroup = {
+    appendField({
+      version: "v1",
       type: "menu-group",
-      id: `group-${Date.now()}`,
       name: "",
       timeFrom: "07:00",
       timeTo: "12:00",
       items: [],
-    } as const;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    appendField(newGroup as any);
+    });
   };
-
-  // const addText = () => {
-  //   const newGroup = {
-  //     type: "text",
-  //     id: `text-${Date.now()}`,
-  //     name: "",
-  //     timeFrom: "07:00",
-  //     timeTo: "12:00",
-  //     items: [],
-  //   } as const;
-  //   appendField(newGroup as any);
-  // };
 
   const handleGroupDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -120,6 +111,18 @@ export function MenuForm() {
       const oldIndex = fields.findIndex((group) => group.id === active.id);
       const newIndex = fields.findIndex((group) => group.id === over.id);
       moveField(oldIndex, newIndex);
+    }
+  };
+
+  const handleHeaderDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = headerFields.findIndex(
+        (group) => group.id === active.id,
+      );
+      const newIndex = headerFields.findIndex((group) => group.id === over.id);
+      move(oldIndex, newIndex);
     }
   };
 
@@ -132,115 +135,128 @@ export function MenuForm() {
 
   return (
     <>
-      <BuilderProvider>
-        <Form {...form}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <section className="section section-primary">
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleHeaderDragEnd}
+            >
+              <SortableContext
+                items={headerFields.map((group) => group.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="mb-2 flex flex-col gap-2" ref={groupsParent}>
+                  {headerFields.map((group, i) => {
+                    const Component = PageElementMap[group.type];
+                    return (
+                      <Component
+                        key={group.id}
+                        id={group.id}
+                        index={i}
+                        remove={remove}
+                        formKey="header"
+                      />
+                    );
+                  })}
+                  {!previewMode && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="border-accent/50 hover:text-accent/50 h-32 w-full border border-dashed"
+                        >
+                          <Plus /> Add element
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>
+                          Select element type
+                        </DropdownMenuLabel>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            append({
+                              type: "text",
+                              text: "",
+                              version: "v1",
+                            })
+                          }
+                        >
+                          Text
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            append({
+                              type: "heading",
+                              heading: "",
+                              version: "v1",
+                            })
+                          }
+                        >
+                          Heading
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </div>
+              </SortableContext>
+            </DndContext>
+          </section>
+
+          <section className="section @container space-y-2">
+            <h2>Menu</h2>
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
               onDragEnd={handleGroupDragEnd}
             >
-              <section className="section section-primary">
-                <SortableContext
-                  items={fields.map((group) => group.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <div className="mb-2 flex flex-col gap-2" ref={groupsParent}>
-                    {headerFields.map((group, i) => {
-                      const Component =
-                        PageElementMap[group.type as "menu-group"];
-                      return (
-                        <Component
-                          key={group.id}
-                          id={group.id}
-                          index={i}
-                          remove={remove}
-                          formKey="header"
-                        />
-                      );
-                    })}
-                  </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className="border-accent/50 hover:text-accent/50 h-32 w-full border border-dashed"
-                      >
-                        <Plus /> Add section
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>Select section type</DropdownMenuLabel>
-                      <DropdownMenuItem
-                        onClick={() =>
-                          append({
-                            type: "text",
-                            description: "",
-                          })
-                        }
-                      >
-                        Text
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </SortableContext>
-              </section>
-
-              <section className="section space-y-2">
-                <h3>Menu</h3>
-                <SortableContext
-                  items={fields.map((group) => group.id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  <div className="flex flex-col gap-2" ref={groupsParent}>
-                    {fields.map((group, i) => {
-                      const Component =
-                        PageElementMap[group.type as "menu-group" | "text"];
-                      return (
-                        <Component
-                          key={group.id}
-                          id={group.id}
-                          index={i}
-                          remove={removeSection}
-                          formKey="menu"
-                        />
-                      );
-                    })}
-                  </div>
-                </SortableContext>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
+              <SortableContext
+                items={fields.map((group) => group.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="flex flex-col gap-2" ref={groupsParent}>
+                  {fields.map((group, i) => {
+                    const Component = PageElementMap[group.type];
+                    return (
+                      <Component
+                        key={group.id}
+                        id={group.id}
+                        index={i}
+                        remove={removeSection}
+                        formKey="menu"
+                      />
+                    );
+                  })}
+                  {!previewMode && (
                     <Button
                       type="button"
                       variant="ghost"
                       className="border-foreground/20 h-32 w-full border border-dashed"
+                      onClick={addGroup}
                     >
-                      <Plus /> Add section
+                      <Plus /> Add menu group
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>Select section type</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={addGroup}>
-                      Menu Group
-                    </DropdownMenuItem>
-                    {/* <DropdownMenuItem onClick={addText}>Text</DropdownMenuItem> */}
-                    <DropdownMenuItem disabled>Image</DropdownMenuItem>
-                    <DropdownMenuItem disabled>Carousel</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <div>
-                  <PreviewModeSwitcher />
-                  <Button type="submit" className="mt-6">
-                    Save Menu
-                  </Button>
+                  )}
                 </div>
-              </section>
+              </SortableContext>
             </DndContext>
-          </form>
-        </Form>
-      </BuilderProvider>
+          </section>
+          <section className="section flex justify-end gap-2">
+            <PreviewModeSwitcher />
+            <Button type="submit">Save Menu</Button>
+          </section>
+        </form>
+      </Form>
     </>
+  );
+}
+
+export function MenuForm() {
+  return (
+    <BuilderProvider>
+      <MenuFormContent />
+    </BuilderProvider>
   );
 }

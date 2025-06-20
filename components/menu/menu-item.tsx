@@ -18,6 +18,7 @@ import {
 import { motion } from "motion/react";
 import { MenuItem } from "@/types/menu/Menu";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useMemo } from "react";
 
 export const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,
@@ -47,6 +48,11 @@ export function MenuItemCard({
   onClick?: (item: MenuItem) => void;
 }) {
   const { formatCurrency } = useCurrency();
+
+  const imgSrc = useMemo(() => {
+    return Array.isArray(item.image) ? item.image[0]?.url : item.image;
+  }, [item.image]);
+
   return (
     <motion.div
       layout
@@ -62,13 +68,13 @@ export function MenuItemCard({
       onClick={() => onClick?.(item)}
     >
       <div className="flex flex-row items-start justify-between gap-4 border-b pb-4">
-        {item.image && (
+        {imgSrc && (
           <motion.div
             layoutId={`item-image-${item?.id}`}
             className="relative aspect-square max-w-24 flex-1 sm:max-w-32 md:max-w-40 xl:max-w-52"
           >
             <Image
-              src={Array.isArray(item.image) ? item.image[0].url : item.image}
+              src={imgSrc}
               alt={item.name}
               width={80}
               height={80}

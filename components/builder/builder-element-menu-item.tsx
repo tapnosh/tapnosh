@@ -17,14 +17,22 @@ import {
 } from "./builder-element-wrapper";
 import PriceInput from "@/components/ui/price-input";
 import MultiChipInput from "../ui/multi-chip-input";
+import { Builder } from "@/types/builder/BuilderSchema";
+import { MenuItem } from "@/types/menu/Menu";
 
-function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
-  const data = useWatch({ name: elementKey });
-  const { control, setValue } = useFormContext();
+interface BuilderElementMenuItemProps extends BuilderElementProps {
+  elementKey: `menu.${number}.items.${number}`;
+}
+
+function BuilderElementMenuItemBase({
+  elementKey,
+}: BuilderElementMenuItemProps) {
+  const data = useWatch<Builder>({ name: elementKey });
+  const { control, setValue } = useFormContext<Builder>();
   const { previewMode } = useBuilder();
 
   if (previewMode) {
-    return <MenuItemCard item={data} isAvailable />;
+    return <MenuItemCard item={data as MenuItem} isAvailable />;
   }
 
   return (
@@ -78,16 +86,16 @@ function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
             <FormLabel>Ingredients</FormLabel>
             <FormControl>
               <MultiChipInput
-                fields={field.value}
+                fields={field.value ?? []}
                 append={(value) =>
                   setValue(`${elementKey}.ingredients`, [
-                    ...[...field.value, value],
+                    ...[...(field.value ?? []), value],
                   ])
                 }
                 remove={(value) =>
                   setValue(
                     `${elementKey}.ingredients`,
-                    field.value.filter((item: string) => item !== value),
+                    field?.value?.filter((item: string) => item !== value),
                   )
                 }
               />
@@ -105,16 +113,16 @@ function BuilderElementMenuItemBase({ elementKey }: BuilderElementProps) {
             <FormLabel>Categories</FormLabel>
             <FormControl>
               <MultiChipInput
-                fields={field.value}
+                fields={field.value ?? []}
                 append={(value) =>
                   setValue(`${elementKey}.categories`, [
-                    ...[...field.value, value],
+                    ...[...(field.value ?? []), value],
                   ])
                 }
                 remove={(value) =>
                   setValue(
                     `${elementKey}.categories`,
-                    field.value.filter((item: string) => item !== value),
+                    field?.value?.filter((item: string) => item !== value),
                   )
                 }
               />

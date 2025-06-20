@@ -32,7 +32,10 @@ export function withBuilderElementWrapper<P extends object>(
     formKey,
     ...props
   }: BuilderElementWrapperProps & Omit<P, "elementKey">) => {
-    const elementKey = useMemo(() => `${formKey}.${index}`, [formKey, index]);
+    const elementKey = useMemo(
+      () => `${formKey}.${index}` as const,
+      [formKey, index],
+    );
     const { previewMode } = useBuilder();
 
     const {

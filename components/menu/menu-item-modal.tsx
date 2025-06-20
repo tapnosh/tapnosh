@@ -173,7 +173,7 @@ export const MenuItemModal = ({
                       <Image
                         src={
                           Array.isArray(menuItem.image)
-                            ? menuItem.image[0].url
+                            ? menuItem.image[0]?.url
                             : menuItem.image
                         }
                         alt={menuItem.name}

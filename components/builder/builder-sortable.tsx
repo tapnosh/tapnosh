@@ -15,8 +15,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Form } from "@/components/ui/form";
-import { BuilderProvider } from "@/context/BuilderContext";
 
 export function BuilderElementSortable({
   name,
@@ -28,10 +26,8 @@ export function BuilderElementSortable({
     append,
     remove,
   }: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fields: any[];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    append?: (value: any) => void;
+    fields: Record<"id", string>[];
+    append?: (value: Record<"id", string>) => void;
     remove?: (index: number | number[]) => void;
   }) => React.ReactNode;
 }) {
@@ -60,35 +56,20 @@ export function BuilderElementSortable({
     }
   };
 
-  // Submit handler (replace with your API logic)
-  const onSubmit = (data: unknown) => {
-    console.log(data);
-    // Here you would typically send the data to your API
-    // For example: api.post('/menu', data)
-  };
-
   return (
     <>
-      <BuilderProvider>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleGroupDragEnd}
-            >
-              <SortableContext
-                items={fields.map((group) => group.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                <div ref={groupsParent}>
-                  {children({ fields, append, remove })}
-                </div>
-              </SortableContext>
-            </DndContext>
-          </form>
-        </Form>
-      </BuilderProvider>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleGroupDragEnd}
+      >
+        <SortableContext
+          items={fields.map((group) => group.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div ref={groupsParent}>{children({ fields, append, remove })}</div>
+        </SortableContext>
+      </DndContext>
     </>
   );
 }

@@ -39,6 +39,7 @@ export default function PriceInput({
 
   const selectedCurrency = useMemo(
     () => currencies.find((c) => c.code === props.value.currency),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.value.currency],
   );
 
@@ -48,7 +49,6 @@ export default function PriceInput({
         <Select
           value={props.value.currency}
           onValueChange={(value) => {
-            console.log(value);
             setValue(`${props.name}.currency`, value, {
               shouldValidate: true,
             });

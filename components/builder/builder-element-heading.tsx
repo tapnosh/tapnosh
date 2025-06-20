@@ -9,28 +9,30 @@ import {
 import { BuilderElementProps } from "./builder-element-wrapper";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useBuilder } from "@/context/BuilderContext";
-import { Builder, HeaderText } from "@/types/builder/BuilderSchema";
+import { Builder, HeaderHeading } from "@/types/builder/BuilderSchema";
 
-interface BuilderElementTextProps extends BuilderElementProps {
+interface BuilderElementHeadingProps extends BuilderElementProps {
   elementKey: `header.${number}`;
 }
 
-export function BuilderElementText({ elementKey }: BuilderElementTextProps) {
+export function BuilderElementHeading({
+  elementKey,
+}: BuilderElementHeadingProps) {
   const { previewMode } = useBuilder();
   const { control } = useFormContext();
-  const data = useWatch<Builder>({ name: elementKey }) as HeaderText;
+  const data = useWatch<Builder>({ name: elementKey }) as HeaderHeading;
 
   if (previewMode) {
-    return <p>{data?.text || "No description provided."}</p>;
+    return <h2>{data?.heading || "No description provided."}</h2>;
   }
 
   return (
     <FormField
       control={control}
-      name={`${elementKey}.text`}
+      name={`${elementKey}.heading`}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Paragrapgh</FormLabel>
+          <FormLabel>Heading</FormLabel>
           <FormControl>
             <Textarea placeholder="Text" {...field} />
           </FormControl>

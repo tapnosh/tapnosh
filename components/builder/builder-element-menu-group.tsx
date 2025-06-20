@@ -6,7 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { BuilderElementProps } from "./builder-element-wrapper";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   closestCenter,
@@ -27,57 +27,32 @@ import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { useMemo } from "react";
 import { useBuilder } from "@/context/BuilderContext";
+import { Builder, BuilderMenuItem } from "@/types/builder/BuilderSchema";
+import { MenuGroup } from "../menu/menu-group";
 
-export function BuilderElementMenuGroup({
-  elementKey: groupKey,
-}: BuilderElementProps) {
-  const elementKey = useMemo(() => `${groupKey}.items`, [groupKey]);
-  const { control } = useFormContext();
+interface BuilderElementMenuGroupProps extends BuilderElementProps {
+  elementKey: `menu.${number}`;
+}
+
+function BuilderElementMenuGroupFields({
+  groupKey,
+}: {
+  groupKey: `menu.${number}`;
+}) {
+  const { control } = useFormContext<Builder>();
   const { previewMode } = useBuilder();
+  const data = useWatch<Builder>({ name: groupKey });
 
-  const {
-    fields,
-    append: appendChild,
-    remove: removeChild,
-    move: moveChild,
-  } = useFieldArray({
-    name: elementKey,
-  });
-
-  const [itemsParent] = useAutoAnimate();
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
-
-  const handleItemDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (over && active.id !== over.id) {
-      const oldIndex = fields.findIndex((group) => group.id === active.id);
-      const newIndex = fields.findIndex((group) => group.id === over.id);
-      moveChild(oldIndex, newIndex);
-    }
-  };
-
-  const handleAdd = () => {
-    appendChild({
-      version: "v1",
-      id: `item-${Date.now()}`,
-      name: "",
-      description: "",
-      price: { amount: 0, currency: "PLN" },
-      ingredients: [],
-      categories: [],
-      image: "",
-    });
-  };
+  if (previewMode) {
+    return (
+      <MenuGroup
+        data={data as { name: string; timeFrom: string; timeTo: string }}
+      />
+    );
+  }
 
   return (
-    <div className="space-y-2">
+    <>
       <FormField
         control={control}
         name={`${groupKey}.name`}
@@ -120,6 +95,62 @@ export function BuilderElementMenuGroup({
           )}
         />
       </div>
+    </>
+  );
+}
+
+export function BuilderElementMenuGroup({
+  elementKey: groupKey,
+}: BuilderElementMenuGroupProps) {
+  const elementKey = useMemo(() => `${groupKey}.items` as const, [groupKey]);
+  const { control } = useFormContext<Builder>();
+  const { previewMode } = useBuilder();
+
+  const {
+    fields,
+    append: appendChild,
+    remove: removeChild,
+    move: moveChild,
+  } = useFieldArray({
+    control,
+    name: elementKey,
+  });
+
+  const [itemsParent] = useAutoAnimate();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleItemDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const oldIndex = fields.findIndex((group) => group.id === active.id);
+      const newIndex = fields.findIndex((group) => group.id === over.id);
+      moveChild(oldIndex, newIndex);
+    }
+  };
+
+  const handleAdd = () => {
+    appendChild({
+      version: "v1",
+      id: `item-${Date.now()}`,
+      name: "",
+      description: "",
+      price: { amount: 0, currency: "PLN" },
+      ingredients: [],
+      categories: [],
+      image: [],
+    } as unknown as BuilderMenuItem);
+  };
+
+  return (
+    <div className="space-y-2">
+      <BuilderElementMenuGroupFields groupKey={groupKey} />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -127,7 +158,7 @@ export function BuilderElementMenuGroup({
       >
         <SortableContext items={fields.map((item) => item.id)}>
           <div
-            className="grid gap-2 md:grid-cols-2 xl:grid-cols-3"
+            className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8"
             ref={itemsParent}
           >
             {fields.map((item, i) => (

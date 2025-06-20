@@ -64,7 +64,10 @@ export default function Order() {
         <h3 className="mb-4">Menu</h3>
         <FiltersBar />
 
-        <h4 className="mb-4">Appetizer</h4>
+        <h4>Appetizer</h4>
+        <p className="text-muted-foreground mb-4">
+          Served from 11:00 AM to 3:00 PM
+        </p>
 
         <article className="grid gap-4 @3xl:grid-cols-2 @3xl:gap-8">
           <AnimatePresence>
