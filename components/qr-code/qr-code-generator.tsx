@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,100 +10,168 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Download, QrCode, Loader2 } from "lucide-react";
+import QRCode from "qrcode";
+import { useNotification } from "@/context/NotificationBar";
+import { BasicNotificationBody } from "@/components/ui/basic-notification";
 
-export function QRCodeCard() {
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [hasQRCode, setHasQRCode] = useState(false);
+export function QRCodeGenerator({ url }: { url: string }) {
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>();
+  const [isGenerating, setIsGenerating] = useState(true);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { openNotification } = useNotification();
 
-  const regenerateQRCode = async () => {
+  const generateQRCode = useCallback(async () => {
+    if (!url.trim()) return;
+
     setIsGenerating(true);
-    // Simulate QR code generation
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setHasQRCode(true);
-    setIsGenerating(false);
-  };
+    try {
+      let validUrl = url.trim();
+      if (!validUrl.startsWith("http://") && !validUrl.startsWith("https://")) {
+        validUrl = "https://" + validUrl;
+      }
 
-  const downloadQRCode = () => {
-    // In a real implementation, this would download the actual QR code
-    alert("QR Code downloaded!");
-  };
+      const qrDataUrl = await QRCode.toDataURL(validUrl, {
+        width: 300,
+        margin: 0,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      });
+
+      setQrCodeDataUrl(qrDataUrl);
+    } catch {
+      openNotification(
+        <BasicNotificationBody
+          title="Error"
+          description="An unexpected error occurred"
+          variant="error"
+        />,
+      );
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [url]);
+
+  useEffect(() => {
+    if (url.trim()) {
+      generateQRCode();
+    }
+  }, [generateQRCode]);
+
+  const downloadQRCode = useCallback(async () => {
+    if (!qrCodeDataUrl) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Set high resolution canvas
+    const scale = 2; // For high DPI displays
+    canvas.width = 800;
+    canvas.height = 960;
+
+    // Scale the context to ensure correct drawing operations
+    ctx.scale(scale, scale);
+
+    // Disable image smoothing for crisp pixels
+    ctx.imageSmoothingEnabled = false;
+
+    // Fill background
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, 400, 480);
+
+    // Draw QR code
+    const qrImage = new Image();
+    qrImage.crossOrigin = "anonymous";
+    qrImage.onload = () => {
+      // Draw QR code centered with higher resolution
+      const qrSize = 300;
+      const qrX = (400 - qrSize) / 2;
+      const qrY = 50;
+
+      ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+
+      // Load and draw tapnosh logo
+      const logoImage = new Image();
+      logoImage.crossOrigin = "anonymous";
+      logoImage.onload = () => {
+        // Calculate logo dimensions (maintain aspect ratio)
+        const logoWidth = 128;
+        const logoHeight = (logoImage.height / logoImage.width) * logoWidth;
+        const logoX = (400 - logoWidth) / 2;
+        const logoY = qrY + qrSize + 30;
+
+        // Draw logo normally for light mode
+        ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoHeight);
+
+        // Download with high quality
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "qrcode.png";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }
+          },
+          "image/png",
+          1.0,
+        ); // Maximum quality
+      };
+      logoImage.src = "/images/tapnosh.svg";
+    };
+    qrImage.src = qrCodeDataUrl;
+  }, [qrCodeDataUrl]);
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="flex items-center justify-center gap-2">
-          <QrCode className="h-5 w-5" />
-          Menu QR Code
-        </CardTitle>
-        <CardDescription>QR code for your restaurant menu</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* QR Code Preview */}
-        <div className="flex justify-center">
-          <div className="flex size-80 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-100">
-            {isGenerating ? (
-              <div className="text-center">
-                <Loader2 className="mx-auto mb-2 h-8 w-8 animate-spin"></Loader2>
-                <p className="text-sm text-gray-500">Generating...</p>
-              </div>
-            ) : hasQRCode ? (
-              <div className="text-center">
-                <div className="mb-2 flex size-64 items-center justify-center rounded-lg bg-black">
-                  <div className="grid grid-cols-8 gap-1 p-2">
-                    {Array.from({ length: 64 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className={`h-1 w-1 ${Math.random() > 0.5 ? "bg-white" : "bg-black"}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <p className="text-xs text-gray-600">Menu QR Code</p>
-              </div>
-            ) : (
-              <div className="text-center">
-                <QrCode className="mx-auto mb-2 h-12 w-12 text-gray-400" />
-                <p className="text-sm text-gray-500">
-                  Click regenerate to create QR code
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col gap-3">
-          <Button
-            onClick={regenerateQRCode}
-            disabled={isGenerating}
-            className="w-full"
-          >
-            <QrCode className="mr-2 h-4 w-4" />
-            {isGenerating ? "Generating..." : "Regenerate QR Code"}
-          </Button>
-
-          {hasQRCode && (
-            <Button
-              variant="outline"
-              onClick={downloadQRCode}
-              className="w-full"
-            >
-              <Download className="mr-2 h-4 w-4" />
-              Download QR Code
-            </Button>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <QrCode className="h-5 w-5" />
+            Scannable menu
+          </CardTitle>
+          <CardDescription>
+            Create QR codes with dark/light mode options
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {isGenerating && (
+            <div className="flex min-h-128 items-center justify-center">
+              <Loader2 className="text-primary mx-auto h-6 w-6 animate-spin" />
+            </div>
           )}
-        </div>
+          {qrCodeDataUrl && (
+            <div className="flex flex-col space-y-4">
+              <div className="border-primary/10 flex flex-col items-center space-y-4 rounded-lg border-2 border-dashed p-6">
+                <img
+                  src={qrCodeDataUrl || "/placeholder.svg"}
+                  alt="Generated QR Code"
+                  className="h-auto max-w-full"
+                />
 
-        {/* QR Code Info */}
-        {hasQRCode && (
-          <div className="rounded-lg bg-gray-50 p-3 text-sm text-gray-600">
-            <p className="mb-1 font-medium">QR Code Details:</p>
-            <p>• Links to: https://bellavista.com/menu</p>
-            <p>• Size: 400x400px</p>
-            <p>• Format: PNG</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                <div className="text-center">
+                  <p className="font-logo text-3xl text-black">tapnosh</p>
+                </div>
+              </div>
+
+              <Button onClick={downloadQRCode} size="lg">
+                <Download className="mr-2 h-4 w-4" />
+                Download QR Code
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <canvas ref={canvasRef} className="hidden" />
+    </>
   );
 }
