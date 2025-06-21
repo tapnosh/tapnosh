@@ -97,8 +97,6 @@ export function NavProjects() {
     return null;
   }
 
-  console.log(pathname, allItems);
-
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Management</SidebarGroupLabel>

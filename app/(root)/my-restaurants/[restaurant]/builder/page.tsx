@@ -1,7 +1,11 @@
-"use client";
-
 import { PageBuilder } from "./page-builder";
 
-export default function MultipleComponents() {
-  return <PageBuilder />;
+export default async function MultipleComponents({
+  params,
+}: {
+  params: Promise<{ restaurant: string }>;
+}) {
+  const { restaurant } = await params;
+
+  return <PageBuilder restaurantId={restaurant} />;
 }

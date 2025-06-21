@@ -12,6 +12,6 @@ export function useCategoriesQuery() {
 
   return useQuery<Category[], TranslatedError>({
     queryKey: ["restaurants-categories"],
-    queryFn: () => fetchClient<Category[]>("restaurants/categories"),
+    queryFn: () => fetchClient<Category[]>("categories"),
   });
 }

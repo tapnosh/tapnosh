@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -32,6 +34,9 @@ import { BuilderProvider, useBuilder } from "@/context/BuilderContext";
 import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BuilderElementHeading } from "@/components/builder/builder-element-heading";
+import { useMenuMutation } from "@/hooks/api/menu/useMenuMutation";
+import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
+import { useMenusQuery } from "@/hooks/api/menu/useMenus";
 
 const PageElementMap = {
   "menu-group": withBuilderElementWrapper(BuilderElementMenuGroup),
@@ -53,7 +58,10 @@ const PreviewModeSwitcher = () => {
   );
 };
 
-function PageBuilderFields() {
+function PageBuilderFields({ restaurantId }: { restaurantId: string }) {
+  const { data: schema } = useMenusQuery({ restaurantId });
+  const { data } = useRestaurantsQuery(restaurantId);
+  const { mutateAsync } = useMenuMutation();
   const [groupsParent] = useAutoAnimate();
 
   const { previewMode } = useBuilder();
@@ -61,7 +69,7 @@ function PageBuilderFields() {
   const form = useForm<Builder>({
     mode: "onChange",
     resolver: zodResolver(BuilderSchema),
-    defaultValues: {},
+    defaultValues: schema || {},
   });
 
   const { control, handleSubmit } = form;
@@ -126,11 +134,12 @@ function PageBuilderFields() {
     }
   };
 
-  // Submit handler (replace with your API logic)
-  const onSubmit = (data: unknown) => {
+  const onSubmit = (schema: Builder) => {
     console.log(data);
-    // Here you would typically send the data to your API
-    // For example: api.post('/menu', data)
+    mutateAsync({
+      restaurantId,
+      schema,
+    });
   };
 
   return (
@@ -253,10 +262,10 @@ function PageBuilderFields() {
   );
 }
 
-export function PageBuilder() {
+export function PageBuilder({ restaurantId }: { restaurantId: string }) {
   return (
     <BuilderProvider>
-      <PageBuilderFields />
+      <PageBuilderFields restaurantId={restaurantId} />
     </BuilderProvider>
   );
 }

@@ -31,7 +31,6 @@ function RestaurantBadges({
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
-  console.log("RestaurantCard", restaurant.categories);
   return (
     <div className="group mb-2 border-b pb-4 last:border-0">
       <RestaurantCarousel restaurant={restaurant} />
