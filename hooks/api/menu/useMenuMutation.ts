@@ -59,7 +59,7 @@ export const useMenuMutation = () => {
         };
 
         // Use the updated schema for the API call
-        const schema = { ...data, schema: updatedSchema };
+        const schema = { ...updatedSchema };
 
         const endpoint = data.id
           ? `restaurants/${data.restaurantId}/menu/${data.id}`
