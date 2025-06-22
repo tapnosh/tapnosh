@@ -3,7 +3,7 @@ import { RestaurantCarousel } from "./restaurant-carousel";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Restaurant } from "@/types/restaurant/Restaurant";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { RestaurantCategory } from "@/types/category/Category";
 
 interface RestaurantCardProps {
@@ -54,7 +54,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
 
         <div className="flex gap-2">
           <Button size="lg" asChild>
-            <Link href={`/restaurants/${restaurant.id}`}>See the Menu</Link>
+            <Link href={`/restaurants/${restaurant.slug}`}>See the Menu</Link>
           </Button>
         </div>
       </div>

@@ -299,36 +299,35 @@ export default function ImageUploadDropzone({
                     <div className="flex">
                       <div className="bg-muted flex size-12 max-w-full items-center justify-center rounded-lg p-2 sm:size-24">
                         <Image
-                          width={128}
-                          height={128}
+                          width={256}
+                          height={256}
                           className="max-h-full max-w-full rounded-lg object-cover"
                           src={url}
-                          alt={isFile ? file.name : file.pathname}
+                          alt={isFile ? file.name : file?.pathmane || "Image"}
                         />
                       </div>
                     </div>
 
-                    <div className="min-w-24 flex-1 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <p
-                          title={
-                            isFile ? file.name : file.pathname || "Unnamed file"
-                          }
-                          className="truncate text-sm font-medium"
-                        >
-                          {isFile ? file.name : file.pathname || "Unnamed file"}
-                        </p>
-                        {isFile && (
+                    <div className="flex min-w-12 flex-1 flex-wrap">
+                      {isFile && (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p
+                            title={file.name}
+                            className="max-w-24 truncate text-sm font-medium break-words"
+                          >
+                            {file.name}
+                          </p>
+
                           <Badge variant="secondary" className="text-xs">
                             {formatFileSize(file.size)}
                           </Badge>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
 
                     <Button
                       variant="ghost"
-                      size="sm"
+                      size="icon"
                       onClick={() => removeFile(index)}
                       type="button"
                       className="flex-shrink-0"

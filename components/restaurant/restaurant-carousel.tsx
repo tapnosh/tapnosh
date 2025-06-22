@@ -41,7 +41,9 @@ export function RestaurantCarousel({ restaurant }: RestaurantCardProps) {
   return (
     <div className="relative mb-4 h-64 overflow-hidden rounded-lg">
       <Image
-        src={restaurant.images[currentImageIndex].url || "/placeholder.svg"}
+        src={
+          restaurant.images[currentImageIndex].url.trim() || "/placeholder.svg"
+        }
         alt={`${restaurant.name} image ${currentImageIndex + 1}`}
         fill
         className="object-cover transition-transform duration-500 group-hover:scale-105"

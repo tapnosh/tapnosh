@@ -11,7 +11,7 @@ export function useCategoriesQuery() {
   const { fetchClient } = useFetchClient();
 
   return useQuery<Category[], TranslatedError>({
-    queryKey: ["restaurants-categories"],
-    queryFn: () => fetchClient<Category[]>("categories"),
+    queryKey: ["categories"],
+    queryFn: () => fetchClient<Category[]>("public_api/categories"),
   });
 }

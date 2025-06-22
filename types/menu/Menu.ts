@@ -1,4 +1,15 @@
 import { z } from "zod";
+import { Builder } from "../builder/BuilderSchema";
+
+export type MenuResponse = {
+  id: string;
+  name: string;
+  restaurant_id: string;
+  schema: Builder;
+  createdAt: string;
+  updatedAt: string;
+  is_deleted: boolean;
+};
 
 export const MenuItemSchema = z.object({
   version: z.literal("v1"),

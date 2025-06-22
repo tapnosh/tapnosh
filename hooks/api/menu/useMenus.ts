@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
-import { Builder } from "@/types/builder/BuilderSchema";
+import { MenuResponse } from "@/types/menu/Menu";
 
 export function useMenusQuery({
   restaurantId,
 }: {
   restaurantId: string;
-}): ReturnType<typeof useQuery<Builder, TranslatedError>>;
+}): ReturnType<typeof useQuery<MenuResponse, TranslatedError>>;
 
 export function useMenusQuery({
   restaurantId,
@@ -15,7 +15,7 @@ export function useMenusQuery({
 }: {
   restaurantId: string;
   id?: string;
-}): ReturnType<typeof useQuery<Builder, TranslatedError>>;
+}): ReturnType<typeof useQuery<MenuResponse, TranslatedError>>;
 
 export function useMenusQuery({
   restaurantId,
@@ -26,13 +26,13 @@ export function useMenusQuery({
 }) {
   const { fetchClient } = useFetchClient();
 
-  return useQuery<Builder | Builder, TranslatedError>({
-    queryKey: ["restaurants", id],
+  return useQuery<MenuResponse, TranslatedError>({
+    queryKey: ["restaurants", "menu", restaurantId, id],
     queryFn: () =>
-      fetchClient<Builder | Builder>(
+      fetchClient<MenuResponse>(
         id
-          ? `/restaurants/${restaurantId}/menu/${id}`
-          : `/restaurants/${restaurantId}/menu`,
+          ? `public_api/restaurants/${restaurantId}/menu/${id}`
+          : `public_api/restaurants/${restaurantId}/menu`,
       ),
   });
 }

@@ -97,7 +97,7 @@ export const MenuItemModal = ({
               }}
               role="dialog"
               aria-modal="true"
-              className="sticky top-4 right-4 bottom-4 left-4 z-50 mx-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-md"
+              className="sticky top-4 right-4 bottom-4 left-4 z-50 mx-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-xl"
             >
               <button
                 onClick={() => setOpen(false)}
@@ -114,13 +114,8 @@ export const MenuItemModal = ({
                         variant="secondary"
                         className="text-xs"
                       >
-                        <span className="mr-1">
-                          {
-                            categoryIcons[
-                              category as keyof typeof categoryIcons
-                            ]
-                          }
-                        </span>
+                        {categoryIcons[category as keyof typeof categoryIcons]}
+
                         {category}
                       </Badge>
                     ))}
@@ -177,9 +172,10 @@ export const MenuItemModal = ({
                             : menuItem.image
                         }
                         alt={menuItem.name}
-                        width={80}
-                        height={80}
-                        quality={50}
+                        width={2056}
+                        height={2056}
+                        quality={100}
+                        priority
                         className="pointer-events-none h-full w-full rounded-md object-cover"
                       />
                     </motion.div>

@@ -26,9 +26,30 @@ const Featured = ({
   const { items, options } = props;
   const [emblaRef] = useEmblaCarousel(options);
   const { formatCurrency } = useCurrency();
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current?.parentElement) {
+        setContainerWidth(containerRef.current.parentElement.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+
+    return () => {
+      window.removeEventListener("resize", updateWidth);
+    };
+  }, []);
 
   return (
-    <div className={cn(className)}>
+    <div
+      ref={containerRef}
+      className={cn(className)}
+      style={{ width: containerWidth ? `${containerWidth}px` : "0" }}
+    >
       <div className="overflow-clip" ref={emblaRef}>
         <div className="flex touch-pan-y touch-pinch-zoom">
           {items.map((item) => (
@@ -75,15 +96,6 @@ const Featured = ({
                       <h6 className="text-primary-foreground font-display-median font-bold">
                         {formatCurrency(item.price.amount, item.price.currency)}
                       </h6>
-                      {/* <Button
-                        onClick={() =>
-                          onAddToCart ? onAddToCart(item) : undefined
-                        }
-                        variant="secondary"
-                      >
-                        <ShoppingBasket />
-                        Add to tab
-                      </Button> */}
                     </div>
                   </article>
                 </div>

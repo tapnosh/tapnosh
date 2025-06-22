@@ -44,12 +44,9 @@ export const useMenuMutation = () => {
                 return {
                   ...item,
                   image: [
-                    {
-                      url:
-                        imageIndex !== -1
-                          ? uploadedImageUrls[imageIndex]
-                          : item.image[0].url,
-                    },
+                    imageIndex !== -1
+                      ? uploadedImageUrls[imageIndex]
+                      : item.image[0].url,
                   ],
                 };
               }
@@ -76,7 +73,7 @@ export const useMenuMutation = () => {
         return await fetchClient<Restaurant>(endpoint, {
           method,
           body: JSON.stringify({
-            ...schema,
+            schema,
           }),
         });
       } catch (error) {

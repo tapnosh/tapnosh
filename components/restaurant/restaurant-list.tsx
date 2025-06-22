@@ -6,7 +6,7 @@ export async function RestaurantList() {
   let restaurants: Restaurant[] = [];
 
   try {
-    restaurants = await authFetch<Restaurant[]>("restaurants", {
+    restaurants = await authFetch<Restaurant[]>("public_api/restaurants", {
       cache: "no-store",
     });
   } catch {}
