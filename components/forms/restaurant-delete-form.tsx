@@ -78,7 +78,6 @@ export function RestaurantDeleteForm({
   const handleCancel = () => {
     setShowConfirmDialog(false);
     setFormData(null);
-    onOpenChange(false);
     form.reset();
   };
 

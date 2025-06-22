@@ -19,7 +19,7 @@ export function QRCodeGenerator({
   url,
   isLoading,
 }: {
-  url: string;
+  url?: string;
   isLoading?: boolean;
 }) {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>();
@@ -28,7 +28,7 @@ export function QRCodeGenerator({
   const { openNotification } = useNotification();
 
   const generateQRCode = useCallback(async () => {
-    if (!url.trim()) return;
+    if (!url?.trim()) return;
 
     setIsGenerating(true);
     try {
