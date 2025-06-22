@@ -2,7 +2,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RestaurantFormEdit } from "./edit-form";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { authFetch } from "@/lib/api/client";
-import { redirect } from "next/navigation";
 
 export default async function RestaurantEdit({
   params,

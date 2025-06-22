@@ -36,7 +36,7 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
         description: restaurant.description,
         theme_id: restaurant.theme.id,
         images: restaurant.images || [],
-        category_ids: restaurant.categories.map((c) => c.id),
+        category_ids: restaurant.categories?.map((c) => c.id),
       });
     }
   }, [restaurant, form]);

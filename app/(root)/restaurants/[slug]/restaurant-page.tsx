@@ -9,7 +9,7 @@ import Link from "next/link";
 function SchemaParser({ schema }: { schema?: Builder }) {
   if (!schema) {
     return (
-      <section className="section">
+      <section className="section pt-0">
         <p className="text-muted-foreground">
           No menu available for this restaurant.
         </p>
@@ -73,7 +73,7 @@ export function RestaurantHeader({
     <header className="section section-primary relative mb-0 -translate-y-16 overflow-clip">
       <div className="absolute inset-0 -top-16 z-1">
         <Image
-          src={restaurant.images[0].url || "/placeholder.svg"}
+          src={restaurant.images[0]?.url || "/placeholder.svg"}
           alt={`${restaurant.name} restaurant interior`}
           fill
           className="object-cover opacity-15"

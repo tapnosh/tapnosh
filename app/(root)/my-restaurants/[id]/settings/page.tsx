@@ -1,4 +1,3 @@
-import { ScannableMenuEditor } from "@/components/qr-code/scannable-menu";
 import { authFetch } from "@/lib/api/client";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { RestaurantFormDelete } from "./delete-form";

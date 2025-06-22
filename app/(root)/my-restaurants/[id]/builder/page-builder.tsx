@@ -35,7 +35,6 @@ import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BuilderElementHeading } from "@/components/builder/builder-element-heading";
 import { useMenuMutation } from "@/hooks/api/menu/useMenuMutation";
-import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
 import { useMenusQuery } from "@/hooks/api/menu/useMenus";
 import { useNotification } from "@/context/NotificationBar";
 import { BasicNotificationBody } from "@/components/ui/basic-notification";

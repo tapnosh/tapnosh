@@ -8,6 +8,6 @@ export function ThemeSetter({ color }: { color: string }) {
 
   useLayoutEffect(() => {
     setColor(color);
-  }, []);
+  }, [color]);
   return null;
 }

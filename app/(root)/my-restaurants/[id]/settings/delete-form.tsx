@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useNotification } from "@/context/NotificationBar";
 import { BasicNotificationBody } from "@/components/ui/basic-notification";
 import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutation";
-import { useState } from "react";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { RestaurantDeleteForm } from "@/components/forms/restaurant-delete-form";
 import { useRouter } from "next/navigation";
@@ -16,7 +15,6 @@ export function RestaurantFormDelete({
   restaurant: Restaurant;
 }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useRestaurantMutation("DELETE");
   const { openNotification } = useNotification();
 
@@ -61,8 +59,6 @@ export function RestaurantFormDelete({
 
   return (
     <RestaurantDeleteForm
-      open={open}
-      onOpenChange={setOpen}
       restaurantName={restaurant.name}
       restaurantSlug={restaurant.slug!}
       form={form}

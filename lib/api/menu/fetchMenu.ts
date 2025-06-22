@@ -18,7 +18,7 @@ export async function fetchMenu(
 
     const text = await response.text();
     if (!text) {
-      console.error("Empty response when fetching menu");
+      console.error("Empty response when fetching menu", restaurantId);
       return undefined;
     }
 

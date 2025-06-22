@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { Loader2, Trash2, AlertTriangle } from "lucide-react";
 import {
@@ -38,8 +40,6 @@ interface RestaurantDeleteFormProps {
   isPending?: boolean;
   restaurantName: string;
   restaurantSlug: string;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
 }
 
 export function RestaurantDeleteForm({
@@ -48,8 +48,6 @@ export function RestaurantDeleteForm({
   isPending,
   restaurantName,
   restaurantSlug,
-  open,
-  onOpenChange,
 }: RestaurantDeleteFormProps) {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [formData, setFormData] = useState<RestaurantDeleteFormData | null>(
@@ -97,7 +95,7 @@ export function RestaurantDeleteForm({
             restaurant
             <span className="text-foreground font-semibold">
               {" "}
-              "{restaurantName}"
+              &quot;{restaurantName}&quot;
             </span>{" "}
             and remove all associated data.
           </CardDescription>
@@ -191,7 +189,7 @@ export function RestaurantDeleteForm({
               Are you absolutely sure you want to delete
               <span className="text-foreground font-semibold">
                 {" "}
-                "{restaurantName}"
+                &quot;{restaurantName}&quot;
               </span>
               ? This action cannot be undone.
             </DialogDescription>

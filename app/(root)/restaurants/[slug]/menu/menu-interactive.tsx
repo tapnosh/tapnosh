@@ -1,22 +1,16 @@
 "use client";
 
-import { unstable_ViewTransition as ViewTransition } from "react";
 import { MenuItemCard } from "@/components/menu/menu-item";
 import { Featured } from "@/components/menu/featured";
-import { SampleDishes } from "@/mock/menu/dishes";
-import Image from "next/image";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { MenuItem } from "@/types/menu/Menu";
 import { MenuItemModal } from "@/components/menu/menu-item-modal";
-import { useParams } from "next/navigation";
 import { FiltersBar } from "@/components/filters/filters-bar";
-import { RestaurantHeader } from "../restaurant-page";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuGroup } from "@/components/menu/menu-group";
 
 export function MenuInteractive({ schema }: { schema?: Builder }) {
-  const { slug } = useParams<{ slug: string }>();
   const [open, setOpen] = useState(false);
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
 
@@ -28,6 +22,17 @@ export function MenuInteractive({ schema }: { schema?: Builder }) {
   const featuredItems = schema?.menu
     .flatMap(({ items }) => items.flatMap((item) => item))
     .slice(0, 10);
+
+  if (!schema) {
+    return (
+      <section className="section pt-0">
+        <p className="text-muted-foreground">
+          No menu available for this restaurant.
+        </p>
+      </section>
+    );
+  }
+
   return (
     <>
       {featuredItems && (

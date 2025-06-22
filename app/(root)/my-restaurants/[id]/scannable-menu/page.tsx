@@ -18,7 +18,7 @@ export default async function ScannableMenu({
       </section>
 
       <section className="section items-center pb-8">
-        <ScannableMenuEditor />
+        <ScannableMenuEditor restaurantId={restaurant.id ?? ""} />
       </section>
     </>
   );
