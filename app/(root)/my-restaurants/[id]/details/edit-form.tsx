@@ -10,8 +10,10 @@ import {
 } from "@/types/restaurant/Create";
 import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutation";
 import { RestaurantDetailsForm } from "@/components/forms/restaurant-details-form";
+import { useEffect } from "react";
+import { Restaurant } from "@/types/restaurant/Restaurant";
 
-export function RestaurantFormEdit() {
+export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
   const { mutateAsync, isPending } = useRestaurantMutation("PUT");
   const { openNotification } = useNotification();
 
@@ -26,6 +28,19 @@ export function RestaurantFormEdit() {
     },
   });
 
+  useEffect(() => {
+    if (restaurant) {
+      form.reset({
+        id: restaurant.id,
+        name: restaurant.name,
+        description: restaurant.description,
+        theme_id: restaurant.theme.id,
+        images: restaurant.images || [],
+        category_ids: restaurant.categories?.map((c) => c.id),
+      });
+    }
+  }, [restaurant, form]);
+
   const onSubmit = async (data: RestaurantFormData) => {
     try {
       await mutateAsync(data);
@@ -37,14 +52,25 @@ export function RestaurantFormEdit() {
         />,
       );
       form.reset();
-    } catch {
-      openNotification(
-        <BasicNotificationBody
-          title="Error"
-          description="An unexpected error occurred"
-          variant="error"
-        />,
-      );
+    } catch (error) {
+      console.error("Error creating restaurant:", error);
+      if (error instanceof Error) {
+        openNotification(
+          <BasicNotificationBody
+            title="Error"
+            description={error.message}
+            variant="error"
+          />,
+        );
+      } else {
+        openNotification(
+          <BasicNotificationBody
+            title="Error"
+            description="An unexpected error occurred"
+            variant="error"
+          />,
+        );
+      }
     }
   };
 
@@ -53,7 +79,7 @@ export function RestaurantFormEdit() {
       form={form}
       onSubmit={onSubmit}
       isPending={isPending}
-      submitLabel="Add Restaurant"
+      submitLabel="Update Details"
     />
   );
 }

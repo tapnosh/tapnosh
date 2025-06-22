@@ -76,8 +76,8 @@ export function MenuItemCard({
             <Image
               src={imgSrc}
               alt={item.name}
-              width={80}
-              height={80}
+              width={256}
+              height={256}
               quality={50}
               className="h-full w-full rounded-md object-cover"
             />
@@ -99,9 +99,8 @@ export function MenuItemCard({
               <div className="flex flex-wrap gap-1.5">
                 {item?.categories?.map((category) => (
                   <Badge key={category} variant="secondary" className="text-xs">
-                    <span className="mr-1">
-                      {categoryIcons[category as keyof typeof categoryIcons]}
-                    </span>
+                    {categoryIcons[category as keyof typeof categoryIcons]}
+
                     {category}
                   </Badge>
                 ))}

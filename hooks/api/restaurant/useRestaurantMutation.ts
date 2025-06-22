@@ -8,6 +8,7 @@ import {
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
 import { useUploadImage } from "./useUploadImage";
+import { PutBlobResult } from "@vercel/blob";
 
 export const useRestaurantMutation = (
   method: "POST" | "PUT" | "DELETE" = "POST",
@@ -27,13 +28,34 @@ export const useRestaurantMutation = (
           };
         }
 
-        const validatedData = RestaurantFormSchema.parse(data);
+        // Skip validation for DELETE operations
+        let validatedData = {};
+        if (method !== "DELETE") {
+          validatedData = RestaurantFormSchema.parse(data);
+        }
 
-        const images = data.images
-          .filter((image) => "file" in image)
-          .map(({ file }) => file);
+        const images = Object.groupBy(data.images, (image) =>
+          "file" in image ? "file" : "blob",
+        );
 
-        const imageBlobs = await uploadImages(images);
+        let imageBlobs: PutBlobResult[] = [];
+
+        const filesToUpload = images.file
+          ?.filter(
+            (image): image is { file: File; url: string } => "file" in image,
+          )
+          .map(({ file }) => file) as File[];
+
+        if (filesToUpload?.length) {
+          imageBlobs = await uploadImages(
+            images.file
+              ?.filter(
+                (image): image is { file: File; url: string } =>
+                  "file" in image,
+              )
+              .map(({ file }) => file) as File[],
+          );
+        }
 
         const endpoint =
           method === "POST" ? "restaurants" : `restaurants/${data.id}`;
@@ -42,7 +64,11 @@ export const useRestaurantMutation = (
           method,
           body: JSON.stringify({
             ...validatedData,
-            images: imageBlobs,
+            ...(imageBlobs?.length
+              ? {
+                  images: [...(images?.blob ? images.blob : []), ...imageBlobs],
+                }
+              : {}),
           }),
         });
       } catch (error) {

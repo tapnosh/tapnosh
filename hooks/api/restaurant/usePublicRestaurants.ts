@@ -3,22 +3,22 @@ import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
-export function useRestaurantsQuery(): ReturnType<
+export function usePublicRestaurantsQuery(): ReturnType<
   typeof useQuery<Restaurant[], TranslatedError>
 >;
 
-export function useRestaurantsQuery(
-  id?: string,
+export function usePublicRestaurantsQuery(
+  slug: string,
 ): ReturnType<typeof useQuery<Restaurant, TranslatedError>>;
 
-export function useRestaurantsQuery(id?: string) {
+export function usePublicRestaurantsQuery(slug?: string) {
   const { fetchClient } = useFetchClient();
 
   return useQuery<Restaurant[] | Restaurant, TranslatedError>({
-    queryKey: ["restaurants", id],
+    queryKey: ["restaurants", "public", slug],
     queryFn: () =>
       fetchClient<Restaurant[] | Restaurant>(
-        id ? `restaurants/${id}` : "restaurants",
+        slug ? `public_api/restaurants/${slug}` : "public_api/restaurants",
       ),
   });
 }

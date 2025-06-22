@@ -20,7 +20,7 @@ import { useParams } from "next/navigation";
 import { NavProjects } from "./nav-projects";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ slug: string }>();
 
   const data = React.useMemo(
     () => ({
@@ -35,15 +35,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           title: "Restaurants",
           url: "/restaurants",
           icon: Utensils,
-          items: params.id
+          items: params.slug
             ? [
                 {
-                  title: `${params.id}`,
-                  url: `/restaurants/${params.id}`,
+                  title: `${params.slug}`,
+                  url: `/restaurants/${params.slug}`,
                 },
                 {
-                  title: `${params.id} menu`,
-                  url: `/restaurants/${params.id}/menu`,
+                  title: `${params.slug} menu`,
+                  url: `/restaurants/${params.slug}/menu`,
                 },
               ]
             : undefined,

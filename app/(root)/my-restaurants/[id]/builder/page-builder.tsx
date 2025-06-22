@@ -1,6 +1,8 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   DndContext,
@@ -32,6 +34,13 @@ import { BuilderProvider, useBuilder } from "@/context/BuilderContext";
 import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BuilderElementHeading } from "@/components/builder/builder-element-heading";
+import { useMenuMutation } from "@/hooks/api/menu/useMenuMutation";
+import { useMenusQuery } from "@/hooks/api/menu/useMenus";
+import { useNotification } from "@/context/NotificationBar";
+import { BasicNotificationBody } from "@/components/ui/basic-notification";
+import { RestaurantHeader } from "@/app/(root)/restaurants/[slug]/restaurant-page";
+import { useThemeColor } from "@/context/ThemeContext";
+import { Restaurant } from "@/types/restaurant/Restaurant";
 
 const PageElementMap = {
   "menu-group": withBuilderElementWrapper(BuilderElementMenuGroup),
@@ -45,7 +54,11 @@ const PreviewModeSwitcher = () => {
   return (
     <Button
       variant="outline"
-      onClick={() => togglePreviewMode()}
+      onClick={(e) => {
+        e.preventDefault();
+        togglePreviewMode();
+      }}
+      type="button"
       className="mb-4"
     >
       {previewMode ? "Exit Preview Mode" : "Enter Preview Mode"}
@@ -53,7 +66,13 @@ const PreviewModeSwitcher = () => {
   );
 };
 
-function PageBuilderFields() {
+function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
+  const { setColor } = useThemeColor();
+  const { openNotification } = useNotification();
+  const { data: menu, refetch } = useMenusQuery({
+    restaurantId: restaurant.id || "",
+  });
+  const { mutateAsync } = useMenuMutation();
   const [groupsParent] = useAutoAnimate();
 
   const { previewMode } = useBuilder();
@@ -61,10 +80,22 @@ function PageBuilderFields() {
   const form = useForm<Builder>({
     mode: "onChange",
     resolver: zodResolver(BuilderSchema),
-    defaultValues: {},
+    defaultValues: menu?.schema,
   });
 
-  const { control, handleSubmit } = form;
+  useEffect(() => {
+    form.reset(menu?.schema ?? restaurant.menu);
+  }, [menu, form, restaurant]);
+
+  useEffect(() => {
+    if (restaurant?.theme?.color) setColor(restaurant.theme.color);
+  }, [restaurant, setColor]);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
 
   const {
     fields,
@@ -126,18 +157,50 @@ function PageBuilderFields() {
     }
   };
 
-  // Submit handler (replace with your API logic)
-  const onSubmit = (data: unknown) => {
-    console.log(data);
-    // Here you would typically send the data to your API
-    // For example: api.post('/menu', data)
+  const onSubmit = async (schema: Builder) => {
+    try {
+      await mutateAsync({
+        restaurantId: restaurant.id || "",
+        schema,
+        id: menu?.id,
+      });
+      openNotification(
+        <BasicNotificationBody
+          title="Success"
+          description="Restaurant page updated successfully!"
+          variant="success"
+        />,
+      );
+      await refetch();
+    } catch (error) {
+      if (error instanceof Error) {
+        openNotification(
+          <BasicNotificationBody
+            title="Error"
+            description={error.message}
+            variant="error"
+          />,
+        );
+      } else {
+        openNotification(
+          <BasicNotificationBody
+            title="Error"
+            description="An unexpected error occurred"
+            variant="error"
+          />,
+        );
+      }
+    }
   };
 
   return (
     <>
+      <div ref={groupsParent}>
+        {restaurant && <RestaurantHeader restaurant={restaurant} />}
+      </div>
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <section className="section section-primary">
+          <section className="section pt-0">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -166,7 +229,7 @@ function PageBuilderFields() {
                         <Button
                           type="button"
                           variant="ghost"
-                          className="border-accent/50 hover:text-accent/50 h-32 w-full border border-dashed"
+                          className="border-foreground/20 h-32 w-full border border-dashed"
                         >
                           <Plus /> Add element
                         </Button>
@@ -245,7 +308,10 @@ function PageBuilderFields() {
           </section>
           <section className="section flex justify-end gap-2">
             <PreviewModeSwitcher />
-            <Button type="submit">Save Menu</Button>
+            <Button disabled={isSubmitting} type="submit">
+              {isSubmitting && <Loader2 className="animate-spin" />}
+              Save Menu
+            </Button>
           </section>
         </form>
       </Form>
@@ -253,10 +319,10 @@ function PageBuilderFields() {
   );
 }
 
-export function PageBuilder() {
+export function PageBuilder({ restaurant }: { restaurant: Restaurant }) {
   return (
     <BuilderProvider>
-      <PageBuilderFields />
+      <PageBuilderFields restaurant={restaurant} />
     </BuilderProvider>
   );
 }

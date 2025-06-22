@@ -13,15 +13,22 @@ import { Download, QrCode, Loader2 } from "lucide-react";
 import QRCode from "qrcode";
 import { useNotification } from "@/context/NotificationBar";
 import { BasicNotificationBody } from "@/components/ui/basic-notification";
+import NextImage from "next/image";
 
-export function QRCodeGenerator({ url }: { url: string }) {
+export function QRCodeGenerator({
+  url,
+  isLoading,
+}: {
+  url?: string;
+  isLoading?: boolean;
+}) {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>();
   const [isGenerating, setIsGenerating] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { openNotification } = useNotification();
 
   const generateQRCode = useCallback(async () => {
-    if (!url.trim()) return;
+    if (!url?.trim()) return;
 
     setIsGenerating(true);
     try {
@@ -54,10 +61,10 @@ export function QRCodeGenerator({ url }: { url: string }) {
   }, [url]);
 
   useEffect(() => {
-    if (url.trim()) {
+    if (url?.trim()) {
       generateQRCode();
     }
-  }, [generateQRCode]);
+  }, [generateQRCode, url]);
 
   const downloadQRCode = useCallback(async () => {
     if (!qrCodeDataUrl) return;
@@ -143,18 +150,21 @@ export function QRCodeGenerator({ url }: { url: string }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {isGenerating && (
-            <div className="flex min-h-128 items-center justify-center">
+          {(isGenerating || isLoading) && (
+            <div className="flex min-h-96 items-center justify-center">
               <Loader2 className="text-primary mx-auto h-6 w-6 animate-spin" />
             </div>
           )}
           {qrCodeDataUrl && (
             <div className="flex flex-col space-y-4">
               <div className="border-primary/10 flex flex-col items-center space-y-4 rounded-lg border-2 border-dashed p-6">
-                <img
+                <NextImage
                   src={qrCodeDataUrl || "/placeholder.svg"}
                   alt="Generated QR Code"
                   className="h-auto max-w-full"
+                  width={350}
+                  height={350}
+                  quality={100}
                 />
 
                 <div className="text-center">

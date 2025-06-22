@@ -9,6 +9,7 @@ import {
   FileText,
   Palette,
   type LucideIcon,
+  Settings,
 } from "lucide-react";
 import {
   SidebarGroup,
@@ -30,12 +31,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
-
-const restaurants = [
-  { id: 1, name: "Restaurant One" },
-  { id: 2, name: "Restaurant Two" },
-  { id: 3, name: "Pizza Palace" },
-];
+import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
 
 type MyRestaurantsSidebarItem = {
   title: string;
@@ -60,7 +56,7 @@ const staticItems = [
   },
 ];
 
-const getRestaurantSubItems = (restaurantId: number) => [
+const getRestaurantSubItems = (restaurantId?: string) => [
   {
     title: "Scannable Menu",
     url: `/my-restaurants/${restaurantId}/scannable-menu`,
@@ -76,28 +72,34 @@ const getRestaurantSubItems = (restaurantId: number) => [
     url: `/my-restaurants/${restaurantId}/builder`,
     icon: Palette,
   },
+  {
+    title: "Settings",
+    url: `/my-restaurants/${restaurantId}/settings`,
+    icon: Settings,
+  },
 ];
 
 export function NavProjects() {
+  const { data: restaurants } = useRestaurantsQuery();
   const { isSignedIn } = useSession();
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
 
   const allItems: MyRestaurantsSidebarItem[] = [
     ...staticItems,
-    ...restaurants.map((restaurant) => ({
-      title: restaurant.name,
-      url: `/restaurants/${restaurant.id}`,
-      icon: Store,
-      items: getRestaurantSubItems(restaurant.id),
-    })),
+    ...(restaurants
+      ? restaurants.map((restaurant) => ({
+          title: restaurant.name,
+          url: `/restaurants/${restaurant.slug}`,
+          icon: Store,
+          items: getRestaurantSubItems(restaurant.id),
+        }))
+      : []),
   ];
 
   if (!isSignedIn) {
     return null;
   }
-
-  console.log(pathname, allItems);
 
   return (
     <SidebarGroup>

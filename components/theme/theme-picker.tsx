@@ -19,12 +19,16 @@ import { RestaurantTheme } from "@/types/theme/Theme";
 import { useRestaurantThemesQuery } from "../../hooks/api/theme/useRestaurantThemes";
 import { useCreateRestaurantTheme } from "@/hooks/api/theme/useCreateRestaurantTheme";
 import { TranslatedError } from "@/types/api/Error";
+import { useFormField } from "@/components/ui/form";
+import { useWatch } from "react-hook-form";
 
 export function ThemePicker({
   onChange,
 }: {
   onChange?: (theme: RestaurantTheme) => void;
 }) {
+  const { name } = useFormField();
+  const value = useWatch({ name });
   const { openNotification } = useNotification();
 
   const { data = [], isLoading, refetch } = useRestaurantThemesQuery();
@@ -73,6 +77,20 @@ export function ThemePicker({
       );
     }
   };
+
+  useEffect(() => {
+    console.log(value, name);
+    if (value && data.length > 0) {
+      const selectedTheme = data.find((t) => t.id === value);
+      if (selectedTheme) {
+        setHexColor(selectedTheme.color);
+        setTheme(selectedTheme);
+      } else {
+        setHexColor(undefined);
+        setTheme(undefined);
+      }
+    }
+  }, [value, data]);
 
   return (
     <div

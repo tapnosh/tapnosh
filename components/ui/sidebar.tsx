@@ -255,22 +255,27 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, open } = useSidebar();
 
   return (
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
-      variant="ghost"
+      variant="secondary"
       size="icon"
-      className={cn("bg-background h-9 w-9 rounded-lg", className)}
+      className={cn("h-9 w-9 rounded-lg", className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      <Menu className="size-5" />
+      <Menu
+        className={cn(
+          "size-5 rotate-90 transition-transform duration-300 ease-in-out",
+          open && "rotate-0",
+        )}
+      />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

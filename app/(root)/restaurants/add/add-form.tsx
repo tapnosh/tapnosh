@@ -10,6 +10,7 @@ import {
 } from "@/types/restaurant/Create";
 import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutation";
 import { RestaurantDetailsForm } from "@/components/forms/restaurant-details-form";
+import { queryClient } from "@/providers/QueryProvider";
 
 export function RestaurantFormCreate() {
   const { mutateAsync, isPending } = useRestaurantMutation();
@@ -37,6 +38,7 @@ export function RestaurantFormCreate() {
         />,
       );
       form.reset();
+      queryClient.refetchQueries();
     } catch {
       openNotification(
         <BasicNotificationBody

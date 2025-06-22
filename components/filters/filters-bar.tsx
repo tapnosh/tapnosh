@@ -12,7 +12,7 @@ export function FiltersBar() {
   return (
     <div className="mb-12 flex flex-wrap items-center justify-between gap-3">
       <Tabs className="overflow-auto" defaultValue="appetizers">
-        <TabsList className="bg-primary-foreground text-primary/75">
+        <TabsList>
           <TabsTrigger
             value="all"
             className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
