@@ -10,7 +10,13 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useThemeColor } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils";
-import { CirclePlus, Loader2Icon, Paintbrush, Palette } from "lucide-react";
+import {
+  Check,
+  CirclePlus,
+  Loader2Icon,
+  Paintbrush,
+  Palette,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useThrottle } from "@uidotdev/usehooks";
 import { useNotification } from "@/context/NotificationBar";
@@ -58,8 +64,9 @@ export function ThemePicker({
 
   const handleThemeCreate = async (color: string) => {
     try {
-      await mutateAsync({ color });
+      const res = await mutateAsync({ color });
       refetch();
+      handleThemeChange(res);
       openNotification(
         <BasicNotificationBody
           title="Success"
@@ -192,9 +199,13 @@ export function ColorPicker({
               <div
                 key={s.id}
                 style={{ background: s.color }}
-                className="size-6 cursor-pointer rounded-md active:scale-105"
+                className="relative size-6 cursor-pointer rounded-md border active:scale-105"
                 onClick={() => onThemeChange(s)}
-              />
+              >
+                {theme?.id === s.id && (
+                  <Check className="text-primary-foreground absolute inset-0 m-auto h-4 w-4" />
+                )}
+              </div>
             ))}
           </TabsContent>
         </Tabs>

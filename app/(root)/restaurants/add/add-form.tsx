@@ -11,8 +11,10 @@ import {
 import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutation";
 import { RestaurantDetailsForm } from "@/components/forms/restaurant-details-form";
 import { queryClient } from "@/providers/QueryProvider";
+import { useRouter } from "next/navigation";
 
 export function RestaurantFormCreate() {
+  const router = useRouter();
   const { mutateAsync, isPending } = useRestaurantMutation();
   const { openNotification } = useNotification();
 
@@ -29,7 +31,7 @@ export function RestaurantFormCreate() {
 
   const onSubmit = async (data: RestaurantFormData) => {
     try {
-      await mutateAsync(data);
+      const res = await mutateAsync(data);
       openNotification(
         <BasicNotificationBody
           title="Success"
@@ -39,6 +41,7 @@ export function RestaurantFormCreate() {
       );
       form.reset();
       queryClient.refetchQueries();
+      router.push(`/restaurants/${res.slug}`);
     } catch {
       openNotification(
         <BasicNotificationBody
