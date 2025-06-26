@@ -2,6 +2,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RestaurantFormEdit } from "./edit-form";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { authFetch } from "@/lib/api/client";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Restaurant Details",
+  description:
+    "Edit your restaurant details, contact information, and basic settings. Keep your restaurant profile up to date for customers.",
+  keywords: [
+    "restaurant details",
+    "edit restaurant",
+    "restaurant settings",
+    "restaurant information",
+    "contact details",
+  ],
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function RestaurantEdit({
   params,

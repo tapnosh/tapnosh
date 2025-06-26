@@ -84,13 +84,15 @@ export function MenuItemCard({
           </motion.div>
         )}
         <div className="flex flex-1 flex-col">
-          <header className="flex items-start justify-between">
-            <span className="font-display-median text-lg">{item.name}</span>
-            <span className="font-display-median text-lg font-semibold">
+          <header className="flex items-start justify-between gap-0.5 pb-0.5">
+            <span className="font-display-median text-lg leading-5">
+              {item.name}
+            </span>
+            <span className="font-display-median text-lg leading-5 font-semibold">
               {formatCurrency(item.price.amount, item.price.currency)}
             </span>
           </header>
-          <span className="text-muted-foreground pr-15 text-sm italic">
+          <span className="text-muted-foreground pr-15 text-sm leading-4 italic">
             {item?.description}
           </span>
           <footer className="mt-2 flex items-center justify-between gap-2">

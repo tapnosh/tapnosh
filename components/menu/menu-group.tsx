@@ -12,7 +12,7 @@ export function MenuGroup({
 }>) {
   return (
     <>
-      <h4 className="mb-0">{data?.name || "No group name provided"}</h4>
+      <h4 className="mt-6 mb-0">{data?.name || "No group name provided"}</h4>
       <p className="text-muted-foreground mb-4">
         Served from {data.timeFrom} to {data.timeTo}
       </p>

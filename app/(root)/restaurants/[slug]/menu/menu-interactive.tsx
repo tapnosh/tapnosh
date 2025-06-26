@@ -35,7 +35,7 @@ export function MenuInteractive({ schema }: { schema?: Builder }) {
 
   return (
     <>
-      {featuredItems && (
+      {featuredItems?.length && (
         <>
           <section className="section pt-0 pb-2 lg:pb-4">
             <h2>Chef Picks</h2>
@@ -59,7 +59,7 @@ export function MenuInteractive({ schema }: { schema?: Builder }) {
 
       {schema?.menu && (
         <section className="section @container pt-16">
-          <h2 className="sm:mb-4">Menu</h2>
+          <h2>Menu</h2>
           <FiltersBar />
           {schema.menu.map((group, index) => (
             <MenuGroup data={group} key={index}>
