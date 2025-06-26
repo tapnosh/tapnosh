@@ -2,10 +2,69 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Users, ChefHat, Utensils } from "lucide-react";
 import { RestaurantList } from "@/components/restaurant/restaurant-list";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Discover Amazing Restaurants Near You",
+  description:
+    "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers. Browse hundreds of restaurants with detailed menus, photos, and authentic reviews.",
+  openGraph: {
+    title: "Discover Amazing Restaurants Near You | tapnosh",
+    description:
+      "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers.",
+    url: "https://tapnosh.com",
+  },
+  twitter: {
+    title: "Discover Amazing Restaurants Near You | tapnosh",
+    description:
+      "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers.",
+  },
+  alternates: {
+    canonical: "https://tapnosh.com",
+  },
+};
 
 export default function RestaurantLanding() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "tapnosh",
+    description:
+      "Discover amazing restaurants near you. Join our platform to explore the best dining experiences in your city.",
+    url: "https://tapnosh.com",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://tapnosh.com/restaurants?q={search_term_string}",
+      },
+      "query-input": "required name=search_term_string",
+    },
+    mainEntity: {
+      "@type": "Organization",
+      name: "tapnosh",
+      description: "A platform connecting food lovers with amazing restaurants",
+      url: "https://tapnosh.com",
+      logo: "https://tapnosh.com/images/logo.png",
+      sameAs: [
+        "https://twitter.com/tapnosh",
+        "https://facebook.com/tapnosh",
+        "https://instagram.com/tapnosh",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "Customer Service",
+        availableLanguage: "English",
+      },
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <section className="section section-primary">
         <div className="container mx-auto px-4 md:px-6">

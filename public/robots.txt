@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://tapnosh.com
+
+# Sitemaps
+Sitemap: https://tapnosh.com/sitemap.xml
