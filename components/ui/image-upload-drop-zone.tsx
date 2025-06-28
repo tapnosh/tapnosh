@@ -225,16 +225,17 @@ export default function ImageUploadDropzone({
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={() => replace([])}
-              type="button"
             >
               <X />
               Clear All
             </Button>
             {files.length < limit && (
               <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 onClick={() => fileInputRef.current?.click()}

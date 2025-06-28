@@ -86,7 +86,6 @@ export function ThemePicker({
   };
 
   useEffect(() => {
-    console.log(value, name);
     if (value && data.length > 0) {
       const selectedTheme = data.find((t) => t.id === value);
       if (selectedTheme) {
