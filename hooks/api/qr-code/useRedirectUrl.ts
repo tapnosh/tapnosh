@@ -10,7 +10,7 @@ export function useRedirectUrlQuery(id: string) {
   const { fetchClient } = useFetchClient();
 
   return useQuery<{ url: string }, TranslatedError>({
-    queryKey: ["categories"],
+    queryKey: ["qr-redirect-url"],
     queryFn: () =>
       fetchClient<{ url: string }>(`restaurants/${id}/generate_qr`),
   });
