@@ -49,7 +49,7 @@ export const NotificationProvider: React.FC<{ children: ReactNode }> = ({
     content: ReactNode,
     options?: { timeout?: number; persistent?: boolean; animation?: boolean },
   ) => {
-    const id = Date.now().toString(); // simple id generation using current time
+    const id = crypto.randomUUID();
     const persistent = options?.persistent ?? false;
     const timeout = options?.timeout ?? 4000;
 
