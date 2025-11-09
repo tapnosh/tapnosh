@@ -1,5 +1,3 @@
-import React from "react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   DndContext,
   closestCenter,
@@ -7,13 +5,15 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
+  type DragEndEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 export function BuilderElementSortable({

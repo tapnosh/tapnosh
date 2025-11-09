@@ -1,4 +1,5 @@
-import { Textarea } from "@/components/ui/forms/textarea";
+import { useFormContext, useWatch } from "react-hook-form";
+
 import {
   FormControl,
   FormField,
@@ -6,10 +7,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/forms/form";
-import { BuilderElementProps } from "./builder-element-wrapper";
-import { useFormContext, useWatch } from "react-hook-form";
+import { Textarea } from "@/components/ui/forms/textarea";
 import { useBuilder } from "@/context/BuilderContext";
 import { Builder, HeaderText } from "@/types/builder/BuilderSchema";
+
+import { BuilderElementProps } from "./builder-element-wrapper";
 
 interface BuilderElementTextProps extends BuilderElementProps {
   elementKey: `header.${number}`;

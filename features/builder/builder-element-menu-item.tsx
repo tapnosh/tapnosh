@@ -1,6 +1,5 @@
-import { Input } from "@/components/ui/forms/input";
-import { Textarea } from "@/components/ui/forms/textarea";
 import { useFormContext, useWatch } from "react-hook-form";
+
 import {
   FormControl,
   FormField,
@@ -9,16 +8,19 @@ import {
   FormMessage,
 } from "@/components/ui/forms/form";
 import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
+import { Input } from "@/components/ui/forms/input";
+import MultiChipInput from "@/components/ui/forms/multi-chip-input";
+import PriceInput from "@/components/ui/forms/price-input";
+import { Textarea } from "@/components/ui/forms/textarea";
 import { useBuilder } from "@/context/BuilderContext";
 import { MenuItemCard } from "@/features/menu/menu-item";
+import { Builder } from "@/types/builder/BuilderSchema";
+import { MenuItem } from "@/types/menu/Menu";
+
 import {
   BuilderElementProps,
   withBuilderElementWrapper,
 } from "./builder-element-wrapper";
-import PriceInput from "@/components/ui/forms/price-input";
-import MultiChipInput from "@/components/ui/forms/multi-chip-input";
-import { Builder } from "@/types/builder/BuilderSchema";
-import { MenuItem } from "@/types/menu/Menu";
 
 interface BuilderElementMenuItemProps extends BuilderElementProps {
   elementKey: `menu.${number}.items.${number}`;

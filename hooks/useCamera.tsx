@@ -1,6 +1,7 @@
-import { useNotification } from "@/context/NotificationBar";
 import { CircleAlert } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+
+import { useNotification } from "@/context/NotificationBar";
 import { tryCatch } from "@/utils/tryCatch";
 
 export function useCamera() {

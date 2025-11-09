@@ -1,6 +1,10 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { type UseFormReturn } from "react-hook-form";
+
+import { Button } from "@/components/ui/forms/button";
+import { Checkbox } from "@/components/ui/forms/checkbox";
 import {
   Form,
   FormControl,
@@ -10,15 +14,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/forms/form";
+import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
 import { Input } from "@/components/ui/forms/input";
 import { Textarea } from "@/components/ui/forms/textarea";
-import { Checkbox } from "@/components/ui/forms/checkbox";
-import { Button } from "@/components/ui/forms/button";
 import { ThemePicker } from "@/features/theme/theme-picker";
-import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
 import { useCategoriesQuery } from "@/hooks/api/categories/useCategories";
 import { RestaurantFormData } from "@/types/restaurant/Create";
-import { UseFormReturn } from "react-hook-form";
 
 interface RestaurantFormFieldsProps {
   form: UseFormReturn<RestaurantFormData>;

@@ -1,17 +1,7 @@
 import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/forms/form";
-import { BuilderElementProps } from "./builder-element-wrapper";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import {
   closestCenter,
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -21,14 +11,26 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
-import { Input } from "@/components/ui/forms/input";
-import { BuilderElementMenuItem } from "./builder-element-menu-item";
-import { Button } from "@/components/ui/forms/button";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Plus } from "lucide-react";
 import { useMemo } from "react";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+
+import { Button } from "@/components/ui/forms/button";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/forms/form";
+import { Input } from "@/components/ui/forms/input";
 import { useBuilder } from "@/context/BuilderContext";
-import { Builder, BuilderMenuItem } from "@/types/builder/BuilderSchema";
 import { MenuGroup } from "@/features/menu/menu-group";
+import { Builder, BuilderMenuItem } from "@/types/builder/BuilderSchema";
+
+import { BuilderElementMenuItem } from "./builder-element-menu-item";
+import { BuilderElementProps } from "./builder-element-wrapper";
 
 interface BuilderElementMenuGroupProps extends BuilderElementProps {
   elementKey: `menu.${number}`;

@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/forms/button";
+import { Download, Eye, QrCode } from "lucide-react";
+
 import {
   Card,
   CardContent,
@@ -8,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/data-display/card";
-import { Download, Eye, QrCode } from "lucide-react";
+import { Button } from "@/components/ui/forms/button";
 
 export function QRCodePreview() {
   return (

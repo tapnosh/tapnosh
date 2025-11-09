@@ -2,9 +2,10 @@
 
 import { Check, Clock, Utensils } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/utils/cn";
+
 import { Badge } from "@/components/ui/data-display/badge";
 import { Card, CardContent } from "@/components/ui/data-display/card";
+import { cn } from "@/utils/cn";
 
 type Status = "received" | "preparing" | "done";
 

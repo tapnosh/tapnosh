@@ -1,7 +1,10 @@
 "use client";
 
+import { Download, QrCode, Loader2 } from "lucide-react";
+import NextImage from "next/image";
+import QRCode from "qrcode";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/forms/button";
+
 import {
   Card,
   CardContent,
@@ -9,11 +12,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/data-display/card";
-import { Download, QrCode, Loader2 } from "lucide-react";
-import QRCode from "qrcode";
-import { useNotification } from "@/context/NotificationBar";
 import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
-import NextImage from "next/image";
+import { Button } from "@/components/ui/forms/button";
+import { useNotification } from "@/context/NotificationBar";
 import { tryCatch } from "@/utils/tryCatch";
 
 export function QRCodeGenerator({

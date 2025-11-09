@@ -1,9 +1,10 @@
 "use client";
 
+import { type VariantProps } from "class-variance-authority";
+
 import { Button, buttonVariants } from "@/components/ui/forms/button";
 import { useNotification } from "@/context/NotificationBar";
 import { CodeScanner } from "@/features/scan/code-scanner";
-import { type VariantProps } from "class-variance-authority";
 
 export function ButtonScanner(
   props: React.ComponentProps<"button"> &

@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { MenuItemSchema } from "../menu/Menu";
+
 import { BlobImageSchema, UploadImageSchema } from "../image/BlobImage";
+import { MenuItemSchema } from "../menu/Menu";
 
 const BuilderMenuItemSchema = MenuItemSchema.extend({
   image: z

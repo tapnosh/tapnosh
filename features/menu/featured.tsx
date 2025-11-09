@@ -1,10 +1,11 @@
-import React from "react";
-import { EmblaOptionsType } from "embla-carousel";
+import { type EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { cn } from "@/utils/cn";
-import { MenuItem } from "@/types/menu/Menu";
+import React from "react";
+
 import { useCurrency } from "@/hooks/useCurrency";
+import { MenuItem } from "@/types/menu/Menu";
+import { cn } from "@/utils/cn";
 
 type PropType = {
   items: MenuItem[];

@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
 import { BookOpen, Home, LifeBuoy, Send, Utensils } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import * as React from "react";
 
-import { LanguageSelector } from "@/features/navigation/nav-language-selector";
-import { NavMain } from "@/features/navigation/nav-main";
-import { NavUser } from "@/features/navigation/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -15,8 +14,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/layout/sidebar";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { LanguageSelector } from "@/features/navigation/nav-language-selector";
+import { NavMain } from "@/features/navigation/nav-main";
+import { NavUser } from "@/features/navigation/nav-user";
+
 import { NavManagement } from "./nav-management";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

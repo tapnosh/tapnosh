@@ -1,16 +1,18 @@
 "use client";
 
+import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
+import { Dispatch, useState } from "react";
+import { RemoveScroll } from "react-remove-scroll";
+
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
-import { useOrder } from "@/context/OrderContext";
-import Image from "next/image";
-import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
-import { Dispatch, useState } from "react";
-import { MenuItem } from "@/types/menu/Menu";
-import { useCurrency } from "@/hooks/useCurrency";
 import { useNotification } from "@/context/NotificationBar";
-import { AnimatePresence, motion } from "motion/react";
-import { RemoveScroll } from "react-remove-scroll";
+import { useOrder } from "@/context/OrderContext";
+import { useCurrency } from "@/hooks/useCurrency";
+import { MenuItem } from "@/types/menu/Menu";
+
 import { categoryIcons } from "./menu-item";
 
 export const MenuItemModal = ({

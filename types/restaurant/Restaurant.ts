@@ -1,7 +1,10 @@
-import { RestaurantTheme } from "@/types/theme/Theme";
+import { type PutBlobResult } from "@vercel/blob";
+
 import { RestaurantCategory } from "@/types/category/Category";
-import { PutBlobResult } from "@vercel/blob";
+import { RestaurantTheme } from "@/types/theme/Theme";
+
 import { Builder } from "../builder/BuilderSchema";
+
 export interface Restaurant {
   id?: string;
   slug?: string;

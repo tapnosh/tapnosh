@@ -1,11 +1,12 @@
 "use client";
 
-import { IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
+import { type IDetectedBarcode, Scanner } from "@yudiel/react-qr-scanner";
 import { Camera, CircleAlert, Loader2Icon } from "lucide-react";
-import { Button } from "@/components/ui/forms/button";
-import { useCamera } from "@/hooks/useCamera";
 import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/forms/button";
 import { useNotification } from "@/context/NotificationBar";
+import { useCamera } from "@/hooks/useCamera";
 
 export function CodeScanner({
   handleAccept,

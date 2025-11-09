@@ -1,7 +1,13 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
 import { Check, ChevronDown, Globe } from "lucide-react";
+import { useLayoutEffect, useState } from "react";
+
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenuButton,
+} from "@/components/ui/layout/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,11 +15,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/navigation/dropdown-menu";
 import { getUserLocale, setUserLocale } from "@/services/locale";
-import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenuButton,
-} from "@/components/ui/layout/sidebar";
 
 type Language = {
   code: "pl" | "en";

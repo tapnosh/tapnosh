@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+
 import { Locale, defaultLocale } from "../translations/navigation";
 
 const COOKIE_NAME = "APP_LOCALE";

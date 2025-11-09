@@ -1,14 +1,21 @@
 "use client";
 
-import { SignInButton, SignOutButton } from "@clerk/nextjs";
-
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { BadgeCheck, ChevronsUpDown, LogIn, LogOut } from "lucide-react";
+import { useMemo } from "react";
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/data-display/avatar";
+import { Skeleton } from "@/components/ui/data-display/skeleton";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/layout/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,15 +25,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/navigation/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/layout/sidebar";
-import { useUser } from "@clerk/nextjs";
-import { Skeleton } from "@/components/ui/data-display/skeleton";
-import { useMemo } from "react";
 
 export function NavUser() {
   const { isSignedIn, user, isLoaded } = useUser();

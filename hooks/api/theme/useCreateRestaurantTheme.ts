@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
+
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
-import { z } from "zod";
-import { RestaurantTheme } from "@/types/theme/Theme";
 import {
   RestaurantThemeFormData,
   RestaurantThemeFormSchema,
 } from "@/types/theme/Create";
+import { RestaurantTheme } from "@/types/theme/Theme";
 import { tryCatch } from "@/utils/tryCatch";
 
 export const useCreateRestaurantTheme = () => {

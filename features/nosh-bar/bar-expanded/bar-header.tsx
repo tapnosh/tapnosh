@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
 import { X } from "lucide-react";
+import { motion } from "motion/react";
 
 type HeaderProps = {
   activeTab: "cart" | "orders";

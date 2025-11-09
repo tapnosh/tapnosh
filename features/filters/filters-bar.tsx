@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/layout/tabs";
-import { Button } from "@/components/ui/forms/button";
 import { Settings2Icon, X } from "lucide-react";
+import { useState } from "react";
+
+import { Button } from "@/components/ui/forms/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/layout/tabs";
+
 import { FiltersDrawer } from "./filters-drawer";
 
 export function FiltersBar() {

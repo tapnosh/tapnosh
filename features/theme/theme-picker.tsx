@@ -1,15 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/forms/button";
-import { Input } from "@/components/ui/forms/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/overlays/popover";
-import { Tabs, TabsContent } from "@/components/ui/layout/tabs";
-import { useThemeColor } from "@/context/ThemeContext";
-import { cn } from "@/utils/cn";
+import { useThrottle } from "@uidotdev/usehooks";
 import {
   Check,
   CirclePlus,
@@ -18,15 +9,25 @@ import {
   Palette,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useThrottle } from "@uidotdev/usehooks";
-import { useNotification } from "@/context/NotificationBar";
-import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
-import { RestaurantTheme } from "@/types/theme/Theme";
-import { useRestaurantThemesQuery } from "@/hooks/api/theme/useRestaurantThemes";
-import { useCreateRestaurantTheme } from "@/hooks/api/theme/useCreateRestaurantTheme";
-import { TranslatedError } from "@/types/api/Error";
-import { useFormField } from "@/components/ui/forms/form";
 import { useWatch } from "react-hook-form";
+
+import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
+import { Button } from "@/components/ui/forms/button";
+import { useFormField } from "@/components/ui/forms/form";
+import { Input } from "@/components/ui/forms/input";
+import { Tabs, TabsContent } from "@/components/ui/layout/tabs";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/overlays/popover";
+import { useNotification } from "@/context/NotificationBar";
+import { useThemeColor } from "@/context/ThemeContext";
+import { useCreateRestaurantTheme } from "@/hooks/api/theme/useCreateRestaurantTheme";
+import { useRestaurantThemesQuery } from "@/hooks/api/theme/useRestaurantThemes";
+import { TranslatedError } from "@/types/api/Error";
+import { RestaurantTheme } from "@/types/theme/Theme";
+import { cn } from "@/utils/cn";
 import { tryCatch } from "@/utils/tryCatch";
 
 export function ThemePicker({

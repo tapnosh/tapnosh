@@ -1,7 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Loader2, Trash2, AlertTriangle } from "lucide-react";
+import { useState } from "react";
+import { type UseFormReturn } from "react-hook-form";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/data-display/card";
+import { Button } from "@/components/ui/forms/button";
 import {
   Form,
   FormControl,
@@ -12,7 +22,6 @@ import {
   FormMessage,
 } from "@/components/ui/forms/form";
 import { Input } from "@/components/ui/forms/input";
-import { Button } from "@/components/ui/forms/button";
 import {
   Dialog,
   DialogContent,
@@ -21,14 +30,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/overlays/dialog";
-import { UseFormReturn } from "react-hook-form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/data-display/card";
 
 interface RestaurantDeleteFormData {
   confirmationSlug: string;

@@ -1,8 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { Badge } from "@/components/ui/data-display/badge";
-import { Button } from "@/components/ui/forms/button";
 import {
   Beef,
   Beer,
@@ -16,9 +13,13 @@ import {
   Wine,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { MenuItem } from "@/types/menu/Menu";
-import { useCurrency } from "@/hooks/useCurrency";
+import Image from "next/image";
 import { useMemo } from "react";
+
+import { Badge } from "@/components/ui/data-display/badge";
+import { Button } from "@/components/ui/forms/button";
+import { useCurrency } from "@/hooks/useCurrency";
+import { MenuItem } from "@/types/menu/Menu";
 
 export const categoryIcons = {
   meat: <Beef className="h-4 w-4" />,

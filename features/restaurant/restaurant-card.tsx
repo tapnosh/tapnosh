@@ -1,10 +1,12 @@
-import { unstable_ViewTransition as ViewTransition } from "react";
-import { RestaurantCarousel } from "./restaurant-carousel";
-import { Button } from "@/components/ui/forms/button";
 import Link from "next/link";
-import { Restaurant } from "@/types/restaurant/Restaurant";
+import { unstable_ViewTransition as ViewTransition } from "react";
+
 import { Badge } from "@/components/ui/data-display/badge";
+import { Button } from "@/components/ui/forms/button";
 import { RestaurantCategory } from "@/types/category/Category";
+import { Restaurant } from "@/types/restaurant/Restaurant";
+
+import { RestaurantCarousel } from "./restaurant-carousel";
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
