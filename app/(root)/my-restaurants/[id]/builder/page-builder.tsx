@@ -1,9 +1,5 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Loader2, Plus } from "lucide-react";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   DndContext,
   closestCenter,
@@ -11,37 +7,42 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragEndEvent,
+  type DragEndEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Plus } from "lucide-react";
+import React, { useEffect } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+
+import { RestaurantHeader } from "@/app/(root)/restaurants/[slug]/restaurant-page";
+import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
+import { Button } from "@/components/ui/forms/button";
+import { Form } from "@/components/ui/forms/form";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useFieldArray, useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
-import { withBuilderElementWrapper } from "@/components/builder/builder-element-wrapper";
-import { BuilderElementMenuGroup } from "@/components/builder/builder-element-menu-group";
-import { BuilderElementText } from "@/components/builder/builder-element-text";
+} from "@/components/ui/navigation/dropdown-menu";
 import { BuilderProvider, useBuilder } from "@/context/BuilderContext";
-import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { BuilderElementHeading } from "@/components/builder/builder-element-heading";
+import { useNotification } from "@/context/NotificationBar";
+import { useThemeColor } from "@/context/ThemeContext";
+import { BuilderElementHeading } from "@/features/builder/builder-element-heading";
+import { BuilderElementMenuGroup } from "@/features/builder/builder-element-menu-group";
+import { BuilderElementText } from "@/features/builder/builder-element-text";
+import { withBuilderElementWrapper } from "@/features/builder/builder-element-wrapper";
 import { useMenuMutation } from "@/hooks/api/menu/useMenuMutation";
 import { useMenusQuery } from "@/hooks/api/menu/useMenus";
-import { useNotification } from "@/context/NotificationBar";
-import { BasicNotificationBody } from "@/components/ui/basic-notification";
-import { RestaurantHeader } from "@/app/(root)/restaurants/[slug]/restaurant-page";
-import { useThemeColor } from "@/context/ThemeContext";
+import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
 import { Restaurant } from "@/types/restaurant/Restaurant";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 const PageElementMap = {
   "menu-group": withBuilderElementWrapper(BuilderElementMenuGroup),

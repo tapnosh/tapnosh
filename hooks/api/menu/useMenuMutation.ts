@@ -1,11 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
+
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
-import { Restaurant } from "@/types/restaurant/Restaurant";
-import { z } from "zod";
-import { useUploadImage } from "../restaurant/useUploadImage";
 import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
-import { tryCatch } from "@/lib/tryCatch";
+import { Restaurant } from "@/types/restaurant/Restaurant";
+import { tryCatch } from "@/utils/tryCatch";
+
+import { useUploadImage } from "../restaurant/useUploadImage";
 
 export const useMenuMutation = () => {
   const { fetchClient } = useFetchClient();

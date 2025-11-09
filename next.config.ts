@@ -1,7 +1,9 @@
-import nextra from "nextra";
-import createNextIntlPlugin from "next-intl/plugin";
 import { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+import nextra from "nextra";
+
 import packageJson from "./package.json" assert { type: "json" };
+
 const { version } = packageJson;
 
 const nextConfig: NextConfig = {

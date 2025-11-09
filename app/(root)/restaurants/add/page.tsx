@@ -1,6 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { RestaurantFormCreate } from "./add-form";
 import type { Metadata } from "next";
+
+import { Card, CardContent } from "@/components/ui/data-display/card";
+
+import { RestaurantFormCreate } from "./add-form";
 
 export const metadata: Metadata = {
   title: "Add Your Restaurant",

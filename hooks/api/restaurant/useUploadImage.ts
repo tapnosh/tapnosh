@@ -1,11 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { TranslatedError } from "@/types/api/Error";
-import { upload } from "@vercel/blob/client";
 import { type PutBlobResult } from "@vercel/blob";
-
+import { upload } from "@vercel/blob/client";
 import { z } from "zod";
+
+import { TranslatedError } from "@/types/api/Error";
 import { ImageValidationSchema } from "@/types/image/BlobImage";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export const useUploadImage = () => {
   return useMutation<PutBlobResult[], TranslatedError, File[]>({

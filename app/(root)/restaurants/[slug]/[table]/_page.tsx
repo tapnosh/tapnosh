@@ -1,16 +1,16 @@
 "use client";
 
-import { unstable_ViewTransition as ViewTransition } from "react";
-import { MenuItemCard } from "@/components/menu/menu-item";
-import { Featured } from "@/components/menu/featured";
-import { SampleDishes } from "@/mock/menu/dishes";
-import Image from "next/image";
 import { AnimatePresence } from "motion/react";
-import { useState } from "react";
-import { MenuItem } from "@/types/menu/Menu";
-import { MenuItemModal } from "@/components/menu/menu-item-modal";
+import Image from "next/image";
 import { useParams } from "next/navigation";
-import { FiltersBar } from "@/components/filters/filters-bar";
+import { unstable_ViewTransition as ViewTransition, useState } from "react";
+
+import { FiltersBar } from "@/features/filters/filters-bar";
+import { Featured } from "@/features/menu/featured";
+import { MenuItemCard } from "@/features/menu/menu-item";
+import { MenuItemModal } from "@/features/menu/menu-item-modal";
+import { SampleDishes } from "@/mock/menu/dishes";
+import { MenuItem } from "@/types/menu/Menu";
 
 export default function Order() {
   const { restaurant, table } = useParams();

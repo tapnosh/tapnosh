@@ -1,12 +1,16 @@
 "use client";
 
 import { Minus, Plus, Trash2 } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
+
+import {
+  Card,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/data-display/card";
+import { Separator } from "@/components/ui/data-display/separator";
+import { Button } from "@/components/ui/forms/button";
+import { Input } from "@/components/ui/forms/input";
 import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
 

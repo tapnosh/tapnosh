@@ -1,6 +1,8 @@
 {
   "i18n-ally.localesPaths": ["translations/messages"],
   "files.associations": {
-    "*.mdx": "markdown",
+    "*.mdx": "markdown"
   },
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false
 }

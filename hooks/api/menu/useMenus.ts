@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
 import { MenuResponse } from "@/types/menu/Menu";

@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { Builder } from "../builder/BuilderSchema";
+
+import { type Builder } from "../builder/BuilderSchema";
 
 export type MenuResponse = {
   id: string;

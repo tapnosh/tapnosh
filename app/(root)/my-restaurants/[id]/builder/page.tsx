@@ -1,7 +1,9 @@
-import { Restaurant } from "@/types/restaurant/Restaurant";
-import { PageBuilder } from "./page-builder";
-import { authFetch } from "@/lib/api/client";
 import type { Metadata } from "next";
+
+import { authFetch } from "@/lib/auth/client";
+import { Restaurant } from "@/types/restaurant/Restaurant";
+
+import { PageBuilder } from "./page-builder";
 
 export const metadata: Metadata = {
   title: "Menu Builder",

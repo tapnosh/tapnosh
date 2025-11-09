@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+
 import { getUserLocale } from "@/services/locale";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export function useCurrency(): {
   formatCurrency: (value: number, currency?: string) => string;

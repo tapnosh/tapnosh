@@ -1,6 +1,6 @@
 "use client";
 
-import MultiStatusDemo from "@/components/status/multi-status";
+import MultiStatusDemo from "@/features/status/multi-status";
 
 export default function Restaurant() {
   return (

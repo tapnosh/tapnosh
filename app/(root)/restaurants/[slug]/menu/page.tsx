@@ -1,8 +1,10 @@
+import { fetchMenu } from "@/features/menu/fetchMenu";
+import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
+import { ThemeSetter } from "@/features/theme/theme-setter";
+
 import { RestaurantHeader } from "../restaurant-page";
+
 import { MenuInteractive } from "./menu-interactive";
-import { fetchRestaurant } from "@/lib/api/restaurant/fetchRestaurant";
-import { fetchMenu } from "@/lib/api/menu/fetchMenu";
-import { ThemeSetter } from "@/components/theme/theme-setter";
 
 export default async function RestaurantMenu({
   params,

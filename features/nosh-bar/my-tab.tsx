@@ -1,0 +1,42 @@
+"use client";
+
+import { ReceiptText } from "lucide-react";
+import { motion } from "motion/react";
+
+import type { OrderItem } from "@/types/nosh-bar";
+import { cn } from "@/utils/cn";
+
+export function MyTabSummary({
+  orderItems,
+  expandWithTab,
+}: {
+  orderItems: OrderItem[];
+  expandWithTab: (tab: "orders") => void;
+}) {
+  const totalOrderAmount = orderItems.reduce(
+    (sum, item) => sum + item.price,
+    0,
+  );
+
+  return (
+    <motion.button
+      className={cn(
+        "group text-primary hover:bg-primary-foreground/75 bg-primary-foreground relative flex flex-1 cursor-pointer flex-col overflow-hidden rounded-3xl p-3 transition-all",
+      )}
+      onClick={() => expandWithTab("orders")}
+    >
+      <div className="flex items-center gap-2">
+        <span className="font-bold whitespace-nowrap">My Tab</span>
+      </div>
+      <div className="flex w-full items-end justify-between">
+        <div className="flex flex-col items-start">
+          <span className="text-xs leading-3">{orderItems.length} items</span>
+          <span className="text-sm font-medium">
+            ${totalOrderAmount.toFixed(2)}
+          </span>
+        </div>
+        <ReceiptText />
+      </div>
+    </motion.button>
+  );
+}

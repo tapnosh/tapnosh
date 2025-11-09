@@ -1,5 +1,6 @@
 "use client";
 
+import Color, { type ColorInstance } from "color";
 import {
   createContext,
   useContext,
@@ -8,7 +9,6 @@ import {
   ReactNode,
   useMemo,
 } from "react";
-import Color, { ColorInstance } from "color";
 
 interface ThemeColorContextType {
   color: string;
