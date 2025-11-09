@@ -6,7 +6,6 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 
 import { RestaurantFormEdit } from "./edit-form";
 
-
 export const metadata: Metadata = {
   title: "Restaurant Details",
   description:

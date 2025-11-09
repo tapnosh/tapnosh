@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/forms/button";
 import { RestaurantList } from "@/features/restaurant/restaurant-list";
 
-
 export const metadata: Metadata = {
   title: "Discover Amazing Restaurants Near You",
   description:

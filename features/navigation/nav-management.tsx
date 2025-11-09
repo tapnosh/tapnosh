@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "@clerk/nextjs";
 import {
   ChevronRight,
   CirclePlus,
@@ -11,6 +12,14 @@ import {
   type LucideIcon,
   Settings,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/layout/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -24,14 +33,6 @@ import {
   SidebarMenuSkeleton,
   useSidebar,
 } from "@/components/ui/layout/sidebar";
-import Link from "next/link";
-import { useSession } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/layout/collapsible";
 import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
 
 type MyRestaurantsSidebarItem = {

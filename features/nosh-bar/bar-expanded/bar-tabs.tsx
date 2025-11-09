@@ -1,10 +1,10 @@
 "use client";
 
-import { ReceiptText, ShoppingBasket } from "lucide-react";
-import { cn } from "@/utils/cn";
+import { type LucideIcon, ReceiptText, ShoppingBasket } from "lucide-react";
+
 import { Separator } from "@/components/ui/data-display/separator";
-import { OrderItem } from "@/features/nosh-bar/nosh-bar";
-import { LucideIcon } from "lucide-react";
+import type { OrderItem } from "@/types/nosh-bar";
+import { cn } from "@/utils/cn";
 
 type TabButtonProps = {
   icon: LucideIcon;

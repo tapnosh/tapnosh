@@ -15,8 +15,6 @@ import { tryCatch } from "@/utils/tryCatch";
 
 import { useFormField } from "./form";
 
-
-
 const validateFiles = (fileList: File[]) => {
   const validFiles: File[] = [];
   const invalidFiles: string[] = [];

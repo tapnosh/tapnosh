@@ -3,7 +3,7 @@
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { unstable_ViewTransition as ViewTransition , useState } from "react";
+import { unstable_ViewTransition as ViewTransition, useState } from "react";
 
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { Featured } from "@/features/menu/featured";

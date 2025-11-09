@@ -1,6 +1,7 @@
-import { OrderItem } from "@/features/nosh-bar/nosh-bar";
-import { useOrder } from "@/context/OrderContext";
 import { useState } from "react";
+
+import { useOrder } from "@/context/OrderContext";
+import type { OrderItem } from "@/types/nosh-bar";
 
 export function useNoshBar() {
   const [activeTab, setActiveTab] = useState<"cart" | "orders">("cart");

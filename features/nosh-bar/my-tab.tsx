@@ -1,9 +1,10 @@
 "use client";
 
-import { motion } from "motion/react";
 import { ReceiptText } from "lucide-react";
+import { motion } from "motion/react";
+
+import type { OrderItem } from "@/types/nosh-bar";
 import { cn } from "@/utils/cn";
-import { OrderItem } from "./nosh-bar";
 
 export function MyTabSummary({
   orderItems,

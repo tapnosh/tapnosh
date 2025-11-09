@@ -1,12 +1,13 @@
 "use client";
 
-import { Trash2, Minus, Plus, ArrowRight, Wallet } from "lucide-react";
-import { cn } from "@/utils/cn";
-import { Button } from "@/components/ui/forms/button";
+import { ArrowRight, Minus, Plus, Trash2, Wallet } from "lucide-react";
+
 import { Badge } from "@/components/ui/data-display/badge";
-import { CartItem, OrderItem } from "@/features/nosh-bar/nosh-bar";
+import { Button } from "@/components/ui/forms/button";
 import { OrderConfirmationStatus } from "@/features/nosh-bar/bar-expanded/order-confirmation-status";
 import { useCurrency } from "@/hooks/useCurrency";
+import type { CartItem, OrderItem } from "@/types/nosh-bar";
+import { cn } from "@/utils/cn";
 
 const statusColors = {
   preparing: "bg-amber-500",

@@ -1,32 +1,17 @@
 "use client";
 
-import { useLayoutEffect } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { cn } from "@/utils/cn";
+import { useLayoutEffect } from "react";
+
 import { Notification, useNotification } from "@/context/NotificationBar";
+import { useOrder } from "@/context/OrderContext";
+import { useContentHeight } from "@/hooks/useContentHeight";
+import { useNoshBar } from "@/hooks/useNoshBar";
+import type { CartItem, OrderItem } from "@/types/nosh-bar";
+import { cn } from "@/utils/cn";
+
 import { CollapsedBar } from "./bar-collapsed";
 import { ExpandedBar } from "./bar-expanded/bar-expanded";
-import { useNoshBar } from "@/hooks/useNoshBar";
-import { useContentHeight } from "@/hooks/useContentHeight";
-import React from "react";
-import { useOrder } from "@/context/OrderContext";
-
-export type CartItem = {
-  id: string;
-  name: string;
-  price: {
-    amount: number;
-    currency: string;
-  };
-  quantity: number;
-};
-
-export type OrderItem = {
-  id: string;
-  name: string;
-  price: number;
-  status: "preparing" | "ready" | "delivered" | "cancelled";
-};
 
 type BarMainProps = {
   activeTab: "cart" | "orders";

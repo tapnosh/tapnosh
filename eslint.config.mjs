@@ -41,7 +41,7 @@ const eslintConfig = [
       "import/no-cycle": "error",
       "import/no-useless-path-segments": "error",
       "import/no-relative-packages": "error",
-      
+
       // Import style rules
       "import/first": "error",
       "import/no-duplicates": "error",
@@ -64,7 +64,7 @@ const eslintConfig = [
           },
         },
       ],
-      
+
       // Unused imports rules
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [

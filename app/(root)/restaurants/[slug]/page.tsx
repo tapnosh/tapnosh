@@ -7,8 +7,6 @@ import { Restaurant as RestaurantType } from "@/types/restaurant/Restaurant";
 
 import { RestaurantPage } from "./restaurant-page";
 
-
-
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function generateStaticParams() {

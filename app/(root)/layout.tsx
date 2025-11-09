@@ -8,7 +8,6 @@ import { getLocale, getMessages } from "next-intl/server";
 import { Head as NextraHead } from "nextra/components";
 
 import { LoadingBar } from "@/components/ui/feedback/loading-bar";
-import { Toaster } from "@/components/ui/feedback/sonner";
 import {
   SidebarInset,
   SidebarProvider,
@@ -218,7 +217,6 @@ export default async function RootLayout({
                           {children}
                           <NoshBar />
                         </SidebarInset>
-                        <Toaster />
                       </OrderProvider>
                     </NotificationProvider>
                   </SidebarProvider>

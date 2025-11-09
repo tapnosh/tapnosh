@@ -7,7 +7,6 @@ import { MenuItemCard } from "@/features/menu/menu-item";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
-
 function SchemaParser({ schema }: { schema?: Builder }) {
   if (!schema) {
     return (

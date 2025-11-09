@@ -1,9 +1,10 @@
 "use client";
 
-import { CartItem, OrderItem } from "@/features/nosh-bar/nosh-bar";
+import type { CartItem, OrderItem } from "@/types/nosh-bar";
+
+import { CartContent, OrdersContent } from "./bar-content";
 import { BarHeader } from "./bar-header";
 import { TabNavigation } from "./bar-tabs";
-import { CartContent, OrdersContent } from "./bar-content";
 
 type ExpandedBarProps = {
   activeTab: "cart" | "orders";
