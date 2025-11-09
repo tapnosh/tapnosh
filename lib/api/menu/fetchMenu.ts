@@ -1,30 +1,32 @@
 import { MenuResponse } from "@/types/menu/Menu";
+import { tryCatch } from "@/lib/tryCatch";
 
 export async function fetchMenu(
   restaurantId: string,
 ): Promise<MenuResponse | undefined> {
-  try {
-    const response = await fetch(
-      new URL(
-        `public_api/restaurants/${restaurantId}/menu`,
-        process.env.NEXT_PUBLIC_API_BASE_URL,
-      ),
-    );
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    if (!response.ok) {
-      console.error(`Failed to fetch menu: HTTP ${response.status}`);
-      return undefined;
-    }
-
-    const text = await response.text();
-    if (!text) {
-      console.error("Empty response when fetching menu", restaurantId);
-      return undefined;
-    }
-
-    return JSON.parse(text);
-  } catch (error) {
-    console.error("Failed to fetch or parse menu data:", error);
+  if (!baseUrl) {
     return undefined;
   }
+
+  const [error, response] = await tryCatch(
+    fetch(new URL(`public_api/restaurants/${restaurantId}/menu`, baseUrl)),
+  );
+
+  if (error || !response || !response.ok) {
+    return undefined;
+  }
+
+  const [textError, text] = await tryCatch(response.text());
+  if (textError || !text) {
+    return undefined;
+  }
+
+  const [parseError, data] = tryCatch(() => JSON.parse(text));
+  if (parseError) {
+    return undefined;
+  }
+
+  return data;
 }

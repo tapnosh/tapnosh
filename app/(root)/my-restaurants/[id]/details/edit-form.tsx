@@ -12,6 +12,7 @@ import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutat
 import { RestaurantDetailsForm } from "@/components/forms/restaurant-details-form";
 import { useEffect } from "react";
 import { Restaurant } from "@/types/restaurant/Restaurant";
+import { tryCatch } from "@/lib/tryCatch";
 
 export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
   const { mutateAsync, isPending } = useRestaurantMutation("PUT");
@@ -42,36 +43,32 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
   }, [restaurant, form]);
 
   const onSubmit = async (data: RestaurantFormData) => {
-    try {
-      await mutateAsync(data);
+    const [error] = await tryCatch(mutateAsync(data));
+
+    if (error) {
+      console.error("Error creating restaurant:", error);
       openNotification(
         <BasicNotificationBody
-          title="Success"
-          description="Restaurant created successfully!"
-          variant="success"
+          title="Error"
+          description={
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred"
+          }
+          variant="error"
         />,
       );
-      form.reset();
-    } catch (error) {
-      console.error("Error creating restaurant:", error);
-      if (error instanceof Error) {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description={error.message}
-            variant="error"
-          />,
-        );
-      } else {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description="An unexpected error occurred"
-            variant="error"
-          />,
-        );
-      }
+      return;
     }
+
+    openNotification(
+      <BasicNotificationBody
+        title="Success"
+        description="Restaurant created successfully!"
+        variant="success"
+      />,
+    );
+    form.reset();
   };
 
   return (

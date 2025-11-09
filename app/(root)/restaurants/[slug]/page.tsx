@@ -8,13 +8,31 @@ import type { Metadata } from "next";
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function generateStaticParams() {
-  const restaurants = await fetch(new URL("public_api/restaurants", baseUrl), {
-    next: { revalidate: 3600 },
-  }).then((res) => res.json());
+  if (!baseUrl) {
+    return [];
+  }
 
-  return restaurants.map((restaurant: RestaurantType) => ({
-    slug: restaurant.slug,
-  }));
+  try {
+    const response = await fetch(new URL("public_api/restaurants", baseUrl), {
+      next: { revalidate: 3600 },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const restaurants = await response.json();
+
+    if (!Array.isArray(restaurants)) {
+      return [];
+    }
+
+    return restaurants.map((restaurant: RestaurantType) => ({
+      slug: restaurant.slug,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({

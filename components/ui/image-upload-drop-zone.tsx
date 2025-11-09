@@ -12,17 +12,19 @@ import Image from "next/image";
 import { useFormField } from "./form";
 import { useFieldArray } from "react-hook-form";
 import { ImageValidationSchema } from "@/types/image/BlobImage";
+import { tryCatch } from "@/lib/tryCatch";
 
 const validateFiles = (fileList: File[]) => {
   const validFiles: File[] = [];
   const invalidFiles: string[] = [];
 
   fileList.forEach((file) => {
-    try {
-      ImageValidationSchema.parse(file);
-      validFiles.push(file);
-    } catch {
+    const [error] = tryCatch(() => ImageValidationSchema.parse(file));
+
+    if (error) {
       invalidFiles.push(file.name);
+    } else {
+      validFiles.push(file);
     }
   });
 

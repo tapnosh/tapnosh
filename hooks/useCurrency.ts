@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { getUserLocale } from "@/services/locale";
+import { tryCatch } from "@/lib/tryCatch";
 
 export function useCurrency(): {
   formatCurrency: (value: number, currency?: string) => string;
@@ -10,15 +11,14 @@ export function useCurrency(): {
 
   useEffect(() => {
     async function getLocale() {
-      try {
-        const userLocale = await getUserLocale();
-        setLocale(userLocale ?? "pl-PL");
-      } catch (error) {
+      const [error, userLocale] = await tryCatch(getUserLocale());
+      if (error) {
         console.error("Error getting user locale:", error);
         setLocale("pl-PL");
-      } finally {
-        setLoading(false);
+      } else {
+        setLocale(userLocale ?? "pl-PL");
       }
+      setLoading(false);
     }
 
     getLocale();
@@ -26,15 +26,19 @@ export function useCurrency(): {
 
   const formatCurrency = useCallback(
     (value: number, currency?: string): string => {
-      try {
-        return new Intl.NumberFormat(locale ?? "pl-PL", {
+      const [error, result] = tryCatch(() =>
+        new Intl.NumberFormat(locale ?? "pl-PL", {
           style: "currency",
           currency: currency ?? "PLN",
-        }).format(value);
-      } catch (error) {
+        }).format(value),
+      );
+
+      if (error) {
         console.error("Error formatting currency:", error);
         return "";
       }
+
+      return result;
     },
     [locale],
   );

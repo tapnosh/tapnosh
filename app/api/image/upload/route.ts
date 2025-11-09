@@ -1,41 +1,56 @@
-import { auth } from "@clerk/nextjs/server";
-import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
+import { type HandleUploadBody } from "@vercel/blob/client";
 import { NextResponse } from "next/server";
+import { Effect } from "effect";
+import {
+  authenticateUser,
+  getAuthToken,
+  parseRequestBody,
+  validateUserAuthorization,
+} from "@/lib/api/auth-effects";
+import {
+  AuthError,
+  ParseError,
+  TokenError,
+  UnauthorizedError,
+  UploadError,
+} from "@/lib/api/errors";
+import { uploadImageToBlob } from "@/lib/api/image-effects";
 
 export async function POST(request: Request): Promise<NextResponse> {
-  try {
-    const body = (await request.json()) as HandleUploadBody;
-    const { getToken, userId } = await auth();
-    const token = await getToken();
+  const program = Effect.gen(function* () {
+    const body = yield* parseRequestBody<HandleUploadBody>(request);
 
-    if (!token || !userId) {
-      return NextResponse.json(
-        { error: "User Unauthorized to upload an image" },
-        { status: 401 },
-      );
-    }
+    const { getToken, userId } = yield* authenticateUser();
 
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async () => ({
-        allowedContentTypes: [
-          "image/jpeg",
-          "image/png",
-          "image/webp",
-          "image/svg+xml",
-          "image/svg",
-        ],
-        addRandomSuffix: true,
-      }),
-      onUploadCompleted: async () => {},
-    });
+    const token = yield* getAuthToken(getToken);
+
+    yield* validateUserAuthorization(token, userId);
+
+    const jsonResponse = yield* uploadImageToBlob(body, request);
 
     return NextResponse.json(jsonResponse);
-  } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error)?.message || error },
-      { status: 400 },
-    );
-  }
+  }).pipe(
+    Effect.catchAll((error) => {
+      if (
+        error instanceof UnauthorizedError ||
+        error instanceof ParseError ||
+        error instanceof AuthError ||
+        error instanceof TokenError ||
+        error instanceof UploadError
+      ) {
+        return Effect.succeed(
+          NextResponse.json(
+            { error: error.message },
+            { status: error.statusCode },
+          ),
+        );
+      }
+
+      return Effect.succeed(
+        NextResponse.json({ error: "Unknown error" }, { status: 500 }),
+      );
+    }),
+  );
+
+  return Effect.runPromise(program);
 }

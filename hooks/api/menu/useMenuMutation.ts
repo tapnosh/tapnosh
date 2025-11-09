@@ -5,6 +5,7 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
 import { useUploadImage } from "../restaurant/useUploadImage";
 import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
+import { tryCatch } from "@/lib/tryCatch";
 
 export const useMenuMutation = () => {
   const { fetchClient } = useFetchClient();
@@ -16,77 +17,92 @@ export const useMenuMutation = () => {
     { schema: Builder; id?: string; restaurantId: string; delete?: boolean }
   >({
     mutationFn: async (data) => {
-      try {
-        const validatedData = BuilderSchema.parse(data.schema);
+      const [parseError, validatedData] = tryCatch(() =>
+        BuilderSchema.parse(data.schema),
+      );
 
-        // Extract all image files from menu items
-        const images = validatedData.menu.flatMap(({ items }) =>
-          items.flatMap((item) =>
-            item.image[0] && "file" in item.image[0]
-              ? { file: item.image[0].file, itemId: item.id }
-              : [],
-          ),
-        );
-
-        // Upload all images at once and get back array of URLs
-        const uploadedImageUrls = await uploadImages(images.map((i) => i.file));
-
-        // Update the schema with uploaded image URLs
-        const updatedSchema = {
-          ...validatedData,
-          menu: validatedData.menu.map((section) => ({
-            ...section,
-            items: section.items.map((item) => {
-              if (item.image[0] && "file" in item.image[0]) {
-                const imageIndex = images.findIndex(
-                  (img) => img.itemId === item.id,
-                );
-                return {
-                  ...item,
-                  image: [
-                    imageIndex !== -1
-                      ? uploadedImageUrls[imageIndex]
-                      : item.image[0].url,
-                  ],
-                };
-              }
-              return item;
-            }),
-          })),
-        };
-
-        // Use the updated schema for the API call
-        const schema = { ...updatedSchema };
-
-        const endpoint = data.id
-          ? `restaurants/${data.restaurantId}/menu/${data.id}`
-          : `restaurants/${data.restaurantId}/menu`;
-
-        let method: "POST" | "PUT" | "DELETE" = "POST";
-        if (data.id) {
-          method = "PUT";
+      if (parseError) {
+        if (parseError instanceof z.ZodError) {
+          throw {
+            translationKey: "parse.error",
+            status: 422,
+            message: parseError.errors.map((e) => e.message).join(", "),
+          };
         }
-        if (data.delete) {
-          method = "DELETE";
-        }
+        throw parseError;
+      }
 
-        return await fetchClient<Restaurant>(endpoint, {
+      // Extract all image files from menu items
+      const images = validatedData.menu.flatMap(({ items }) =>
+        items.flatMap((item) =>
+          item.image[0] && "file" in item.image[0]
+            ? { file: item.image[0].file, itemId: item.id }
+            : [],
+        ),
+      );
+
+      // Upload all images at once and get back array of URLs
+      const [uploadError, uploadedImageUrls] = await tryCatch(
+        uploadImages(images.map((i) => i.file)),
+      );
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Update the schema with uploaded image URLs
+      const updatedSchema = {
+        ...validatedData,
+        menu: validatedData.menu.map((section) => ({
+          ...section,
+          items: section.items.map((item) => {
+            if (item.image[0] && "file" in item.image[0]) {
+              const imageIndex = images.findIndex(
+                (img) => img.itemId === item.id,
+              );
+              return {
+                ...item,
+                image: [
+                  imageIndex !== -1
+                    ? uploadedImageUrls[imageIndex]
+                    : item.image[0].url,
+                ],
+              };
+            }
+            return item;
+          }),
+        })),
+      };
+
+      // Use the updated schema for the API call
+      const schema = { ...updatedSchema };
+
+      const endpoint = data.id
+        ? `restaurants/${data.restaurantId}/menu/${data.id}`
+        : `restaurants/${data.restaurantId}/menu`;
+
+      let method: "POST" | "PUT" | "DELETE" = "POST";
+      if (data.id) {
+        method = "PUT";
+      }
+      if (data.delete) {
+        method = "DELETE";
+      }
+
+      const [fetchError, result] = await tryCatch(
+        fetchClient<Restaurant>(endpoint, {
           method,
           body: JSON.stringify({
             schema,
           }),
-        });
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw {
-            translationKey: "parse.error",
-            status: 422,
-            message: error.errors.map((e) => e.message).join(", "),
-          };
-        }
+        }),
+      );
 
-        throw error as TranslatedError;
+      if (fetchError) {
+        throw fetchError;
       }
+
+      return result;
     },
   });
 };
