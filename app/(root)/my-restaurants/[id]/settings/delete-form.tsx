@@ -8,6 +8,7 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { RestaurantDeleteForm } from "@/components/forms/restaurant-delete-form";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/providers/QueryProvider";
+import { tryCatch } from "@/lib/tryCatch";
 
 export function RestaurantFormDelete({
   restaurant,
@@ -25,36 +26,32 @@ export function RestaurantFormDelete({
   });
 
   const onSubmit = async () => {
-    try {
-      await mutateAsync(restaurant);
+    const [error] = await tryCatch(mutateAsync(restaurant));
+
+    if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Success"
-          description="Restaurant deleted successfully!"
-          variant="warning"
+          title="Error"
+          description={
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred"
+          }
+          variant="error"
         />,
       );
-      queryClient.refetchQueries();
-      router.push("/my-restaurants");
-    } catch (error) {
-      if (error instanceof Error) {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description={error.message}
-            variant="error"
-          />,
-        );
-      } else {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description="An unexpected error occurred"
-            variant="error"
-          />,
-        );
-      }
+      return;
     }
+
+    openNotification(
+      <BasicNotificationBody
+        title="Success"
+        description="Restaurant deleted successfully!"
+        variant="warning"
+      />,
+    );
+    queryClient.refetchQueries();
+    router.push("/my-restaurants");
   };
 
   return (

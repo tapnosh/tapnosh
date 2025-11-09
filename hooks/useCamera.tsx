@@ -1,6 +1,7 @@
 import { useNotification } from "@/context/NotificationBar";
 import { CircleAlert } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { tryCatch } from "@/lib/tryCatch";
 
 export function useCamera() {
   const { openNotification } = useNotification();
@@ -11,11 +12,11 @@ export function useCamera() {
       throw new Error("Media devices API is not supported in this browser.");
     }
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach((track) => track.stop());
-      return true;
-    } catch {
+    const [error, stream] = await tryCatch(
+      navigator.mediaDevices.getUserMedia({ video: true }),
+    );
+
+    if (error) {
       openNotification(
         <div className="flex w-full items-center justify-between gap-4 px-4">
           <div className="flex flex-col">
@@ -34,6 +35,9 @@ export function useCamera() {
       );
       return false;
     }
+
+    stream.getTracks().forEach((track) => track.stop());
+    return true;
   }
 
   const checkPermission = useCallback(async () => {
@@ -42,15 +46,16 @@ export function useCamera() {
       return;
     }
 
-    try {
-      const result = await navigator.permissions.query({
-        name: "camera" as PermissionName,
-      });
+    const [error, result] = await tryCatch(
+      navigator.permissions.query({ name: "camera" as PermissionName }),
+    );
 
-      setIsCameraAllowed("granted" === result.state ? true : false);
-    } catch (error) {
+    if (error) {
       console.error("Error checking camera permission:", error);
+      return;
     }
+
+    setIsCameraAllowed("granted" === result.state ? true : false);
   }, []);
 
   useEffect(() => {

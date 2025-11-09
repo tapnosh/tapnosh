@@ -27,6 +27,7 @@ import { useCreateRestaurantTheme } from "@/hooks/api/theme/useCreateRestaurantT
 import { TranslatedError } from "@/types/api/Error";
 import { useFormField } from "@/components/ui/form";
 import { useWatch } from "react-hook-form";
+import { tryCatch } from "@/lib/tryCatch";
 
 export function ThemePicker({
   onChange,
@@ -63,26 +64,28 @@ export function ThemePicker({
   };
 
   const handleThemeCreate = async (color: string) => {
-    try {
-      const res = await mutateAsync({ color });
-      refetch();
-      handleThemeChange(res);
-      openNotification(
-        <BasicNotificationBody
-          title="Success"
-          description="Theme created successfully"
-          variant="success"
-        />,
-      );
-    } catch (error) {
+    const [error, res] = await tryCatch(mutateAsync({ color }));
+
+    if (error) {
       openNotification(
         <BasicNotificationBody
           title="Error"
-          description={(error as TranslatedError).message}
+          description={(error as unknown as TranslatedError).message}
           variant="error"
         />,
       );
+      return;
     }
+
+    refetch();
+    handleThemeChange(res);
+    openNotification(
+      <BasicNotificationBody
+        title="Success"
+        description="Theme created successfully"
+        variant="success"
+      />,
+    );
   };
 
   useEffect(() => {

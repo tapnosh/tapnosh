@@ -41,6 +41,7 @@ import { BasicNotificationBody } from "@/components/ui/basic-notification";
 import { RestaurantHeader } from "@/app/(root)/restaurants/[slug]/restaurant-page";
 import { useThemeColor } from "@/context/ThemeContext";
 import { Restaurant } from "@/types/restaurant/Restaurant";
+import { tryCatch } from "@/lib/tryCatch";
 
 const PageElementMap = {
   "menu-group": withBuilderElementWrapper(BuilderElementMenuGroup),
@@ -158,39 +159,37 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
   };
 
   const onSubmit = async (schema: Builder) => {
-    try {
-      await mutateAsync({
+    const [error] = await tryCatch(
+      mutateAsync({
         restaurantId: restaurant.id || "",
         schema,
         id: menu?.id,
-      });
+      }),
+    );
+
+    if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Success"
-          description="Restaurant page updated successfully!"
-          variant="success"
+          title="Error"
+          description={
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred"
+          }
+          variant="error"
         />,
       );
-      await refetch();
-    } catch (error) {
-      if (error instanceof Error) {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description={error.message}
-            variant="error"
-          />,
-        );
-      } else {
-        openNotification(
-          <BasicNotificationBody
-            title="Error"
-            description="An unexpected error occurred"
-            variant="error"
-          />,
-        );
-      }
+      return;
     }
+
+    openNotification(
+      <BasicNotificationBody
+        title="Success"
+        description="Restaurant page updated successfully!"
+        variant="success"
+      />,
+    );
+    await refetch();
   };
 
   return (

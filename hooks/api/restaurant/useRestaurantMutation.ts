@@ -9,6 +9,7 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
 import { useUploadImage } from "./useUploadImage";
 import { PutBlobResult } from "@vercel/blob";
+import { tryCatch } from "@/lib/tryCatch";
 
 export const useRestaurantMutation = (
   method: "POST" | "PUT" | "DELETE" = "POST",
@@ -18,49 +19,71 @@ export const useRestaurantMutation = (
 
   return useMutation<Restaurant, TranslatedError, RestaurantFormData>({
     mutationFn: async (data) => {
-      try {
-        if ((method === "PUT" || method === "DELETE") && !data.id) {
-          throw {
-            translationKey: "restaurant.id.required",
-            status: 400,
-            message:
-              "Restaurant ID is required for update and delete operations",
-          };
-        }
+      if ((method === "PUT" || method === "DELETE") && !data.id) {
+        throw {
+          translationKey: "restaurant.id.required",
+          status: 400,
+          message: "Restaurant ID is required for update and delete operations",
+        };
+      }
 
-        // Skip validation for DELETE operations
-        let validatedData = {};
-        if (method !== "DELETE") {
-          validatedData = RestaurantFormSchema.parse(data);
-        }
-
-        const images = Object.groupBy(data.images, (image) =>
-          "file" in image ? "file" : "blob",
+      // Skip validation for DELETE operations
+      let validatedData = {};
+      if (method !== "DELETE") {
+        const [parseError, parsed] = tryCatch(() =>
+          RestaurantFormSchema.parse(data),
         );
 
-        let imageBlobs: PutBlobResult[] = [];
+        if (parseError) {
+          if (parseError instanceof z.ZodError) {
+            throw {
+              translationKey: "parse.error",
+              status: 422,
+              message: parseError.errors.map((e) => e.message).join(", "),
+            };
+          }
+          throw parseError;
+        }
 
-        const filesToUpload = images.file
-          ?.filter(
-            (image): image is { file: File; url: string } => "file" in image,
-          )
-          .map(({ file }) => file) as File[];
+        validatedData = parsed;
+      }
 
-        if (filesToUpload?.length) {
-          imageBlobs = await uploadImages(
+      const images = Object.groupBy(data.images, (image) =>
+        "file" in image ? "file" : "blob",
+      );
+
+      let imageBlobs: PutBlobResult[] = [];
+
+      const filesToUpload = images.file
+        ?.filter(
+          (image): image is { file: File; url: string } => "file" in image,
+        )
+        .map(({ file }) => file) as File[];
+
+      if (filesToUpload?.length) {
+        const [uploadError, uploaded] = await tryCatch(
+          uploadImages(
             images.file
               ?.filter(
                 (image): image is { file: File; url: string } =>
                   "file" in image,
               )
               .map(({ file }) => file) as File[],
-          );
+          ),
+        );
+
+        if (uploadError) {
+          throw uploadError;
         }
 
-        const endpoint =
-          method === "POST" ? "restaurants" : `restaurants/${data.id}`;
+        imageBlobs = uploaded;
+      }
 
-        return await fetchClient<Restaurant>(endpoint, {
+      const endpoint =
+        method === "POST" ? "restaurants" : `restaurants/${data.id}`;
+
+      const [fetchError, result] = await tryCatch(
+        fetchClient<Restaurant>(endpoint, {
           method,
           body: JSON.stringify({
             ...validatedData,
@@ -70,18 +93,14 @@ export const useRestaurantMutation = (
                 }
               : {}),
           }),
-        });
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          throw {
-            translationKey: "parse.error",
-            status: 422,
-            message: error.errors.map((e) => e.message).join(", "),
-          };
-        }
+        }),
+      );
 
-        throw error as TranslatedError;
+      if (fetchError) {
+        throw fetchError;
       }
+
+      return result;
     },
   });
 };

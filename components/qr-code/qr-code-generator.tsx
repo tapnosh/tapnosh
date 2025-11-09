@@ -14,6 +14,7 @@ import QRCode from "qrcode";
 import { useNotification } from "@/context/NotificationBar";
 import { BasicNotificationBody } from "@/components/ui/basic-notification";
 import NextImage from "next/image";
+import { tryCatch } from "@/lib/tryCatch";
 
 export function QRCodeGenerator({
   url,
@@ -31,23 +32,24 @@ export function QRCodeGenerator({
     if (!url?.trim()) return;
 
     setIsGenerating(true);
-    try {
-      let validUrl = url.trim();
-      if (!validUrl.startsWith("http://") && !validUrl.startsWith("https://")) {
-        validUrl = "https://" + validUrl;
-      }
 
-      const qrDataUrl = await QRCode.toDataURL(validUrl, {
+    let validUrl = url.trim();
+    if (!validUrl.startsWith("http://") && !validUrl.startsWith("https://")) {
+      validUrl = "https://" + validUrl;
+    }
+
+    const [error, qrDataUrl] = await tryCatch(
+      QRCode.toDataURL(validUrl, {
         width: 300,
         margin: 0,
         color: {
           dark: "#000000",
           light: "#FFFFFF",
         },
-      });
+      }),
+    );
 
-      setQrCodeDataUrl(qrDataUrl);
-    } catch {
+    if (error) {
       openNotification(
         <BasicNotificationBody
           title="Error"
@@ -55,10 +57,13 @@ export function QRCodeGenerator({
           variant="error"
         />,
       );
-    } finally {
       setIsGenerating(false);
+      return;
     }
-  }, [url]);
+
+    setQrCodeDataUrl(qrDataUrl);
+    setIsGenerating(false);
+  }, [url, openNotification]);
 
   useEffect(() => {
     if (url?.trim()) {

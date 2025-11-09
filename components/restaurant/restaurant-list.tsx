@@ -1,19 +1,20 @@
 import { RestaurantCard } from "@/components/restaurant/restaurant-card";
 import { authFetch } from "@/lib/api/client";
 import { Restaurant } from "@/types/restaurant/Restaurant";
+import { tryCatch } from "@/lib/tryCatch";
 
 export async function RestaurantList() {
-  let restaurants: Restaurant[] = [];
-
-  try {
-    restaurants = await authFetch<Restaurant[]>("public_api/restaurants", {
+  const [error, restaurants] = await tryCatch(
+    authFetch<Restaurant[]>("public_api/restaurants", {
       cache: "no-store",
-    });
-  } catch {}
+    }),
+  );
+
+  const restaurantList = error ? [] : restaurants;
 
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-      {restaurants?.map((restaurant) => (
+      {restaurantList?.map((restaurant) => (
         <RestaurantCard key={restaurant.id} restaurant={restaurant} />
       ))}
     </div>

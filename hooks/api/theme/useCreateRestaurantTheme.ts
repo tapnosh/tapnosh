@@ -7,6 +7,7 @@ import {
   RestaurantThemeFormData,
   RestaurantThemeFormSchema,
 } from "@/types/theme/Create";
+import { tryCatch } from "@/lib/tryCatch";
 
 export const useCreateRestaurantTheme = () => {
   const { fetchClient } = useFetchClient();
@@ -14,24 +15,33 @@ export const useCreateRestaurantTheme = () => {
   return useMutation<RestaurantTheme, TranslatedError, RestaurantThemeFormData>(
     {
       mutationFn: async (data) => {
-        try {
-          const validatedData = RestaurantThemeFormSchema.parse(data);
+        const [parseError, validatedData] = tryCatch(() =>
+          RestaurantThemeFormSchema.parse(data),
+        );
 
-          return await fetchClient<RestaurantTheme>("restaurant-theme", {
-            method: "POST",
-            body: JSON.stringify(validatedData),
-          });
-        } catch (error) {
-          if (error instanceof z.ZodError) {
+        if (parseError) {
+          if (parseError instanceof z.ZodError) {
             throw {
               translationKey: "parse.error",
               status: 422,
-              message: error.errors.map((e) => e.message).join(", "),
+              message: parseError.errors.map((e) => e.message).join(", "),
             };
           }
-
-          throw error as TranslatedError;
+          throw parseError;
         }
+
+        const [error, result] = await tryCatch(
+          fetchClient<RestaurantTheme>("restaurant-theme", {
+            method: "POST",
+            body: JSON.stringify(validatedData),
+          }),
+        );
+
+        if (error) {
+          throw error;
+        }
+
+        return result;
       },
     },
   );
