@@ -1,6 +1,7 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { Effect } from "effect";
-import { UploadError } from "./errors";
+
+import { UploadError } from "@/lib/errors/errors";
 
 /**
  * Configuration for allowed image content types
