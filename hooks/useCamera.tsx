@@ -1,7 +1,7 @@
 import { useNotification } from "@/context/NotificationBar";
 import { CircleAlert } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export function useCamera() {
   const { openNotification } = useNotification();

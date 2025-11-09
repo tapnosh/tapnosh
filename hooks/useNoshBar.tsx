@@ -1,4 +1,4 @@
-import { OrderItem } from "@/components/nosh-bar/nosh-bar";
+import { OrderItem } from "@/features/nosh-bar/nosh-bar";
 import { useOrder } from "@/context/OrderContext";
 import { useState } from "react";
 

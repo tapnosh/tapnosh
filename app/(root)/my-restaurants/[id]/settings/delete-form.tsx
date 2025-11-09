@@ -2,13 +2,13 @@
 
 import { useForm } from "react-hook-form";
 import { useNotification } from "@/context/NotificationBar";
-import { BasicNotificationBody } from "@/components/ui/basic-notification";
+import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
 import { useRestaurantMutation } from "@/hooks/api/restaurant/useRestaurantMutation";
 import { Restaurant } from "@/types/restaurant/Restaurant";
-import { RestaurantDeleteForm } from "@/components/forms/restaurant-delete-form";
+import { RestaurantDeleteForm } from "@/features/forms/restaurant-delete-form";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/providers/QueryProvider";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export function RestaurantFormDelete({
   restaurant,

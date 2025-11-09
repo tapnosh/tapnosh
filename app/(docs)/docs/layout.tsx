@@ -40,9 +40,17 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pageMap = (await getPageMap()).filter(
-    (ele) => !("name" in ele && ele.name === "restaurants"),
-  );
+  // Get pageMap and filter out all app routes, keeping only content from /content directory
+  const fullPageMap = await getPageMap();
+  const pageMap = fullPageMap.filter((item) => {
+    // Only include items that are from the docs content directory
+    // Exclude any route-based pages like my-restaurants, restaurants, about, etc.
+    if ("name" in item) {
+      const excludedRoutes = ["restaurants", "my-restaurants", "about"];
+      return !excludedRoutes.includes(item.name);
+    }
+    return true;
+  });
 
   return (
     <html lang="en" dir="ltr">

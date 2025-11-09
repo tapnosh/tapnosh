@@ -7,7 +7,7 @@ import {
   RestaurantThemeFormData,
   RestaurantThemeFormSchema,
 } from "@/types/theme/Create";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export const useCreateRestaurantTheme = () => {
   const { fetchClient } = useFetchClient();

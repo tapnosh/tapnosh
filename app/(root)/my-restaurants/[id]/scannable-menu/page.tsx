@@ -1,5 +1,5 @@
-import { ScannableMenuEditor } from "@/components/qr-code/scannable-menu";
-import { authFetch } from "@/lib/api/client";
+import { ScannableMenuEditor } from "@/features/qr-code/scannable-menu";
+import { authFetch } from "@/lib/auth/client";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
 export default async function ScannableMenu({

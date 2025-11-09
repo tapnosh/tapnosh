@@ -1,7 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/data-display/card";
 import { RestaurantFormEdit } from "./edit-form";
 import { Restaurant } from "@/types/restaurant/Restaurant";
-import { authFetch } from "@/lib/api/client";
+import { authFetch } from "@/lib/auth/client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

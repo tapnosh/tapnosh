@@ -1,6 +1,6 @@
-import { MenuGroup } from "@/components/menu/menu-group";
-import { MenuItemCard } from "@/components/menu/menu-item";
-import { Badge } from "@/components/ui/badge";
+import { MenuGroup } from "@/features/menu/menu-group";
+import { MenuItemCard } from "@/features/menu/menu-item";
+import { Badge } from "@/components/ui/data-display/badge";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import Image from "next/image";

@@ -6,15 +6,15 @@ import {
   getAuthToken,
   parseRequestBody,
   validateUserAuthorization,
-} from "@/lib/api/auth-effects";
+} from "@/lib/auth/auth-effects";
 import {
   AuthError,
   ParseError,
   TokenError,
   UnauthorizedError,
   UploadError,
-} from "@/lib/api/errors";
-import { uploadImageToBlob } from "@/lib/api/image-effects";
+} from "@/lib/errors/errors";
+import { uploadImageToBlob } from "@/features/image/image-effects";
 
 export async function POST(request: Request): Promise<NextResponse> {
   const program = Effect.gen(function* () {

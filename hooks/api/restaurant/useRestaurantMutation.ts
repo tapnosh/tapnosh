@@ -9,7 +9,7 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
 import { useUploadImage } from "./useUploadImage";
 import { PutBlobResult } from "@vercel/blob";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export const useRestaurantMutation = (
   method: "POST" | "PUT" | "DELETE" = "POST",

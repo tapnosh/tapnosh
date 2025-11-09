@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/data-display/card";
 import { RestaurantFormCreate } from "./add-form";
 import type { Metadata } from "next";
 

@@ -1,10 +1,9 @@
 ---
 name: Task
 about: Describe task requirements and outcomes
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: ""
+assignees: ""
 ---
 
 ## 🎯 Task Overview

@@ -5,7 +5,7 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { z } from "zod";
 import { useUploadImage } from "../restaurant/useUploadImage";
 import { Builder, BuilderSchema } from "@/types/builder/BuilderSchema";
-import { tryCatch } from "@/lib/tryCatch";
+import { tryCatch } from "@/utils/tryCatch";
 
 export const useMenuMutation = () => {
   const { fetchClient } = useFetchClient();

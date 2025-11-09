@@ -1,6 +1,6 @@
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { PageBuilder } from "./page-builder";
-import { authFetch } from "@/lib/api/client";
+import { authFetch } from "@/lib/auth/client";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

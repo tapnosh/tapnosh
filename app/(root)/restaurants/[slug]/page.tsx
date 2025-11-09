@@ -1,9 +1,9 @@
 import { Restaurant as RestaurantType } from "@/types/restaurant/Restaurant";
 import { RestaurantPage } from "./restaurant-page";
-import { ThemeSetter } from "@/components/theme/theme-setter";
-import { fetchMenu } from "@/lib/api/menu/fetchMenu";
-import { fetchRestaurant } from "@/lib/api/restaurant/fetchRestaurant";
+import { ThemeSetter } from "@/features/theme/theme-setter";
+import { fetchMenu } from "@/features/menu/fetchMenu";
 import type { Metadata } from "next";
+import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 

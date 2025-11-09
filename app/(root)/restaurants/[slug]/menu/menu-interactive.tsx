@@ -1,14 +1,14 @@
 "use client";
 
-import { MenuItemCard } from "@/components/menu/menu-item";
-import { Featured } from "@/components/menu/featured";
+import { MenuItemCard } from "@/features/menu/menu-item";
+import { Featured } from "@/features/menu/featured";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import { MenuItem } from "@/types/menu/Menu";
-import { MenuItemModal } from "@/components/menu/menu-item-modal";
-import { FiltersBar } from "@/components/filters/filters-bar";
+import { MenuItemModal } from "@/features/menu/menu-item-modal";
+import { FiltersBar } from "@/features/filters/filters-bar";
 import { Builder } from "@/types/builder/BuilderSchema";
-import { MenuGroup } from "@/components/menu/menu-group";
+import { MenuGroup } from "@/features/menu/menu-group";
 
 export function MenuInteractive({ schema }: { schema?: Builder }) {
   const [open, setOpen] = useState(false);

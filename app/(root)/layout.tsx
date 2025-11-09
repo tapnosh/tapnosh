@@ -1,20 +1,21 @@
+import "@/assets/styles/globals.css";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Head as NextraHead } from "nextra/components";
-import "@/assets/styles/globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import Head from "next/head";
-import { AppSidebar } from "@/components/navigation/app-sidebar";
-import { Toaster } from "@/components/ui/sonner";
+import { AppSidebar } from "@/features/navigation/app-sidebar";
+import { Toaster } from "@/components/ui/feedback/sonner";
+import { LoadingBar } from "@/components/ui/feedback/loading-bar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/layout/sidebar";
 import { OrderProvider } from "@/context/OrderContext";
-import { NoshBar } from "@/components/nosh-bar/nosh-bar";
+import { NoshBar } from "@/features/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeColorProvider } from "@/context/ThemeContext";
@@ -192,6 +193,7 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <LoadingBar />
           <QueryProvider>
             <ThemeColorProvider>
               <ThemeProvider

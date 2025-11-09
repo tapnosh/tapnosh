@@ -1,4 +1,4 @@
-import { authFetch } from "@/lib/api/client";
+import { authFetch } from "@/lib/auth/client";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { RestaurantFormDelete } from "./delete-form";
 
