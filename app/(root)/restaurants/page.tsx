@@ -1,5 +1,6 @@
-import { RestaurantList } from "@/features/restaurant/restaurant-list";
 import type { Metadata } from "next";
+
+import { RestaurantList } from "@/features/restaurant/restaurant-list";
 
 export const metadata: Metadata = {
   title: "Browse Restaurants",

@@ -1,6 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { Effect } from "effect";
-import { AuthError, ParseError, TokenError, UnauthorizedError } from "./errors";
+
+import {
+  AuthError,
+  ParseError,
+  TokenError,
+  UnauthorizedError,
+} from "../errors/errors";
 
 /**
  * Parses the request body as JSON

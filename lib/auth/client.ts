@@ -1,5 +1,6 @@
-import { TranslatedError } from "@/types/api/Error";
 import { auth } from "@clerk/nextjs/server";
+
+import { TranslatedError } from "@/types/api/Error";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

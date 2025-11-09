@@ -1,8 +1,11 @@
-import { Card, CardContent } from "@/components/ui/data-display/card";
-import { RestaurantFormEdit } from "./edit-form";
-import { Restaurant } from "@/types/restaurant/Restaurant";
-import { authFetch } from "@/lib/auth/client";
 import type { Metadata } from "next";
+
+import { Card, CardContent } from "@/components/ui/data-display/card";
+import { authFetch } from "@/lib/auth/client";
+import { Restaurant } from "@/types/restaurant/Restaurant";
+
+import { RestaurantFormEdit } from "./edit-form";
+
 
 export const metadata: Metadata = {
   title: "Restaurant Details",

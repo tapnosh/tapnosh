@@ -1,5 +1,8 @@
 "use client";
 
+import { useMemo } from "react";
+import { type ControllerRenderProps, useFormContext } from "react-hook-form";
+
 import { Input } from "@/components/ui/forms/input";
 import {
   Select,
@@ -8,11 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/forms/select";
-import { ControllerRenderProps, useFormContext } from "react-hook-form";
 import { useCurrency } from "@/hooks/useCurrency";
-import { useFormField } from "./form";
-import { useMemo } from "react";
 import { cn } from "@/utils/cn";
+
+import { useFormField } from "./form";
 
 export default function PriceInput({
   className,

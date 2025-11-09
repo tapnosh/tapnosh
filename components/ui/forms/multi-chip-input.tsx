@@ -1,8 +1,9 @@
 "use client";
 
-import type React from "react";
-import { Badge } from "@/components/ui/data-display/badge";
 import { X } from "lucide-react";
+import type React from "react";
+
+import { Badge } from "@/components/ui/data-display/badge";
 import { cn } from "@/utils/cn";
 
 export default function MultiChipInput({

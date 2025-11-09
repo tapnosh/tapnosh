@@ -1,25 +1,26 @@
 import "@/assets/styles/globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { getLocale, getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
-import { Head as NextraHead } from "nextra/components";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import Head from "next/head";
-import { AppSidebar } from "@/features/navigation/app-sidebar";
-import { Toaster } from "@/components/ui/feedback/sonner";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import { Head as NextraHead } from "nextra/components";
+
 import { LoadingBar } from "@/components/ui/feedback/loading-bar";
+import { Toaster } from "@/components/ui/feedback/sonner";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/layout/sidebar";
-import { OrderProvider } from "@/context/OrderContext";
-import { NoshBar } from "@/features/nosh-bar/nosh-bar";
 import { NotificationProvider } from "@/context/NotificationBar";
-import { ClerkProvider } from "@clerk/nextjs";
+import { OrderProvider } from "@/context/OrderContext";
 import { ThemeColorProvider } from "@/context/ThemeContext";
+import { AppSidebar } from "@/features/navigation/app-sidebar";
+import { NoshBar } from "@/features/nosh-bar/nosh-bar";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

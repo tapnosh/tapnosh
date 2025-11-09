@@ -1,13 +1,14 @@
 "use client";
 
-import { MenuItemCard } from "@/features/menu/menu-item";
-import { Featured } from "@/features/menu/featured";
-import { SampleDishes } from "@/mock/menu/dishes";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
-import { MenuItem } from "@/types/menu/Menu";
-import { MenuItemModal } from "@/features/menu/menu-item-modal";
+
 import { FiltersBar } from "@/features/filters/filters-bar";
+import { Featured } from "@/features/menu/featured";
+import { MenuItemCard } from "@/features/menu/menu-item";
+import { MenuItemModal } from "@/features/menu/menu-item-modal";
+import { SampleDishes } from "@/mock/menu/dishes";
+import { MenuItem } from "@/types/menu/Menu";
 
 export function MenuComponent() {
   const [open, setOpen] = useState(false);

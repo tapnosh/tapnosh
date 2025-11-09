@@ -1,5 +1,6 @@
 import { authFetch } from "@/lib/auth/client";
 import { Restaurant } from "@/types/restaurant/Restaurant";
+
 import { RestaurantFormDelete } from "./delete-form";
 
 export default async function Settings({

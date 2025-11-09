@@ -1,7 +1,7 @@
 "use client";
 
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 
 function Collapsible({
   ...props

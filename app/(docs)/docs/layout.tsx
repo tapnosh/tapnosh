@@ -1,10 +1,10 @@
-import { Footer, Layout, Navbar } from "nextra-theme-docs";
+import { Metadata } from "next";
+import Head from "next/head";
 import { Head as NextraHead } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import "@/assets/styles/globals.css";
 import "nextra-theme-docs/style.css";
-import Head from "next/head";
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Documentation | tapnosh.",

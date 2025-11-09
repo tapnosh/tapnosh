@@ -1,5 +1,5 @@
-import { JSX, useMemo } from "react";
 import { Info, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { JSX, useMemo } from "react";
 
 export type Variant = "info" | "success" | "error" | "warning";
 

@@ -1,6 +1,8 @@
 import { type HandleUploadBody } from "@vercel/blob/client";
-import { NextResponse } from "next/server";
 import { Effect } from "effect";
+import { NextResponse } from "next/server";
+
+import { uploadImageToBlob } from "@/features/image/image-effects";
 import {
   authenticateUser,
   getAuthToken,
@@ -14,7 +16,6 @@ import {
   UnauthorizedError,
   UploadError,
 } from "@/lib/errors/errors";
-import { uploadImageToBlob } from "@/features/image/image-effects";
 
 export async function POST(request: Request): Promise<NextResponse> {
   const program = Effect.gen(function* () {
