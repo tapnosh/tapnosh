@@ -11,10 +11,6 @@ export const metadata: Metadata = {
     "menu management",
     "restaurant analytics",
   ],
-  robots: {
-    index: false, // This is a private management page
-    follow: false,
-  },
 };
 
 export default async function MyRestaurant({

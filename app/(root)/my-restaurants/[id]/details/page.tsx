@@ -17,10 +17,6 @@ export const metadata: Metadata = {
     "restaurant information",
     "contact details",
   ],
-  robots: {
-    index: false,
-    follow: false,
-  },
 };
 
 export default async function RestaurantEdit({
