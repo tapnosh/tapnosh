@@ -72,7 +72,7 @@ export default async function sitemap({
                 lastModified: restaurant.updatedAt
                   ? new Date(restaurant.updatedAt)
                   : new Date(),
-                changeFrequency: "weekly",
+                changeFrequency: "daily",
                 priority: 0.8,
               });
 
@@ -81,7 +81,7 @@ export default async function sitemap({
                 lastModified: restaurant.updatedAt
                   ? new Date(restaurant.updatedAt)
                   : new Date(),
-                changeFrequency: "weekly",
+                changeFrequency: "hourly",
                 priority: 0.7,
               });
             });
