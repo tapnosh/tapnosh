@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 
+import { sitemapLogger } from "@/lib/logger/app";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tapnosh.com";
@@ -10,8 +11,13 @@ export const revalidate = 3600; // Revalidate every hour
 
 // Generate multiple sitemap segments
 export async function generateSitemaps() {
-  // Return array of sitemap IDs
-  return [{ id: "static" }, { id: "restaurants" }];
+  sitemapLogger.info("Generating sitemap segments");
+  const segments = [{ id: "static" }, { id: "restaurants" }];
+  sitemapLogger.info(
+    { segments: segments.map((s) => s.id) },
+    `Generated ${segments.length} segments`,
+  );
+  return segments;
 }
 
 export default async function sitemap({
@@ -19,9 +25,12 @@ export default async function sitemap({
 }: {
   id: string;
 }): Promise<MetadataRoute.Sitemap> {
+  sitemapLogger.info({ segmentId: id }, "Generating sitemap for segment");
+
   // Static pages sitemap
   if (id === "static") {
-    return [
+    sitemapLogger.info("Building static pages sitemap");
+    const staticPages: MetadataRoute.Sitemap = [
       {
         url: baseUrl,
         lastModified: new Date(),
@@ -47,13 +56,17 @@ export default async function sitemap({
         priority: 0.5,
       },
     ];
+    sitemapLogger.info({ count: staticPages.length }, "Generated static pages");
+    return staticPages;
   }
 
   // Restaurants sitemap
   if (id === "restaurants") {
+    sitemapLogger.info("Building restaurants sitemap");
     const sitemap: MetadataRoute.Sitemap = [];
 
     if (apiUrl) {
+      sitemapLogger.info({ apiUrl }, "Fetching restaurants from API");
       try {
         const response = await fetch(
           new URL("public_api/restaurants", apiUrl),
@@ -62,8 +75,17 @@ export default async function sitemap({
           },
         );
 
+        sitemapLogger.info(
+          { status: response.status, statusText: response.statusText },
+          "API response received",
+        );
+
         if (response.ok) {
           const restaurants = await response.json();
+          sitemapLogger.info(
+            { count: Array.isArray(restaurants) ? restaurants.length : 0 },
+            "Received restaurants",
+          );
 
           if (Array.isArray(restaurants)) {
             restaurants.forEach((restaurant: Restaurant) => {
@@ -85,15 +107,37 @@ export default async function sitemap({
                 priority: 0.7,
               });
             });
+            sitemapLogger.info(
+              { count: sitemap.length },
+              "Generated restaurant URLs",
+            );
           }
+        } else {
+          sitemapLogger.warn(
+            { status: response.status, statusText: response.statusText },
+            "Failed to fetch restaurants",
+          );
         }
       } catch (error) {
-        console.error("Error fetching restaurants for sitemap:", error);
+        sitemapLogger.error(
+          { error },
+          "Error fetching restaurants for sitemap",
+        );
       }
+    } else {
+      sitemapLogger.warn("API URL not configured, skipping restaurant sitemap");
     }
 
+    sitemapLogger.info(
+      { count: sitemap.length },
+      "Returning entries for restaurants segment",
+    );
     return sitemap;
   }
 
+  sitemapLogger.warn(
+    { segmentId: id },
+    "Unknown segment ID, returning empty sitemap",
+  );
   return [];
 }
