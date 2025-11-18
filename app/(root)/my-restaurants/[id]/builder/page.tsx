@@ -16,10 +16,6 @@ export const metadata: Metadata = {
     "menu management",
     "drag and drop menu",
   ],
-  robots: {
-    index: false,
-    follow: false,
-  },
 };
 
 export default async function MultipleComponents({

@@ -30,10 +30,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://tapnosh.com/restaurants/add",
   },
-  robots: {
-    index: false, // Restaurant owners don't need this page indexed
-    follow: true,
-  },
 };
 
 export default function RestaurantCreate() {

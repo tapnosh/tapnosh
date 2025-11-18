@@ -25,10 +25,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://tapnosh.com/my-restaurants",
   },
-  robots: {
-    index: false, // This is a private dashboard page
-    follow: false,
-  },
 };
 
 export default async function MyRestaurants() {
