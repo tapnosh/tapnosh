@@ -34,8 +34,6 @@ export async function generateMetadata({
       ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
       ogImageUrl.searchParams.set("dish", dishId);
 
-      console.log(ogImageUrl.toString());
-
       return {
         title: `${dish.name} - ${restaurant.name}`,
         description:

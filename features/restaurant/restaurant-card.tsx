@@ -3,6 +3,7 @@ import { unstable_ViewTransition as ViewTransition } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
+import { ShareButton } from "@/components/ui/forms/share-button";
 import { RestaurantCategory } from "@/types/category/Category";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
@@ -54,10 +55,17 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           <span>{restaurant.address}</span>
         </div> */}
 
-        <div className="flex gap-2">
-          <Button size="lg" asChild>
+        <div className="flex items-center gap-2">
+          <Button size="lg" asChild className="flex-1">
             <Link href={`/restaurants/${restaurant.slug}`}>See the Menu</Link>
           </Button>
+          <ShareButton
+            url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://tapnosh.com"}/restaurants/${restaurant.slug}`}
+            title={`${restaurant.name} - Restaurant on tapnosh`}
+            text={restaurant.description}
+            size="lg"
+            variant="outline"
+          />
         </div>
       </div>
     </div>

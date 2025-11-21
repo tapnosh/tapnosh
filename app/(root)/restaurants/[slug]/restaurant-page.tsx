@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/data-display/badge";
+import { ShareButton } from "@/components/ui/forms/share-button";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { Builder } from "@/types/builder/BuilderSchema";
@@ -126,6 +127,14 @@ export function RestaurantHeader({
             >
               Make Reservation
             </Link>
+            <ShareButton
+              url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://tapnosh.com"}/restaurants/${restaurant.slug}`}
+              title={`${restaurant.name} - Restaurant on tapnosh`}
+              text={restaurant.description}
+              className="bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/25 border-primary-foreground/50 rounded-lg border backdrop-blur-sm transition-all duration-300"
+              variant="ghost"
+              size="lg"
+            />
           </div>
         )}
       </div>

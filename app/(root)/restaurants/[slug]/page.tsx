@@ -55,9 +55,9 @@ export async function generateMetadata({
   const restaurantCategories =
     restaurant.categories?.map((cat) => cat.name).join(", ") || "Restaurant";
 
-  const restaurantImage =
-    restaurant.images?.[0]?.url ||
-    "https://tapnosh.com/images/og-restaurant-default.jpg";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://tapnosh.com";
+  const ogImageUrl = new URL(`${baseUrl}/api/og/restaurant`);
+  ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
 
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
@@ -79,10 +79,10 @@ export async function generateMetadata({
       type: "website",
       images: [
         {
-          url: restaurantImage,
+          url: ogImageUrl.toString(),
           width: 1200,
           height: 630,
-          alt: `${restaurant.name} - Restaurant Photo`,
+          alt: `${restaurant.name} - Restaurant`,
         },
       ],
       siteName: "tapnosh",
@@ -90,7 +90,7 @@ export async function generateMetadata({
     twitter: {
       title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
       description: `${restaurant.description} Located at ${restaurant.address || "your area"}. Discover their menu and dining experience.`,
-      images: [restaurantImage],
+      images: [ogImageUrl.toString()],
     },
     alternates: {
       canonical: `https://tapnosh.com/restaurants/${restaurant.slug}`,
