@@ -10,7 +10,6 @@ import { Badge } from "@/components/ui/data-display/badge";
 import { ShareButton } from "@/components/ui/forms/share-button";
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { FilterState } from "@/features/filters/types";
-import { Featured } from "@/features/menu/featured";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
@@ -56,14 +55,6 @@ function MenuInteractive({
   const handleClose = () => {
     setOpen(false);
     deleteUrlParam(searchParams, "dish");
-  };
-
-  const featuredItems = schema?.menu
-    .flatMap(({ items }) => items.flatMap((item) => item))
-    .slice(0, 10);
-
-  const handleFeaturedClick = (item: MenuItem) => {
-    handleClick(item);
   };
 
   // Filter function to check if item matches filters
@@ -131,7 +122,7 @@ function MenuInteractive({
         </section>
       )}
 
-      {featuredItems?.length && (
+      {/* {featuredItems?.length && (
         <>
           <section className="section pb-2 lg:pb-4">
             <h2>Chef Picks</h2>
@@ -151,7 +142,7 @@ function MenuInteractive({
             />
           </div>
         </>
-      )}
+      )} */}
 
       {schema.menu && (
         <section className="section @container pt-16">
@@ -185,7 +176,6 @@ function MenuInteractive({
                           key={item.id}
                           onClick={handleClick}
                           isAvailable
-                          restaurantSlug={restaurantSlug}
                         />
                       </AnimatePresence>
                     ) : null,

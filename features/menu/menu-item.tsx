@@ -18,7 +18,6 @@ import { useMemo } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
-import { ShareButton } from "@/components/ui/forms/share-button";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
 
@@ -43,25 +42,17 @@ export function MenuItemCard({
   isAvailable,
   onAddToCart,
   onClick,
-  restaurantSlug,
 }: {
   item: MenuItem;
   isAvailable: boolean;
   onAddToCart?: (item: MenuItem) => void;
   onClick?: (item: MenuItem) => void;
-  restaurantSlug?: string;
 }) {
   const { formatCurrency } = useCurrency();
 
   const imgSrc = useMemo(() => {
     return Array.isArray(item.image) ? item.image[0]?.url : item.image;
   }, [item.image]);
-
-  const shareUrl = useMemo(() => {
-    if (!restaurantSlug) return "";
-    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/restaurants/${restaurantSlug}/${item.id}`;
-  }, [restaurantSlug, item.id]);
 
   return (
     <motion.div
@@ -102,14 +93,6 @@ export function MenuItemCard({
               <span className="font-display-median text-lg leading-5 font-semibold">
                 {formatCurrency(item.price.amount, item.price.currency)}
               </span>
-              {restaurantSlug && shareUrl && (
-                <ShareButton
-                  url={shareUrl}
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                />
-              )}
             </div>
           </header>
           <span className="text-muted-foreground pr-15 text-sm leading-4 italic">
