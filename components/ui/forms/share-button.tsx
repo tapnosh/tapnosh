@@ -14,6 +14,7 @@ interface ShareButtonProps {
   className?: string;
   variant?: "default" | "ghost" | "outline" | "secondary";
   size?: "default" | "sm" | "lg" | "icon";
+  label?: string;
 }
 
 export function ShareButton({
@@ -23,6 +24,7 @@ export function ShareButton({
   className,
   variant = "ghost",
   size = "icon",
+  label,
 }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -33,11 +35,21 @@ export function ShareButton({
     // Check if Web Share API is available (mobile devices)
     if (navigator.share) {
       try {
-        await navigator.share({
-          title,
-          text,
+        const shareData: ShareData = {
           url,
-        });
+        };
+
+        // Only add title if provided
+        if (title && title !== "Check this out!") {
+          shareData.title = title;
+        }
+
+        // Only add text if provided and different from title
+        if (text && text !== title) {
+          shareData.text = text;
+        }
+
+        await navigator.share(shareData);
       } catch (error) {
         // User cancelled or error occurred
         if ((error as Error).name !== "AbortError") {
@@ -76,6 +88,7 @@ export function ShareButton({
       ) : (
         <Share2 className="h-4 w-4" />
       )}
+      {label && <span>{label}</span>}
     </Button>
   );
 }

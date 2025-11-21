@@ -153,8 +153,8 @@ export default async function Restaurant({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <RestaurantPage restaurant={restaurant} schema={schema} />
       <ThemeSetter color={restaurant.theme.color} />
+      <RestaurantPage restaurant={restaurant} schema={schema} />
     </>
   );
 }

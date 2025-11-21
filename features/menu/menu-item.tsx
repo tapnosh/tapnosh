@@ -60,7 +60,7 @@ export function MenuItemCard({
   const shareUrl = useMemo(() => {
     if (!restaurantSlug) return "";
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/restaurants/${restaurantSlug}/menu/${item.id}`;
+    return `${baseUrl}/restaurants/${restaurantSlug}/${item.id}`;
   }, [restaurantSlug, item.id]);
 
   return (
@@ -105,8 +105,6 @@ export function MenuItemCard({
               {restaurantSlug && shareUrl && (
                 <ShareButton
                   url={shareUrl}
-                  title={`Check out ${item.name}!`}
-                  text={item.description || `${item.name} at our restaurant`}
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8"

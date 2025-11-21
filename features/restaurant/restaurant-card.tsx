@@ -60,11 +60,9 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             <Link href={`/restaurants/${restaurant.slug}`}>See the Menu</Link>
           </Button>
           <ShareButton
-            url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://tapnosh.com"}/restaurants/${restaurant.slug}`}
-            title={`${restaurant.name} - Restaurant on tapnosh`}
-            text={restaurant.description}
+            url={`/restaurants/${restaurant.slug}`}
+            title={restaurant.name}
             size="lg"
-            variant="outline"
           />
         </div>
       </div>

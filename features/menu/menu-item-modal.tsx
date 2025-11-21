@@ -38,7 +38,7 @@ export const MenuItemModal = ({
   const shareUrl = useMemo(() => {
     if (!restaurantSlug || !menuItem) return "";
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/restaurants/${restaurantSlug}/menu/${menuItem.id}`;
+    return `${baseUrl}/restaurants/${restaurantSlug}/${menuItem.id}`;
   }, [restaurantSlug, menuItem]);
 
   const handleIncrement = () => {
@@ -114,11 +114,6 @@ export const MenuItemModal = ({
                 {restaurantSlug && shareUrl && (
                   <ShareButton
                     url={shareUrl}
-                    title={`Check out ${menuItem?.name}!`}
-                    text={
-                      menuItem?.description ||
-                      `${menuItem?.name} at our restaurant`
-                    }
                     variant="ghost"
                     size="icon"
                     className="hover:bg-muted-foreground hover:text-secondary text-muted-foreground rounded-full bg-white/80 backdrop-blur-sm transition-colors dark:bg-black/50"

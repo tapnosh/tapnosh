@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { FiltersBar } from "@/features/filters/filters-bar";
+import { FilterState } from "@/features/filters/types";
 import { Featured } from "@/features/menu/featured";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
@@ -26,6 +27,8 @@ export function MenuInteractive({
 
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
   const [open, setOpen] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FilterState | undefined>();
 
   useEffect(() => {
     if (dishId && schema) {
@@ -56,6 +59,38 @@ export function MenuInteractive({
 
   const handleFeaturedClick = (item: MenuItem) => {
     handleClick(item);
+  };
+
+  // Filter function to check if item matches filters
+  const itemMatchesFilters = (item: MenuItem) => {
+    if (!filters) return true;
+
+    // Check price range
+    const { priceRange, categories, ingredients } = filters;
+    const itemPrice = item.price.amount;
+    if (itemPrice < priceRange[0] || itemPrice > priceRange[1]) {
+      return false;
+    }
+
+    // Check categories (if any are selected)
+    if (categories.length > 0) {
+      const itemCategories = item.categories || [];
+      const hasMatchingCategory = categories.some((cat) =>
+        itemCategories.includes(cat),
+      );
+      if (!hasMatchingCategory) return false;
+    }
+
+    // Check ingredients (exclude items with selected ingredients)
+    if (ingredients.length > 0) {
+      const itemIngredients = item.ingredients || [];
+      const hasExcludedIngredient = ingredients.some((ing) =>
+        itemIngredients.includes(ing),
+      );
+      if (hasExcludedIngredient) return false;
+    }
+
+    return true;
   };
 
   if (!schema) {
@@ -95,24 +130,43 @@ export function MenuInteractive({
       {schema?.menu && (
         <section className="section @container pt-16">
           <h2>Menu</h2>
-          <FiltersBar />
-          {schema.menu.map((group, groupIndex) => (
-            <MenuGroup data={group} key={groupIndex}>
-              {group.items.map(({ version, ...item }) =>
-                version === "v1" ? (
-                  <AnimatePresence key={item.id}>
-                    <MenuItemCard
-                      item={{ ...item, version }}
-                      key={item.id}
-                      onClick={handleClick}
-                      isAvailable
-                      restaurantSlug={restaurantSlug}
-                    />
-                  </AnimatePresence>
-                ) : null,
-              )}
-            </MenuGroup>
-          ))}
+          <FiltersBar
+            groups={schema.menu}
+            selectedGroup={selectedGroup}
+            onGroupChange={setSelectedGroup}
+            filters={filters}
+            onFiltersChange={setFilters}
+          />
+          {schema.menu
+            .filter((group) =>
+              selectedGroup ? group.name === selectedGroup : true,
+            )
+            .map((group, groupIndex) => {
+              const filteredItems = group.items.filter((item) =>
+                itemMatchesFilters(item as MenuItem),
+              );
+
+              // Only render group if it has items after filtering
+              if (filteredItems.length === 0) return null;
+
+              return (
+                <MenuGroup data={group} key={groupIndex}>
+                  {filteredItems.map(({ version, ...item }) =>
+                    version === "v1" ? (
+                      <AnimatePresence key={item.id}>
+                        <MenuItemCard
+                          item={{ ...item, version }}
+                          key={item.id}
+                          onClick={handleClick}
+                          isAvailable
+                          restaurantSlug={restaurantSlug}
+                        />
+                      </AnimatePresence>
+                    ) : null,
+                  )}
+                </MenuGroup>
+              );
+            })}
         </section>
       )}
 

@@ -1,14 +1,103 @@
+"use client";
+
+import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { ShareButton } from "@/components/ui/forms/share-button";
+import { FiltersBar } from "@/features/filters/filters-bar";
+import { FilterState } from "@/features/filters/types";
+import { Featured } from "@/features/menu/featured";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
+import { MenuItemModal } from "@/features/menu/menu-item-modal";
+import { deleteUrlParam, setUrlParam } from "@/features/menu/utils/url-state";
 import { Builder } from "@/types/builder/BuilderSchema";
+import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";
+import { findDishById } from "@/utils/dish-id";
 
-function SchemaParser({ schema }: { schema?: Builder }) {
+function MenuInteractive({
+  schema,
+  restaurantSlug,
+}: {
+  schema?: Builder;
+  restaurantSlug: string;
+}) {
+  const searchParams = useSearchParams();
+  const dishId = searchParams.get("dish");
+
+  const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
+  const [open, setOpen] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [filters, setFilters] = useState<FilterState | undefined>();
+
+  useEffect(() => {
+    if (dishId && schema) {
+      const result = findDishById(schema.menu, dishId);
+      if (result) {
+        setMenuItem(result.item as MenuItem);
+        setOpen(true);
+      }
+    } else {
+      setOpen(false);
+    }
+  }, [dishId, schema]);
+
+  const handleClick = (item: MenuItem) => {
+    setMenuItem(item);
+    setOpen(true);
+    setUrlParam(searchParams, "dish", item.id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    deleteUrlParam(searchParams, "dish");
+  };
+
+  const featuredItems = schema?.menu
+    .flatMap(({ items }) => items.flatMap((item) => item))
+    .slice(0, 10);
+
+  const handleFeaturedClick = (item: MenuItem) => {
+    handleClick(item);
+  };
+
+  // Filter function to check if item matches filters
+  const itemMatchesFilters = (item: MenuItem) => {
+    if (!filters) return true;
+
+    // Check price range
+    const { priceRange, categories, ingredients } = filters;
+    const itemPrice = item.price.amount;
+    if (itemPrice < priceRange[0] || itemPrice > priceRange[1]) {
+      return false;
+    }
+
+    // Check categories (if any are selected)
+    if (categories.length > 0) {
+      const itemCategories = item.categories || [];
+      const hasMatchingCategory = categories.some((cat) =>
+        itemCategories.includes(cat),
+      );
+      if (!hasMatchingCategory) return false;
+    }
+
+    // Check ingredients (exclude items with selected ingredients)
+    if (ingredients.length > 0) {
+      const itemIngredients = item.ingredients || [];
+      const hasExcludedIngredient = ingredients.some((ing) =>
+        itemIngredients.includes(ing),
+      );
+      if (hasExcludedIngredient) return false;
+    }
+
+    return true;
+  };
+
   if (!schema) {
     return (
       <section className="section">
@@ -42,24 +131,82 @@ function SchemaParser({ schema }: { schema?: Builder }) {
         </section>
       )}
 
+      {featuredItems?.length && (
+        <>
+          <section className="section pb-2 lg:pb-4">
+            <h2>Chef Picks</h2>
+          </section>
+
+          <div className="flex w-full max-w-full flex-1 overflow-hidden">
+            <Featured
+              items={featuredItems}
+              options={{
+                loop: true,
+                align: "start",
+                dragFree: true,
+              }}
+              slideHeight="40vh"
+              slideSize="40vh"
+              onAddToCart={handleFeaturedClick}
+            />
+          </div>
+        </>
+      )}
+
       {schema.menu && (
-        <section className="section @container">
-          <h2 className="sm:mb-4">Menu</h2>
-          {schema.menu.map((group, index) => (
-            <MenuGroup data={group} key={index}>
-              {group.items.map(({ version, ...item }) =>
-                version === "v1" ? (
-                  <MenuItemCard
-                    item={{ ...item, version }}
-                    key={item.id}
-                    isAvailable
-                  />
-                ) : null,
-              )}
-            </MenuGroup>
-          ))}
+        <section className="section @container pt-16">
+          <h2>Menu</h2>
+          <FiltersBar
+            groups={schema.menu}
+            selectedGroup={selectedGroup}
+            onGroupChange={setSelectedGroup}
+            filters={filters}
+            onFiltersChange={setFilters}
+          />
+          {schema.menu
+            .filter((group) =>
+              selectedGroup ? group.name === selectedGroup : true,
+            )
+            .map((group, groupIndex) => {
+              const filteredItems = group.items.filter((item) =>
+                itemMatchesFilters(item as MenuItem),
+              );
+
+              // Only render group if it has items after filtering
+              if (filteredItems.length === 0) return null;
+
+              return (
+                <MenuGroup data={group} key={groupIndex}>
+                  {filteredItems.map(({ version, ...item }) =>
+                    version === "v1" ? (
+                      <AnimatePresence key={item.id}>
+                        <MenuItemCard
+                          item={{ ...item, version }}
+                          key={item.id}
+                          onClick={handleClick}
+                          isAvailable
+                          restaurantSlug={restaurantSlug}
+                        />
+                      </AnimatePresence>
+                    ) : null,
+                  )}
+                </MenuGroup>
+              );
+            })}
         </section>
       )}
+
+      <MenuItemModal
+        menuItem={menuItem}
+        open={open}
+        setOpen={(isOpen) => {
+          if (!isOpen) {
+            handleClose();
+          }
+        }}
+        canBeAddedToTab={false}
+        restaurantSlug={restaurantSlug}
+      />
     </>
   );
 }
@@ -114,26 +261,17 @@ export function RestaurantHeader({
         </p>
 
         {showCta && (
-          <div className="flex flex-col justify-start gap-4 sm:flex-row">
+          <div className="flex flex-col justify-start gap-2 sm:flex-row">
             <Link
-              href={`/restaurants/${restaurant.slug}/menu`}
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 rounded-lg px-8 py-3 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              View Menu
-            </Link>
-            <Link
-              href={`/restaurants/${restaurant.slug}/menu`}
-              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/25 rounded-lg border-2 px-8 py-3 font-semibold backdrop-blur-sm transition-all duration-300"
+              href={"#"}
+              className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 items-center justify-center gap-2 rounded-lg px-8 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
             >
               Make Reservation
             </Link>
             <ShareButton
-              url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://tapnosh.com"}/restaurants/${restaurant.slug}`}
-              title={`${restaurant.name} - Restaurant on tapnosh`}
-              text={restaurant.description}
-              className="bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/25 border-primary-foreground/50 rounded-lg border backdrop-blur-sm transition-all duration-300"
-              variant="ghost"
-              size="lg"
+              className="size-10"
+              url={`/restaurants/${restaurant.slug}`}
+              size="icon"
             />
           </div>
         )}
@@ -152,7 +290,7 @@ export function RestaurantPage({
   return (
     <>
       <RestaurantHeader restaurant={restaurant} />
-      <SchemaParser schema={schema} />
+      <MenuInteractive schema={schema} restaurantSlug={restaurant.slug || ""} />
     </>
   );
 }
