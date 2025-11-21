@@ -12,10 +12,19 @@ export async function GET(request: NextRequest) {
     const ingredients = searchParams.get("ingredients");
     const price = searchParams.get("price");
     const currency = searchParams.get("currency");
-    const imageUrl = searchParams.get("image");
+    let imageUrl = searchParams.get("image");
 
     if (!dishName) {
       return new Response("Missing dish name", { status: 400 });
+    }
+
+    // Convert relative URLs to absolute URLs
+    if (imageUrl && !imageUrl.startsWith("http")) {
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || request.headers.get("host") || "";
+      const protocol =
+        process.env.NODE_ENV === "production" ? "https://" : "http://";
+      imageUrl = `${protocol}${baseUrl}${imageUrl}`;
     }
 
     return new ImageResponse(

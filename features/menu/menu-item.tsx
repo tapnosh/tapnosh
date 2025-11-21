@@ -60,7 +60,7 @@ export function MenuItemCard({
   const shareUrl = useMemo(() => {
     if (!restaurantSlug) return "";
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/restaurants/${restaurantSlug}/menu?dish=${item.id}`;
+    return `${baseUrl}/restaurants/${restaurantSlug}/menu/${item.id}`;
   }, [restaurantSlug, item.id]);
 
   return (

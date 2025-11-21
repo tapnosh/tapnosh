@@ -12,6 +12,7 @@ import { MenuItemModal } from "@/features/menu/menu-item-modal";
 import { deleteUrlParam, setUrlParam } from "@/features/menu/utils/url-state";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
+import { findDishById } from "@/utils/dish-id";
 
 export function MenuInteractive({
   schema,
@@ -27,13 +28,10 @@ export function MenuInteractive({
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (dishId) {
-      const item = schema?.menu
-        .flatMap((group) => group.items)
-        .find((item) => item.id === dishId);
-
-      if (item) {
-        setMenuItem(item);
+    if (dishId && schema) {
+      const result = findDishById(schema.menu, dishId);
+      if (result) {
+        setMenuItem(result.item as MenuItem);
         setOpen(true);
       }
     } else {
@@ -55,6 +53,10 @@ export function MenuInteractive({
   const featuredItems = schema?.menu
     .flatMap(({ items }) => items.flatMap((item) => item))
     .slice(0, 10);
+
+  const handleFeaturedClick = (item: MenuItem) => {
+    handleClick(item);
+  };
 
   if (!schema) {
     return (
@@ -84,7 +86,7 @@ export function MenuInteractive({
               }}
               slideHeight="40vh"
               slideSize="40vh"
-              onAddToCart={handleClick}
+              onAddToCart={handleFeaturedClick}
             />
           </div>
         </>
@@ -94,8 +96,8 @@ export function MenuInteractive({
         <section className="section @container pt-16">
           <h2>Menu</h2>
           <FiltersBar />
-          {schema.menu.map((group, index) => (
-            <MenuGroup data={group} key={index}>
+          {schema.menu.map((group, groupIndex) => (
+            <MenuGroup data={group} key={groupIndex}>
               {group.items.map(({ version, ...item }) =>
                 version === "v1" ? (
                   <AnimatePresence key={item.id}>

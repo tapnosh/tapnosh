@@ -38,7 +38,7 @@ export const MenuItemModal = ({
   const shareUrl = useMemo(() => {
     if (!restaurantSlug || !menuItem) return "";
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
-    return `${baseUrl}/restaurants/${restaurantSlug}/menu?dish=${menuItem.id}`;
+    return `${baseUrl}/restaurants/${restaurantSlug}/menu/${menuItem.id}`;
   }, [restaurantSlug, menuItem]);
 
   const handleIncrement = () => {
