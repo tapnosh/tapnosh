@@ -1,23 +1,55 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { Featured } from "@/features/menu/featured";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
+import { deleteUrlParam, setUrlParam } from "@/features/menu/utils/url-state";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
 
-export function MenuInteractive({ schema }: { schema?: Builder }) {
-  const [open, setOpen] = useState(false);
+export function MenuInteractive({
+  schema,
+  restaurantSlug,
+}: {
+  schema?: Builder;
+  restaurantSlug: string;
+}) {
+  const searchParams = useSearchParams();
+  const dishId = searchParams.get("dish");
+
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (dishId) {
+      const item = schema?.menu
+        .flatMap((group) => group.items)
+        .find((item) => item.id === dishId);
+
+      if (item) {
+        setMenuItem(item);
+        setOpen(true);
+      }
+    } else {
+      setOpen(false);
+    }
+  }, [dishId, schema]);
 
   const handleClick = (item: MenuItem) => {
     setMenuItem(item);
     setOpen(true);
+    setUrlParam(searchParams, "dish", item.id);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    deleteUrlParam(searchParams, "dish");
   };
 
   const featuredItems = schema?.menu
@@ -72,6 +104,7 @@ export function MenuInteractive({ schema }: { schema?: Builder }) {
                       key={item.id}
                       onClick={handleClick}
                       isAvailable
+                      restaurantSlug={restaurantSlug}
                     />
                   </AnimatePresence>
                 ) : null,
@@ -81,7 +114,17 @@ export function MenuInteractive({ schema }: { schema?: Builder }) {
         </section>
       )}
 
-      <MenuItemModal menuItem={menuItem} open={open} setOpen={setOpen} />
+      <MenuItemModal
+        menuItem={menuItem}
+        open={open}
+        setOpen={(isOpen) => {
+          if (!isOpen) {
+            handleClose();
+          }
+        }}
+        canBeAddedToTab
+        restaurantSlug={restaurantSlug}
+      />
     </>
   );
 }
