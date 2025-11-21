@@ -1,9 +1,10 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
 import { findDishById } from "@/utils/dish-id";
+
+import { DishRedirect } from "./dish-redirect";
 
 export async function generateMetadata({
   params,
@@ -28,26 +29,12 @@ export async function generateMetadata({
     if (result) {
       const dish = result.item;
       const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://tapnosh.com";
-      const dishImageUrl =
-        typeof dish.image === "string"
-          ? dish.image
-          : Array.isArray(dish.image) && dish.image[0]
-            ? dish.image[0].url
-            : undefined;
 
       const ogImageUrl = new URL(`${baseUrl}/api/og/dish`);
-      ogImageUrl.searchParams.set("name", dish.name);
-      if (dish.ingredients?.length) {
-        ogImageUrl.searchParams.set(
-          "ingredients",
-          dish.ingredients.join(" • "),
-        );
-      }
-      ogImageUrl.searchParams.set("price", dish.price.amount.toString());
-      ogImageUrl.searchParams.set("currency", dish.price.currency);
-      if (dishImageUrl) {
-        ogImageUrl.searchParams.set("image", dishImageUrl);
-      }
+      ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
+      ogImageUrl.searchParams.set("dish", dishId);
+
+      console.log(ogImageUrl.toString());
 
       return {
         title: `${dish.name} - ${restaurant.name}`,
@@ -89,6 +76,6 @@ export default async function DishPage({
 }) {
   const { slug, dish } = await params;
 
-  // Redirect to the menu page with the dish query parameter
-  redirect(`/restaurants/${slug}/menu?dish=${dish}`);
+  // Use client-side redirect to preserve metadata for crawlers
+  return <DishRedirect slug={slug} dish={dish} />;
 }
