@@ -43,7 +43,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
 
   const { slug } = await params;
   const restaurant = await fetchRestaurant(slug);
@@ -58,51 +58,50 @@ export async function generateMetadata({
   const restaurantCategories =
     restaurant.categories?.map((cat) => cat.name).join(", ") || "Restaurant";
 
-  const ogImageUrl = new URL("/api/og/restaurant");
-  ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
+  const ogImageUrl = `/api/og/restaurant?restaurant=${encodeURIComponent(restaurant.slug ?? "")}`;
 
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
     description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
-    // keywords: [
-    //   restaurant.name,
-    //   ...(restaurant.categories?.map((cat) => cat.name) || []),
-    //   "restaurant",
-    //   "menu",
-    //   "dining",
-    //   "food",
-    //   restaurant?.address || "",
-    //   "tapnosh",
-    // ].filter(Boolean),
-    // openGraph: {
-    //   title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
-    //   description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
-    //   url: `${baseUrl}/restaurants/${restaurant.slug}`,
-    //   type: "website",
-    //   images: [
-    //     {
-    //       url: ogImageUrl.toString(),
-    //       width: 1200,
-    //       height: 630,
-    //       alt: `${restaurant.name} - Restaurant`,
-    //     },
-    //   ],
-    //   siteName: "tapnosh",
-    // },
-    // twitter: {
-    //   title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
-    //   description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience.`,
-    //   images: [ogImageUrl.toString()],
-    // },
-    // alternates: {
-    //   canonical: `${baseUrl}/restaurants/${restaurant.slug}`,
-    // },
-    // other: {
-    //   "business:contact_data:street_address": restaurant?.address || "",
-    //   "business:contact_data:locality": "City", // You might want to extract this from address
-    //   "business:contact_data:region": "Region", // You might want to extract this from address
-    //   "business:contact_data:country_name": "Country", // You might want to extract this from address
-    // },
+    keywords: [
+      restaurant.name,
+      ...(restaurant.categories?.map((cat) => cat.name) || []),
+      "restaurant",
+      "menu",
+      "dining",
+      "food",
+      restaurant?.address || "",
+      "tapnosh",
+    ].filter(Boolean),
+    openGraph: {
+      title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
+      description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
+      url: `${baseUrl}/restaurants/${restaurant.slug}`,
+      type: "website",
+      images: [
+        {
+          url: ogImageUrl.toString(),
+          width: 1200,
+          height: 630,
+          alt: `${restaurant.name} - Restaurant`,
+        },
+      ],
+      siteName: "tapnosh",
+    },
+    twitter: {
+      title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
+      description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience.`,
+      images: [ogImageUrl.toString()],
+    },
+    alternates: {
+      canonical: `${baseUrl}/restaurants/${restaurant.slug}`,
+    },
+    other: {
+      "business:contact_data:street_address": restaurant?.address || "",
+      "business:contact_data:locality": "City", // You might want to extract this from address
+      "business:contact_data:region": "Region", // You might want to extract this from address
+      "business:contact_data:country_name": "Country", // You might want to extract this from address
+    },
   };
 }
 
