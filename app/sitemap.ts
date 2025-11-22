@@ -3,7 +3,7 @@ import { MetadataRoute } from "next";
 import { sitemapLogger } from "@/lib/logger/app";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const dynamic = "force-dynamic";
@@ -29,7 +29,7 @@ export default async function sitemap({
 
   if (!baseUrl) {
     sitemapLogger.error(
-      "NEXT_PUBLIC_SITE_URL is not defined in environment variables",
+      "NEXT_PUBLIC_BASE_URL is not defined in environment variables",
     );
     return [];
   }
