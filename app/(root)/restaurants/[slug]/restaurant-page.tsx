@@ -13,11 +13,11 @@ import { FilterState } from "@/features/filters/types";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
-import { deleteUrlParam, setUrlParam } from "@/features/menu/utils/url-state";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { findDishById } from "@/utils/dish-id";
+import { deleteUrlParam, setUrlParam } from "@/utils/url-state";
 
 function MenuInteractive({
   schema,
@@ -145,7 +145,7 @@ function MenuInteractive({
       )} */}
 
       {schema.menu && (
-        <section className="section @container pt-16">
+        <section className="section @container">
           <h2>Menu</h2>
           <FiltersBar
             groups={schema.menu}

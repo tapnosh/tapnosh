@@ -110,7 +110,7 @@ export const MenuItemModal = ({
               aria-modal="true"
               className="sticky top-4 right-4 bottom-4 left-4 z-50 mx-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-xl"
             >
-              <div className="absolute top-4 right-4 z-10 flex gap-2">
+              <div className="absolute top-3 right-3 z-10 flex gap-2">
                 {restaurantSlug && shareUrl && (
                   <ShareButton
                     url={shareUrl}
@@ -119,12 +119,14 @@ export const MenuItemModal = ({
                     className="hover:bg-muted-foreground hover:text-secondary text-muted-foreground rounded-full bg-white/80 backdrop-blur-sm transition-colors dark:bg-black/50"
                   />
                 )}
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setOpen(false)}
                   className="text-muted-foreground hover:bg-muted-foreground hover:text-secondary rounded-full bg-white/80 p-1 backdrop-blur-sm transition-colors dark:bg-black/50"
                 >
-                  <X className="h-5 w-5" />
-                </button>
+                  <X className="size-5" />
+                </Button>
               </div>
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>

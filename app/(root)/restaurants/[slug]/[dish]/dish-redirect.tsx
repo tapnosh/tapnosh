@@ -12,9 +12,9 @@ export function DishRedirect({ slug, dish }: { slug: string; dish: string }) {
   }, [router, slug, dish]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex flex-1 items-center justify-center">
       <div className="text-center">
-        <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800 dark:border-gray-700 dark:border-t-gray-200"></div>
+        <div className="border-primary border-t-primary-foreground dark:border-primary-foreground dark:border-t-primary mb-4 h-8 w-8 animate-spin rounded-full border-4"></div>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ export const categoryIcons = {
   cold: <Beer className="h-4 w-4" />,
 };
 
-const MotionButton = motion(Button);
+const MotionButton = motion.create(Button);
 
 // Menu Item Card Component
 export function MenuItemCard({

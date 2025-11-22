@@ -72,6 +72,7 @@
     "react-hook-form": "^7.56.4",
     "react-remove-scroll": "^2.6.3",
     "redis": "^5.5.6",
+    "schema-dts": "^1.1.5",
     "sonner": "^2.0.1",
     "string-to-color": "^2.2.2",
     "swr": "^2.3.3",

@@ -116,10 +116,9 @@ export async function GET(request: NextRequest) {
             {/* Restaurant name */}
             <h1
               style={{
-                fontSize: "96px",
-                fontWeight: "bold",
-                lineHeight: 1.1,
-                marginBottom: "32px",
+                fontSize: "128px",
+                fontWeight: 600,
+                lineHeight: 1,
                 marginTop: 0,
                 color: foregroundColor.hex(),
               }}

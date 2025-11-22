@@ -1,15 +1,9 @@
 "use client";
 
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useState } from "react";
 
-import { Badge } from "@/components/ui/data-display/badge";
-import { Button } from "@/components/ui/forms/button";
-import { Label } from "@/components/ui/forms/label";
-import { Slider } from "@/components/ui/forms/slider";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -17,8 +11,10 @@ import {
   DrawerTitle,
 } from "@/components/ui/overlays/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useCurrency } from "@/hooks/useCurrency";
 
+import { BadgeFilter } from "./badge-filter";
+import { FilterActions } from "./filter-actions";
+import { PriceRangeFilter } from "./price-range-filter";
 import { FilterState } from "./types";
 
 interface FiltersDrawerProps {
@@ -42,10 +38,7 @@ export function FiltersDrawer({
   filters,
   onApply,
 }: FiltersDrawerProps) {
-  const { formatCurrency } = useCurrency();
   const isMobile = useIsMobile();
-  const [categoriesParent] = useAutoAnimate();
-  const [ingredientsParent] = useAutoAnimate();
   const [priceRange, setPriceRange] = useState<[number, number]>(
     filters?.priceRange || [minPrice, maxPrice],
   );
@@ -56,19 +49,12 @@ export function FiltersDrawer({
     filters?.ingredients || [],
   );
 
-  const handleCategoryToggle = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category],
-    );
-  };
-
-  const handleIngredientToggle = (ingredient: string) => {
-    setSelectedIngredients((prev) =>
-      prev.includes(ingredient)
-        ? prev.filter((i) => i !== ingredient)
-        : [...prev, ingredient],
+  const toggleItem = (
+    item: string,
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+  ) => {
+    setter((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item],
     );
   };
 
@@ -102,101 +88,30 @@ export function FiltersDrawer({
         </DrawerHeader>
 
         <div className="space-y-6 px-4 pb-4">
-          {/* Price Range Filter */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-base font-semibold">Price Range</Label>
-              <span className="text-muted-foreground text-sm">
-                {formatCurrency(priceRange[0])} -{" "}
-                {formatCurrency(priceRange[1])}
-              </span>
-            </div>
-            <Slider
-              min={minPrice}
-              max={maxPrice}
-              step={1}
-              value={priceRange}
-              onValueChange={(value) =>
-                setPriceRange(value as [number, number])
-              }
-            />
-          </div>
+          <PriceRangeFilter
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            value={priceRange}
+            onChange={setPriceRange}
+          />
 
-          {/* Categories Filter */}
-          {allCategories.length > 0 && (
-            <div className="space-y-4">
-              <Label className="text-base font-semibold">Categories</Label>
-              <div ref={categoriesParent} className="flex flex-wrap gap-2">
-                {[...allCategories]
-                  .sort((a, b) => {
-                    const aSelected = selectedCategories.includes(a);
-                    const bSelected = selectedCategories.includes(b);
-                    if (aSelected && !bSelected) return -1;
-                    if (!aSelected && bSelected) return 1;
-                    return 0;
-                  })
-                  .map((category) => {
-                    const isSelected = selectedCategories.includes(category);
-                    return (
-                      <Badge
-                        key={category}
-                        variant={isSelected ? "default" : "outline"}
-                        className="cursor-pointer px-3 py-1.5"
-                        onClick={() => handleCategoryToggle(category)}
-                      >
-                        {category}
-                      </Badge>
-                    );
-                  })}
-              </div>
-            </div>
-          )}
+          <BadgeFilter
+            label="Categories"
+            items={allCategories}
+            selectedItems={selectedCategories}
+            onToggle={(item) => toggleItem(item, setSelectedCategories)}
+          />
 
-          {/* Ingredients Filter */}
-          {allIngredients.length > 0 && (
-            <div className="space-y-4">
-              <Label className="text-base font-semibold">
-                Exclude Ingredients
-              </Label>
-              <div ref={ingredientsParent} className="flex flex-wrap gap-2">
-                {[...allIngredients]
-                  .sort((a, b) => {
-                    const aSelected = selectedIngredients.includes(a);
-                    const bSelected = selectedIngredients.includes(b);
-                    if (aSelected && !bSelected) return -1;
-                    if (!aSelected && bSelected) return 1;
-                    return 0;
-                  })
-                  .map((ingredient) => {
-                    const isSelected = selectedIngredients.includes(ingredient);
-                    return (
-                      <Badge
-                        key={ingredient}
-                        variant={isSelected ? "default" : "outline"}
-                        className="cursor-pointer px-3 py-1.5"
-                        onClick={() => handleIngredientToggle(ingredient)}
-                      >
-                        {ingredient}
-                      </Badge>
-                    );
-                  })}
-              </div>
-            </div>
-          )}
+          <BadgeFilter
+            label="Exclude Ingredients"
+            items={allIngredients}
+            selectedItems={selectedIngredients}
+            onToggle={(item) => toggleItem(item, setSelectedIngredients)}
+          />
         </div>
 
         <DrawerFooter>
-          <div className="flex w-full gap-2">
-            <Button onClick={handleApply} className="flex-1">
-              Apply Filters
-            </Button>
-            <Button variant="outline" onClick={handleReset} className="flex-1">
-              Reset
-            </Button>
-          </div>
-          <DrawerClose asChild>
-            <Button variant="ghost">Cancel</Button>
-          </DrawerClose>
+          <FilterActions onApply={handleApply} onReset={handleReset} />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
