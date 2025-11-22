@@ -63,7 +63,7 @@ export async function generateMetadata({
   console.log(ogImageUrl.toString());
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
-    description: `${restaurant.description} Located at ${restaurant.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
+    description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
     keywords: [
       restaurant.name,
       ...(restaurant.categories?.map((cat) => cat.name) || []),
@@ -71,12 +71,12 @@ export async function generateMetadata({
       "menu",
       "dining",
       "food",
-      restaurant.address || "",
+      restaurant?.address || "",
       "tapnosh",
     ].filter(Boolean),
     openGraph: {
       title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
-      description: `${restaurant.description} Located at ${restaurant.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
+      description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
       url: `${baseUrl}/restaurants/${restaurant.slug}`,
       type: "website",
       images: [
@@ -91,14 +91,14 @@ export async function generateMetadata({
     },
     twitter: {
       title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
-      description: `${restaurant.description} Located at ${restaurant.address || "your area"}. Discover their menu and dining experience.`,
+      description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience.`,
       images: [ogImageUrl.toString()],
     },
     alternates: {
       canonical: `${baseUrl}/restaurants/${restaurant.slug}`,
     },
     other: {
-      "business:contact_data:street_address": restaurant.address || "",
+      "business:contact_data:street_address": restaurant?.address || "",
       "business:contact_data:locality": "City", // You might want to extract this from address
       "business:contact_data:region": "Region", // You might want to extract this from address
       "business:contact_data:country_name": "Country", // You might want to extract this from address
@@ -131,7 +131,7 @@ export default async function Restaurant({
     <>
       {/* <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
       /> */}
       <ThemeSetter color={restaurant.theme.color} />
       <RestaurantPage restaurant={restaurant} schema={schema} />
