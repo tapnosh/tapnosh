@@ -60,49 +60,49 @@ export async function generateMetadata({
 
   const ogImageUrl = new URL(`${baseUrl}/api/og/restaurant`);
   ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
-  console.log(ogImageUrl.toString());
+
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
     description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
-    keywords: [
-      restaurant.name,
-      ...(restaurant.categories?.map((cat) => cat.name) || []),
-      "restaurant",
-      "menu",
-      "dining",
-      "food",
-      restaurant?.address || "",
-      "tapnosh",
-    ].filter(Boolean),
-    openGraph: {
-      title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
-      description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
-      url: `${baseUrl}/restaurants/${restaurant.slug}`,
-      type: "website",
-      images: [
-        {
-          url: ogImageUrl.toString(),
-          width: 1200,
-          height: 630,
-          alt: `${restaurant.name} - Restaurant`,
-        },
-      ],
-      siteName: "tapnosh",
-    },
-    twitter: {
-      title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
-      description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience.`,
-      images: [ogImageUrl.toString()],
-    },
-    alternates: {
-      canonical: `${baseUrl}/restaurants/${restaurant.slug}`,
-    },
-    other: {
-      "business:contact_data:street_address": restaurant?.address || "",
-      "business:contact_data:locality": "City", // You might want to extract this from address
-      "business:contact_data:region": "Region", // You might want to extract this from address
-      "business:contact_data:country_name": "Country", // You might want to extract this from address
-    },
+    // keywords: [
+    //   restaurant.name,
+    //   ...(restaurant.categories?.map((cat) => cat.name) || []),
+    //   "restaurant",
+    //   "menu",
+    //   "dining",
+    //   "food",
+    //   restaurant?.address || "",
+    //   "tapnosh",
+    // ].filter(Boolean),
+    // openGraph: {
+    //   title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
+    //   description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience on tapnosh.`,
+    //   url: `${baseUrl}/restaurants/${restaurant.slug}`,
+    //   type: "website",
+    //   images: [
+    //     {
+    //       url: ogImageUrl.toString(),
+    //       width: 1200,
+    //       height: 630,
+    //       alt: `${restaurant.name} - Restaurant`,
+    //     },
+    //   ],
+    //   siteName: "tapnosh",
+    // },
+    // twitter: {
+    //   title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
+    //   description: `${restaurant.description} Located at ${restaurant?.address || "your area"}. Discover their menu and dining experience.`,
+    //   images: [ogImageUrl.toString()],
+    // },
+    // alternates: {
+    //   canonical: `${baseUrl}/restaurants/${restaurant.slug}`,
+    // },
+    // other: {
+    //   "business:contact_data:street_address": restaurant?.address || "",
+    //   "business:contact_data:locality": "City", // You might want to extract this from address
+    //   "business:contact_data:region": "Region", // You might want to extract this from address
+    //   "business:contact_data:country_name": "Country", // You might want to extract this from address
+    // },
   };
 }
 
