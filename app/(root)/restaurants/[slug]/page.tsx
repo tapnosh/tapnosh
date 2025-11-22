@@ -58,8 +58,8 @@ export async function generateMetadata({
   const restaurantCategories =
     restaurant.categories?.map((cat) => cat.name).join(", ") || "Restaurant";
 
-  // const ogImageUrl = new URL("/api/og/restaurant", baseUrl);
-  // ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
+  const ogImageUrl = new URL("/api/og/restaurant");
+  ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
 
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
