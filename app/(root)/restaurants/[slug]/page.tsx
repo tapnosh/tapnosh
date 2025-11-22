@@ -2,6 +2,7 @@
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
 // import { generateRestaurant } from "@/features/menu/lib/generateRestaurantSchema";
+import { generateRestaurant } from "@/features/menu/lib/generateRestaurantSchema";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
 import { ThemeSetter } from "@/features/theme/theme-setter";
 import { Restaurant as RestaurantType } from "@/types/restaurant/Restaurant";
@@ -121,18 +122,18 @@ export default async function Restaurant({
 
   const { schema } = (await fetchMenu(restaurant.id)) || {};
 
-  // const jsonLd = generateRestaurant(
-  //   restaurant,
-  //   schema,
-  //   restaurant.slug ?? slug,
-  // );
+  const jsonLd = generateRestaurant(
+    restaurant,
+    schema,
+    restaurant.slug ?? slug,
+  );
 
   return (
     <>
-      {/* <script
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      /> */}
+      />
       <ThemeSetter color={restaurant.theme.color} />
       <RestaurantPage restaurant={restaurant} schema={schema} />
     </>
