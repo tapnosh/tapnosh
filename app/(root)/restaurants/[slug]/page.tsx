@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
-import { generateRestaurant } from "@/features/menu/lib/generateRestaurantSchema";
+// import { generateRestaurant } from "@/features/menu/lib/generateRestaurantSchema";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
 import { ThemeSetter } from "@/features/theme/theme-setter";
 import { Restaurant as RestaurantType } from "@/types/restaurant/Restaurant";
