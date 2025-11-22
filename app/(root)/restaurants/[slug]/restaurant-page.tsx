@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
-// import { ShareButton } from "@/components/ui/forms/share-button";git
+import { ShareButton } from "@/components/ui/forms/share-button";
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { FilterState } from "@/features/filters/types";
 import { MenuGroup } from "@/features/menu/menu-group";
@@ -258,11 +258,11 @@ export function RestaurantHeader({
             >
               Make Reservation
             </Link>
-            {/* <ShareButton
+            <ShareButton
               className="size-10"
               url={`/restaurants/${restaurant.slug}`}
               size="icon"
-            /> */}
+            />
           </div>
         )}
       </div>
