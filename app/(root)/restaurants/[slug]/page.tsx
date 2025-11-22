@@ -58,7 +58,7 @@ export async function generateMetadata({
   const restaurantCategories =
     restaurant.categories?.map((cat) => cat.name).join(", ") || "Restaurant";
 
-  const ogImageUrl = `/api/og/restaurant?restaurant=${encodeURIComponent(restaurant.slug ?? "")}`;
+  const ogImageUrl = `${baseUrl}/api/og/restaurant?restaurant=${encodeURIComponent(restaurant.slug ?? "")}`;
 
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
