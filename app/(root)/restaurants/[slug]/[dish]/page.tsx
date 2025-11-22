@@ -15,11 +15,9 @@ function generateDishMetadata(
   restaurant: Restaurant,
   dishId: string,
 ): Metadata {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
 
-  const ogImageUrl = new URL(`${baseUrl}/api/og/dish`);
-  ogImageUrl.searchParams.set("restaurant", restaurant.slug ?? "");
-  ogImageUrl.searchParams.set("dish", dishId);
+  const ogImageUrl = `${baseUrl}/api/og/dish?restaurant=${encodeURIComponent(restaurant.slug ?? "")}&dish=${encodeURIComponent(dishId)}`;
 
   return {
     title: `${dish.name} - ${restaurant.name}`,
@@ -100,7 +98,7 @@ export default async function DishPage({
 
     if (result) {
       const menuItemJsonLd = generateMenuItemSchema(result.item, slug, dishId);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "";
 
       // Generate restaurant schema with hasMenu containing the specific menu item
       restaurantJsonLd = {
