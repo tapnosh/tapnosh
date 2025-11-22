@@ -3,11 +3,12 @@
 import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { Dispatch, useState } from "react";
+import { Dispatch, useMemo, useState } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
+import { ShareButton } from "@/components/ui/forms/share-button";
 import { useNotification } from "@/context/NotificationBar";
 import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -20,17 +21,25 @@ export const MenuItemModal = ({
   setOpen,
   menuItem,
   canBeAddedToTab = false,
+  restaurantSlug,
 }: {
   open: boolean;
   setOpen: Dispatch<boolean>;
   menuItem?: MenuItem;
   canBeAddedToTab?: boolean;
+  restaurantSlug?: string;
 }) => {
   const [amount, setAmount] = useState<number | string>(1);
   const { openNotification } = useNotification();
   const { addItem } = useOrder();
 
   const { formatCurrency } = useCurrency();
+
+  const shareUrl = useMemo(() => {
+    if (!restaurantSlug || !menuItem) return "";
+    const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
+    return `${baseUrl}/restaurants/${restaurantSlug}/${menuItem.id}`;
+  }, [restaurantSlug, menuItem]);
 
   const handleIncrement = () => {
     setAmount((prev) => (+prev >= 9 ? prev : +prev + 1));
@@ -101,12 +110,24 @@ export const MenuItemModal = ({
               aria-modal="true"
               className="sticky top-4 right-4 bottom-4 left-4 z-50 mx-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-xl"
             >
-              <button
-                onClick={() => setOpen(false)}
-                className="text-muted-foreground hover:bg-muted-foreground hover:text-secondary absolute top-4 right-4 z-10 rounded-full p-1 transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="absolute top-3 right-3 z-10 flex gap-2">
+                {restaurantSlug && shareUrl && (
+                  <ShareButton
+                    url={shareUrl}
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-muted-foreground hover:text-secondary text-muted-foreground rounded-full bg-white/80 backdrop-blur-sm transition-colors dark:bg-black/50"
+                  />
+                )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setOpen(false)}
+                  className="text-muted-foreground hover:bg-muted-foreground hover:text-secondary rounded-full bg-white/80 p-1 backdrop-blur-sm transition-colors dark:bg-black/50"
+                >
+                  <X className="size-5" />
+                </Button>
+              </div>
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
                   <div className="flex flex-wrap gap-1.5">

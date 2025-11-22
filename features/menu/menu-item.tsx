@@ -34,7 +34,7 @@ export const categoryIcons = {
   cold: <Beer className="h-4 w-4" />,
 };
 
-const MotionButton = motion(Button);
+const MotionButton = motion.create(Button);
 
 // Menu Item Card Component
 export function MenuItemCard({
@@ -89,9 +89,11 @@ export function MenuItemCard({
             <span className="font-display-median text-lg leading-5">
               {item.name}
             </span>
-            <span className="font-display-median text-lg leading-5 font-semibold">
-              {formatCurrency(item.price.amount, item.price.currency)}
-            </span>
+            <div className="flex items-center gap-1">
+              <span className="font-display-median text-lg leading-5 font-semibold">
+                {formatCurrency(item.price.amount, item.price.currency)}
+              </span>
+            </div>
           </header>
           <span className="text-muted-foreground pr-15 text-sm leading-4 italic">
             {item?.description}

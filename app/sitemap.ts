@@ -3,7 +3,7 @@ import { MetadataRoute } from "next";
 import { sitemapLogger } from "@/lib/logger/app";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tapnosh.com";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const dynamic = "force-dynamic";
@@ -26,6 +26,13 @@ export default async function sitemap({
   id: string;
 }): Promise<MetadataRoute.Sitemap> {
   sitemapLogger.info({ segmentId: id }, "Generating sitemap for segment");
+
+  if (!baseUrl) {
+    sitemapLogger.error(
+      "NEXT_PUBLIC_SITE_URL is not defined in environment variables",
+    );
+    return [];
+  }
 
   // Static pages sitemap
   if (id === "static") {
