@@ -1,5 +1,6 @@
 import { useFormContext, useWatch } from "react-hook-form";
 
+import { CategoryMultiSelect } from "@/components/ui/forms/category-multiselect";
 import {
   FormControl,
   FormField,
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/forms/form";
 import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
 import { Input } from "@/components/ui/forms/input";
-import MultiChipInput from "@/components/ui/forms/multi-chip-input";
 import PriceInput from "@/components/ui/forms/price-input";
 import { Textarea } from "@/components/ui/forms/textarea";
 import { useBuilder } from "@/context/BuilderContext";
@@ -30,7 +30,7 @@ function BuilderElementMenuItemBase({
   elementKey,
 }: BuilderElementMenuItemProps) {
   const data = useWatch<Builder>({ name: elementKey });
-  const { control, setValue } = useFormContext<Builder>();
+  const { control } = useFormContext<Builder>();
   const { previewMode } = useBuilder();
 
   if (previewMode) {
@@ -82,24 +82,16 @@ function BuilderElementMenuItemBase({
 
       <FormField
         control={control}
-        name={`${elementKey}.ingredients`}
+        name={`${elementKey}.allergen_ids`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Ingredients</FormLabel>
+            <FormLabel>Allergens</FormLabel>
             <FormControl>
-              <MultiChipInput
-                fields={field.value ?? []}
-                append={(value) =>
-                  setValue(`${elementKey}.ingredients`, [
-                    ...[...(field.value ?? []), value],
-                  ])
-                }
-                remove={(value) =>
-                  setValue(
-                    `${elementKey}.ingredients`,
-                    field?.value?.filter((item: string) => item !== value),
-                  )
-                }
+              <CategoryMultiSelect
+                value={field.value}
+                onChange={field.onChange}
+                type="allergens"
+                placeholder="Select allergens..."
               />
             </FormControl>
             <FormMessage />
@@ -109,24 +101,16 @@ function BuilderElementMenuItemBase({
 
       <FormField
         control={control}
-        name={`${elementKey}.categories`}
+        name={`${elementKey}.food_type_ids`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Categories</FormLabel>
+            <FormLabel>Food Types</FormLabel>
             <FormControl>
-              <MultiChipInput
-                fields={field.value ?? []}
-                append={(value) =>
-                  setValue(`${elementKey}.categories`, [
-                    ...[...(field.value ?? []), value],
-                  ])
-                }
-                remove={(value) =>
-                  setValue(
-                    `${elementKey}.categories`,
-                    field?.value?.filter((item: string) => item !== value),
-                  )
-                }
+              <CategoryMultiSelect
+                value={field.value}
+                onChange={field.onChange}
+                type="food_type"
+                placeholder="Select food types..."
               />
             </FormControl>
             <FormMessage />

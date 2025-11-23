@@ -109,20 +109,22 @@ export function RestaurantDetailsForm({
           )}
         />
 
-        {/* CATEGORIES */}
+        {/* CUISINES */}
         <FormField
           control={form.control}
-          name="category_ids"
+          name="cuisine_ids"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Categories</FormLabel>
+              <FormLabel>Cuisines</FormLabel>
               <FormDescription>
-                Search and select categories that apply to this restaurant
+                Search and select cuisines that apply to this restaurant
               </FormDescription>
               <FormControl>
                 <CategoryMultiSelect
                   value={field.value}
                   onChange={field.onChange}
+                  type="cuisine"
+                  placeholder="Select cuisines..."
                 />
               </FormControl>
               <FormMessage />

@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { ImageResponse } from "@vercel/og";
 import Color, { type ColorInstance } from "color";
 import { NextRequest } from "next/server";
+import { getTranslations } from "next-intl/server";
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
@@ -81,9 +82,20 @@ export async function GET(request: NextRequest) {
 
     const dish = result.item;
 
+    // Get food type names from translations
+    const t = await getTranslations("categories");
+    const foodTypeNames: string[] = [];
+    if (dish.food_type_ids && dish.food_type_ids.length > 0) {
+      dish.food_type_ids.forEach((id) => {
+        const name = t(`food_type.${id}`);
+        if (name) {
+          foodTypeNames.push(name);
+        }
+      });
+    }
+
     // Extract dish details
     const dishName = dish.name;
-    const ingredients = dish.ingredients?.join(" • ");
     const currency = dish.price.currency;
     const price = new Intl.NumberFormat("pl-PL", {
       style: "currency",
@@ -174,19 +186,34 @@ export async function GET(request: NextRequest) {
                 {dishName}
               </h1>
 
-              {/* Ingredients */}
-              {ingredients && (
-                <p
+              {/* Food types */}
+              {foodTypeNames.length > 0 && (
+                <div
                   style={{
-                    fontSize: "28px",
-                    lineHeight: 1.5,
-                    color: foregroundColor.hex(),
-                    marginBottom: "16px",
-                    fontWeight: 300,
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                    marginTop: "16px",
+                    marginBottom: "8px",
                   }}
                 >
-                  {ingredients}
-                </p>
+                  {foodTypeNames.map((foodType, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        display: "flex",
+                        padding: "6px 14px",
+                        backgroundColor: foregroundColor.alpha(0.15).string(),
+                        color: foregroundColor.hex(),
+                        borderRadius: "8px",
+                        fontSize: "20px",
+                        fontWeight: 300,
+                      }}
+                    >
+                      {foodType}
+                    </span>
+                  ))}
+                </div>
               )}
 
               {/* Price */}

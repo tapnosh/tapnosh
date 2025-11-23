@@ -1,6 +1,26 @@
 "use client";
 
-import { Check, ChevronsUpDown, Loader2, Tag, X } from "lucide-react";
+import {
+  Apple,
+  Check,
+  ChevronRight,
+  ChevronsUpDown,
+  CookingPot,
+  Droplets,
+  Fish,
+  Flame,
+  Leaf,
+  Loader2,
+  Milk,
+  Nut,
+  Sparkles,
+  Tag,
+  Wheat,
+  WheatOff,
+  Wine,
+  X,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
@@ -26,6 +46,7 @@ interface CategoryMultiSelectProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  type?: "cuisine" | "allergens" | "food_type";
 }
 
 export function CategoryMultiSelect({
@@ -34,15 +55,65 @@ export function CategoryMultiSelect({
   placeholder = "Select categories...",
   className,
   disabled = false,
+  type,
 }: CategoryMultiSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const t = useTranslations("categories");
+
+  // Icon mapping based on category type and ID
+  const getCategoryIcon = (categoryId: string, categoryType?: string) => {
+    const iconClass = "h-3.5 w-3.5";
+
+    if (categoryType === "allergens") {
+      const allergenIcons: Record<string, React.ReactNode> = {
+        gluten: <Wheat className={iconClass} />,
+        crustaceans: <Fish className={iconClass} />,
+        eggs: <Apple className={iconClass} />,
+        fish: <Fish className={iconClass} />,
+        peanuts: <Nut className={iconClass} />,
+        soybeans: <Leaf className={iconClass} />,
+        milk: <Milk className={iconClass} />,
+        nuts: <Nut className={iconClass} />,
+        alcohol: <Wine className={iconClass} />,
+      };
+      return allergenIcons[categoryId] || <WheatOff className={iconClass} />;
+    }
+
+    if (categoryType === "food_type") {
+      const foodTypeIcons: Record<string, React.ReactNode> = {
+        vegan: <Leaf className={iconClass} />,
+        vegetarian: <Leaf className={iconClass} />,
+        gluten_free: <Wheat className={`${iconClass} line-through`} />,
+        lactose_free: <Milk className={`${iconClass} line-through`} />,
+        spicy: <Flame className={iconClass} />,
+        hot: <Flame className={iconClass} />,
+        halal: <Sparkles className={iconClass} />,
+        kosher: <Sparkles className={iconClass} />,
+        organic: <Leaf className={iconClass} />,
+        raw: <Droplets className={iconClass} />,
+      };
+      return foodTypeIcons[categoryId] || <CookingPot className={iconClass} />;
+    }
+
+    if (categoryType === "cuisine") {
+      const cuisineIcons: Record<string, React.ReactNode> = {
+        seafood: <Fish className={iconClass} />,
+        bbq: <Flame className={iconClass} />,
+        vegan: <Leaf className={iconClass} />,
+        vegetarian: <Leaf className={iconClass} />,
+      };
+      return cuisineIcons[categoryId] || <ChevronRight className={iconClass} />;
+    }
+
+    return <Tag className={iconClass} />;
+  };
 
   const {
     data: categories = [],
     error: categoriesError,
     isLoading: isLoadingCategories,
-  } = useCategoriesQuery();
+  } = useCategoriesQuery(type ? { type } : undefined);
 
   const selectedCategories = React.useMemo(
     () => categories.filter((cat) => value.includes(cat.id)),
@@ -52,12 +123,8 @@ export function CategoryMultiSelect({
   const filteredCategories = React.useMemo(() => {
     if (!searchQuery) return categories;
     const query = searchQuery.toLowerCase();
-    return categories.filter(
-      (cat) =>
-        cat.name.toLowerCase().includes(query) ||
-        cat.description?.toLowerCase().includes(query),
-    );
-  }, [categories, searchQuery]);
+    return categories.filter((cat) => t(cat.id).toLowerCase().includes(query));
+  }, [categories, searchQuery, t]);
 
   const handleToggleCategory = (categoryId: string) => {
     const newValue = value.includes(categoryId)
@@ -80,10 +147,10 @@ export function CategoryMultiSelect({
       return placeholder;
     }
     if (selectedCategories.length === 1) {
-      return selectedCategories[0].name;
+      return t(selectedCategories[0].id);
     }
     return `${selectedCategories.length} categories selected`;
-  }, [selectedCategories, placeholder]);
+  }, [selectedCategories, placeholder, t]);
 
   return (
     <div className="space-y-2">
@@ -145,13 +212,11 @@ export function CategoryMultiSelect({
                           onSelect={() => handleToggleCategory(category.id)}
                           className="cursor-pointer"
                         >
-                          <div className="flex flex-col">
-                            <span className="font-medium">{category.name}</span>
-                            {category.description && (
-                              <span className="text-muted-foreground text-xs">
-                                {category.description}
-                              </span>
-                            )}
+                          <div className="flex items-center gap-2">
+                            {getCategoryIcon(category.id, type)}
+                            <span className="font-medium">
+                              {t(category.id)}
+                            </span>
                           </div>
                           {isSelected && <Check className="ml-auto h-4 w-4" />}
                         </CommandItem>
@@ -172,8 +237,8 @@ export function CategoryMultiSelect({
               key={category.id}
               className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-sm"
             >
-              <Tag className="h-3 w-3" />
-              <span>{category.name}</span>
+              {getCategoryIcon(category.id, type)}
+              <span>{t(category.id)}</span>
               <button
                 type="button"
                 onClick={(e) => handleRemoveCategory(category.id, e)}

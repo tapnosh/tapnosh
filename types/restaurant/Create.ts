@@ -31,10 +31,9 @@ export const RestaurantFormSchema = z.object({
     .array(z.union([UploadImageSchema, BlobImageSchema]))
     .min(1, "At least one image must be added")
     .max(5, "You can upload up to 5 images"),
-  category_ids: z
+  cuisine_ids: z
     .array(z.string().uuid())
-    .max(5, "You can select up to 5 categories")
-    // .min(1, "At least one category must be selected")
+    .max(5, "You can select up to 5 cuisines")
     .optional(),
 });
 

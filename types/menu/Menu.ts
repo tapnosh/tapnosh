@@ -26,8 +26,8 @@ export const MenuItemSchema = z.object({
       .positive("Amount must be a positive number"),
     currency: z.string(),
   }),
-  ingredients: z.array(z.string()).max(10).optional(),
-  categories: z.array(z.string()).max(10).optional(),
+  allergen_ids: z.array(z.string()).max(10).optional(),
+  food_type_ids: z.array(z.string()).max(10).optional(),
   image: z
     .union([
       z.string().url().optional(),
@@ -35,6 +35,8 @@ export const MenuItemSchema = z.object({
     ])
     .optional(),
   confirmed: z.boolean().optional(),
+  ingredients: z.array(z.string()).optional(),
+  categories: z.array(z.string()).optional(),
 });
 
 export type MenuItem = z.infer<typeof MenuItemSchema>;

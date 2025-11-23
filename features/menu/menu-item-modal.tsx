@@ -6,15 +6,12 @@ import Image from "next/image";
 import { Dispatch, useMemo, useState } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 
-import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { ShareButton } from "@/components/ui/forms/share-button";
 import { useNotification } from "@/context/NotificationBar";
 import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
-
-import { categoryIcons } from "./menu-item";
 
 export const MenuItemModal = ({
   open,
@@ -130,19 +127,6 @@ export const MenuItemModal = ({
               </div>
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
-                  <div className="flex flex-wrap gap-1.5">
-                    {menuItem?.categories?.map((category) => (
-                      <Badge
-                        key={category}
-                        variant="secondary"
-                        className="text-xs"
-                      >
-                        {categoryIcons[category as keyof typeof categoryIcons]}
-
-                        {category}
-                      </Badge>
-                    ))}
-                  </div>
                   <motion.h2
                     className="font-display-median mt-3 font-normal"
                     initial={{ opacity: 0, y: "50%" }}
@@ -163,26 +147,6 @@ export const MenuItemModal = ({
                   </motion.span>
                 </header>
                 <div className="pb-4">
-                  <div className="flex flex-col pt-3">
-                    <motion.h6
-                      initial={{ opacity: 0, y: "50%" }}
-                      animate={{ opacity: 1, y: "0%" }}
-                      exit={{ opacity: 0, y: "50%" }}
-                      transition={{ delay: 0.4, type: "tween", duration: 0.3 }}
-                      className="font-display-median text-foreground block uppercase"
-                    >
-                      Ingredients
-                    </motion.h6>
-                    <motion.span
-                      initial={{ opacity: 0, y: "50%" }}
-                      animate={{ opacity: 1, y: "0%" }}
-                      exit={{ opacity: 0, y: "50%" }}
-                      transition={{ delay: 0.5, type: "tween", duration: 0.3 }}
-                      className="text-muted-foreground mb-1 block"
-                    >
-                      {menuItem?.ingredients?.join(" • ")}
-                    </motion.span>
-                  </div>
                   {menuItem?.image && (
                     <motion.div
                       layoutId={`item-image-${menuItem?.id}`}

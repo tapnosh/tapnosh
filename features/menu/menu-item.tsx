@@ -16,7 +16,6 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { useMemo } from "react";
 
-import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
@@ -100,16 +99,7 @@ export function MenuItemCard({
           </span>
           <footer className="mt-2 flex items-center justify-between gap-2">
             <div className="flex flex-1 flex-col gap-2">
-              <span className="text-sm">{item?.ingredients?.join(" • ")}</span>
-              <div className="flex flex-wrap gap-1.5">
-                {item?.categories?.map((category) => (
-                  <Badge key={category} variant="secondary" className="text-xs">
-                    {categoryIcons[category as keyof typeof categoryIcons]}
-
-                    {category}
-                  </Badge>
-                ))}
-              </div>
+              {/* Allergens and food types would be displayed here if needed */}
             </div>
 
             {isAvailable && onAddToCart && (

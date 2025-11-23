@@ -27,7 +27,7 @@ export function RestaurantFormCreate() {
       description: "",
       theme_id: "",
       images: [],
-      category_ids: [],
+      cuisine_ids: [],
     },
   });
 

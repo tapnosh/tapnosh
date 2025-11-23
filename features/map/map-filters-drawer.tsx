@@ -40,8 +40,8 @@ function BadgeFilter({
   selectedItems,
   onToggle,
   mode = "include",
-  searchQuery,
   translateItem,
+  showSearch = true,
 }: {
   label: string;
   description?: string;
@@ -49,10 +49,11 @@ function BadgeFilter({
   selectedItems: string[];
   onToggle: (item: string) => void;
   mode?: "include" | "exclude";
-  searchQuery: string;
   translateItem: (id: string) => string;
+  showSearch?: boolean;
 }) {
   const [parent] = useAutoAnimate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredItems = useMemo(() => {
     if (!searchQuery) return items;
@@ -64,13 +65,15 @@ function BadgeFilter({
 
   if (items.length === 0) return null;
 
-  const sortedItems = [...filteredItems].sort((a, b) => {
-    const aSelected = selectedItems.includes(a.name);
-    const bSelected = selectedItems.includes(b.name);
-    if (aSelected && !bSelected) return -1;
-    if (!aSelected && bSelected) return 1;
-    return 0;
-  });
+  // Split items into selected and unselected for proper ordering
+  const selectedItemsFiltered = items.filter((item) =>
+    selectedItems.includes(item.name),
+  );
+  const unselectedItemsFiltered = filteredItems.filter(
+    (item) => !selectedItems.includes(item.name),
+  );
+
+  const sortedItems = [...selectedItemsFiltered, ...unselectedItemsFiltered];
 
   const modeText = mode === "exclude" ? "Exclude" : "Include";
 
@@ -87,6 +90,19 @@ function BadgeFilter({
           <p className="text-muted-foreground mt-1 text-sm">{description}</p>
         )}
       </div>
+      {/* Search Bar */}
+      {showSearch && (
+        <div className="relative">
+          <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <Input
+            type="text"
+            placeholder="Search categories..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+      )}
       <div ref={parent} className="flex flex-wrap gap-2">
         {sortedItems.length === 0 ? (
           <p className="text-muted-foreground text-sm">No results found</p>
@@ -144,15 +160,8 @@ export function MapFiltersDrawer({
 }: MapFiltersDrawerProps) {
   const isMobile = useIsMobile();
   const t = useTranslations("categories");
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>(
     filters?.cuisines || [],
-  );
-  const [selectedAllergens, setSelectedAllergens] = useState<string[]>(
-    filters?.allergens || [],
-  );
-  const [selectedFoodTypes, setSelectedFoodTypes] = useState<string[]>(
-    filters?.foodTypes || [],
   );
   const [distance, setDistance] = useState<number | null>(
     filters?.distance ?? null,
@@ -160,8 +169,6 @@ export function MapFiltersDrawer({
 
   // Fetch categories by type
   const { data: cuisines = [] } = useCategoriesQuery({ type: "cuisine" });
-  const { data: allergens = [] } = useCategoriesQuery({ type: "allergens" });
-  const { data: foodTypes = [] } = useCategoriesQuery({ type: "food_type" });
 
   // Helper function to translate category by ID
   const translateCategory = (id: string) => {
@@ -176,27 +183,11 @@ export function MapFiltersDrawer({
     );
   };
 
-  const toggleAllergen = (allergen: string) => {
-    setSelectedAllergens((prev) =>
-      prev.includes(allergen)
-        ? prev.filter((a) => a !== allergen)
-        : [...prev, allergen],
-    );
-  };
-
-  const toggleFoodType = (foodType: string) => {
-    setSelectedFoodTypes((prev) =>
-      prev.includes(foodType)
-        ? prev.filter((f) => f !== foodType)
-        : [...prev, foodType],
-    );
-  };
-
   const handleApply = () => {
     onApply({
       cuisines: selectedCuisines,
-      allergens: selectedAllergens,
-      foodTypes: selectedFoodTypes,
+      allergens: [],
+      foodTypes: [],
       distance,
     });
     setOpen(false);
@@ -204,10 +195,7 @@ export function MapFiltersDrawer({
 
   const handleReset = () => {
     setSelectedCuisines([]);
-    setSelectedAllergens([]);
-    setSelectedFoodTypes([]);
     setDistance(null);
-    setSearchQuery("");
   };
 
   return (
@@ -226,18 +214,6 @@ export function MapFiltersDrawer({
         </DrawerHeader>
 
         <div className="space-y-6 overflow-y-auto px-4 pb-4">
-          {/* Search Bar */}
-          <div className="relative">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-            <Input
-              type="text"
-              placeholder="Search categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
-            />
-          </div>
-
           <DistanceFilter
             maxDistance={100}
             value={distance}
@@ -252,29 +228,6 @@ export function MapFiltersDrawer({
             selectedItems={selectedCuisines}
             onToggle={toggleCuisine}
             mode="include"
-            searchQuery={searchQuery}
-            translateItem={translateCategory}
-          />
-
-          <BadgeFilter
-            label="Allergens"
-            description="Exclude restaurants with these allergens"
-            items={allergens}
-            selectedItems={selectedAllergens}
-            onToggle={toggleAllergen}
-            mode="exclude"
-            searchQuery={searchQuery}
-            translateItem={translateCategory}
-          />
-
-          <BadgeFilter
-            label="Food Types"
-            description="Include restaurants with these food types"
-            items={foodTypes}
-            selectedItems={selectedFoodTypes}
-            onToggle={toggleFoodType}
-            mode="include"
-            searchQuery={searchQuery}
             translateItem={translateCategory}
           />
         </div>
