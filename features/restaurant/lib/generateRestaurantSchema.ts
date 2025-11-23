@@ -13,7 +13,7 @@ export function generateRestaurantSchema(
     "@type": "Restaurant",
     name: restaurant.name,
     description: restaurant.description,
-    address: restaurant.address.formattedAddress
+    address: restaurant?.address?.formattedAddress
       ? {
           "@type": "PostalAddress",
           streetAddress: restaurant.address.formattedAddress,
