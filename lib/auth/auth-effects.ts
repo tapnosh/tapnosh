@@ -66,7 +66,8 @@ export const validateUserAuthorization = (
   userId: string | null,
 ) =>
   token && userId
-    ? Effect.succeed({ token, userId })
+    ? // TODO noshtap call to verify ownership
+      Effect.succeed({ token, userId })
     : Effect.fail(
         new UnauthorizedError({
           message: "User is not authorized",

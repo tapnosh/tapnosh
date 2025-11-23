@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { unstable_ViewTransition as ViewTransition } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
@@ -15,8 +18,10 @@ interface RestaurantCardProps {
 
 function RestaurantBadges({
   categories,
+  translateCategory,
 }: {
   categories?: RestaurantCategory[];
+  translateCategory: (id: string) => string;
 }) {
   if (!categories) {
     return <></>;
@@ -24,9 +29,9 @@ function RestaurantBadges({
 
   return (
     <div className="flex gap-2">
-      {categories?.map(({ name, id }) => (
+      {categories?.map(({ id }) => (
         <Badge key={id} variant="outline" className="font-medium">
-          {name}
+          {translateCategory(id)}
         </Badge>
       ))}
     </div>
@@ -34,6 +39,13 @@ function RestaurantBadges({
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
+  const t = useTranslations("categories");
+
+  // Helper function to translate category by ID
+  const translateCategory = (id: string) => {
+    return t(id);
+  };
+
   return (
     <div className="group mb-2 border-b pb-4 last:border-0">
       <RestaurantCarousel restaurant={restaurant} />
@@ -43,7 +55,10 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           <ViewTransition name={`title-${restaurant.id}`}>
             <h3>{restaurant.name}</h3>
           </ViewTransition>
-          <RestaurantBadges categories={restaurant.categories} />
+          <RestaurantBadges
+            categories={restaurant.categories}
+            translateCategory={translateCategory}
+          />
         </div>
         <ViewTransition name={`description-${restaurant.id}`}>
           <p className="text-muted-foreground mb-3 italic">

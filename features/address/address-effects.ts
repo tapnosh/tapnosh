@@ -21,7 +21,7 @@ const client = new Client({});
  * Gets the Google Maps API key from environment variables
  */
 export const getGoogleMapsApiKey = () =>
-  Effect.sync(() => process.env.GOOGLE_MAPS_API_KEY).pipe(
+  Effect.sync(() => process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY).pipe(
     Effect.flatMap((key) =>
       key
         ? Effect.succeed(key)

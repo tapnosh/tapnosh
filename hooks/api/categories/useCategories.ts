@@ -4,15 +4,23 @@ import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
 import { Category } from "@/types/category/Category";
 
-export function useCategoriesQuery(): ReturnType<
-  typeof useQuery<Category[], TranslatedError>
->;
+interface UseCategoriesQueryParams {
+  type?: "cuisine" | "allergens" | "food_type";
+}
 
-export function useCategoriesQuery() {
+export function useCategoriesQuery(
+  params?: UseCategoriesQueryParams,
+): ReturnType<typeof useQuery<Category[], TranslatedError>>;
+
+export function useCategoriesQuery(params?: UseCategoriesQueryParams) {
   const { fetchClient } = useFetchClient();
 
+  const url = params?.type
+    ? `public_api/categories?type=${params.type}`
+    : "public_api/categories";
+
   return useQuery<Category[], TranslatedError>({
-    queryKey: ["categories"],
-    queryFn: () => fetchClient<Category[]>("public_api/categories"),
+    queryKey: ["categories", params?.type],
+    queryFn: () => fetchClient<Category[]>(url),
   });
 }

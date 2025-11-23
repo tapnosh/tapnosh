@@ -1,6 +1,13 @@
 "use client";
 
-import { BookOpen, Home, LifeBuoy, Send, Utensils } from "lucide-react";
+import {
+  BookOpen,
+  Home,
+  LifeBuoy,
+  MapIcon,
+  Send,
+  Utensils,
+} from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import * as React from "react";
@@ -36,18 +43,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           title: "Restaurants",
           url: "/restaurants",
           icon: Utensils,
-          items: params.slug
-            ? [
-                {
-                  title: `${params.slug}`,
-                  url: `/restaurants/${params.slug}`,
-                },
-                {
-                  title: `${params.slug} menu`,
-                  url: `/restaurants/${params.slug}/menu`,
-                },
-              ]
-            : undefined,
+          // items: params.slug
+          //   ? [
+          //       {
+          //         title: `${params.slug}`,
+          //         url: `/restaurants/${params.slug}`,
+          //       },
+          //       {
+          //         title: `${params.slug} menu`,
+          //         url: `/restaurants/${params.slug}/menu`,
+          //       },
+          //     ]
+          //   : undefined,
+        },
+        {
+          title: "Map",
+          url: "/map",
+          icon: MapIcon,
         },
         {
           title: "Documentation",
