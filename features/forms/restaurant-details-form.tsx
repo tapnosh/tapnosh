@@ -3,8 +3,9 @@
 import { Loader2 } from "lucide-react";
 import { type UseFormReturn } from "react-hook-form";
 
+import { AddressAutocomplete } from "@/components/ui/forms/address-autocomplete";
 import { Button } from "@/components/ui/forms/button";
-import { Checkbox } from "@/components/ui/forms/checkbox";
+import { CategoryMultiSelect } from "@/components/ui/forms/category-multiselect";
 import {
   Form,
   FormControl,
@@ -18,7 +19,6 @@ import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
 import { Input } from "@/components/ui/forms/input";
 import { Textarea } from "@/components/ui/forms/textarea";
 import { ThemePicker } from "@/features/theme/theme-picker";
-import { useCategoriesQuery } from "@/hooks/api/categories/useCategories";
 import { RestaurantFormData } from "@/types/restaurant/Create";
 
 interface RestaurantFormFieldsProps {
@@ -34,13 +34,6 @@ export function RestaurantDetailsForm({
   isPending,
   submitLabel = "Submit",
 }: RestaurantFormFieldsProps) {
-  const {
-    data: categories = [],
-    error: categoriesError,
-    isLoading: isLoadingCategories,
-    refetch: refetchCategories,
-  } = useCategoriesQuery();
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -78,6 +71,31 @@ export function RestaurantDetailsForm({
           )}
         />
 
+        {/* ADDRESS */}
+        <FormField
+          control={form.control}
+          name="address"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Address</FormLabel>
+              <FormDescription>
+                Search and select your restaurant&apos;s address
+              </FormDescription>
+              <FormControl>
+                <AddressAutocomplete
+                  value={field.value}
+                  onSelect={(address) => {
+                    field.onChange(address);
+                  }}
+                  placeholder="Search for an address..."
+                  debounceMs={300}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* IMAGES */}
         <FormField
           control={form.control}
@@ -95,82 +113,18 @@ export function RestaurantDetailsForm({
         <FormField
           control={form.control}
           name="category_ids"
-          render={() => (
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Categories</FormLabel>
               <FormDescription>
-                Select the categories that apply to this restaurant
+                Search and select categories that apply to this restaurant
               </FormDescription>
-
-              {isLoadingCategories ? (
-                <div className="flex items-center gap-2 py-4">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  <span className="text-muted-foreground text-sm">
-                    Loading categories...
-                  </span>
-                </div>
-              ) : categoriesError ? (
-                <div className="space-y-2 py-4">
-                  <p className="text-destructive text-sm">
-                    Failed to load categories
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => refetchCategories()}
-                  >
-                    Retry
-                  </Button>
-                </div>
-              ) : categories.length === 0 ? (
-                <p className="text-muted-foreground py-4 text-sm">
-                  No categories available
-                </p>
-              ) : (
-                <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
-                  {categories.map((category) => (
-                    <FormField
-                      key={category.id}
-                      control={form.control}
-                      name="category_ids"
-                      render={({ field }) => (
-                        <FormItem
-                          className="flex flex-row items-start space-y-0 space-x-3"
-                          key={category.id}
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(category.id)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([
-                                      ...(field.value || []),
-                                      category.id,
-                                    ])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== category.id,
-                                      ),
-                                    );
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="font-normal">
-                            {category.name}
-                            {category.description && (
-                              <span className="text-muted-foreground block text-xs">
-                                {category.description}
-                              </span>
-                            )}
-                          </FormLabel>
-                        </FormItem>
-                      )}
-                    />
-                  ))}
-                </div>
-              )}
-
+              <FormControl>
+                <CategoryMultiSelect
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -205,11 +159,7 @@ export function RestaurantDetailsForm({
           >
             Reset Form
           </Button>
-          <Button
-            type="submit"
-            disabled={isPending || isLoadingCategories}
-            className="flex-1"
-          >
+          <Button type="submit" disabled={isPending} className="flex-1">
             {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
