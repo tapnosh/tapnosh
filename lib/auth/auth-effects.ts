@@ -65,12 +65,11 @@ export const validateUserAuthorization = (
   token: string | null,
   userId: string | null,
 ) =>
-  // TODO user authorization
   token && userId
     ? Effect.succeed({ token, userId })
     : Effect.fail(
         new UnauthorizedError({
-          message: "User unauthorized to upload an image",
+          message: "User is not authorized",
           statusCode: 401,
         }),
       );

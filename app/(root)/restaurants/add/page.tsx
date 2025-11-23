@@ -43,7 +43,7 @@ export default function RestaurantCreate() {
         </h6>
       </section>
 
-      <section className="section items-center pb-8 lg:mt-12">
+      <section className="section items-center pb-8">
         <Card>
           <CardContent>
             <RestaurantFormCreate />
