@@ -14,7 +14,19 @@ export interface Restaurant {
   createdAt: string;
   updatedAt: string;
   theme: RestaurantTheme;
-  address: string | null;
+  address: {
+    formattedAddress: string;
+    streetNumber: string;
+    street: string;
+    city: string;
+    state: string;
+    stateCode: string;
+    country: string;
+    countryCode: string;
+    postalCode: string;
+    latitude: number;
+    longitude: number;
+  };
   images: PutBlobResult[];
   categories: RestaurantCategory[];
   menu?: Builder;

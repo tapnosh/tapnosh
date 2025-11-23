@@ -4,16 +4,16 @@ import { BlobImageSchema, UploadImageSchema } from "../image/BlobImage";
 
 export const AddressSchema = z.object({
   formattedAddress: z.string().min(1, "Address is required"),
-  streetNumber: z.string(),
-  street: z.string(),
+  streetNumber: z.string().min(1, "Street number is required"),
+  street: z.string().min(1, "Street is required"),
   city: z.string().min(1, "City is required"),
-  state: z.string(),
-  stateCode: z.string(),
+  state: z.string().min(1, "State is required"),
+  stateCode: z.string().min(1, "State code is required"),
   country: z.string().min(1, "Country is required"),
-  countryCode: z.string(),
-  postalCode: z.string(),
-  latitude: z.number().nullable(),
-  longitude: z.number().nullable(),
+  countryCode: z.string().min(1, "Country code is required"),
+  postalCode: z.string().min(1, "Postal code is required"),
+  latitude: z.number(),
+  longitude: z.number(),
 });
 
 export const RestaurantFormSchema = z.object({

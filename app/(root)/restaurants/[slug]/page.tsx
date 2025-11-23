@@ -70,7 +70,7 @@ export async function generateMetadata({
       "menu",
       "dining",
       "food",
-      restaurant?.address || "",
+      restaurant?.address.formattedAddress || "",
       "tapnosh",
     ].filter(Boolean),
     openGraph: {
@@ -97,7 +97,8 @@ export async function generateMetadata({
       canonical: `${baseUrl}/restaurants/${restaurant.slug}`,
     },
     other: {
-      "business:contact_data:street_address": restaurant?.address || "",
+      "business:contact_data:street_address":
+        restaurant?.address.formattedAddress || "",
       "business:contact_data:locality": "City", // You might want to extract this from address
       "business:contact_data:region": "Region", // You might want to extract this from address
       "business:contact_data:country_name": "Country", // You might want to extract this from address
