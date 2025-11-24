@@ -22,12 +22,14 @@ export const MenuItemModal = ({
   menuItem,
   canBeAddedToTab = false,
   restaurantSlug,
+  isAvailable = true,
 }: {
   open: boolean;
   setOpen: Dispatch<boolean>;
   menuItem?: MenuItem;
   canBeAddedToTab?: boolean;
   restaurantSlug?: string;
+  isAvailable?: boolean;
 }) => {
   const [amount, setAmount] = useState<number | string>(1);
   const { openNotification } = useNotification();
@@ -210,6 +212,21 @@ export const MenuItemModal = ({
                       </motion.div>
                     )}
                 </header>
+                {!isAvailable && (
+                  <motion.div
+                    className="text-muted-foreground mt-3 text-sm italic"
+                    initial={{ opacity: 0, y: "50%" }}
+                    animate={{ opacity: 1, y: "0%" }}
+                    exit={{ opacity: 0, y: "50%" }}
+                    transition={{
+                      delay: 0.45,
+                      type: "tween",
+                      duration: 0.3,
+                    }}
+                  >
+                    This dish is not available for serving
+                  </motion.div>
+                )}
                 <div className="pb-4">
                   {menuItem?.image && (
                     <motion.div
@@ -232,7 +249,7 @@ export const MenuItemModal = ({
                     </motion.div>
                   )}
                 </div>
-                {canBeAddedToTab && (
+                {canBeAddedToTab && isAvailable && (
                   <motion.footer
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

@@ -39,7 +39,7 @@ export function MenuItemCard({
       key={item.id}
       layoutId={`item-${item?.id}`}
       role="button"
-      style={{ borderRadius: "1rem" }}
+      style={{ borderRadius: "1rem", opacity: isAvailable ? 1 : 0.5 }}
       transition={{
         type: "spring",
         duration: 0.4,
@@ -132,16 +132,13 @@ export function MenuItemCard({
               </MotionButton>
             )}
           </footer>
+          {!isAvailable && (
+            <div className="text-muted-foreground mt-2 text-sm italic">
+              This dish is not available for serving
+            </div>
+          )}
         </div>
       </div>
-
-      {/* <CardFooter className="px-4">
-        {!isAvailable && (
-          <Badge variant="outline" className="text-muted-foreground">
-            Not Available
-          </Badge>
-        )}
-      </CardFooter> */}
     </motion.div>
   );
 }
