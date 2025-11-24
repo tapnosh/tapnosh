@@ -240,10 +240,12 @@ export const MenuItemModal = ({
                             : menuItem.image
                         }
                         alt={menuItem.name}
-                        width={2056}
-                        height={2056}
-                        quality={100}
+                        width={1024}
+                        height={1024}
+                        quality={90}
                         priority
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48L3N2Zz4="
                         className="pointer-events-none h-full w-full rounded-2xl object-cover"
                       />
                     </motion.div>
