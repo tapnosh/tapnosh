@@ -83,8 +83,8 @@ export function FiltersBar({
     if (onFiltersChange) {
       onFiltersChange({
         priceRange: [minPrice, maxPrice],
-        categories: [],
-        ingredients: [],
+        food_types: [],
+        allergens: [],
       });
     }
   };

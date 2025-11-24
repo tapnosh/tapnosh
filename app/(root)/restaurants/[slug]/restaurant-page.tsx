@@ -62,28 +62,28 @@ function MenuInteractive({
     if (!filters) return true;
 
     // Check price range
-    const { priceRange, categories, ingredients } = filters;
+    const { priceRange, food_types, allergens } = filters;
     const itemPrice = item.price.amount;
     if (itemPrice < priceRange[0] || itemPrice > priceRange[1]) {
       return false;
     }
 
-    // Check categories (if any are selected)
-    if (categories.length > 0) {
-      const itemCategories = item.categories || [];
-      const hasMatchingCategory = categories.some((cat) =>
-        itemCategories.includes(cat),
+    // Check food types (if any are selected, item must have at least one matching)
+    if (food_types.length > 0) {
+      const itemFoodTypes = item.food_type_ids || [];
+      const hasMatchingFoodType = food_types.some((foodType) =>
+        itemFoodTypes.includes(foodType),
       );
-      if (!hasMatchingCategory) return false;
+      if (!hasMatchingFoodType) return false;
     }
 
-    // Check ingredients (exclude items with selected ingredients)
-    if (ingredients.length > 0) {
-      const itemIngredients = item.ingredients || [];
-      const hasExcludedIngredient = ingredients.some((ing) =>
-        itemIngredients.includes(ing),
+    // Check allergens (if any are selected, item must NOT contain any of them)
+    if (allergens.length > 0) {
+      const itemAllergens = item.allergen_ids || [];
+      const hasExcludedAllergen = allergens.some((allergen) =>
+        itemAllergens.includes(allergen),
       );
-      if (hasExcludedIngredient) return false;
+      if (hasExcludedAllergen) return false;
     }
 
     return true;

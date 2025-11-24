@@ -45,11 +45,11 @@ export function FiltersDrawer({
   const [priceRange, setPriceRange] = useState<[number, number]>(
     filters?.priceRange || [minPrice, maxPrice],
   );
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    filters?.categories || [],
+  const [selectedFoodTypes, setSelectedFoodTypes] = useState<string[]>(
+    filters?.food_types || [],
   );
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>(
-    filters?.ingredients || [],
+  const [selectedAllergens, setSelectedAllergens] = useState<string[]>(
+    filters?.allergens || [],
   );
 
   const toggleItem = (
@@ -64,15 +64,15 @@ export function FiltersDrawer({
   const handleApply = () => {
     onApply({
       priceRange,
-      categories: selectedCategories,
-      ingredients: selectedIngredients,
+      food_types: selectedFoodTypes,
+      allergens: selectedAllergens,
     });
   };
 
   const handleReset = () => {
     setPriceRange([minPrice, maxPrice]);
-    setSelectedCategories([]);
-    setSelectedIngredients([]);
+    setSelectedFoodTypes([]);
+    setSelectedAllergens([]);
   };
 
   return (
@@ -101,16 +101,16 @@ export function FiltersDrawer({
           <BadgeFilter
             label="Food Types"
             items={foodTypes}
-            selectedItems={selectedCategories}
-            onToggle={(item) => toggleItem(item, setSelectedCategories)}
+            selectedItems={selectedFoodTypes}
+            onToggle={(item) => toggleItem(item, setSelectedFoodTypes)}
             translateItem={t}
           />
 
           <BadgeFilter
             label="Exclude Allergens"
             items={allergens}
-            selectedItems={selectedIngredients}
-            onToggle={(item) => toggleItem(item, setSelectedIngredients)}
+            selectedItems={selectedAllergens}
+            onToggle={(item) => toggleItem(item, setSelectedAllergens)}
             translateItem={t}
           />
         </div>

@@ -64,8 +64,8 @@ export function MenuItemCard({
           </motion.div>
         )}
         <div className="flex flex-1 flex-col">
-          <header className="flex items-start justify-between gap-1 pb-0.5">
-            <span className="font-display-median text-lg leading-5 lg:text-2xl">
+          <header className="flex items-start justify-between gap-1 pb-1">
+            <span className="font-display-median text-lg leading-5 sm:leading-6 lg:text-2xl">
               {item.name}
             </span>
             <div className="mt-1 flex items-center gap-1">

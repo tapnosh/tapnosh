@@ -120,7 +120,7 @@ export function NavManagement() {
             <Collapsible
               key={item.title}
               asChild
-              defaultOpen={
+              open={
                 pathname.includes(item.url) ||
                 item.items?.some((subItem) => pathname.includes(subItem.url))
               }

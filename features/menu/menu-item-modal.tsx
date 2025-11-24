@@ -3,6 +3,7 @@
 import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Dispatch, useMemo, useState } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 
@@ -12,6 +13,8 @@ import { useNotification } from "@/context/NotificationBar";
 import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
+
+import { getAllergenIcon, getFoodTypeIcon } from "./utils/icons";
 
 export const MenuItemModal = ({
   open,
@@ -31,6 +34,7 @@ export const MenuItemModal = ({
   const { addItem } = useOrder();
 
   const { formatCurrency } = useCurrency();
+  const t = useTranslations("categories");
 
   const shareUrl = useMemo(() => {
     if (!restaurantSlug || !menuItem) return "";
@@ -128,7 +132,7 @@ export const MenuItemModal = ({
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
                   <motion.h2
-                    className="font-display-median mt-3 font-normal"
+                    className="font-display-median mt-8 font-normal sm:mt-10"
                     initial={{ opacity: 0, y: "50%" }}
                     animate={{ opacity: 1, y: "0%" }}
                     exit={{ opacity: 0, y: "50%" }}
@@ -145,6 +149,66 @@ export const MenuItemModal = ({
                   >
                     {menuItem?.description}
                   </motion.span>
+
+                  {/* Allergens */}
+                  {menuItem?.allergen_ids &&
+                    menuItem.allergen_ids.length > 0 && (
+                      <motion.div
+                        className="mt-3 flex flex-wrap items-center gap-1"
+                        initial={{ opacity: 0, y: "50%" }}
+                        animate={{ opacity: 1, y: "0%" }}
+                        exit={{ opacity: 0, y: "50%" }}
+                        transition={{
+                          delay: 0.35,
+                          type: "tween",
+                          duration: 0.3,
+                        }}
+                      >
+                        {menuItem.allergen_ids.map((allergenId) => {
+                          const AllergenIcon = getAllergenIcon(allergenId);
+                          return (
+                            <div
+                              key={allergenId}
+                              className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-xs"
+                              title={t(allergenId)}
+                            >
+                              <AllergenIcon className="h-3.5 w-3.5" />
+                              <span>{t(allergenId)}</span>
+                            </div>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+
+                  {/* Food Types */}
+                  {menuItem?.food_type_ids &&
+                    menuItem.food_type_ids.length > 0 && (
+                      <motion.div
+                        className="mt-2 flex flex-wrap items-center gap-1"
+                        initial={{ opacity: 0, y: "50%" }}
+                        animate={{ opacity: 1, y: "0%" }}
+                        exit={{ opacity: 0, y: "50%" }}
+                        transition={{
+                          delay: 0.4,
+                          type: "tween",
+                          duration: 0.3,
+                        }}
+                      >
+                        {menuItem.food_type_ids.map((foodTypeId) => {
+                          const FoodTypeIcon = getFoodTypeIcon(foodTypeId);
+                          return (
+                            <div
+                              key={foodTypeId}
+                              className="bg-primary/10 text-primary flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
+                              title={t(foodTypeId)}
+                            >
+                              <FoodTypeIcon className="h-3.5 w-3.5" />
+                              <span>{t(foodTypeId)}</span>
+                            </div>
+                          );
+                        })}
+                      </motion.div>
+                    )}
                 </header>
                 <div className="pb-4">
                   {menuItem?.image && (
@@ -163,7 +227,7 @@ export const MenuItemModal = ({
                         height={2056}
                         quality={100}
                         priority
-                        className="pointer-events-none h-full w-full rounded-md object-cover"
+                        className="pointer-events-none h-full w-full rounded-2xl object-cover"
                       />
                     </motion.div>
                   )}
