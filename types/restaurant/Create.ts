@@ -12,8 +12,8 @@ export const AddressSchema = z.object({
   country: z.string().min(1, "Country is required"),
   countryCode: z.string().min(1, "Country code is required"),
   postalCode: z.string().min(1, "Postal code is required"),
-  latitude: z.number(),
-  longitude: z.number(),
+  lat: z.number(),
+  lng: z.number(),
 });
 
 export const RestaurantFormSchema = z.object({
@@ -31,10 +31,7 @@ export const RestaurantFormSchema = z.object({
     .array(z.union([UploadImageSchema, BlobImageSchema]))
     .min(1, "At least one image must be added")
     .max(5, "You can upload up to 5 images"),
-  cuisine_ids: z
-    .array(z.string().uuid())
-    .max(5, "You can select up to 5 cuisines")
-    .optional(),
+  category_ids: z.array(z.string()).max(5, "You can select up to 5 cuisines"),
 });
 
 export type RestaurantFormData = z.infer<typeof RestaurantFormSchema>;

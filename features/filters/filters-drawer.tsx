@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import {
@@ -22,9 +23,9 @@ interface FiltersDrawerProps {
   setOpen: (open: boolean) => void;
   minPrice: number;
   maxPrice: number;
-  allCategories: string[];
-  allIngredients: string[];
   filters?: FilterState;
+  allergens: string[];
+  foodTypes: string[];
   onApply: (filters: FilterState) => void;
 }
 
@@ -33,12 +34,14 @@ export function FiltersDrawer({
   setOpen,
   minPrice,
   maxPrice,
-  allCategories,
-  allIngredients,
   filters,
+  allergens,
+  foodTypes,
   onApply,
 }: FiltersDrawerProps) {
   const isMobile = useIsMobile();
+  const t = useTranslations("categories");
+
   const [priceRange, setPriceRange] = useState<[number, number]>(
     filters?.priceRange || [minPrice, maxPrice],
   );
@@ -96,17 +99,19 @@ export function FiltersDrawer({
           />
 
           <BadgeFilter
-            label="Categories"
-            items={allCategories}
+            label="Food Types"
+            items={foodTypes}
             selectedItems={selectedCategories}
             onToggle={(item) => toggleItem(item, setSelectedCategories)}
+            translateItem={t}
           />
 
           <BadgeFilter
-            label="Exclude Ingredients"
-            items={allIngredients}
+            label="Exclude Allergens"
+            items={allergens}
             selectedItems={selectedIngredients}
             onToggle={(item) => toggleItem(item, setSelectedIngredients)}
+            translateItem={t}
           />
         </div>
 

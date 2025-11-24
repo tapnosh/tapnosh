@@ -27,7 +27,7 @@ export function RestaurantFormDelete({
   });
 
   const onSubmit = async () => {
-    const [error] = await tryCatch(mutateAsync(restaurant));
+    const [error] = await tryCatch(mutateAsync({ id: restaurant.id }));
 
     if (error) {
       openNotification(

@@ -51,19 +51,21 @@ export function FiltersBar({
   }, [allItems]);
 
   // Extract all unique categories
-  const allCategories = useMemo(() => {
+  const allergens = useMemo(() => {
     const categories = new Set<string>();
     allItems.forEach((item) => {
-      item.categories?.forEach((cat) => categories.add(cat));
+      item.allergen_ids?.forEach((cat) => categories.add(cat));
     });
     return Array.from(categories).sort();
   }, [allItems]);
 
+  console.log("Allergens:", allergens);
+
   // Extract all unique ingredients
-  const allIngredients = useMemo(() => {
+  const foodTypes = useMemo(() => {
     const ingredients = new Set<string>();
     allItems.forEach((item) => {
-      item.ingredients?.forEach((ing) => ingredients.add(ing));
+      item.food_type_ids?.forEach((ing) => ingredients.add(ing));
     });
     return Array.from(ingredients).sort();
   }, [allItems]);
@@ -136,9 +138,9 @@ export function FiltersBar({
         setOpen={(value) => setOpen(value)}
         minPrice={minPrice}
         maxPrice={maxPrice}
-        allCategories={allCategories}
-        allIngredients={allIngredients}
         filters={filters}
+        allergens={allergens}
+        foodTypes={foodTypes}
         onApply={handleFiltersApply}
       />
     </div>

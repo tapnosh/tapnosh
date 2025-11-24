@@ -34,11 +34,6 @@ export function RestaurantDetailsDialog({
   const isMobile = useIsMobile();
   const t = useTranslations("categories");
 
-  // Helper function to translate category by ID
-  const translateCategory = (id: string) => {
-    return t(id);
-  };
-
   if (!restaurant) return null;
 
   const restaurantImage = restaurant.images?.[0]?.url;
@@ -85,7 +80,7 @@ export function RestaurantDetailsDialog({
               <div className="flex flex-wrap gap-2">
                 {restaurant.categories.map((category) => (
                   <Badge key={category.id} variant="secondary">
-                    {translateCategory(category.id)}
+                    {t(category.id)}
                   </Badge>
                 ))}
               </div>
@@ -151,7 +146,7 @@ export function RestaurantDetailsDialog({
               Navigate To
             </Button>
             <Button className="flex-1" asChild>
-              <Link href={`/restaurants/${restaurant.id}`}>
+              <Link href={`/restaurants/${restaurant.slug}`}>
                 <Utensils className="mr-2 h-4 w-4" />
                 Open Restaurant
               </Link>

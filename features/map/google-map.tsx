@@ -63,11 +63,6 @@ export function RestaurantMap({
     useState<RestaurantMapItem | null>(null);
   const t = useTranslations("categories");
 
-  // Helper function to translate category by ID
-  const translateCategory = (id: string) => {
-    return t(id);
-  };
-
   // Filter restaurants with valid coordinates
   const restaurantsWithCoords = useMemo(
     () =>
@@ -207,7 +202,7 @@ export function RestaurantMap({
                       key={category.id}
                       className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700"
                     >
-                      {translateCategory(category.name)}
+                      {t(category.name)}
                     </span>
                   ))}
                 </div>

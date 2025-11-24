@@ -1,5 +1,7 @@
 import categories from "./categories.json";
 
-export default {
+const en = {
   categories,
 };
+
+export default en;

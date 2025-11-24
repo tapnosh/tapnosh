@@ -34,6 +34,7 @@ export function RestaurantDetailsForm({
   isPending,
   submitLabel = "Submit",
 }: RestaurantFormFieldsProps) {
+  console.log(form.formState.errors);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -112,7 +113,7 @@ export function RestaurantDetailsForm({
         {/* CUISINES */}
         <FormField
           control={form.control}
-          name="cuisine_ids"
+          name="category_ids"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Cuisines</FormLabel>

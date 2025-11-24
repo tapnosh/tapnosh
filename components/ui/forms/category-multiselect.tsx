@@ -1,25 +1,6 @@
 "use client";
 
-import {
-  Apple,
-  Check,
-  ChevronRight,
-  ChevronsUpDown,
-  CookingPot,
-  Droplets,
-  Fish,
-  Flame,
-  Leaf,
-  Loader2,
-  Milk,
-  Nut,
-  Sparkles,
-  Tag,
-  Wheat,
-  WheatOff,
-  Wine,
-  X,
-} from "lucide-react";
+import { Check, ChevronsUpDown, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import * as React from "react";
 
@@ -37,6 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/overlays/popover";
+import { getAllergenIcon, getFoodTypeIcon } from "@/features/menu/utils/icons";
 import { useCategoriesQuery } from "@/hooks/api/categories/useCategories";
 import { cn } from "@/utils/cn";
 
@@ -61,52 +43,15 @@ export function CategoryMultiSelect({
   const [searchQuery, setSearchQuery] = React.useState("");
   const t = useTranslations("categories");
 
-  // Icon mapping based on category type and ID
   const getCategoryIcon = (categoryId: string, categoryType?: string) => {
-    const iconClass = "h-3.5 w-3.5";
-
     if (categoryType === "allergens") {
-      const allergenIcons: Record<string, React.ReactNode> = {
-        gluten: <Wheat className={iconClass} />,
-        crustaceans: <Fish className={iconClass} />,
-        eggs: <Apple className={iconClass} />,
-        fish: <Fish className={iconClass} />,
-        peanuts: <Nut className={iconClass} />,
-        soybeans: <Leaf className={iconClass} />,
-        milk: <Milk className={iconClass} />,
-        nuts: <Nut className={iconClass} />,
-        alcohol: <Wine className={iconClass} />,
-      };
-      return allergenIcons[categoryId] || <WheatOff className={iconClass} />;
+      return getAllergenIcon(categoryId);
     }
-
     if (categoryType === "food_type") {
-      const foodTypeIcons: Record<string, React.ReactNode> = {
-        vegan: <Leaf className={iconClass} />,
-        vegetarian: <Leaf className={iconClass} />,
-        gluten_free: <Wheat className={`${iconClass} line-through`} />,
-        lactose_free: <Milk className={`${iconClass} line-through`} />,
-        spicy: <Flame className={iconClass} />,
-        hot: <Flame className={iconClass} />,
-        halal: <Sparkles className={iconClass} />,
-        kosher: <Sparkles className={iconClass} />,
-        organic: <Leaf className={iconClass} />,
-        raw: <Droplets className={iconClass} />,
-      };
-      return foodTypeIcons[categoryId] || <CookingPot className={iconClass} />;
+      return getFoodTypeIcon(categoryId);
     }
 
-    if (categoryType === "cuisine") {
-      const cuisineIcons: Record<string, React.ReactNode> = {
-        seafood: <Fish className={iconClass} />,
-        bbq: <Flame className={iconClass} />,
-        vegan: <Leaf className={iconClass} />,
-        vegetarian: <Leaf className={iconClass} />,
-      };
-      return cuisineIcons[categoryId] || <ChevronRight className={iconClass} />;
-    }
-
-    return <Tag className={iconClass} />;
+    return undefined;
   };
 
   const {
@@ -205,6 +150,7 @@ export function CategoryMultiSelect({
                   <CommandGroup>
                     {filteredCategories.map((category) => {
                       const isSelected = value.includes(category.id);
+                      const Icon = getCategoryIcon(category.id, type);
                       return (
                         <CommandItem
                           key={category.id}
@@ -213,7 +159,7 @@ export function CategoryMultiSelect({
                           className="cursor-pointer"
                         >
                           <div className="flex items-center gap-2">
-                            {getCategoryIcon(category.id, type)}
+                            {Icon && <Icon className="h-4 w-4" />}
                             <span className="font-medium">
                               {t(category.id)}
                             </span>
@@ -232,23 +178,26 @@ export function CategoryMultiSelect({
       {/* Selected categories badges */}
       {selectedCategories.length > 0 && (
         <div className="flex flex-wrap gap-2">
-          {selectedCategories.map((category) => (
-            <div
-              key={category.id}
-              className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-sm"
-            >
-              {getCategoryIcon(category.id, type)}
-              <span>{t(category.id)}</span>
-              <button
-                type="button"
-                onClick={(e) => handleRemoveCategory(category.id, e)}
-                className="hover:bg-secondary-foreground/20 ml-1 rounded-sm transition-colors"
-                disabled={disabled}
+          {selectedCategories.map((category) => {
+            const Icon = getCategoryIcon(category.id, type);
+            return (
+              <div
+                key={category.id}
+                className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-sm"
               >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
-          ))}
+                {Icon && <Icon className="h-4 w-4" />}
+                <span>{t(category.id)}</span>
+                <button
+                  type="button"
+                  onClick={(e) => handleRemoveCategory(category.id, e)}
+                  className="hover:bg-secondary-foreground/20 ml-1 rounded-sm transition-colors"
+                  disabled={disabled}
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

@@ -6,8 +6,8 @@ import { RestaurantTheme } from "@/types/theme/Theme";
 import { Builder } from "../builder/BuilderSchema";
 
 export interface Restaurant {
-  id?: string;
-  slug?: string;
+  id: string;
+  slug: string;
   name: string;
   description: string;
   theme_id: string;
@@ -24,8 +24,8 @@ export interface Restaurant {
     country: string;
     countryCode: string;
     postalCode: string;
-    latitude: number;
-    longitude: number;
+    lat: number;
+    lng: number;
   };
   images: PutBlobResult[];
   categories: RestaurantCategory[];
