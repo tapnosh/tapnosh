@@ -126,6 +126,7 @@ export function MapFiltersDrawer({
             onToggle={toggleCuisine}
             mode="include"
             translateItem={t}
+            showSearch
           />
         </div>
 
