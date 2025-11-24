@@ -2,9 +2,9 @@ import { MetadataRoute } from "next";
 
 import { robotsLogger } from "@/lib/logger/app";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
   robotsLogger.info({ baseUrl }, "Generating robots.txt");
 
   const config = {
