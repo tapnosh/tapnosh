@@ -32,8 +32,10 @@ import { tryCatch } from "@/utils/tryCatch";
 
 export function ThemePicker({
   onChange,
+  "aria-invalid": ariaInvalid,
 }: {
   onChange?: (theme: RestaurantTheme) => void;
+  "aria-invalid"?: boolean;
 }) {
   const { name } = useFormField();
   const value = useWatch({ name });
@@ -104,7 +106,11 @@ export function ThemePicker({
 
   return (
     <div
-      className="preview bg-muted flex h-full w-full items-center justify-center rounded bg-cover bg-center p-10 transition-all"
+      className={cn(
+        "preview bg-muted flex h-full w-full items-center justify-center rounded-md bg-cover bg-center p-10 transition-all",
+        ariaInvalid &&
+          "ring-destructive dark:ring-destructive/40 border-destructive ring-1",
+      )}
       style={{ background: hexColor }}
     >
       <ColorPicker
@@ -116,6 +122,7 @@ export function ThemePicker({
         isPending={isPending || isLoading}
         isValidColor={isValidColor}
         onThemeChange={handleThemeChange}
+        aria-invalid={ariaInvalid}
       />
     </div>
   );
@@ -131,6 +138,7 @@ export function ColorPicker({
   isPending,
   onThemeChange,
   isValidColor,
+  "aria-invalid": ariaInvalid,
 }: {
   theme: RestaurantTheme | undefined;
   themes: RestaurantTheme[];
@@ -141,6 +149,7 @@ export function ColorPicker({
   isPending: boolean;
   onThemeChange: (theme: RestaurantTheme) => void;
   isValidColor: boolean;
+  "aria-invalid"?: boolean;
 }) {
   const canBeCreated = useMemo(
     () => !themes.find(({ color }) => color === background) && isValidColor,
@@ -160,8 +169,9 @@ export function ColorPicker({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
+          aria-invalid={ariaInvalid}
           className={cn(
-            "hover:bg-background/75 w-[220px] justify-start text-left font-normal",
+            "hover:bg-background/75 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 w-[220px] justify-start text-left font-normal",
             !background && "text-muted-foreground",
             className,
           )}

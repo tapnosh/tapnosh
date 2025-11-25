@@ -29,6 +29,7 @@ interface CategoryMultiSelectProps {
   className?: string;
   disabled?: boolean;
   type?: "cuisine" | "allergens" | "food_type";
+  "aria-invalid"?: boolean;
 }
 
 export function CategoryMultiSelect({
@@ -38,6 +39,7 @@ export function CategoryMultiSelect({
   className,
   disabled = false,
   type,
+  "aria-invalid": ariaInvalid,
 }: CategoryMultiSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -105,8 +107,9 @@ export function CategoryMultiSelect({
             variant="outline"
             role="combobox"
             aria-expanded={open}
+            aria-invalid={ariaInvalid}
             className={cn(
-              "hover:border-input w-full justify-between rounded-md",
+              "hover:border-input aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 w-full justify-between rounded-md",
               className,
             )}
             disabled={disabled || isLoadingCategories}
@@ -161,7 +164,7 @@ export function CategoryMultiSelect({
                           <div className="flex items-center gap-2">
                             {Icon && <Icon className="h-4 w-4" />}
                             <span className="font-medium">
-                              {t(category.id)}
+                              {t(category.name)}
                             </span>
                           </div>
                           {isSelected && <Check className="ml-auto h-4 w-4" />}
@@ -186,7 +189,7 @@ export function CategoryMultiSelect({
                 className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-sm"
               >
                 {Icon && <Icon className="h-4 w-4" />}
-                <span>{t(category.id)}</span>
+                <span>{t(category.name)}</span>
                 <button
                   type="button"
                   onClick={(e) => handleRemoveCategory(category.id, e)}

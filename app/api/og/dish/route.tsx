@@ -86,17 +86,15 @@ export async function GET(request: NextRequest) {
     const t = await getTranslations("categories");
     const foodTypeNames: string[] = [];
     if (dish.food_type_ids && dish.food_type_ids.length > 0) {
-      dish.food_type_ids.forEach((id) => {
-        const name = t(`food_type.${id}`);
-        if (name) {
-          foodTypeNames.push(name);
-        }
+      dish.food_type_ids.forEach((name) => {
+        foodTypeNames.push(t(name));
       });
     }
 
     // Extract dish details
     const dishName = dish.name;
     const currency = dish.price.currency;
+    const description = dish.description;
     const price = new Intl.NumberFormat("pl-PL", {
       style: "currency",
       currency: currency,
@@ -172,20 +170,6 @@ export async function GET(request: NextRequest) {
                 paddingRight: dishImageUrl ? "60px" : "0",
               }}
             >
-              {/* Dish name */}
-              <h1
-                style={{
-                  fontSize: "64px",
-                  fontWeight: "bold",
-                  lineHeight: 1,
-                  marginBottom: "0",
-                  marginTop: 0,
-                  color: foregroundColor.hex(),
-                }}
-              >
-                {dishName}
-              </h1>
-
               {/* Food types */}
               {foodTypeNames.length > 0 && (
                 <div
@@ -203,7 +187,7 @@ export async function GET(request: NextRequest) {
                       style={{
                         display: "flex",
                         padding: "6px 14px",
-                        backgroundColor: foregroundColor.alpha(0.15).string(),
+                        backgroundColor: primaryColor.hex(),
                         color: foregroundColor.hex(),
                         borderRadius: "8px",
                         fontSize: "20px",
@@ -216,12 +200,40 @@ export async function GET(request: NextRequest) {
                 </div>
               )}
 
+              {/* Dish name */}
+              <h1
+                style={{
+                  fontSize: "56px",
+                  fontWeight: "bold",
+                  lineHeight: 1,
+                  marginBottom: "0",
+                  marginTop: 0,
+                  color: foregroundColor.hex(),
+                }}
+              >
+                {dishName}
+              </h1>
+
+              {/* Price */}
+              {description && (
+                <p
+                  style={{
+                    display: "flex",
+                    fontSize: "32px",
+                    fontWeight: 300,
+                    color: foregroundColor.hex(),
+                  }}
+                >
+                  {description}
+                </p>
+              )}
+
               {/* Price */}
               {price && (
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "72px",
+                    fontSize: "64px",
                     fontWeight: 900,
                     color: foregroundColor.hex(),
                   }}

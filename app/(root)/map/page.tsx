@@ -1,6 +1,7 @@
 "use client";
 
-import { Crosshair, SlidersHorizontal } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Crosshair, Loader2, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -11,213 +12,15 @@ import { MapFiltersDrawer } from "@/features/map/map-filters-drawer";
 import { RestaurantDetailsDialog } from "@/features/map/restaurant-details-drawer";
 import { MapFilterState } from "@/features/map/types";
 import { calculateDistance } from "@/features/map/utils/distance";
-import { RestaurantMapItem } from "@/types/restaurant/RestaurantMap";
-
-// Mock data - replace with actual API call
-const mockRestaurants: RestaurantMapItem[] = [
-  {
-    id: "8c96ae0d-28ed-453f-9f8b-4eea2208235b",
-    name: "Sante!",
-    description: "Restauracja śródziemnomorska 🌊",
-    slug: "sante",
-    theme: {
-      id: "9bd1b345-2882-40ea-ac86-0f02a09e995b",
-      color: "#291aff",
-    },
-    images: [
-      {
-        url: "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/542812182_17983765919893708_3166450575168985522_n.-xGdt1u5c1IsoYIZeHkvOBFimg62hX1.jpg",
-        downloadUrl:
-          "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/542812182_17983765919893708_3166450575168985522_n.-xGdt1u5c1IsoYIZeHkvOBFimg62hX1.jpg?download=1",
-        pathname:
-          "542812182_17983765919893708_3166450575168985522_n.-xGdt1u5c1IsoYIZeHkvOBFimg62hX1.jpg",
-        contentType: "image/jpeg",
-        contentDisposition:
-          'inline; filename="542812182_17983765919893708_3166450575168985522_n.-xGdt1u5c1IsoYIZeHkvOBFimg62hX1.jpg"',
-      },
-    ],
-    categories: [
-      {
-        id: "5abeaf2e-04a2-4c98-a52b-7149bc5143f0",
-        name: "Test",
-        description: "Test",
-        createdAt: "2025-11-23T00:00:00.000Z",
-        updatedAt: "2025-11-23T00:00:00.000Z",
-      },
-    ],
-    address: {
-      formattedAddress: "Warsaw, Poland",
-      streetNumber: "1",
-      street: "Test Street",
-      city: "Warsaw",
-      state: "Mazowieckie",
-      stateCode: "MZ",
-      country: "Poland",
-      countryCode: "PL",
-      postalCode: "00-001",
-      latitude: 52.2297,
-      longitude: 21.0122,
-    },
-    menu: {
-      menu: [
-        {
-          name: "Dania główne",
-          type: "menu-group",
-          items: [
-            {
-              id: "item-1763749953491",
-              name: "Makaron z krewetkami w sosie winnym",
-              image: [
-                {
-                  url: "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/542812182_17983765919893708_3166450575168985522_n.-us5Ng54QZSX3ElmmGeIiivHLhmUB6G.jpg",
-                  pathname:
-                    "542812182_17983765919893708_3166450575168985522_n.-us5Ng54QZSX3ElmmGeIiivHLhmUB6G.jpg",
-                  contentType: "image/jpeg",
-                  downloadUrl:
-                    "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/542812182_17983765919893708_3166450575168985522_n.-us5Ng54QZSX3ElmmGeIiivHLhmUB6G.jpg?download=1",
-                  contentDisposition:
-                    'inline; filename="542812182_17983765919893708_3166450575168985522_n.-us5Ng54QZSX3ElmmGeIiivHLhmUB6G.jpg"',
-                },
-              ],
-              price: {
-                amount: 45,
-                currency: "PLN",
-              },
-              version: "v1",
-              categories: ["włoska"],
-              description: "Makaronik kreweteczki co chcieć więcej",
-              ingredients: ["penne", "białe wino", "pietruszka", "krewetki"],
-            },
-            {
-              id: "item-1763803725352",
-              name: "Brioche z krewetkami",
-              image: [
-                {
-                  url: "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/Brioche_6-SQ-ZmynwIbse29D6ZnDQLTG8SZIhpGBDT.webp",
-                  pathname: "Brioche_6-SQ-ZmynwIbse29D6ZnDQLTG8SZIhpGBDT.webp",
-                  contentType: "image/webp",
-                  downloadUrl:
-                    "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/Brioche_6-SQ-ZmynwIbse29D6ZnDQLTG8SZIhpGBDT.webp?download=1",
-                  contentDisposition:
-                    'inline; filename="Brioche_6-SQ-ZmynwIbse29D6ZnDQLTG8SZIhpGBDT.webp"',
-                },
-              ],
-              price: {
-                amount: 30,
-                currency: "PLN",
-              },
-              version: "v1",
-              categories: ["kontynentalna"],
-              description:
-                "Pyszna maślana bułka nadziewana krewetkami i konfiturą z cebuli",
-              ingredients: ["bułka", "krewetki", "cebula"],
-            },
-          ],
-          timeTo: "12:00",
-          version: "v1",
-          timeFrom: "07:00",
-        },
-      ],
-      header: [
-        {
-          type: "heading",
-          heading: "Cudowne doznania",
-          version: "v1",
-        },
-        {
-          text: "Pyszne żarełko",
-          type: "text",
-          version: "v1",
-        },
-      ],
-    },
-  },
-  {
-    id: "8a321c89-a29c-40bd-8aed-39998af43a4f",
-    name: "Kantyna am am",
-    description: "Pyszne jedzonko o kazdej porze dnia",
-    slug: "kantyna-dam-dam",
-    theme: {
-      id: "0f1faec9-8b97-48d8-9d11-c597c0161404",
-      color: "#f976aa",
-    },
-    images: [
-      {
-        url: "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/Brioche_6-SQ-YdCTc9VFhqvUjDAAamO2o5v4E3yRui.webp",
-        downloadUrl:
-          "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/Brioche_6-SQ-YdCTc9VFhqvUjDAAamO2o5v4E3yRui.webp?download=1",
-        pathname: "Brioche_6-SQ-YdCTc9VFhqvUjDAAamO2o5v4E3yRui.webp",
-        contentType: "image/webp",
-        contentDisposition:
-          'inline; filename="Brioche_6-SQ-YdCTc9VFhqvUjDAAamO2o5v4E3yRui.webp"',
-      },
-    ],
-    categories: [
-      {
-        id: "5abeaf2e-04a2-4c98-a52b-7149bc5143f0",
-        name: "Test",
-        description: "Test",
-        createdAt: "2025-11-23T00:00:00.000Z",
-        updatedAt: "2025-11-23T00:00:00.000Z",
-      },
-    ],
-    address: {
-      formattedAddress: "Krakow, Poland",
-      streetNumber: "10",
-      street: "Main Street",
-      city: "Krakow",
-      state: "Malopolskie",
-      stateCode: "MP",
-      country: "Poland",
-      countryCode: "PL",
-      postalCode: "30-001",
-      latitude: 50.0647,
-      longitude: 19.945,
-    },
-    menu: {
-      menu: [
-        {
-          name: "Main dishes",
-          type: "menu-group",
-          items: [
-            {
-              id: "item-1763811576607",
-              name: "Some fancy pasta",
-              image: [
-                {
-                  url: "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/544103330_17984981786893708_2343218965447401058_n.-kUnwKWnp7y6f6ybZc8qmCa5RVlarxl.jpg",
-                  pathname:
-                    "544103330_17984981786893708_2343218965447401058_n.-kUnwKWnp7y6f6ybZc8qmCa5RVlarxl.jpg",
-                  contentType: "image/jpeg",
-                  downloadUrl:
-                    "https://wbslsaap89e4sdcz.public.blob.vercel-storage.com/544103330_17984981786893708_2343218965447401058_n.-kUnwKWnp7y6f6ybZc8qmCa5RVlarxl.jpg?download=1",
-                  contentDisposition:
-                    'inline; filename="544103330_17984981786893708_2343218965447401058_n.-kUnwKWnp7y6f6ybZc8qmCa5RVlarxl.jpg"',
-                },
-              ],
-              price: {
-                amount: 31.96,
-                currency: "PLN",
-              },
-              version: "v1",
-              categories: [],
-              description: "pych",
-              ingredients: ["makaron", "krewetki"],
-            },
-          ],
-          timeTo: "12:00",
-          version: "v1",
-          timeFrom: "07:00",
-        },
-      ],
-      header: [],
-    },
-  },
-];
+import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
+import { Restaurant } from "@/types/restaurant/Restaurant";
 
 export default function MapPage() {
+  const { data: restaurants, isLoading: isLoadingRestaurants } =
+    useRestaurantsQuery();
+
   const [selectedRestaurant, setSelectedRestaurant] =
-    useState<RestaurantMapItem | null>(null);
+    useState<Restaurant | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [hasShownSuccessToast, setHasShownSuccessToast] = useState(false);
@@ -266,7 +69,7 @@ export default function MapPage() {
     }
   }, [userLocation, isLocating, locationError, hasShownSuccessToast]);
 
-  const handleMarkerClick = (restaurant: RestaurantMapItem) => {
+  const handleMarkerClick = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
     setIsDialogOpen(true);
   };
@@ -282,7 +85,8 @@ export default function MapPage() {
 
   // Filter restaurants based on selected categories and distance
   const filteredRestaurants = useMemo(() => {
-    return mockRestaurants.filter((restaurant) => {
+    if (!restaurants) return [];
+    return restaurants.filter((restaurant) => {
       const restaurantCategoryNames = restaurant.categories.map((c) => c.name);
 
       // Filter by cuisines (include)
@@ -320,8 +124,8 @@ export default function MapPage() {
         const distance = calculateDistance(
           userLocation.lat,
           userLocation.lng,
-          restaurant.address.latitude,
-          restaurant.address.longitude,
+          restaurant.address.lat,
+          restaurant.address.lng,
         );
         if (distance > filters.distance) {
           return false;
@@ -330,7 +134,7 @@ export default function MapPage() {
 
       return true;
     });
-  }, [filters, userLocation]);
+  }, [restaurants, filters, userLocation]);
 
   // Get Google Maps API key from environment variable
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
@@ -348,6 +152,26 @@ export default function MapPage() {
 
   return (
     <div className="w-full flex-1">
+      <AnimatePresence>
+        {isLoadingRestaurants && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Loader2 className="text-primary h-12 w-12 animate-spin" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <RestaurantMap
         restaurants={filteredRestaurants}
         onMarkerClick={handleMarkerClick}

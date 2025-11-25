@@ -263,7 +263,7 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="secondary"
       size="icon"
-      className={cn("h-9 w-9 rounded-lg", className)}
+      className={cn("h-9 w-9 rounded-md", className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCallback, useState } from "react";
 
 import {
   Collapsible,
@@ -86,6 +87,7 @@ export function NavManagement() {
   const { isSignedIn } = useSession();
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
   const allItems: MyRestaurantsSidebarItem[] = [
     ...staticItems,
@@ -100,6 +102,13 @@ export function NavManagement() {
           }))
       : []),
   ];
+
+  const toggleItem = useCallback((itemTitle: string) => {
+    setOpenItems((prev) => ({
+      ...prev,
+      [itemTitle]: !prev[itemTitle],
+    }));
+  }, []);
 
   if (!isSignedIn) {
     return null;
@@ -121,9 +130,11 @@ export function NavManagement() {
               key={item.title}
               asChild
               open={
+                openItems?.[item.title] ||
                 pathname.includes(item.url) ||
                 item.items?.some((subItem) => pathname.includes(subItem.url))
               }
+              onOpenChange={() => toggleItem(item.title)}
             >
               <SidebarMenuItem>
                 <SidebarMenuButton

@@ -1,7 +1,7 @@
 "use client";
 
 import Color from "color";
-import { MapPin } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -31,15 +31,17 @@ function RestaurantBadges({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {categories?.map(({ id }) => (
+    <div className="flex flex-wrap gap-1.5">
+      {categories?.map(({ id, name }) => (
         <Badge
           key={id}
-          variant="outline"
-          className="border-current font-medium"
-          style={{ color: foregroundColor }}
+          variant="default"
+          style={{
+            color: foregroundColor,
+            backgroundColor: foregroundColor + "20",
+          }}
         >
-          {translateCategory(id)}
+          {translateCategory(name)}
         </Badge>
       ))}
     </div>
@@ -73,7 +75,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             src={restaurant.images[0]?.url || "/placeholder.svg"}
             alt={`${restaurant.name} restaurant interior`}
             fill
-            className="object-cover opacity-15"
+            className="object-cover opacity-10"
             style={{
               filter:
                 "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
@@ -104,10 +106,20 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         </div>
       </div>
 
+      {restaurant.categories && restaurant.categories.length > 0 && (
+        <div className="mb-2">
+          <RestaurantBadges
+            categories={restaurant.categories}
+            translateCategory={t}
+            foregroundColor={foregroundColor}
+          />
+        </div>
+      )}
+
       {/* Content */}
       <div className="relative z-10 flex flex-1 flex-col">
         <ViewTransition name={`title-${restaurant.id}`}>
-          <h3 className="mb-3 text-3xl font-bold md:text-4xl">
+          <h3 className="mb-3 text-3xl leading-8 font-bold md:text-4xl">
             {restaurant.name}
           </h3>
         </ViewTransition>
@@ -117,25 +129,28 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             <p className="mb-4 text-sm opacity-90">{restaurant.description}</p>
           </ViewTransition>
         )}
-
-        {restaurant?.address?.formattedAddress && (
-          <div className="mb-4 flex items-start gap-2 text-sm opacity-90">
-            <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
-            <span>{restaurant.address.formattedAddress}</span>
-          </div>
-        )}
-
         <div className="flex-1" />
 
-        {restaurant.categories && restaurant.categories.length > 0 && (
-          <div className="mb-6">
-            <RestaurantBadges
-              categories={restaurant.categories}
-              translateCategory={t}
-              foregroundColor={foregroundColor}
-            />
-          </div>
-        )}
+        <div className="mb-4 flex flex-col gap-2">
+          {restaurant?.address?.formattedAddress && (
+            <div className="flex items-start gap-2 text-sm opacity-90">
+              <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <span>{restaurant.address.formattedAddress}</span>
+            </div>
+          )}
+
+          {restaurant?.phoneNumber && (
+            <div className="flex items-center gap-2 text-sm opacity-90">
+              <Phone className="h-4 w-4 flex-shrink-0" />
+              <a
+                href={`tel:${restaurant.phoneNumber}`}
+                className="transition-opacity hover:opacity-70"
+              >
+                {restaurant.phoneNumber}
+              </a>
+            </div>
+          )}
+        </div>
 
         {/* CTA Button at bottom */}
         <Button

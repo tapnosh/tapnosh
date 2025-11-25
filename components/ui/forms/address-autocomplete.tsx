@@ -30,6 +30,7 @@ interface AddressAutocompleteProps {
   className?: string;
   disabled?: boolean;
   debounceMs?: number;
+  "aria-invalid"?: boolean;
 }
 
 export function AddressAutocomplete({
@@ -39,6 +40,7 @@ export function AddressAutocomplete({
   className,
   disabled = false,
   debounceMs = 300,
+  "aria-invalid": ariaInvalid,
 }: AddressAutocompleteProps) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -99,8 +101,9 @@ export function AddressAutocomplete({
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-invalid={ariaInvalid}
           className={cn(
-            "hover:border-input w-full justify-between rounded-md",
+            "hover:border-input aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 w-full justify-between rounded-md",
             className,
           )}
           disabled={disabled}

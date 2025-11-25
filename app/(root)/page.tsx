@@ -171,19 +171,17 @@ export default function RestaurantLanding() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-primary text-primary-foreground mt-16 py-12">
+      <footer className="bg-primary text-primary-foreground mt-16 py-8">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-4">
-            <div className="">
-              <h3 className="font-logo text-lg font-semibold">tapnosh</h3>
-              <p className="text-primary-foreground/80">
-                Connecting food lovers with amazing restaurants in their
-                community.
-              </p>
-            </div>
+          <div className="max-w-xs gap-8">
+            <h3 className="font-logo text-2xl font-semibold">tapnosh</h3>
+            <p className="text-primary-foreground/80 text-sm">
+              Connecting food lovers with amazing restaurants in their
+              community.
+            </p>
           </div>
-          <div className="text-primary-foreground/80 border-primary-foreground/50 mt-8 border-t pt-8 text-center">
-            <p>&copy; 2025 tapnosh. All rights reserved.</p>
+          <div className="text-primary-foreground/80 mt-4 text-center text-sm">
+            &copy; {new Date().getFullYear()} tapnosh. All rights reserved.
           </div>
         </div>
       </footer>

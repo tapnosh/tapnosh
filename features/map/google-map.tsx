@@ -9,11 +9,11 @@ import {
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { RestaurantMapItem } from "@/types/restaurant/RestaurantMap";
+import { Restaurant } from "@/types/restaurant/Restaurant";
 
 interface RestaurantMapProps {
-  restaurants: RestaurantMapItem[];
-  onMarkerClick: (restaurant: RestaurantMapItem) => void;
+  restaurants: Restaurant[];
+  onMarkerClick: (restaurant: Restaurant) => void;
   apiKey: string;
   userLocation?: { lat: number; lng: number } | null;
 }
@@ -59,8 +59,9 @@ export function RestaurantMap({
   });
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [hoveredRestaurant, setHoveredRestaurant] =
-    useState<RestaurantMapItem | null>(null);
+  const [hoveredRestaurant, setHoveredRestaurant] = useState<Restaurant | null>(
+    null,
+  );
   const t = useTranslations("categories");
 
   // Filter restaurants with valid coordinates
@@ -68,10 +69,10 @@ export function RestaurantMap({
     () =>
       restaurants.filter(
         (restaurant) =>
-          restaurant.address?.latitude &&
-          restaurant.address?.longitude &&
-          !isNaN(restaurant.address.latitude) &&
-          !isNaN(restaurant.address.longitude),
+          restaurant.address?.lat &&
+          restaurant.address?.lng &&
+          !isNaN(restaurant.address.lat) &&
+          !isNaN(restaurant.address.lng),
       ),
     [restaurants],
   );
@@ -99,8 +100,8 @@ export function RestaurantMap({
     restaurantsWithCoords.forEach((restaurant) => {
       if (restaurant.address) {
         bounds.extend({
-          lat: restaurant.address.latitude,
-          lng: restaurant.address.longitude,
+          lat: restaurant.address.lat,
+          lng: restaurant.address.lng,
         });
       }
     });
@@ -109,8 +110,8 @@ export function RestaurantMap({
       map.fitBounds(bounds);
     } else {
       map.setCenter({
-        lat: restaurantsWithCoords[0].address!.latitude,
-        lng: restaurantsWithCoords[0].address!.longitude,
+        lat: restaurantsWithCoords[0].address!.lat,
+        lng: restaurantsWithCoords[0].address!.lng,
       });
       map.setZoom(15);
     }
@@ -128,14 +129,7 @@ export function RestaurantMap({
   }
 
   if (!isLoaded) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="text-center">
-          <div className="border-primary mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-t-transparent" />
-          <p className="text-muted-foreground text-sm">Loading map...</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -151,8 +145,8 @@ export function RestaurantMap({
         <Marker
           key={restaurant.id}
           position={{
-            lat: restaurant.address!.latitude,
-            lng: restaurant.address!.longitude,
+            lat: restaurant.address!.lat,
+            lng: restaurant.address!.lng,
           }}
           icon={createCustomPin(restaurant.theme.color)}
           title={restaurant.name}
@@ -164,8 +158,8 @@ export function RestaurantMap({
       {hoveredRestaurant && (
         <InfoWindow
           position={{
-            lat: hoveredRestaurant.address!.latitude,
-            lng: hoveredRestaurant.address!.longitude,
+            lat: hoveredRestaurant.address!.lat,
+            lng: hoveredRestaurant.address!.lng,
           }}
           onCloseClick={() => setHoveredRestaurant(null)}
           options={{
