@@ -1,5 +1,6 @@
 "use client";
 
+import Color from "color";
 import { MapPin, Navigation, Phone, Utensils } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +13,7 @@ import {
   DrawerContent,
   DrawerFooter,
 } from "@/components/ui/overlays/drawer";
+import { getAccessibleVariant } from "@/context/ThemeContext";
 import { navigateToLocation } from "@/features/map/utils/navigation";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -35,6 +37,10 @@ export function RestaurantDetailsDialog({
 
   const restaurantImage = restaurant.images?.[0]?.url;
   const menuItems = restaurant.menu?.menu.flatMap((group) => group.items) || [];
+  const foregroundColor = getAccessibleVariant(
+    Color(restaurant.theme.color),
+    "foreground",
+  ).hex();
 
   const handleNavigate = () => {
     if (!restaurant.address?.lat || !restaurant.address?.lng) return;
@@ -60,7 +66,7 @@ export function RestaurantDetailsDialog({
                 src={restaurantImage}
                 alt={`${restaurant.name} restaurant image`}
                 fill
-                className="object-cover opacity-10"
+                className="object-cover opacity-5"
                 style={{
                   filter:
                     "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
@@ -72,14 +78,18 @@ export function RestaurantDetailsDialog({
             </div>
           )}
 
-          <div className="relative z-10 px-4 pt-8 pb-6">
+          <div className="relative z-10 px-4 pt-4 pb-6">
             {/* Categories */}
-            <div className="mb-4 flex flex-wrap gap-2">
+            <div className="mb-2 flex flex-wrap gap-2">
               {restaurant.categories.map((category) => (
                 <Badge
                   key={category.id}
                   variant="secondary"
-                  className="bg-primary-foreground/15 text-primary-foreground font-bold backdrop-blur-sm"
+                  className="font-bold backdrop-blur-sm"
+                  style={{
+                    backgroundColor: `${foregroundColor}15`,
+                    color: foregroundColor,
+                  }}
                 >
                   {t(category.name)}
                 </Badge>
@@ -87,18 +97,27 @@ export function RestaurantDetailsDialog({
             </div>
 
             {/* Restaurant Name */}
-            <h1 className="text-primary-foreground mb-3 text-3xl font-bold tracking-tight drop-shadow-sm">
+            <h1
+              className="mb-3 text-3xl font-bold tracking-tight drop-shadow-sm"
+              style={{ color: foregroundColor }}
+            >
               {restaurant.name}
             </h1>
 
             {/* Description */}
-            <p className="text-primary-foreground/90 mb-4 text-base drop-shadow-sm">
+            <p
+              className="mb-4 text-base drop-shadow-sm"
+              style={{ color: foregroundColor, opacity: 0.9 }}
+            >
               {restaurant.description}
             </p>
 
             {/* Address and Contact Info */}
             {(restaurant.address || restaurant.phoneNumber) && (
-              <div className="text-primary-foreground/90 flex flex-col gap-3 text-sm drop-shadow-sm">
+              <div
+                className="flex flex-col gap-3 text-sm drop-shadow-sm"
+                style={{ color: foregroundColor, opacity: 0.9 }}
+              >
                 {restaurant.address && (
                   <div className="flex items-start gap-2">
                     <MapPin className="mt-0.5 size-4 shrink-0" />
@@ -110,7 +129,8 @@ export function RestaurantDetailsDialog({
                     <Phone className="size-4 shrink-0" />
                     <a
                       href={`tel:${restaurant.phoneNumber}`}
-                      className="hover:text-primary-foreground transition-colors"
+                      className="transition-colors hover:opacity-100"
+                      style={{ color: foregroundColor }}
                     >
                       {restaurant.phoneNumber}
                     </a>

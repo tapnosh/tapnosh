@@ -22,21 +22,45 @@ const ThemeColorContext = createContext<ThemeColorContextType | undefined>(
   undefined,
 );
 
-function getAccessibleVariant(
+export function getAccessibleVariant(
   base: ColorInstance,
   target: "foreground" | "accent",
 ): ColorInstance {
-  const contrastThreshold = target === "foreground" ? 4.5 : 3;
-  const lighten = base.isDark();
+  const contrastThreshold = target === "foreground" ? 6 : 3.5;
+  const isDark = base.isDark();
 
-  for (let i = 0; i <= 1; i += 0.1) {
-    const test = lighten ? base.lighten(i) : base.darken(i);
+  // Keep the hue and saturation, only adjust lightness for readability
+  const hue = base.hue();
+  const saturation = base.saturationl();
+  let lightness = base.lightness();
+
+  const step = 2;
+  const maxIterations = 50;
+
+  for (let i = 0; i < maxIterations; i++) {
+    // Adjust lightness while keeping hue and saturation
+    lightness = isDark ? lightness + step : lightness - step;
+
+    // Clamp lightness between 0 and 100
+    if (lightness > 100) lightness = 100;
+    if (lightness < 0) lightness = 0;
+
+    const test = Color.hsl(hue, saturation, lightness);
+
     if (test.contrast(base) >= contrastThreshold) {
       return test;
     }
+
+    // If we've reached the limits, break
+    if (lightness >= 100 || lightness <= 0) {
+      break;
+    }
   }
 
-  return base.isDark() ? Color("#ffffff") : Color("#000000");
+  // Fallback: desaturate slightly if we still don't have enough contrast
+  return isDark
+    ? Color.hsl(hue, saturation * 0.8, 90)
+    : Color.hsl(hue, saturation * 0.8, 10);
 }
 
 export function ThemeColorProvider({ children }: { children: ReactNode }) {
