@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Dispatch, useMemo, useState } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 
+import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { ShareButton } from "@/components/ui/forms/share-button";
 import { useNotification } from "@/context/NotificationBar";
@@ -174,14 +175,14 @@ export const MenuItemModal = ({
                       {menuItem.allergens.map((allergen) => {
                         const AllergenIcon = getAllergenIcon(allergen.name);
                         return (
-                          <div
+                          <Badge
                             key={allergen.id}
-                            className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-xs"
+                            variant="default"
                             title={t(allergen.name)}
                           >
-                            <AllergenIcon className="h-3.5 w-3.5" />
+                            <AllergenIcon />
                             <span>{t(allergen.name)}</span>
-                          </div>
+                          </Badge>
                         );
                       })}
                     </motion.div>
@@ -203,14 +204,14 @@ export const MenuItemModal = ({
                       {menuItem.food_types.map((foodType) => {
                         const FoodTypeIcon = getFoodTypeIcon(foodType.name);
                         return (
-                          <div
+                          <Badge
                             key={foodType.id}
-                            className="bg-primary/10 text-primary flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
+                            variant="outline"
                             title={t(foodType.name)}
                           >
-                            <FoodTypeIcon className="h-3.5 w-3.5" />
+                            <FoodTypeIcon />
                             <span>{t(foodType.name)}</span>
-                          </div>
+                          </Badge>
                         );
                       })}
                     </motion.div>
