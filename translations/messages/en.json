@@ -1,9 +1,0 @@
-{
-  "HomePage": {
-    "title": "Hello world!"
-  },
-  "LocaleSwitcher": {
-    "label": "Language",
-    "locale": "en"
-  }
-}

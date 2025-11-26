@@ -51,21 +51,33 @@ export function FiltersBar({
   }, [allItems]);
 
   // Extract all unique categories
-  const allCategories = useMemo(() => {
-    const categories = new Set<string>();
+  const allergens = useMemo(() => {
+    const categoriesMap = new Map<string, { id: string; name: string }>();
     allItems.forEach((item) => {
-      item.categories?.forEach((cat) => categories.add(cat));
+      item.allergens?.forEach((cat) => {
+        if (!categoriesMap.has(cat.id)) {
+          categoriesMap.set(cat.id, { id: cat.id, name: cat.name });
+        }
+      });
     });
-    return Array.from(categories).sort();
+    return Array.from(categoriesMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }, [allItems]);
 
   // Extract all unique ingredients
-  const allIngredients = useMemo(() => {
-    const ingredients = new Set<string>();
+  const foodTypes = useMemo(() => {
+    const ingredientsMap = new Map<string, { id: string; name: string }>();
     allItems.forEach((item) => {
-      item.ingredients?.forEach((ing) => ingredients.add(ing));
+      item.food_types?.forEach((ing) => {
+        if (!ingredientsMap.has(ing.id)) {
+          ingredientsMap.set(ing.id, { id: ing.id, name: ing.name });
+        }
+      });
     });
-    return Array.from(ingredients).sort();
+    return Array.from(ingredientsMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }, [allItems]);
 
   const handleGroupChange = (value: string) => {
@@ -81,8 +93,8 @@ export function FiltersBar({
     if (onFiltersChange) {
       onFiltersChange({
         priceRange: [minPrice, maxPrice],
-        categories: [],
-        ingredients: [],
+        food_types: [],
+        allergens: [],
       });
     }
   };
@@ -136,9 +148,9 @@ export function FiltersBar({
         setOpen={(value) => setOpen(value)}
         minPrice={minPrice}
         maxPrice={maxPrice}
-        allCategories={allCategories}
-        allIngredients={allIngredients}
         filters={filters}
+        allergens={allergens}
+        foodTypes={foodTypes}
         onApply={handleFiltersApply}
       />
     </div>

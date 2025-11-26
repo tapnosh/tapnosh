@@ -12,6 +12,12 @@ export type MenuResponse = {
   is_deleted: boolean;
 };
 
+const RestaurantCategorySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+});
+
 export const MenuItemSchema = z.object({
   version: z.literal("v1"),
   id: z.string(),
@@ -26,8 +32,8 @@ export const MenuItemSchema = z.object({
       .positive("Amount must be a positive number"),
     currency: z.string(),
   }),
-  ingredients: z.array(z.string()).max(10).optional(),
-  categories: z.array(z.string()).max(10).optional(),
+  allergens: z.array(RestaurantCategorySchema).max(10).optional(),
+  food_types: z.array(RestaurantCategorySchema).max(10).optional(),
   image: z
     .union([
       z.string().url().optional(),
@@ -35,6 +41,8 @@ export const MenuItemSchema = z.object({
     ])
     .optional(),
   confirmed: z.boolean().optional(),
+  ingredients: z.array(z.string()).optional(),
+  categories: z.array(z.string()).optional(),
 });
 
 export type MenuItem = z.infer<typeof MenuItemSchema>;

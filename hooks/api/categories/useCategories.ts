@@ -2,17 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
-import { Category } from "@/types/category/Category";
+import { RestaurantCategory } from "@/types/category/Category";
 
-export function useCategoriesQuery(): ReturnType<
-  typeof useQuery<Category[], TranslatedError>
->;
+interface UseCategoriesQueryParams {
+  type?: "cuisine" | "allergens" | "food_type";
+}
 
-export function useCategoriesQuery() {
+export function useCategoriesQuery(
+  params?: UseCategoriesQueryParams,
+): ReturnType<typeof useQuery<RestaurantCategory[], TranslatedError>>;
+
+export function useCategoriesQuery(params?: UseCategoriesQueryParams) {
   const { fetchClient } = useFetchClient();
 
-  return useQuery<Category[], TranslatedError>({
-    queryKey: ["categories"],
-    queryFn: () => fetchClient<Category[]>("public_api/categories"),
+  const url = params?.type
+    ? `public_api/categories?type=${params.type}`
+    : "public_api/categories";
+
+  return useQuery<RestaurantCategory[], TranslatedError>({
+    queryKey: ["categories", params?.type],
+    queryFn: () => fetchClient<RestaurantCategory[]>(url),
   });
 }

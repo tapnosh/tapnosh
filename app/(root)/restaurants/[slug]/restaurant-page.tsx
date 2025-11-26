@@ -1,13 +1,20 @@
 "use client";
 
+import { MapPin, Phone } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import {
+  unstable_ViewTransition as ViewTransition,
+  useEffect,
+  useState,
+} from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { ShareButton } from "@/components/ui/forms/share-button";
+import { SocialMediaLink } from "@/components/ui/navigation/social-media-link";
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { FilterState } from "@/features/filters/types";
 import { MenuGroup } from "@/features/menu/menu-group";
@@ -18,6 +25,26 @@ import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { findDishById } from "@/utils/dish-id";
 import { deleteUrlParam, setUrlParam } from "@/utils/url-state";
+
+// TODO Calculate it in backend with timezone support
+function isWithinServingTime(timeFrom: string, timeTo: string): boolean {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes(); // Current time in minutes
+
+  // Parse timeFrom and timeTo (expecting format like "HH:MM")
+  const [fromHours, fromMinutes] = timeFrom.split(":").map(Number);
+  const [toHours, toMinutes] = timeTo.split(":").map(Number);
+
+  const fromTime = fromHours * 60 + fromMinutes;
+  const toTime = toHours * 60 + toMinutes;
+
+  // Handle cases where serving time spans midnight
+  if (toTime < fromTime) {
+    return currentTime >= fromTime || currentTime <= toTime;
+  }
+
+  return currentTime >= fromTime && currentTime <= toTime;
+}
 
 function MenuInteractive({
   schema,
@@ -62,28 +89,28 @@ function MenuInteractive({
     if (!filters) return true;
 
     // Check price range
-    const { priceRange, categories, ingredients } = filters;
+    const { priceRange, food_types, allergens } = filters;
     const itemPrice = item.price.amount;
     if (itemPrice < priceRange[0] || itemPrice > priceRange[1]) {
       return false;
     }
 
-    // Check categories (if any are selected)
-    if (categories.length > 0) {
-      const itemCategories = item.categories || [];
-      const hasMatchingCategory = categories.some((cat) =>
-        itemCategories.includes(cat),
+    // Check food types (if any are selected, item must have at least one matching)
+    if (food_types.length > 0) {
+      const itemFoodTypes = item.food_types || [];
+      const hasMatchingFoodType = food_types.some((foodType) =>
+        itemFoodTypes.map(({ id }) => id).includes(foodType),
       );
-      if (!hasMatchingCategory) return false;
+      if (!hasMatchingFoodType) return false;
     }
 
-    // Check ingredients (exclude items with selected ingredients)
-    if (ingredients.length > 0) {
-      const itemIngredients = item.ingredients || [];
-      const hasExcludedIngredient = ingredients.some((ing) =>
-        itemIngredients.includes(ing),
+    // Check allergens (if any are selected, item must NOT contain any of them)
+    if (allergens.length > 0) {
+      const itemAllergens = item.allergens || [];
+      const hasExcludedAllergen = allergens.some((allergen) =>
+        itemAllergens.map(({ id }) => id).includes(allergen),
       );
-      if (hasExcludedIngredient) return false;
+      if (hasExcludedAllergen) return false;
     }
 
     return true;
@@ -166,6 +193,11 @@ function MenuInteractive({
               // Only render group if it has items after filtering
               if (filteredItems.length === 0) return null;
 
+              const isAvailable = isWithinServingTime(
+                group.timeFrom,
+                group.timeTo,
+              );
+
               return (
                 <MenuGroup data={group} key={groupIndex}>
                   {filteredItems.map(({ version, ...item }) =>
@@ -175,7 +207,7 @@ function MenuInteractive({
                           item={{ ...item, version }}
                           key={item.id}
                           onClick={handleClick}
-                          isAvailable
+                          isAvailable={isAvailable}
                         />
                       </AnimatePresence>
                     ) : null,
@@ -201,21 +233,25 @@ function MenuInteractive({
   );
 }
 
-export function RestaurantHeader({
-  restaurant,
-  showCta = true,
-}: {
-  restaurant: Restaurant;
-  showCta?: boolean;
-}) {
+export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
+  const t = useTranslations("categories");
+
   return (
-    <header className="section section-primary relative -mb-8 -translate-y-16 overflow-clip">
+    <header className="section section-primary -mb-8 -translate-y-16 overflow-clip">
+      <ShareButton
+        className="fixed top-4 right-4 z-100 rounded-md"
+        url={`/restaurants/${restaurant.slug}`}
+        label="Share"
+        size="default"
+        variant="secondary"
+      />
+
       <div className="absolute inset-0 -top-16 z-1">
         <Image
           src={restaurant.images[0]?.url || "/placeholder.svg"}
           alt={`${restaurant.name} restaurant interior`}
           fill
-          className="object-cover opacity-15"
+          className="object-cover opacity-10"
           style={{
             filter:
               "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
@@ -228,43 +264,84 @@ export function RestaurantHeader({
       </div>
 
       <div className="relative z-10 flex flex-col pt-16">
-        <div className="w-full">
-          <div className="flex flex-wrap gap-2">
-            {restaurant.categories.map((c) => (
-              <Badge
-                key={c.id}
-                variant="secondary"
-                className="bg-primary-foreground/15 text-primary-foreground mb-4 font-bold backdrop-blur-sm"
-              >
-                {c.name}
-              </Badge>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-2">
+          {restaurant.categories.map((c) => (
+            <Badge
+              key={c.id}
+              variant="secondary"
+              className="bg-primary-foreground/15 text-primary-foreground mb-4 font-bold backdrop-blur-sm"
+            >
+              {t(c.name)}
+            </Badge>
+          ))}
+        </div>
 
+        <ViewTransition name={`title-${restaurant.id}`}>
           <h1 className="mb-4 text-5xl font-bold tracking-tight drop-shadow-sm md:text-7xl">
             {restaurant.name}
           </h1>
-        </div>
+        </ViewTransition>
 
-        <p className="text-primary-foreground/90 mb-4 max-w-2xl text-lg drop-shadow-sm">
-          {restaurant.description}
-        </p>
+        <ViewTransition name={`description-${restaurant.id}`}>
+          <p className="text-primary-foreground/90 mb-6 max-w-3xl text-lg drop-shadow-sm">
+            {restaurant.description}
+          </p>
+        </ViewTransition>
 
-        {showCta && (
-          <div className="flex flex-col justify-start gap-2 sm:flex-row">
-            <Link
-              href={"#"}
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 items-center justify-center gap-2 rounded-lg px-8 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              Make Reservation
-            </Link>
-            <ShareButton
-              className="size-10"
-              url={`/restaurants/${restaurant.slug}`}
-              size="icon"
-            />
+        {/* Address and Contact Info */}
+        {(restaurant.address || restaurant.phoneNumber) && (
+          <div className="text-primary-foreground/90 flex flex-col gap-4 drop-shadow-sm">
+            {restaurant.address && (
+              <div className="flex items-start gap-2">
+                <MapPin className="mt-1 size-4.5 shrink-0" />
+                <span className="text-base">
+                  {restaurant.address.formattedAddress}
+                </span>
+              </div>
+            )}
+            {restaurant.phoneNumber && (
+              <div className="flex items-center gap-2">
+                <Phone className="size-4.5 shrink-0" />
+                <a
+                  href={`tel:${restaurant.phoneNumber}`}
+                  className="hover:text-primary-foreground text-base transition-colors"
+                >
+                  {restaurant.phoneNumber}
+                </a>
+              </div>
+            )}
           </div>
         )}
+
+        {restaurant.reservationUrl ||
+        restaurant.facebookUrl ||
+        restaurant.instagramUrl ? (
+          <div className="mt-6 flex flex-row justify-start gap-2">
+            {restaurant.reservationUrl && (
+              <Link
+                href={restaurant.reservationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-8 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg sm:flex-none"
+              >
+                Make Reservation
+              </Link>
+            )}
+
+            {restaurant.facebookUrl && (
+              <SocialMediaLink
+                platform="facebook"
+                url={restaurant.facebookUrl}
+              />
+            )}
+            {restaurant.instagramUrl && (
+              <SocialMediaLink
+                platform="instagram"
+                url={restaurant.instagramUrl}
+              />
+            )}
+          </div>
+        ) : null}
       </div>
     </header>
   );

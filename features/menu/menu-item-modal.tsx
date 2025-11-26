@@ -3,10 +3,10 @@
 import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Dispatch, useMemo, useState } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 
-import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { ShareButton } from "@/components/ui/forms/share-button";
 import { useNotification } from "@/context/NotificationBar";
@@ -14,7 +14,7 @@ import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
 
-import { categoryIcons } from "./menu-item";
+import { getAllergenIcon, getFoodTypeIcon } from "./utils/icons";
 
 export const MenuItemModal = ({
   open,
@@ -22,24 +22,33 @@ export const MenuItemModal = ({
   menuItem,
   canBeAddedToTab = false,
   restaurantSlug,
+  isAvailable = true,
 }: {
   open: boolean;
   setOpen: Dispatch<boolean>;
   menuItem?: MenuItem;
   canBeAddedToTab?: boolean;
   restaurantSlug?: string;
+  isAvailable?: boolean;
 }) => {
   const [amount, setAmount] = useState<number | string>(1);
   const { openNotification } = useNotification();
   const { addItem } = useOrder();
 
   const { formatCurrency } = useCurrency();
+  const t = useTranslations("categories");
 
   const shareUrl = useMemo(() => {
     if (!restaurantSlug || !menuItem) return "";
     const baseUrl = typeof window !== "undefined" ? window.location.origin : "";
     return `${baseUrl}/restaurants/${restaurantSlug}/${menuItem.id}`;
   }, [restaurantSlug, menuItem]);
+
+  const imageSrc = useMemo(
+    () =>
+      Array.isArray(menuItem?.image) ? menuItem.image[0]?.url : menuItem?.image,
+    [menuItem?.image],
+  );
 
   const handleIncrement = () => {
     setAmount((prev) => (+prev >= 9 ? prev : +prev + 1));
@@ -130,21 +139,8 @@ export const MenuItemModal = ({
               </div>
               <article className="flex flex-col overflow-auto p-4 pb-0">
                 <header>
-                  <div className="flex flex-wrap gap-1.5">
-                    {menuItem?.categories?.map((category) => (
-                      <Badge
-                        key={category}
-                        variant="secondary"
-                        className="text-xs"
-                      >
-                        {categoryIcons[category as keyof typeof categoryIcons]}
-
-                        {category}
-                      </Badge>
-                    ))}
-                  </div>
                   <motion.h2
-                    className="font-display-median mt-3 font-normal"
+                    className="font-display-median mt-8 font-normal sm:mt-10"
                     initial={{ opacity: 0, y: "50%" }}
                     animate={{ opacity: 1, y: "0%" }}
                     exit={{ opacity: 0, y: "50%" }}
@@ -161,50 +157,101 @@ export const MenuItemModal = ({
                   >
                     {menuItem?.description}
                   </motion.span>
+
+                  {/* Allergens */}
+                  {menuItem?.allergens && menuItem.allergens.length > 0 && (
+                    <motion.div
+                      className="mt-3 flex flex-wrap items-center gap-1"
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: "0%" }}
+                      exit={{ opacity: 0, y: "50%" }}
+                      transition={{
+                        delay: 0.35,
+                        type: "tween",
+                        duration: 0.3,
+                      }}
+                    >
+                      {menuItem.allergens.map((allergen) => {
+                        const AllergenIcon = getAllergenIcon(allergen.name);
+                        return (
+                          <div
+                            key={allergen.id}
+                            className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-xs"
+                            title={t(allergen.name)}
+                          >
+                            <AllergenIcon className="h-3.5 w-3.5" />
+                            <span>{t(allergen.name)}</span>
+                          </div>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+
+                  {/* Food Types */}
+                  {menuItem?.food_types && menuItem.food_types.length > 0 && (
+                    <motion.div
+                      className="mt-2 flex flex-wrap items-center gap-1"
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: "0%" }}
+                      exit={{ opacity: 0, y: "50%" }}
+                      transition={{
+                        delay: 0.4,
+                        type: "tween",
+                        duration: 0.3,
+                      }}
+                    >
+                      {menuItem.food_types.map((foodType) => {
+                        const FoodTypeIcon = getFoodTypeIcon(foodType.name);
+                        return (
+                          <div
+                            key={foodType.id}
+                            className="bg-primary/10 text-primary flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
+                            title={t(foodType.name)}
+                          >
+                            <FoodTypeIcon className="h-3.5 w-3.5" />
+                            <span>{t(foodType.name)}</span>
+                          </div>
+                        );
+                      })}
+                    </motion.div>
+                  )}
                 </header>
+                {!isAvailable && (
+                  <motion.div
+                    className="text-muted-foreground mt-3 text-sm italic"
+                    initial={{ opacity: 0, y: "50%" }}
+                    animate={{ opacity: 1, y: "0%" }}
+                    exit={{ opacity: 0, y: "50%" }}
+                    transition={{
+                      delay: 0.45,
+                      type: "tween",
+                      duration: 0.3,
+                    }}
+                  >
+                    This dish is not available for serving
+                  </motion.div>
+                )}
                 <div className="pb-4">
-                  <div className="flex flex-col pt-3">
-                    <motion.h6
-                      initial={{ opacity: 0, y: "50%" }}
-                      animate={{ opacity: 1, y: "0%" }}
-                      exit={{ opacity: 0, y: "50%" }}
-                      transition={{ delay: 0.4, type: "tween", duration: 0.3 }}
-                      className="font-display-median text-foreground block uppercase"
-                    >
-                      Ingredients
-                    </motion.h6>
-                    <motion.span
-                      initial={{ opacity: 0, y: "50%" }}
-                      animate={{ opacity: 1, y: "0%" }}
-                      exit={{ opacity: 0, y: "50%" }}
-                      transition={{ delay: 0.5, type: "tween", duration: 0.3 }}
-                      className="text-muted-foreground mb-1 block"
-                    >
-                      {menuItem?.ingredients?.join(" • ")}
-                    </motion.span>
-                  </div>
-                  {menuItem?.image && (
+                  {menuItem && imageSrc && (
                     <motion.div
                       layoutId={`item-image-${menuItem?.id}`}
                       className="relative aspect-square flex-1 pt-2"
                     >
                       <Image
-                        src={
-                          Array.isArray(menuItem.image)
-                            ? menuItem.image[0]?.url
-                            : menuItem.image
-                        }
+                        src={imageSrc}
                         alt={menuItem.name}
-                        width={2056}
-                        height={2056}
-                        quality={100}
+                        width={1024}
+                        height={1024}
+                        quality={90}
                         priority
-                        className="pointer-events-none h-full w-full rounded-md object-cover"
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAyNCIgaGVpZ2h0PSIxMDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNlZWVlZWUiLz48L3N2Zz4="
+                        className="pointer-events-none h-full w-full rounded-2xl object-cover"
                       />
                     </motion.div>
                   )}
                 </div>
-                {canBeAddedToTab && (
+                {canBeAddedToTab && isAvailable && (
                   <motion.footer
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

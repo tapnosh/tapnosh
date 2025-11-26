@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import {
@@ -17,14 +18,19 @@ import { FilterActions } from "./filter-actions";
 import { PriceRangeFilter } from "./price-range-filter";
 import { FilterState } from "./types";
 
+interface CategoryItem {
+  id: string;
+  name: string;
+}
+
 interface FiltersDrawerProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   minPrice: number;
   maxPrice: number;
-  allCategories: string[];
-  allIngredients: string[];
   filters?: FilterState;
+  allergens: CategoryItem[];
+  foodTypes: CategoryItem[];
   onApply: (filters: FilterState) => void;
 }
 
@@ -33,20 +39,22 @@ export function FiltersDrawer({
   setOpen,
   minPrice,
   maxPrice,
-  allCategories,
-  allIngredients,
   filters,
+  allergens,
+  foodTypes,
   onApply,
 }: FiltersDrawerProps) {
   const isMobile = useIsMobile();
+  const t = useTranslations("categories");
+
   const [priceRange, setPriceRange] = useState<[number, number]>(
     filters?.priceRange || [minPrice, maxPrice],
   );
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    filters?.categories || [],
+  const [selectedFoodTypes, setSelectedFoodTypes] = useState<string[]>(
+    filters?.food_types || [],
   );
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>(
-    filters?.ingredients || [],
+  const [selectedAllergens, setSelectedAllergens] = useState<string[]>(
+    filters?.allergens || [],
   );
 
   const toggleItem = (
@@ -61,15 +69,15 @@ export function FiltersDrawer({
   const handleApply = () => {
     onApply({
       priceRange,
-      categories: selectedCategories,
-      ingredients: selectedIngredients,
+      food_types: selectedFoodTypes,
+      allergens: selectedAllergens,
     });
   };
 
   const handleReset = () => {
     setPriceRange([minPrice, maxPrice]);
-    setSelectedCategories([]);
-    setSelectedIngredients([]);
+    setSelectedFoodTypes([]);
+    setSelectedAllergens([]);
   };
 
   return (
@@ -96,17 +104,21 @@ export function FiltersDrawer({
           />
 
           <BadgeFilter
-            label="Categories"
-            items={allCategories}
-            selectedItems={selectedCategories}
-            onToggle={(item) => toggleItem(item, setSelectedCategories)}
+            label="Food Types"
+            mode="include"
+            items={foodTypes}
+            selectedItems={selectedFoodTypes}
+            onToggle={(item) => toggleItem(item, setSelectedFoodTypes)}
+            translateItem={t}
           />
 
           <BadgeFilter
-            label="Exclude Ingredients"
-            items={allIngredients}
-            selectedItems={selectedIngredients}
-            onToggle={(item) => toggleItem(item, setSelectedIngredients)}
+            label="Exclude Allergens"
+            mode="exclude"
+            items={allergens}
+            selectedItems={selectedAllergens}
+            onToggle={(item) => toggleItem(item, setSelectedAllergens)}
+            translateItem={t}
           />
         </div>
 

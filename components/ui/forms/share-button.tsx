@@ -2,10 +2,12 @@
 
 import { Share2, Check } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/forms/button";
+import { useNotification } from "@/context/NotificationBar";
 import { cn } from "@/utils/cn";
+
+import { BasicNotificationBody } from "../feedback/basic-notification";
 
 interface ShareButtonProps {
   url: string;
@@ -26,6 +28,7 @@ export function ShareButton({
   size = "icon",
   label,
 }: ShareButtonProps) {
+  const { openNotification } = useNotification();
   const [copied, setCopied] = useState(false);
 
   const handleShare = async (e: React.MouseEvent) => {
@@ -67,11 +70,23 @@ export function ShareButton({
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      toast.success("Link copied to clipboard!");
+      openNotification(
+        <BasicNotificationBody
+          title="Copied!"
+          description="Link copied to clipboard"
+          variant="info"
+        />,
+      );
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       console.error("Failed to copy:", error);
-      toast.error("Failed to copy link");
+      openNotification(
+        <BasicNotificationBody
+          title="Error"
+          description="Failed to copy link"
+          variant="error"
+        />,
+      );
     }
   };
 

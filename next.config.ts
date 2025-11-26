@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   experimental: {
     viewTransition: true,
   },
+  serverExternalPackages: ["sequelize", "pino", "pino-pretty"],
   publicRuntimeConfig: {
     version,
   },

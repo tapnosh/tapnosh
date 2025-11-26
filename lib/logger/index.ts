@@ -12,13 +12,15 @@ import pino from "pino";
 /**
  * Creates a child logger with the specified module name
  */
-export const createLogger = (module: string) =>
-  pino({
+export const createLogger = (module: string) => {
+  const isDevelopment = process.env.NODE_ENV === "development";
+
+  return pino({
     level: process.env.LOG_LEVEL || "info",
     browser: {
       asObject: true,
     },
-    ...(process.env.NODE_ENV === "development" && {
+    ...(isDevelopment && {
       transport: {
         target: "pino-pretty",
         options: {
@@ -29,6 +31,7 @@ export const createLogger = (module: string) =>
       },
     }),
   }).child({ module });
+};
 
 /**
  * Default base logger (use createLogger for module-specific loggers)

@@ -1,5 +1,10 @@
+export interface Category {
+  id: string;
+  name: string;
+}
+
 export interface FilterState {
   priceRange: [number, number];
-  categories: string[];
-  ingredients: string[];
+  food_types: string[];
+  allergens: string[];
 }

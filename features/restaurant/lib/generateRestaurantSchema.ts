@@ -13,10 +13,10 @@ export function generateRestaurantSchema(
     "@type": "Restaurant",
     name: restaurant.name,
     description: restaurant.description,
-    address: restaurant.address
+    address: restaurant?.address
       ? {
           "@type": "PostalAddress",
-          streetAddress: restaurant.address,
+          streetAddress: restaurant.address.formattedAddress,
         }
       : undefined,
     image: restaurant.images?.map((img) => img.url) || [],

@@ -9,23 +9,8 @@ const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 export const dynamic = "force-dynamic";
 export const revalidate = 3600; // Revalidate every hour
 
-// Generate multiple sitemap segments
-export async function generateSitemaps() {
-  sitemapLogger.info("Generating sitemap segments");
-  const segments = [{ id: "static" }, { id: "restaurants" }];
-  sitemapLogger.info(
-    { segments: segments.map((s) => s.id) },
-    `Generated ${segments.length} segments`,
-  );
-  return segments;
-}
-
-export default async function sitemap({
-  id,
-}: {
-  id: string;
-}): Promise<MetadataRoute.Sitemap> {
-  sitemapLogger.info({ segmentId: id }, "Generating sitemap for segment");
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  sitemapLogger.info("Generating sitemap");
 
   if (!baseUrl) {
     sitemapLogger.error(
@@ -34,117 +19,93 @@ export default async function sitemap({
     return [];
   }
 
-  // Static pages sitemap
-  if (id === "static") {
-    sitemapLogger.info("Building static pages sitemap");
-    const staticPages: MetadataRoute.Sitemap = [
-      {
-        url: baseUrl,
-        lastModified: new Date(),
-        changeFrequency: "daily",
-        priority: 1,
-      },
-      {
-        url: `${baseUrl}/about`,
-        lastModified: new Date(),
-        changeFrequency: "monthly",
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/restaurants`,
-        lastModified: new Date(),
-        changeFrequency: "daily",
-        priority: 0.9,
-      },
-      {
-        url: `${baseUrl}/docs`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.5,
-      },
-    ];
-    sitemapLogger.info({ count: staticPages.length }, "Generated static pages");
-    return staticPages;
-  }
+  const sitemap: MetadataRoute.Sitemap = [];
 
-  // Restaurants sitemap
-  if (id === "restaurants") {
-    sitemapLogger.info("Building restaurants sitemap");
-    const sitemap: MetadataRoute.Sitemap = [];
+  // Static pages
+  sitemapLogger.info("Building static pages sitemap");
+  sitemap.push(
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/map`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/restaurants`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/docs`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    },
+  );
+  sitemapLogger.info({ count: sitemap.length }, "Generated static pages");
 
-    if (apiUrl) {
-      sitemapLogger.info({ apiUrl }, "Fetching restaurants from API");
-      try {
-        const response = await fetch(
-          new URL("public_api/restaurants", apiUrl),
-          {
-            next: { revalidate: 3600 },
-          },
-        );
+  // Restaurants
+  if (apiUrl) {
+    sitemapLogger.info({ apiUrl }, "Fetching restaurants from API");
+    try {
+      const response = await fetch(new URL("public_api/restaurants", apiUrl), {
+        next: { revalidate: 3600 },
+      });
 
+      sitemapLogger.info(
+        { status: response.status, statusText: response.statusText },
+        "API response received",
+      );
+
+      if (response.ok) {
+        const restaurants = await response.json();
         sitemapLogger.info(
-          { status: response.status, statusText: response.statusText },
-          "API response received",
+          { count: Array.isArray(restaurants) ? restaurants.length : 0 },
+          "Received restaurants",
         );
 
-        if (response.ok) {
-          const restaurants = await response.json();
-          sitemapLogger.info(
-            { count: Array.isArray(restaurants) ? restaurants.length : 0 },
-            "Received restaurants",
-          );
-
-          if (Array.isArray(restaurants)) {
-            restaurants.forEach((restaurant: Restaurant) => {
-              sitemap.push({
-                url: `${baseUrl}/restaurants/${restaurant.slug}`,
-                lastModified: restaurant.updatedAt
-                  ? new Date(restaurant.updatedAt)
-                  : new Date(),
-                changeFrequency: "daily",
-                priority: 0.8,
-              });
-
-              sitemap.push({
-                url: `${baseUrl}/restaurants/${restaurant.slug}/menu`,
-                lastModified: restaurant.updatedAt
-                  ? new Date(restaurant.updatedAt)
-                  : new Date(),
-                changeFrequency: "hourly",
-                priority: 0.7,
-              });
+        if (Array.isArray(restaurants)) {
+          restaurants.forEach((restaurant: Restaurant) => {
+            sitemap.push({
+              url: `${baseUrl}/restaurants/${restaurant.slug}`,
+              lastModified: restaurant.updatedAt
+                ? new Date(restaurant.updatedAt)
+                : new Date(),
+              changeFrequency: "daily",
+              priority: 0.8,
             });
-            sitemapLogger.info(
-              { count: sitemap.length },
-              "Generated restaurant URLs",
-            );
-          }
-        } else {
-          sitemapLogger.warn(
-            { status: response.status, statusText: response.statusText },
-            "Failed to fetch restaurants",
+          });
+          sitemapLogger.info(
+            { count: sitemap.length },
+            "Generated restaurant URLs",
           );
         }
-      } catch (error) {
-        sitemapLogger.error(
-          { error },
-          "Error fetching restaurants for sitemap",
+      } else {
+        sitemapLogger.warn(
+          { status: response.status, statusText: response.statusText },
+          "Failed to fetch restaurants",
         );
       }
-    } else {
-      sitemapLogger.warn("API URL not configured, skipping restaurant sitemap");
+    } catch (error) {
+      sitemapLogger.error({ error }, "Error fetching restaurants for sitemap");
     }
-
-    sitemapLogger.info(
-      { count: sitemap.length },
-      "Returning entries for restaurants segment",
-    );
-    return sitemap;
+  } else {
+    sitemapLogger.warn("API URL not configured, skipping restaurant sitemap");
   }
 
-  sitemapLogger.warn(
-    { segmentId: id },
-    "Unknown segment ID, returning empty sitemap",
-  );
-  return [];
+  sitemapLogger.info({ count: sitemap.length }, "Returning sitemap entries");
+  return sitemap;
 }

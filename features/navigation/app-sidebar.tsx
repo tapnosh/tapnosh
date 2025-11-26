@@ -1,8 +1,14 @@
 "use client";
 
-import { BookOpen, Home, LifeBuoy, Send, Utensils } from "lucide-react";
+import {
+  BookOpen,
+  Home,
+  LifeBuoy,
+  MapIcon,
+  Send,
+  Utensils,
+} from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import * as React from "react";
 
 import {
@@ -21,8 +27,6 @@ import { NavUser } from "@/features/navigation/nav-user";
 import { NavManagement } from "./nav-management";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const params = useParams<{ slug: string }>();
-
   const data = React.useMemo(
     () => ({
       navMain: [
@@ -36,18 +40,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           title: "Restaurants",
           url: "/restaurants",
           icon: Utensils,
-          items: params.slug
-            ? [
-                {
-                  title: `${params.slug}`,
-                  url: `/restaurants/${params.slug}`,
-                },
-                {
-                  title: `${params.slug} menu`,
-                  url: `/restaurants/${params.slug}/menu`,
-                },
-              ]
-            : undefined,
+        },
+        {
+          title: "Map",
+          url: "/map",
+          icon: MapIcon,
         },
         {
           title: "Documentation",
@@ -68,7 +65,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
       ],
     }),
-    [params],
+    [],
   );
 
   return (

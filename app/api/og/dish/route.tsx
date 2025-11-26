@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { ImageResponse } from "@vercel/og";
 import Color, { type ColorInstance } from "color";
 import { NextRequest } from "next/server";
+import { getTranslations } from "next-intl/server";
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
@@ -81,10 +82,19 @@ export async function GET(request: NextRequest) {
 
     const dish = result.item;
 
+    // Get food type names from translations
+    const t = await getTranslations("categories");
+    const foodTypeNames: string[] = [];
+    if (dish.food_types && dish.food_types.length > 0) {
+      dish.food_types.forEach(({ name }) => {
+        foodTypeNames.push(t(name));
+      });
+    }
+
     // Extract dish details
     const dishName = dish.name;
-    const ingredients = dish.ingredients?.join(" • ");
     const currency = dish.price.currency;
+    const description = dish.description;
     const price = new Intl.NumberFormat("pl-PL", {
       style: "currency",
       currency: currency,
@@ -160,10 +170,40 @@ export async function GET(request: NextRequest) {
                 paddingRight: dishImageUrl ? "60px" : "0",
               }}
             >
+              {/* Food types */}
+              {foodTypeNames.length > 0 && (
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                    marginTop: "16px",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {foodTypeNames.map((foodType, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        display: "flex",
+                        padding: "6px 14px",
+                        backgroundColor: primaryColor.hex(),
+                        color: foregroundColor.hex(),
+                        borderRadius: "8px",
+                        fontSize: "20px",
+                        fontWeight: 300,
+                      }}
+                    >
+                      {foodType}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               {/* Dish name */}
               <h1
                 style={{
-                  fontSize: "64px",
+                  fontSize: "56px",
                   fontWeight: "bold",
                   lineHeight: 1,
                   marginBottom: "0",
@@ -174,18 +214,17 @@ export async function GET(request: NextRequest) {
                 {dishName}
               </h1>
 
-              {/* Ingredients */}
-              {ingredients && (
+              {/* Price */}
+              {description && (
                 <p
                   style={{
-                    fontSize: "28px",
-                    lineHeight: 1.5,
-                    color: foregroundColor.hex(),
-                    marginBottom: "16px",
+                    display: "flex",
+                    fontSize: "32px",
                     fontWeight: 300,
+                    color: foregroundColor.hex(),
                   }}
                 >
-                  {ingredients}
+                  {description}
                 </p>
               )}
 
@@ -194,7 +233,7 @@ export async function GET(request: NextRequest) {
                 <div
                   style={{
                     display: "flex",
-                    fontSize: "72px",
+                    fontSize: "64px",
                     fontWeight: 900,
                     color: foregroundColor.hex(),
                   }}

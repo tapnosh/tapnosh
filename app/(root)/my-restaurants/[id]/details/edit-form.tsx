@@ -26,7 +26,7 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
       description: "",
       theme_id: "",
       images: [],
-      category_ids: [],
+      categories: [],
     },
   });
 
@@ -38,7 +38,13 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
         description: restaurant.description,
         theme_id: restaurant.theme.id,
         images: restaurant.images || [],
-        category_ids: restaurant.categories?.map((c) => c.id),
+        categories: restaurant.categories,
+        address: restaurant.address,
+        phoneNumber: restaurant.phoneNumber,
+        facebookUrl: restaurant.facebookUrl,
+        instagramUrl: restaurant.instagramUrl,
+        reservationUrl: restaurant.reservationUrl,
+        priceRange: restaurant.priceRange,
       });
     }
   }, [restaurant, form]);

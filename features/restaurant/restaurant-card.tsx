@@ -1,5 +1,11 @@
+"use client";
+
+import Color from "color";
+import { MapPin, Phone } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { unstable_ViewTransition as ViewTransition } from "react";
+import { useTranslations } from "next-intl";
+import { useMemo, unstable_ViewTransition as ViewTransition } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
@@ -7,26 +13,35 @@ import { ShareButton } from "@/components/ui/forms/share-button";
 import { RestaurantCategory } from "@/types/category/Category";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
-import { RestaurantCarousel } from "./restaurant-carousel";
-
 interface RestaurantCardProps {
   restaurant: Restaurant;
 }
 
 function RestaurantBadges({
   categories,
+  translateCategory,
+  foregroundColor,
 }: {
   categories?: RestaurantCategory[];
+  translateCategory: (id: string) => string;
+  foregroundColor: string;
 }) {
-  if (!categories) {
-    return <></>;
+  if (!categories || categories.length === 0) {
+    return null;
   }
 
   return (
-    <div className="flex gap-2">
-      {categories?.map(({ name, id }) => (
-        <Badge key={id} variant="outline" className="font-medium">
-          {name}
+    <div className="flex flex-wrap gap-1.5">
+      {categories?.map(({ id, name }) => (
+        <Badge
+          key={id}
+          variant="default"
+          style={{
+            color: foregroundColor,
+            backgroundColor: foregroundColor + "20",
+          }}
+        >
+          {translateCategory(name)}
         </Badge>
       ))}
     </div>
@@ -34,37 +49,121 @@ function RestaurantBadges({
 }
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
+  const t = useTranslations("categories");
+
+  const { backgroundColor, foregroundColor } = useMemo(() => {
+    const bgColor = new Color(restaurant.theme.color);
+    const fgColor = bgColor.isDark() ? "#ffffff" : "#000000";
+
+    return {
+      backgroundColor: bgColor.hex(),
+      foregroundColor: fgColor,
+    };
+  }, [restaurant.theme.color]);
+
   return (
-    <div className="group mb-2 border-b pb-4 last:border-0">
-      <RestaurantCarousel restaurant={restaurant} />
-
-      <div className="flex flex-col">
-        <div className="mb-2 flex items-center justify-between">
-          <ViewTransition name={`title-${restaurant.id}`}>
-            <h3>{restaurant.name}</h3>
-          </ViewTransition>
-          <RestaurantBadges categories={restaurant.categories} />
+    <div
+      className="group relative flex h-full min-h-64 flex-col overflow-hidden rounded-2xl p-6 shadow-md sm:min-h-72"
+      style={{
+        backgroundColor,
+        color: foregroundColor,
+      }}
+    >
+      {restaurant.images?.[0]?.url && (
+        <div className="pointer-events-none absolute inset-0 z-1">
+          <Image
+            src={restaurant.images[0]?.url || "/placeholder.svg"}
+            alt={`${restaurant.name} restaurant interior`}
+            fill
+            className="object-cover opacity-10"
+            style={{
+              filter:
+                "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
+              mixBlendMode: "multiply",
+            }}
+            quality={100}
+            loading="eager"
+            priority
+          />
         </div>
-        <ViewTransition name={`description-${restaurant.id}`}>
-          <p className="text-muted-foreground mb-3 italic">
-            {restaurant.description}
-          </p>
-        </ViewTransition>
-        {/* <div className="text-muted-foreground mb-4 flex items-center text-sm">
-          <MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
-          <span>{restaurant.address}</span>
-        </div> */}
+      )}
 
-        <div className="flex items-center gap-2">
-          <Button size="lg" asChild className="flex-1">
-            <Link href={`/restaurants/${restaurant.slug}`}>See the Menu</Link>
-          </Button>
+      {/* Share button in top right corner */}
+      <div className="absolute top-4 right-4 z-40">
+        <div
+          className="rounded-xl shadow-lg"
+          style={{
+            backgroundColor: foregroundColor,
+            color: backgroundColor,
+          }}
+        >
           <ShareButton
             url={`/restaurants/${restaurant.slug}`}
             title={restaurant.name}
-            size="lg"
+            size="icon"
+            variant="ghost"
           />
         </div>
+      </div>
+
+      {restaurant.categories && restaurant.categories.length > 0 && (
+        <div className="mb-2">
+          <RestaurantBadges
+            categories={restaurant.categories}
+            translateCategory={t}
+            foregroundColor={foregroundColor}
+          />
+        </div>
+      )}
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-1 flex-col">
+        <ViewTransition name={`title-${restaurant.id}`}>
+          <h3 className="mb-3 text-3xl leading-8 font-bold md:text-4xl">
+            {restaurant.name}
+          </h3>
+        </ViewTransition>
+
+        {restaurant.description && (
+          <ViewTransition name={`description-${restaurant.id}`}>
+            <p className="mb-4 text-sm opacity-90">{restaurant.description}</p>
+          </ViewTransition>
+        )}
+        <div className="flex-1" />
+
+        <div className="mb-4 flex flex-col gap-2">
+          {restaurant?.address?.formattedAddress && (
+            <div className="flex items-start gap-2 text-sm opacity-90">
+              <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <span>{restaurant.address.formattedAddress}</span>
+            </div>
+          )}
+
+          {restaurant?.phoneNumber && (
+            <div className="flex items-center gap-2 text-sm opacity-90">
+              <Phone className="h-4 w-4 flex-shrink-0" />
+              <a
+                href={`tel:${restaurant.phoneNumber}`}
+                className="transition-opacity hover:opacity-70"
+              >
+                {restaurant.phoneNumber}
+              </a>
+            </div>
+          )}
+        </div>
+
+        {/* CTA Button at bottom */}
+        <Button
+          size="lg"
+          asChild
+          className="w-full shadow-lg"
+          style={{
+            backgroundColor: foregroundColor,
+            color: backgroundColor,
+          }}
+        >
+          <Link href={`/restaurants/${restaurant.slug}`}>View Menu</Link>
+        </Button>
       </div>
     </div>
   );

@@ -351,7 +351,7 @@ export default function ImageUploadDropzone({
       {!files.length && (
         <Card
           className={cn(
-            "cursor-pointer border border-dashed shadow-none transition-colors",
+            "cursor-pointer rounded-md border border-dashed shadow-none transition-colors",
             isDragOver
               ? "border-primary bg-primary/5"
               : "border-muted-foreground/25 hover:border-foreground/50 hover:bg-foreground/5",

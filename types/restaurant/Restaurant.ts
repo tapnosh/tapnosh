@@ -5,17 +5,40 @@ import { RestaurantTheme } from "@/types/theme/Theme";
 
 import { Builder } from "../builder/BuilderSchema";
 
+export enum RestaurantPriceRange {
+  LOW = "low",
+  MID = "mid",
+  HIGH = "high",
+}
+
 export interface Restaurant {
-  id?: string;
-  slug?: string;
+  id: string;
+  slug: string;
   name: string;
   description: string;
   theme_id: string;
   createdAt: string;
   updatedAt: string;
   theme: RestaurantTheme;
-  address: string | null;
+  address: {
+    formattedAddress: string;
+    streetNumber: string;
+    street: string;
+    city: string;
+    state: string;
+    stateCode: string;
+    country: string;
+    countryCode: string;
+    postalCode: string;
+    lat: number;
+    lng: number;
+  };
   images: PutBlobResult[];
   categories: RestaurantCategory[];
+  phoneNumber?: string;
+  facebookUrl?: string;
+  instagramUrl?: string;
+  reservationUrl?: string;
+  priceRange: RestaurantPriceRange;
   menu?: Builder;
 }

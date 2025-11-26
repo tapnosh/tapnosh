@@ -144,8 +144,8 @@ export function BuilderElementMenuGroup({
       name: "",
       description: "",
       price: { amount: 0, currency: "PLN" },
-      ingredients: [],
-      categories: [],
+      allergens: [],
+      food_types: [],
       image: [],
     } as unknown as BuilderMenuItem);
   };

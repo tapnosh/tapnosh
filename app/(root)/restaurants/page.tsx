@@ -41,7 +41,7 @@ export default async function Restaurants() {
         </h6>
       </section>
 
-      <section className="section items-center pb-8 lg:mt-12">
+      <section className="section items-center pb-8">
         <RestaurantList />
       </section>
     </>

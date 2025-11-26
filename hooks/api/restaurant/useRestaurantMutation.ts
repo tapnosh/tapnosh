@@ -13,13 +13,16 @@ import { tryCatch } from "@/utils/tryCatch";
 
 import { useUploadImage } from "./useUploadImage";
 
-export const useRestaurantMutation = (
-  method: "POST" | "PUT" | "DELETE" = "POST",
+type RestaurantMutationData<T extends "POST" | "PUT" | "DELETE"> =
+  T extends "DELETE" ? { id: string } : RestaurantFormData;
+
+export const useRestaurantMutation = <T extends "POST" | "PUT" | "DELETE">(
+  method: T = "POST" as T,
 ) => {
   const { fetchClient } = useFetchClient();
   const { mutateAsync: uploadImages } = useUploadImage();
 
-  return useMutation<Restaurant, TranslatedError, RestaurantFormData>({
+  return useMutation<Restaurant, TranslatedError, RestaurantMutationData<T>>({
     mutationFn: async (data) => {
       if ((method === "PUT" || method === "DELETE") && !data.id) {
         throw {
@@ -29,28 +32,46 @@ export const useRestaurantMutation = (
         };
       }
 
-      // Skip validation for DELETE operations
-      let validatedData = {};
-      if (method !== "DELETE") {
-        const [parseError, parsed] = tryCatch(() =>
-          RestaurantFormSchema.parse(data),
+      // For DELETE operations, skip validation and image processing
+      if (method === "DELETE") {
+        const endpoint = `restaurants/${data.id}`;
+
+        const [fetchError, result] = await tryCatch(
+          fetchClient<Restaurant>(endpoint, {
+            method,
+          }),
         );
 
-        if (parseError) {
-          if (parseError instanceof z.ZodError) {
-            throw {
-              translationKey: "parse.error",
-              status: 422,
-              message: parseError.errors.map((e) => e.message).join(", "),
-            };
-          }
-          throw parseError;
+        if (fetchError) {
+          throw fetchError;
         }
 
-        validatedData = parsed;
+        return result;
       }
 
-      const images = Object.groupBy(data.images, (image) =>
+      // TypeScript now knows data is RestaurantFormData for POST/PUT
+      const formData = data as RestaurantFormData;
+
+      // Skip validation for DELETE operations
+      let validatedData = {};
+      const [parseError, parsed] = tryCatch(() =>
+        RestaurantFormSchema.parse(formData),
+      );
+
+      if (parseError) {
+        if (parseError instanceof z.ZodError) {
+          throw {
+            translationKey: "parse.error",
+            status: 422,
+            message: parseError.errors.map((e) => e.message).join(", "),
+          };
+        }
+        throw parseError;
+      }
+
+      validatedData = parsed;
+
+      const images = Object.groupBy(formData.images, (image) =>
         "file" in image ? "file" : "blob",
       );
 
@@ -82,13 +103,18 @@ export const useRestaurantMutation = (
       }
 
       const endpoint =
-        method === "POST" ? "restaurants" : `restaurants/${data.id}`;
+        method === "POST" ? "restaurants" : `restaurants/${formData.id}`;
+
+      // Transform categories to category_ids for the API
+      const { categories, ...restData } = validatedData as RestaurantFormData;
+      const category_ids = categories.map((cat) => cat.id);
 
       const [fetchError, result] = await tryCatch(
         fetchClient<Restaurant>(endpoint, {
           method,
           body: JSON.stringify({
-            ...validatedData,
+            ...restData,
+            category_ids,
             ...(imageBlobs?.length
               ? {
                   images: [...(images?.blob ? images.blob : []), ...imageBlobs],

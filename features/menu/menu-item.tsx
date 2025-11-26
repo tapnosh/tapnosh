@@ -1,19 +1,9 @@
 "use client";
 
-import {
-  Beef,
-  Beer,
-  Coffee,
-  Droplets,
-  Fish,
-  Leaf,
-  Milk,
-  Plus,
-  Wheat,
-  Wine,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
@@ -21,18 +11,7 @@ import { Button } from "@/components/ui/forms/button";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
 
-export const categoryIcons = {
-  meat: <Beef className="h-4 w-4" />,
-  vegan: <Leaf className="h-4 w-4" />,
-  vegetarian: <Leaf className="h-4 w-4" />,
-  "gluten-free": <Wheat className="h-4 w-4 line-through" />,
-  "dairy-free": <Milk className="h-4 w-4 line-through" />,
-  seafood: <Fish className="h-4 w-4" />,
-  alcoholic: <Wine className="h-4 w-4" />,
-  "non-alcoholic": <Droplets className="h-4 w-4" />,
-  hot: <Coffee className="h-4 w-4" />,
-  cold: <Beer className="h-4 w-4" />,
-};
+import { getAllergenIcon, getFoodTypeIcon } from "./utils/icons";
 
 const MotionButton = motion.create(Button);
 
@@ -49,6 +28,7 @@ export function MenuItemCard({
   onClick?: (item: MenuItem) => void;
 }) {
   const { formatCurrency } = useCurrency();
+  const t = useTranslations("categories");
 
   const imgSrc = useMemo(() => {
     return Array.isArray(item.image) ? item.image[0]?.url : item.image;
@@ -60,7 +40,7 @@ export function MenuItemCard({
       key={item.id}
       layoutId={`item-${item?.id}`}
       role="button"
-      style={{ borderRadius: "1rem" }}
+      style={{ borderRadius: "1rem", opacity: isAvailable ? 1 : 0.5 }}
       transition={{
         type: "spring",
         duration: 0.4,
@@ -68,7 +48,7 @@ export function MenuItemCard({
       className="cursor-pointer space-y-4"
       onClick={() => onClick?.(item)}
     >
-      <div className="flex flex-row items-start justify-between gap-4 border-b pb-4">
+      <div className="flex flex-row items-stretch justify-between gap-4 border-b pb-4">
         {imgSrc && (
           <motion.div
             layoutId={`item-image-${item?.id}`}
@@ -85,12 +65,12 @@ export function MenuItemCard({
           </motion.div>
         )}
         <div className="flex flex-1 flex-col">
-          <header className="flex items-start justify-between gap-0.5 pb-0.5">
-            <span className="font-display-median text-lg leading-5">
+          <header className="flex items-start justify-between gap-1 pb-1">
+            <span className="font-display-median text-lg leading-5 sm:leading-6 lg:text-2xl">
               {item.name}
             </span>
-            <div className="flex items-center gap-1">
-              <span className="font-display-median text-lg leading-5 font-semibold">
+            <div className="mt-1 flex items-center gap-1">
+              <span className="font-display-median text-lg leading-5 font-semibold lg:text-xl">
                 {formatCurrency(item.price.amount, item.price.currency)}
               </span>
             </div>
@@ -98,18 +78,44 @@ export function MenuItemCard({
           <span className="text-muted-foreground pr-15 text-sm leading-4 italic">
             {item?.description}
           </span>
-          <footer className="mt-2 flex items-center justify-between gap-2">
-            <div className="flex flex-1 flex-col gap-2">
-              <span className="text-sm">{item?.ingredients?.join(" • ")}</span>
-              <div className="flex flex-wrap gap-1.5">
-                {item?.categories?.map((category) => (
-                  <Badge key={category} variant="secondary" className="text-xs">
-                    {categoryIcons[category as keyof typeof categoryIcons]}
+          <footer className="mt-2 flex flex-1 gap-2">
+            <div className="flex flex-col justify-between gap-2">
+              {/* Allergens */}
+              {item.allergens && item.allergens.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1">
+                  {item.allergens.map((allergen) => {
+                    const AllergenIcon = getAllergenIcon(allergen.name);
+                    return (
+                      <Badge
+                        key={allergen.id}
+                        variant="secondary"
+                        title={t(allergen.name)}
+                      >
+                        <AllergenIcon className="h-3.5 w-3.5" />
+                        <span>{t(allergen.name)}</span>
+                      </Badge>
+                    );
+                  })}
+                </div>
+              )}
 
-                    {category}
-                  </Badge>
-                ))}
-              </div>
+              {item.food_types && item.food_types.length > 0 && (
+                <div className="mt-auto flex flex-wrap items-center gap-1">
+                  {item.food_types.map((foodType) => {
+                    const FoodTypeIcon = getFoodTypeIcon(foodType.name);
+                    return (
+                      <Badge
+                        key={foodType.id}
+                        variant="outline"
+                        title={t(foodType.name)}
+                      >
+                        <FoodTypeIcon className="h-3.5 w-3.5" />
+                        <span>{t(foodType.name)}</span>
+                      </Badge>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {isAvailable && onAddToCart && (
@@ -127,16 +133,13 @@ export function MenuItemCard({
               </MotionButton>
             )}
           </footer>
+          {!isAvailable && (
+            <div className="text-muted-foreground mt-2 text-sm italic">
+              This dish is not available for serving
+            </div>
+          )}
         </div>
       </div>
-
-      {/* <CardFooter className="px-4">
-        {!isAvailable && (
-          <Badge variant="outline" className="text-muted-foreground">
-            Not Available
-          </Badge>
-        )}
-      </CardFooter> */}
     </motion.div>
   );
 }
