@@ -70,7 +70,9 @@ export function CategoryMultiSelect({
   const filteredCategories = React.useMemo(() => {
     if (!searchQuery) return categories;
     const query = searchQuery.toLowerCase();
-    return categories.filter((cat) => t(cat.id).toLowerCase().includes(query));
+    return categories.filter((cat) =>
+      t(cat.name).toLowerCase().includes(query),
+    );
   }, [categories, searchQuery, t]);
 
   const handleToggleCategory = (categoryId: string) => {
@@ -93,8 +95,8 @@ export function CategoryMultiSelect({
     if (selectedCategories.length === 0) {
       return placeholder;
     }
-    if (selectedCategories.length === 1) {
-      return t(selectedCategories[0].id);
+    if (selectedCategories.length < 5) {
+      return selectedCategories.map((cat) => t(cat.name)).join(", ");
     }
     return `${selectedCategories.length} categories selected`;
   }, [selectedCategories, placeholder, t]);

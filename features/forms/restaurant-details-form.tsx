@@ -48,7 +48,6 @@ export function RestaurantDetailsForm({
   isPending,
   submitLabel = "Submit",
 }: RestaurantFormFieldsProps) {
-  console.log(form.formState.errors);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -123,7 +122,11 @@ export function RestaurantDetailsForm({
                 <FormDescription>
                   Select the typical price range for this restaurant
                 </FormDescription>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select
+                  key={field.value}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <DollarSign className="text-muted-foreground h-4 w-4" />

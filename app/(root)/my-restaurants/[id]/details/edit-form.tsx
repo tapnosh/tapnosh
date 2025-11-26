@@ -39,6 +39,12 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
         theme_id: restaurant.theme.id,
         images: restaurant.images || [],
         category_ids: restaurant.categories?.map((c) => c.id),
+        address: restaurant.address,
+        phoneNumber: restaurant.phoneNumber,
+        facebookUrl: restaurant.facebookUrl,
+        instagramUrl: restaurant.instagramUrl,
+        reservationUrl: restaurant.reservationUrl,
+        priceRange: restaurant.priceRange,
       });
     }
   }, [restaurant, form]);

@@ -59,8 +59,6 @@ export function FiltersBar({
     return Array.from(categories).sort();
   }, [allItems]);
 
-  console.log("Allergens:", allergens);
-
   // Extract all unique ingredients
   const foodTypes = useMemo(() => {
     const ingredients = new Set<string>();

@@ -24,8 +24,8 @@ export const RestaurantFormSchema = z.object({
     .max(100, "Name must be less than 100 characters"),
   description: z
     .string()
-    .min(50, "Description must be at least 50 characters")
-    .max(500, "Description must be less than 500 characters"),
+    .min(10, "Description must be at least 10 characters")
+    .max(250, "Description must be less than 250 characters"),
   theme_id: z
     .string({ required_error: "Theme color is required" })
     .uuid("Theme ID must be a valid UUID format"),
