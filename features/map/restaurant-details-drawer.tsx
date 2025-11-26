@@ -104,14 +104,6 @@ export function RestaurantDetailsDialog({
               {restaurant.name}
             </h1>
 
-            {/* Description */}
-            <p
-              className="mb-4 text-base drop-shadow-sm"
-              style={{ color: foregroundColor, opacity: 0.9 }}
-            >
-              {restaurant.description}
-            </p>
-
             {/* Address and Contact Info */}
             {(restaurant.address || restaurant.phoneNumber) && (
               <div
@@ -142,6 +134,12 @@ export function RestaurantDetailsDialog({
         </div>
 
         <div className="space-y-6 overflow-y-auto px-4 pt-6 pb-24">
+          <p
+            className="mb-4 text-base drop-shadow-sm"
+            style={{ color: foregroundColor, opacity: 0.9 }}
+          >
+            {restaurant.description}
+          </p>
           {/* Menu Items */}
           {menuItems.length > 0 && (
             <div className="space-y-4">

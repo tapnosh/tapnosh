@@ -283,7 +283,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
         </ViewTransition>
 
         <ViewTransition name={`description-${restaurant.id}`}>
-          <p className="text-primary-foreground/90 mb-6 max-w-3xl text-lg drop-shadow-sm">
+          <p className="text-primary-foreground/90 mb-6 max-w-3xl drop-shadow-sm sm:text-lg">
             {restaurant.description}
           </p>
         </ViewTransition>
