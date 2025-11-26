@@ -70,11 +70,11 @@ export async function generateMetadata({
       "menu",
       "dining",
       "food",
-      restaurant?.address?.formattedAddress || "",
+      restaurant?.address.formattedAddress || "",
       "tapnosh",
     ].filter(Boolean),
     openGraph: {
-      title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
+      title: `${restaurant.name} | tapnosh`,
       description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}. Discover their menu and dining experience on tapnosh.`,
       url: `${baseUrl}/restaurants/${restaurant.slug}`,
       type: "website",
@@ -89,7 +89,7 @@ export async function generateMetadata({
       siteName: "tapnosh",
     },
     twitter: {
-      title: `${restaurant.name} - ${restaurantCategories} | tapnosh`,
+      title: `${restaurant.name} | tapnosh`,
       description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}. Discover their menu and dining experience.`,
       images: [ogImageUrl.toString()],
     },
@@ -98,10 +98,10 @@ export async function generateMetadata({
     },
     other: {
       "business:contact_data:street_address":
-        restaurant?.address?.formattedAddress || "",
-      "business:contact_data:locality": "City", // You might want to extract this from address
-      "business:contact_data:region": "Region", // You might want to extract this from address
-      "business:contact_data:country_name": "Country", // You might want to extract this from address
+        restaurant?.address.formattedAddress || "",
+      "business:contact_data:locality": restaurant.address.city,
+      "business:contact_data:region": restaurant.address.state,
+      "business:contact_data:country_name": restaurant.address.country,
     },
   };
 }

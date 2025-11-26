@@ -39,6 +39,6 @@ export interface Restaurant {
   facebookUrl?: string;
   instagramUrl?: string;
   reservationUrl?: string;
-  priceRange?: RestaurantPriceRange;
+  priceRange: RestaurantPriceRange;
   menu?: Builder;
 }

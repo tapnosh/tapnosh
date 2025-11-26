@@ -6,6 +6,11 @@ import { Badge } from "@/components/ui/data-display/badge";
 import { Input } from "@/components/ui/forms/input";
 import { Label } from "@/components/ui/forms/label";
 
+interface CategoryItem {
+  id: string;
+  name: string;
+}
+
 export function BadgeFilter({
   label,
   description,
@@ -18,9 +23,9 @@ export function BadgeFilter({
 }: {
   label: string;
   description?: string;
-  items: string[];
+  items: CategoryItem[];
   selectedItems: string[];
-  onToggle: (item: string) => void;
+  onToggle: (itemId: string) => void;
   mode?: "include" | "exclude";
   translateItem: (id: string) => string;
   showSearch?: boolean;
@@ -31,19 +36,17 @@ export function BadgeFilter({
   const filteredItems = useMemo(() => {
     if (!searchQuery) return items;
     const query = searchQuery.toLowerCase();
-    return items.filter((item) =>
-      translateItem(item).toLowerCase().includes(query),
-    );
-  }, [items, searchQuery, translateItem]);
+    return items.filter((item) => item.name.toLowerCase().includes(query));
+  }, [items, searchQuery]);
 
   if (items.length === 0) return null;
 
   // Split items into selected and unselected for proper ordering
   const selectedItemsFiltered = items.filter((item) =>
-    selectedItems.includes(item),
+    selectedItems.includes(item.id),
   );
   const unselectedItemsFiltered = filteredItems.filter(
-    (item) => !selectedItems.includes(item),
+    (item) => !selectedItems.includes(item.id),
   );
 
   const sortedItems = [...selectedItemsFiltered, ...unselectedItemsFiltered];
@@ -81,15 +84,15 @@ export function BadgeFilter({
           <p className="text-muted-foreground text-sm">No results found</p>
         ) : (
           sortedItems.map((item) => {
-            const isSelected = selectedItems.includes(item);
+            const isSelected = selectedItems.includes(item.id);
             return (
               <Badge
-                key={item}
+                key={item.id}
                 variant={isSelected ? "default" : "outline"}
                 className="cursor-pointer px-3 py-1.5"
-                onClick={() => onToggle(item)}
+                onClick={() => onToggle(item.id)}
               >
-                {translateItem(item)}
+                {translateItem(item.name)}
               </Badge>
             );
           })

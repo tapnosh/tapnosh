@@ -85,8 +85,8 @@ export async function GET(request: NextRequest) {
     // Get food type names from translations
     const t = await getTranslations("categories");
     const foodTypeNames: string[] = [];
-    if (dish.food_type_ids && dish.food_type_ids.length > 0) {
-      dish.food_type_ids.forEach((name) => {
+    if (dish.food_types && dish.food_types.length > 0) {
+      dish.food_types.forEach(({ name }) => {
         foodTypeNames.push(t(name));
       });
     }

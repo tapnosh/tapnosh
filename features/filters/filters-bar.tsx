@@ -52,20 +52,32 @@ export function FiltersBar({
 
   // Extract all unique categories
   const allergens = useMemo(() => {
-    const categories = new Set<string>();
+    const categoriesMap = new Map<string, { id: string; name: string }>();
     allItems.forEach((item) => {
-      item.allergen_ids?.forEach((cat) => categories.add(cat));
+      item.allergens?.forEach((cat) => {
+        if (!categoriesMap.has(cat.id)) {
+          categoriesMap.set(cat.id, { id: cat.id, name: cat.name });
+        }
+      });
     });
-    return Array.from(categories).sort();
+    return Array.from(categoriesMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }, [allItems]);
 
   // Extract all unique ingredients
   const foodTypes = useMemo(() => {
-    const ingredients = new Set<string>();
+    const ingredientsMap = new Map<string, { id: string; name: string }>();
     allItems.forEach((item) => {
-      item.food_type_ids?.forEach((ing) => ingredients.add(ing));
+      item.food_types?.forEach((ing) => {
+        if (!ingredientsMap.has(ing.id)) {
+          ingredientsMap.set(ing.id, { id: ing.id, name: ing.name });
+        }
+      });
     });
-    return Array.from(ingredients).sort();
+    return Array.from(ingredientsMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
   }, [allItems]);
 
   const handleGroupChange = (value: string) => {

@@ -92,7 +92,7 @@ export function RestaurantDetailsForm({
           {/* CUISINES */}
           <FormField
             control={form.control}
-            name="category_ids"
+            name="categories"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Cuisines</FormLabel>

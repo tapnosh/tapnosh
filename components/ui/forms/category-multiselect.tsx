@@ -12,6 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import {
   Popover,
@@ -20,11 +21,12 @@ import {
 } from "@/components/ui/overlays/popover";
 import { getAllergenIcon, getFoodTypeIcon } from "@/features/menu/utils/icons";
 import { useCategoriesQuery } from "@/hooks/api/categories/useCategories";
+import { RestaurantCategory } from "@/types/category/Category";
 import { cn } from "@/utils/cn";
 
 interface CategoryMultiSelectProps {
-  value?: string[];
-  onChange: (categoryIds: string[]) => void;
+  value?: RestaurantCategory[];
+  onChange: (categories: RestaurantCategory[]) => void;
   placeholder?: string;
   className?: string;
   disabled?: boolean;
@@ -45,12 +47,12 @@ export function CategoryMultiSelect({
   const [searchQuery, setSearchQuery] = React.useState("");
   const t = useTranslations("categories");
 
-  const getCategoryIcon = (categoryId: string, categoryType?: string) => {
+  const getCategoryIcon = (categoryName: string, categoryType?: string) => {
     if (categoryType === "allergens") {
-      return getAllergenIcon(categoryId);
+      return getAllergenIcon(categoryName);
     }
     if (categoryType === "food_type") {
-      return getFoodTypeIcon(categoryId);
+      return getFoodTypeIcon(categoryName);
     }
 
     return undefined;
@@ -63,7 +65,7 @@ export function CategoryMultiSelect({
   } = useCategoriesQuery(type ? { type } : undefined);
 
   const selectedCategories = React.useMemo(
-    () => categories.filter((cat) => value.includes(cat.id)),
+    () => categories.filter((cat) => value.some((v) => v.id === cat.id)),
     [categories, value],
   );
 
@@ -75,10 +77,11 @@ export function CategoryMultiSelect({
     );
   }, [categories, searchQuery, t]);
 
-  const handleToggleCategory = (categoryId: string) => {
-    const newValue = value.includes(categoryId)
-      ? value.filter((id) => id !== categoryId)
-      : [...value, categoryId];
+  const handleToggleCategory = (category: RestaurantCategory) => {
+    const isSelected = value.some((v) => v.id === category.id);
+    const newValue = isSelected
+      ? value.filter((v) => v.id !== category.id)
+      : [...value, category];
     onChange(newValue);
   };
 
@@ -88,7 +91,7 @@ export function CategoryMultiSelect({
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    onChange(value.filter((id) => id !== categoryId));
+    onChange(value.filter((v) => v.id !== categoryId));
   };
 
   const displayValue = React.useMemo(() => {
@@ -154,13 +157,15 @@ export function CategoryMultiSelect({
                 filteredCategories.length > 0 && (
                   <CommandGroup>
                     {filteredCategories.map((category) => {
-                      const isSelected = value.includes(category.id);
-                      const Icon = getCategoryIcon(category.id, type);
+                      const isSelected = value.some(
+                        (v) => v.id === category.id,
+                      );
+                      const Icon = getCategoryIcon(category.name, type);
                       return (
                         <CommandItem
                           key={category.id}
                           value={category.id}
-                          onSelect={() => handleToggleCategory(category.id)}
+                          onSelect={() => handleToggleCategory(category)}
                           className="cursor-pointer"
                         >
                           <div className="flex items-center gap-2">
@@ -182,25 +187,26 @@ export function CategoryMultiSelect({
 
       {/* Selected categories badges */}
       {selectedCategories.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1">
           {selectedCategories.map((category) => {
-            const Icon = getCategoryIcon(category.id, type);
+            const Icon = getCategoryIcon(category.name, type);
             return (
-              <div
+              <Badge
                 key={category.id}
-                className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-sm"
+                variant="secondary"
+                className="flex items-center gap-0.5"
               >
                 {Icon && <Icon className="h-4 w-4" />}
                 <span>{t(category.name)}</span>
                 <button
                   type="button"
                   onClick={(e) => handleRemoveCategory(category.id, e)}
-                  className="hover:bg-secondary-foreground/20 ml-1 rounded-sm transition-colors"
+                  className="hover:bg-secondary-foreground/10 ml-1 rounded-sm transition-colors"
                   disabled={disabled}
                 >
                   <X className="h-3 w-3" />
                 </button>
-              </div>
+              </Badge>
             );
           })}
         </div>

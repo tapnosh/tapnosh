@@ -82,13 +82,13 @@ function BuilderElementMenuItemBase({
 
       <FormField
         control={control}
-        name={`${elementKey}.allergen_ids`}
+        name={`${elementKey}.allergens`}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Allergens</FormLabel>
             <FormControl>
               <CategoryMultiSelect
-                value={field.value}
+                value={field.value || []}
                 onChange={field.onChange}
                 type="allergens"
                 placeholder="Select allergens..."
@@ -101,13 +101,13 @@ function BuilderElementMenuItemBase({
 
       <FormField
         control={control}
-        name={`${elementKey}.food_type_ids`}
+        name={`${elementKey}.food_types`}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Food Types</FormLabel>
             <FormControl>
               <CategoryMultiSelect
-                value={field.value}
+                value={field.value || []}
                 onChange={field.onChange}
                 type="food_type"
                 placeholder="Select food types..."

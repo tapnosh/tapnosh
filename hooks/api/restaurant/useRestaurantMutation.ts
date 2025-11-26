@@ -105,11 +105,16 @@ export const useRestaurantMutation = <T extends "POST" | "PUT" | "DELETE">(
       const endpoint =
         method === "POST" ? "restaurants" : `restaurants/${formData.id}`;
 
+      // Transform categories to category_ids for the API
+      const { categories, ...restData } = validatedData as RestaurantFormData;
+      const category_ids = categories.map((cat) => cat.id);
+
       const [fetchError, result] = await tryCatch(
         fetchClient<Restaurant>(endpoint, {
           method,
           body: JSON.stringify({
-            ...validatedData,
+            ...restData,
+            category_ids,
             ...(imageBlobs?.length
               ? {
                   images: [...(images?.blob ? images.blob : []), ...imageBlobs],

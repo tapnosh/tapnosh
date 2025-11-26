@@ -18,14 +18,19 @@ import { FilterActions } from "./filter-actions";
 import { PriceRangeFilter } from "./price-range-filter";
 import { FilterState } from "./types";
 
+interface CategoryItem {
+  id: string;
+  name: string;
+}
+
 interface FiltersDrawerProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   minPrice: number;
   maxPrice: number;
   filters?: FilterState;
-  allergens: string[];
-  foodTypes: string[];
+  allergens: CategoryItem[];
+  foodTypes: CategoryItem[];
   onApply: (filters: FilterState) => void;
 }
 
@@ -100,6 +105,7 @@ export function FiltersDrawer({
 
           <BadgeFilter
             label="Food Types"
+            mode="include"
             items={foodTypes}
             selectedItems={selectedFoodTypes}
             onToggle={(item) => toggleItem(item, setSelectedFoodTypes)}
@@ -108,6 +114,7 @@ export function FiltersDrawer({
 
           <BadgeFilter
             label="Exclude Allergens"
+            mode="exclude"
             items={allergens}
             selectedItems={selectedAllergens}
             onToggle={(item) => toggleItem(item, setSelectedAllergens)}

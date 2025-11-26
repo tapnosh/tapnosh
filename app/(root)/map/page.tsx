@@ -3,9 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Crosshair, Loader2, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
 
+import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
 import { Button } from "@/components/ui/forms/button";
+import { useNotification } from "@/context/NotificationBar";
 import { RestaurantMap } from "@/features/map/google-map";
 import { useGeolocation } from "@/features/map/hooks/useGeolocation";
 import { MapFiltersDrawer } from "@/features/map/map-filters-drawer";
@@ -14,8 +15,10 @@ import { MapFilterState } from "@/features/map/types";
 import { calculateDistance } from "@/features/map/utils/distance";
 import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
 import { Restaurant } from "@/types/restaurant/Restaurant";
+import { cn } from "@/utils/cn";
 
 export default function MapPage() {
+  const { openNotification } = useNotification();
   const { data: restaurants, isLoading: isLoadingRestaurants } =
     useRestaurantsQuery();
 
@@ -23,11 +26,8 @@ export default function MapPage() {
     useState<Restaurant | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
-  const [hasShownSuccessToast, setHasShownSuccessToast] = useState(false);
   const [filters, setFilters] = useState<MapFilterState>({
     cuisines: [],
-    allergens: [],
-    foodTypes: [],
     distance: null,
   });
 
@@ -48,26 +48,18 @@ export default function MapPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Show toast notifications for location errors
+  // Show notifications for location errors
   useEffect(() => {
     if (locationError) {
-      toast.error(locationError);
-      setHasShownSuccessToast(false);
+      openNotification(
+        <BasicNotificationBody
+          title="Error"
+          description={locationError}
+          variant="error"
+        />,
+      );
     }
-  }, [locationError]);
-
-  // Show success toast when location is found (only once per successful fetch)
-  useEffect(() => {
-    if (
-      userLocation &&
-      !isLocating &&
-      !locationError &&
-      !hasShownSuccessToast
-    ) {
-      toast.success("Location found!");
-      setHasShownSuccessToast(true);
-    }
-  }, [userLocation, isLocating, locationError, hasShownSuccessToast]);
+  }, [locationError, openNotification]);
 
   const handleMarkerClick = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -75,46 +67,21 @@ export default function MapPage() {
   };
 
   const handleLocateMe = () => {
-    setHasShownSuccessToast(false);
     getCurrentPosition();
-  };
-
-  const handleApplyFilters = (newFilters: MapFilterState) => {
-    setFilters(newFilters);
   };
 
   // Filter restaurants based on selected categories and distance
   const filteredRestaurants = useMemo(() => {
     if (!restaurants) return [];
     return restaurants.filter((restaurant) => {
-      const restaurantCategoryNames = restaurant.categories.map((c) => c.name);
+      const restaurantCategoryIds = restaurant.categories.map((c) => c.id);
 
       // Filter by cuisines (include)
       if (filters.cuisines.length > 0) {
-        const hasMatchingCuisine = filters.cuisines.some((cuisine) =>
-          restaurantCategoryNames.includes(cuisine),
+        const hasMatchingCuisine = filters.cuisines.some((cuisineId) =>
+          restaurantCategoryIds.includes(cuisineId),
         );
         if (!hasMatchingCuisine) {
-          return false;
-        }
-      }
-
-      // Filter by allergens (exclude)
-      if (filters.allergens.length > 0) {
-        const hasExcludedAllergen = filters.allergens.some((allergen) =>
-          restaurantCategoryNames.includes(allergen),
-        );
-        if (hasExcludedAllergen) {
-          return false;
-        }
-      }
-
-      // Filter by food types (include)
-      if (filters.foodTypes.length > 0) {
-        const hasMatchingFoodType = filters.foodTypes.some((foodType) =>
-          restaurantCategoryNames.includes(foodType),
-        );
-        if (!hasMatchingFoodType) {
           return false;
         }
       }
@@ -135,20 +102,6 @@ export default function MapPage() {
       return true;
     });
   }, [restaurants, filters, userLocation]);
-
-  // Get Google Maps API key from environment variable
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
-
-  if (!apiKey) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <div className="text-destructive text-center">
-          <p className="text-lg font-semibold">Configuration Error</p>
-          <p className="text-sm">Google Maps API key is not configured</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full flex-1">
@@ -175,7 +128,6 @@ export default function MapPage() {
       <RestaurantMap
         restaurants={filteredRestaurants}
         onMarkerClick={handleMarkerClick}
-        apiKey={apiKey}
         userLocation={userLocation}
       />
       <div className="absolute top-3.5 right-4 z-10 flex gap-2">
@@ -190,11 +142,11 @@ export default function MapPage() {
         <Button
           onClick={handleLocateMe}
           disabled={isLocating}
-          className="shadow-lg"
+          className={cn("shadow-lg", isLocating && "animate-spin")}
           size="icon"
           variant="default"
         >
-          <Crosshair className={isLocating ? "animate-spin" : ""} />
+          <Crosshair />
         </Button>
       </div>
       <RestaurantDetailsDialog
@@ -206,7 +158,7 @@ export default function MapPage() {
         open={isFilterDrawerOpen}
         setOpen={setIsFilterDrawerOpen}
         filters={filters}
-        onApply={handleApplyFilters}
+        onApply={setFilters}
         userLocation={userLocation}
       />
     </div>

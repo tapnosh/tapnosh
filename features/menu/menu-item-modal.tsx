@@ -44,6 +44,12 @@ export const MenuItemModal = ({
     return `${baseUrl}/restaurants/${restaurantSlug}/${menuItem.id}`;
   }, [restaurantSlug, menuItem]);
 
+  const imageSrc = useMemo(
+    () =>
+      Array.isArray(menuItem?.image) ? menuItem.image[0]?.url : menuItem?.image,
+    [menuItem?.image],
+  );
+
   const handleIncrement = () => {
     setAmount((prev) => (+prev >= 9 ? prev : +prev + 1));
   };
@@ -153,64 +159,62 @@ export const MenuItemModal = ({
                   </motion.span>
 
                   {/* Allergens */}
-                  {menuItem?.allergen_ids &&
-                    menuItem.allergen_ids.length > 0 && (
-                      <motion.div
-                        className="mt-3 flex flex-wrap items-center gap-1"
-                        initial={{ opacity: 0, y: "50%" }}
-                        animate={{ opacity: 1, y: "0%" }}
-                        exit={{ opacity: 0, y: "50%" }}
-                        transition={{
-                          delay: 0.35,
-                          type: "tween",
-                          duration: 0.3,
-                        }}
-                      >
-                        {menuItem.allergen_ids.map((allergenId) => {
-                          const AllergenIcon = getAllergenIcon(allergenId);
-                          return (
-                            <div
-                              key={allergenId}
-                              className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-xs"
-                              title={t(allergenId)}
-                            >
-                              <AllergenIcon className="h-3.5 w-3.5" />
-                              <span>{t(allergenId)}</span>
-                            </div>
-                          );
-                        })}
-                      </motion.div>
-                    )}
+                  {menuItem?.allergens && menuItem.allergens.length > 0 && (
+                    <motion.div
+                      className="mt-3 flex flex-wrap items-center gap-1"
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: "0%" }}
+                      exit={{ opacity: 0, y: "50%" }}
+                      transition={{
+                        delay: 0.35,
+                        type: "tween",
+                        duration: 0.3,
+                      }}
+                    >
+                      {menuItem.allergens.map((allergen) => {
+                        const AllergenIcon = getAllergenIcon(allergen.name);
+                        return (
+                          <div
+                            key={allergen.id}
+                            className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-1 text-xs"
+                            title={t(allergen.name)}
+                          >
+                            <AllergenIcon className="h-3.5 w-3.5" />
+                            <span>{t(allergen.name)}</span>
+                          </div>
+                        );
+                      })}
+                    </motion.div>
+                  )}
 
                   {/* Food Types */}
-                  {menuItem?.food_type_ids &&
-                    menuItem.food_type_ids.length > 0 && (
-                      <motion.div
-                        className="mt-2 flex flex-wrap items-center gap-1"
-                        initial={{ opacity: 0, y: "50%" }}
-                        animate={{ opacity: 1, y: "0%" }}
-                        exit={{ opacity: 0, y: "50%" }}
-                        transition={{
-                          delay: 0.4,
-                          type: "tween",
-                          duration: 0.3,
-                        }}
-                      >
-                        {menuItem.food_type_ids.map((foodTypeId) => {
-                          const FoodTypeIcon = getFoodTypeIcon(foodTypeId);
-                          return (
-                            <div
-                              key={foodTypeId}
-                              className="bg-primary/10 text-primary flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
-                              title={t(foodTypeId)}
-                            >
-                              <FoodTypeIcon className="h-3.5 w-3.5" />
-                              <span>{t(foodTypeId)}</span>
-                            </div>
-                          );
-                        })}
-                      </motion.div>
-                    )}
+                  {menuItem?.food_types && menuItem.food_types.length > 0 && (
+                    <motion.div
+                      className="mt-2 flex flex-wrap items-center gap-1"
+                      initial={{ opacity: 0, y: "50%" }}
+                      animate={{ opacity: 1, y: "0%" }}
+                      exit={{ opacity: 0, y: "50%" }}
+                      transition={{
+                        delay: 0.4,
+                        type: "tween",
+                        duration: 0.3,
+                      }}
+                    >
+                      {menuItem.food_types.map((foodType) => {
+                        const FoodTypeIcon = getFoodTypeIcon(foodType.name);
+                        return (
+                          <div
+                            key={foodType.id}
+                            className="bg-primary/10 text-primary flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
+                            title={t(foodType.name)}
+                          >
+                            <FoodTypeIcon className="h-3.5 w-3.5" />
+                            <span>{t(foodType.name)}</span>
+                          </div>
+                        );
+                      })}
+                    </motion.div>
+                  )}
                 </header>
                 {!isAvailable && (
                   <motion.div
@@ -228,17 +232,13 @@ export const MenuItemModal = ({
                   </motion.div>
                 )}
                 <div className="pb-4">
-                  {menuItem?.image && (
+                  {menuItem && imageSrc && (
                     <motion.div
                       layoutId={`item-image-${menuItem?.id}`}
                       className="relative aspect-square flex-1 pt-2"
                     >
                       <Image
-                        src={
-                          Array.isArray(menuItem.image)
-                            ? menuItem.image[0]?.url
-                            : menuItem.image
-                        }
+                        src={imageSrc}
                         alt={menuItem.name}
                         width={1024}
                         height={1024}

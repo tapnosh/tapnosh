@@ -1,9 +1,18 @@
 import { Restaurant as RestaurantSchema, WithContext } from "schema-dts";
 
 import { Builder } from "@/types/builder/BuilderSchema";
-import { Restaurant } from "@/types/restaurant/Restaurant";
+import {
+  Restaurant,
+  RestaurantPriceRange,
+} from "@/types/restaurant/Restaurant";
 
 import { generateMenuItemSchema } from "./generateMenuItemSchema";
+
+const PRICE_RANGE_MAP: Record<RestaurantPriceRange, string> = {
+  low: "$",
+  mid: "$$",
+  high: "$$$",
+};
 
 export function generateRestaurant(
   restaurant: Restaurant,
@@ -17,7 +26,7 @@ export function generateRestaurant(
     "@type": "Restaurant",
     name: restaurant.name,
     description: restaurant.description,
-    address: restaurant?.address?.formattedAddress
+    address: restaurant?.address
       ? {
           "@type": "PostalAddress",
           streetAddress: restaurant.address.formattedAddress,
@@ -26,7 +35,9 @@ export function generateRestaurant(
     image: restaurant.images?.map((img) => img.url) || [],
     url: `${baseUrl}/restaurants/${slug}`,
     servesCuisine: restaurant.categories?.map((cat) => cat.name) || [],
-    priceRange: "$$", // TODO - make dynamic if possible
+    priceRange: PRICE_RANGE_MAP[restaurant.priceRange],
+    acceptsReservations: restaurant.reservationUrl ? "Yes" : "No",
+    telephone: restaurant?.phoneNumber,
   };
 
   if (menuSchema?.menu && menuSchema.menu.length > 0) {

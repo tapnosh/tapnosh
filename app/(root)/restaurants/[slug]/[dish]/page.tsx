@@ -106,10 +106,10 @@ export default async function DishPage({
         "@type": "Restaurant",
         name: restaurant.name,
         description: restaurant.description,
-        address: restaurant?.address?.formattedAddress
+        address: restaurant?.address
           ? {
               "@type": "PostalAddress",
-              streetAddress: restaurant?.address?.formattedAddress,
+              streetAddress: restaurant.address.formattedAddress,
             }
           : undefined,
         image: restaurant.images?.map((img) => img.url) || [],

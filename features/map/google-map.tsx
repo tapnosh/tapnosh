@@ -14,7 +14,6 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 interface RestaurantMapProps {
   restaurants: Restaurant[];
   onMarkerClick: (restaurant: Restaurant) => void;
-  apiKey: string;
   userLocation?: { lat: number; lng: number } | null;
 }
 
@@ -50,9 +49,11 @@ const createCustomPin = (color: string): google.maps.Symbol => ({
 export function RestaurantMap({
   restaurants,
   onMarkerClick,
-  apiKey,
+
   userLocation,
 }: RestaurantMapProps) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: apiKey,
     version: "weekly",

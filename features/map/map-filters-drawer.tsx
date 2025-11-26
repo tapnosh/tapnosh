@@ -72,19 +72,18 @@ export function MapFiltersDrawer({
   // Fetch categories by type
   const { data: cuisines = [] } = useCategoriesQuery({ type: "cuisine" });
 
-  const toggleCuisine = (cuisine: string) => {
-    setSelectedCuisines((prev) =>
-      prev.includes(cuisine)
-        ? prev.filter((c) => c !== cuisine)
-        : [...prev, cuisine],
+  const toggleItem = (
+    item: string,
+    setter: React.Dispatch<React.SetStateAction<string[]>>,
+  ) => {
+    setter((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item],
     );
   };
 
   const handleApply = () => {
     onApply({
       cuisines: selectedCuisines,
-      allergens: [],
-      foodTypes: [],
       distance,
     });
     setOpen(false);
@@ -121,9 +120,9 @@ export function MapFiltersDrawer({
           <BadgeFilter
             label="Cuisines"
             description="Include restaurants with these cuisines"
-            items={cuisines.map((cat) => cat.name)}
+            items={cuisines}
             selectedItems={selectedCuisines}
-            onToggle={toggleCuisine}
+            onToggle={(item) => toggleItem(item, setSelectedCuisines)}
             mode="include"
             translateItem={t}
             showSearch

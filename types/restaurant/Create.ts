@@ -2,6 +2,12 @@ import { z } from "zod";
 
 import { BlobImageSchema, UploadImageSchema } from "../image/BlobImage";
 
+const RestaurantCategorySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+});
+
 export const AddressSchema = z.object({
   formattedAddress: z.string().min(1, "Address is required"),
   streetNumber: z.string().min(1, "Street number is required"),
@@ -34,8 +40,8 @@ export const RestaurantFormSchema = z.object({
     .array(z.union([UploadImageSchema, BlobImageSchema]))
     .min(1, "At least one image must be added")
     .max(5, "You can upload up to 5 images"),
-  category_ids: z
-    .array(z.string())
+  categories: z
+    .array(RestaurantCategorySchema)
     .min(1, "At least one cuisine must be selected")
     .max(5, "You can select up to 5 cuisines"),
   // Contact information

@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Instagram, MapPin, Phone } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +14,7 @@ import {
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { ShareButton } from "@/components/ui/forms/share-button";
+import { SocialMediaLink } from "@/components/ui/navigation/social-media-link";
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { FilterState } from "@/features/filters/types";
 import { MenuGroup } from "@/features/menu/menu-group";
@@ -96,18 +97,18 @@ function MenuInteractive({
 
     // Check food types (if any are selected, item must have at least one matching)
     if (food_types.length > 0) {
-      const itemFoodTypes = item.food_type_ids || [];
+      const itemFoodTypes = item.food_types || [];
       const hasMatchingFoodType = food_types.some((foodType) =>
-        itemFoodTypes.includes(foodType),
+        itemFoodTypes.map(({ id }) => id).includes(foodType),
       );
       if (!hasMatchingFoodType) return false;
     }
 
     // Check allergens (if any are selected, item must NOT contain any of them)
     if (allergens.length > 0) {
-      const itemAllergens = item.allergen_ids || [];
+      const itemAllergens = item.allergens || [];
       const hasExcludedAllergen = allergens.some((allergen) =>
-        itemAllergens.includes(allergen),
+        itemAllergens.map(({ id }) => id).includes(allergen),
       );
       if (hasExcludedAllergen) return false;
     }
@@ -328,26 +329,16 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
             )}
 
             {restaurant.facebookUrl && (
-              <a
-                href={restaurant.facebookUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/25 flex size-10 items-center justify-center rounded-lg backdrop-blur-sm transition-all duration-300 hover:scale-105"
-                aria-label="Facebook"
-              >
-                <Facebook className="size-5" />
-              </a>
+              <SocialMediaLink
+                platform="facebook"
+                url={restaurant.facebookUrl}
+              />
             )}
             {restaurant.instagramUrl && (
-              <a
-                href={restaurant.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/25 flex size-10 items-center justify-center rounded-lg backdrop-blur-sm transition-all duration-300 hover:scale-105"
-                aria-label="Instagram"
-              >
-                <Instagram className="size-5" />
-              </a>
+              <SocialMediaLink
+                platform="instagram"
+                url={restaurant.instagramUrl}
+              />
             )}
           </div>
         ) : null}

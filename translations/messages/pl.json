@@ -1,9 +1,0 @@
-{
-  "HomePage": {
-    "title": "Witaj świecie!"
-  },
-  "LocaleSwitcher": {
-    "label": "Język",
-    "locale": "pl"
-  }
-}

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
+import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
@@ -80,37 +81,37 @@ export function MenuItemCard({
           <footer className="mt-2 flex flex-1 gap-2">
             <div className="flex flex-col justify-between gap-2">
               {/* Allergens */}
-              {item.allergen_ids && item.allergen_ids.length > 0 && (
+              {item.allergens && item.allergens.length > 0 && (
                 <div className="flex flex-wrap items-center gap-1">
-                  {item.allergen_ids.map((allergenId) => {
-                    const AllergenIcon = getAllergenIcon(allergenId);
+                  {item.allergens.map((allergen) => {
+                    const AllergenIcon = getAllergenIcon(allergen.name);
                     return (
-                      <div
-                        key={allergenId}
-                        className="bg-secondary text-secondary-foreground flex items-center gap-1 rounded-md px-2 py-0.5 text-xs"
-                        title={t(allergenId)}
+                      <Badge
+                        key={allergen.id}
+                        variant="secondary"
+                        title={t(allergen.name)}
                       >
                         <AllergenIcon className="h-3.5 w-3.5" />
-                        <span>{t(allergenId)}</span>
-                      </div>
+                        <span>{t(allergen.name)}</span>
+                      </Badge>
                     );
                   })}
                 </div>
               )}
 
-              {item.food_type_ids && item.food_type_ids.length > 0 && (
+              {item.food_types && item.food_types.length > 0 && (
                 <div className="mt-auto flex flex-wrap items-center gap-1">
-                  {item.food_type_ids.map((foodTypeId) => {
-                    const FoodTypeIcon = getFoodTypeIcon(foodTypeId);
+                  {item.food_types.map((foodType) => {
+                    const FoodTypeIcon = getFoodTypeIcon(foodType.name);
                     return (
-                      <div
-                        key={foodTypeId}
-                        className="bg-primary/10 text-primary flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium"
-                        title={t(foodTypeId)}
+                      <Badge
+                        key={foodType.id}
+                        variant="outline"
+                        title={t(foodType.name)}
                       >
                         <FoodTypeIcon className="h-3.5 w-3.5" />
-                        <span>{t(foodTypeId)}</span>
-                      </div>
+                        <span>{t(foodType.name)}</span>
+                      </Badge>
                     );
                   })}
                 </div>
