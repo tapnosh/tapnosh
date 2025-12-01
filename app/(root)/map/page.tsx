@@ -19,8 +19,11 @@ import { cn } from "@/utils/cn";
 
 export default function MapPage() {
   const { openNotification } = useNotification();
-  const { data: restaurants, isLoading: isLoadingRestaurants } =
-    usePublicRestaurantsQuery();
+  const {
+    data: restaurants,
+    isLoading: isLoadingRestaurants,
+    error: restaurantsError,
+  } = usePublicRestaurantsQuery();
 
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<Restaurant | null>(null);
@@ -59,7 +62,16 @@ export default function MapPage() {
         />,
       );
     }
-  }, [locationError, openNotification]);
+    if (restaurantsError) {
+      openNotification(
+        <BasicNotificationBody
+          title="Error"
+          description="Failed to load restaurants. Please try again later."
+          variant="error"
+        />,
+      );
+    }
+  }, [locationError, restaurantsError, openNotification]);
 
   const handleMarkerClick = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
