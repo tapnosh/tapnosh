@@ -20,6 +20,7 @@ import { FilterState } from "@/features/filters/types";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
+import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";
@@ -254,7 +255,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
           className="object-cover opacity-10"
           style={{
             filter:
-              "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
+              "grayscale(100%) sepia(100%) hue-rotate(25deg) brightness(0.9) contrast(1.2)",
             mixBlendMode: "multiply",
           }}
           quality={100}
@@ -264,12 +265,15 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
       </div>
 
       <div className="relative z-10 flex flex-col pt-16">
-        <div className="flex flex-wrap gap-2">
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <Badge variant="secondary">
+            <PriceRangeIndicator priceRange={restaurant.priceRange} />
+          </Badge>
           {restaurant.categories.map((c) => (
             <Badge
               key={c.id}
               variant="secondary"
-              className="bg-primary-foreground/15 text-primary-foreground mb-4 font-bold backdrop-blur-sm"
+              className="bg-primary-foreground/15 text-primary-foreground font-bold backdrop-blur-sm"
             >
               {t(c.name)}
             </Badge>

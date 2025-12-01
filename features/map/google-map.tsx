@@ -169,10 +169,7 @@ export function RestaurantMap({
           }}
         >
           <div className="max-w-xs p-2">
-            <h3
-              className="mb-1 text-base font-semibold"
-              style={{ color: hoveredRestaurant.theme.color }}
-            >
+            <h3 className="mb-1 text-xl font-semibold">
               {hoveredRestaurant.name}
             </h3>
             {hoveredRestaurant.description && (
