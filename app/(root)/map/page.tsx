@@ -13,14 +13,14 @@ import { MapFiltersDrawer } from "@/features/map/map-filters-drawer";
 import { RestaurantDetailsDialog } from "@/features/map/restaurant-details-drawer";
 import { MapFilterState } from "@/features/map/types";
 import { calculateDistance } from "@/features/map/utils/distance";
-import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
+import { usePublicRestaurantsQuery } from "@/hooks/api/restaurant/usePublicRestaurants";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { cn } from "@/utils/cn";
 
 export default function MapPage() {
   const { openNotification } = useNotification();
   const { data: restaurants, isLoading: isLoadingRestaurants } =
-    useRestaurantsQuery();
+    usePublicRestaurantsQuery();
 
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<Restaurant | null>(null);
