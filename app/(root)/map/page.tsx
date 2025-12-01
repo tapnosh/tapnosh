@@ -13,14 +13,17 @@ import { MapFiltersDrawer } from "@/features/map/map-filters-drawer";
 import { RestaurantDetailsDialog } from "@/features/map/restaurant-details-drawer";
 import { MapFilterState } from "@/features/map/types";
 import { calculateDistance } from "@/features/map/utils/distance";
-import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
+import { usePublicRestaurantsQuery } from "@/hooks/api/restaurant/usePublicRestaurants";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { cn } from "@/utils/cn";
 
 export default function MapPage() {
   const { openNotification } = useNotification();
-  const { data: restaurants, isLoading: isLoadingRestaurants } =
-    useRestaurantsQuery();
+  const {
+    data: restaurants,
+    isLoading: isLoadingRestaurants,
+    error: restaurantsError,
+  } = usePublicRestaurantsQuery();
 
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<Restaurant | null>(null);
@@ -59,7 +62,16 @@ export default function MapPage() {
         />,
       );
     }
-  }, [locationError, openNotification]);
+    if (restaurantsError) {
+      openNotification(
+        <BasicNotificationBody
+          title="Error"
+          description="Failed to load restaurants. Please try again later."
+          variant="error"
+        />,
+      );
+    }
+  }, [locationError, restaurantsError, openNotification]);
 
   const handleMarkerClick = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
