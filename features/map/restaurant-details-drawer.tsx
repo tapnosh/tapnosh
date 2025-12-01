@@ -16,6 +16,7 @@ import {
 import { getAccessibleVariant } from "@/context/ThemeContext";
 import { navigateToLocation } from "@/features/map/utils/navigation";
 import { MenuItemCard } from "@/features/menu/menu-item";
+import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
@@ -54,10 +55,10 @@ export function RestaurantDetailsDialog({
       onOpenChange={onOpenChange}
       direction={isMobile ? "bottom" : "right"}
     >
-      <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-[10px] md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
+      <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-3xl md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
         {/* Header with background image */}
         <div
-          className="relative overflow-clip rounded-b-lg pt-4"
+          className="relative overflow-clip rounded-b-3xl pt-4"
           style={{ backgroundColor: restaurant.theme.color }}
         >
           {restaurant.images[0].url && (
@@ -69,7 +70,7 @@ export function RestaurantDetailsDialog({
                 className="object-cover opacity-5"
                 style={{
                   filter:
-                    "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
+                    "grayscale(100%) sepia(100%) hue-rotate(25deg) brightness(0.9) contrast(1.2)",
                   mixBlendMode: "multiply",
                 }}
                 quality={70}
@@ -80,7 +81,16 @@ export function RestaurantDetailsDialog({
 
           <div className="relative z-10 px-4 pt-4 pb-6">
             {/* Categories */}
-            <div className="mb-2 flex flex-wrap gap-2">
+            <div className="mb-2 flex flex-wrap gap-1.5">
+              <Badge
+                className="font-bold"
+                style={{
+                  color: restaurant.theme.color,
+                  backgroundColor: foregroundColor,
+                }}
+              >
+                <PriceRangeIndicator priceRange={restaurant.priceRange} />
+              </Badge>
               {restaurant.categories.map((category) => (
                 <Badge
                   key={category.id}
@@ -134,12 +144,7 @@ export function RestaurantDetailsDialog({
         </div>
 
         <div className="space-y-6 overflow-y-auto px-4 pt-6 pb-24">
-          <p
-            className="mb-4 text-base drop-shadow-sm"
-            style={{ color: foregroundColor, opacity: 0.9 }}
-          >
-            {restaurant.description}
-          </p>
+          <p className="mb-4 text-sm">{restaurant.description}</p>
           {/* Menu Items */}
           {menuItems.length > 0 && (
             <div className="space-y-4">

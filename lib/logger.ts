@@ -24,7 +24,7 @@ import pino from "pino";
  */
 export const createLogger = (module: string) =>
   pino({
-    level: process.env.LOG_LEVEL || "info",
+    level: "info",
     browser: {
       asObject: true,
     },

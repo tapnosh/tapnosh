@@ -87,7 +87,7 @@ export function FiltersDrawer({
       onOpenChange={setOpen}
       direction={isMobile ? "bottom" : "right"}
     >
-      <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-[10px] md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
+      <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-3xl md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
         <DrawerHeader>
           <DrawerTitle>Filter Menu Items</DrawerTitle>
           <DrawerDescription>

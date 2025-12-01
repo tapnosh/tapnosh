@@ -10,6 +10,7 @@ import { useMemo, unstable_ViewTransition as ViewTransition } from "react";
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { ShareButton } from "@/components/ui/forms/share-button";
+import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { RestaurantCategory } from "@/types/category/Category";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
@@ -21,10 +22,14 @@ function RestaurantBadges({
   categories,
   translateCategory,
   foregroundColor,
+  priceRange,
+  backgroundColor,
 }: {
   categories?: RestaurantCategory[];
   translateCategory: (id: string) => string;
   foregroundColor: string;
+  priceRange: Restaurant["priceRange"];
+  backgroundColor: string;
 }) {
   if (!categories || categories.length === 0) {
     return null;
@@ -32,6 +37,16 @@ function RestaurantBadges({
 
   return (
     <div className="flex flex-wrap gap-1.5">
+      <Badge
+        variant="default"
+        className="font-bold"
+        style={{
+          color: backgroundColor,
+          backgroundColor: foregroundColor,
+        }}
+      >
+        <PriceRangeIndicator priceRange={priceRange} />
+      </Badge>
       {categories?.map(({ id, name }) => (
         <Badge
           key={id}
@@ -78,7 +93,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             className="object-cover opacity-10"
             style={{
               filter:
-                "grayscale(100%) sepia(100%) hue-rotate(25deg) saturate(200%) brightness(0.9) contrast(1.2)",
+                "grayscale(100%) sepia(100%) hue-rotate(25deg) brightness(0.9) contrast(1.2)",
               mixBlendMode: "multiply",
             }}
             quality={100}
@@ -107,11 +122,13 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
       </div>
 
       {restaurant.categories && restaurant.categories.length > 0 && (
-        <div className="mb-2">
+        <div className="mb-3">
           <RestaurantBadges
             categories={restaurant.categories}
             translateCategory={t}
             foregroundColor={foregroundColor}
+            backgroundColor={backgroundColor}
+            priceRange={restaurant.priceRange}
           />
         </div>
       )}
