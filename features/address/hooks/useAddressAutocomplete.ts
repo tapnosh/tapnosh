@@ -8,10 +8,12 @@ export function useAddressAutocomplete(searchQuery: string, enabled = true) {
   const { fetchClient } = useFetchClient();
   return useQuery<PlaceAutocompleteResponseData, TranslatedError>({
     queryKey: ["address-autocomplete", searchQuery],
-    queryFn: () =>
-      fetchClient(
-        `/api/address/autocomplete?input=${encodeURIComponent(searchQuery)}`,
-      ),
+    queryFn: () => {
+      const params = new URLSearchParams({
+        input: searchQuery,
+      });
+      return fetchClient(`places/autocomplete?${params.toString()}`);
+    },
     enabled: enabled && searchQuery.length >= 3,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
