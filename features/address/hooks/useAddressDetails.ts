@@ -11,7 +11,7 @@ export function useAddressDetails(
 ) {
   const { fetchClient } = useFetchClient();
 
-  return useQuery<{ address: AddressDetails }, TranslatedError>({
+  return useQuery<AddressDetails, TranslatedError>({
     queryKey: ["address-details", placeId, sessionToken],
     queryFn: async () => {
       const params = new URLSearchParams({
