@@ -79,8 +79,8 @@ export function AddressAutocomplete({
 
   // Handle successful address details fetch
   React.useEffect(() => {
-    if (addressDetailsData?.address) {
-      onSelect(addressDetailsData.address);
+    if (addressDetailsData) {
+      onSelect(addressDetailsData);
       setOpen(false);
       setSearchQuery("");
       setSelectedPlaceId(null);
