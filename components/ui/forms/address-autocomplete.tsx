@@ -73,7 +73,7 @@ export function AddressAutocomplete({
     data: addressDetailsData,
     isLoading: isLoadingDetails,
     error: detailsError,
-  } = useAddressDetails(selectedPlaceId);
+  } = useAddressDetails(selectedPlaceId, autocompleteData?.sessionToken);
 
   // Handle successful address details fetch
   React.useEffect(() => {

@@ -1,12 +1,17 @@
-import { PlaceAutocompleteResponseData } from "@googlemaps/google-maps-services-js";
+import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { useQuery } from "@tanstack/react-query";
 
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
 
+export type PlacesAutocompleteResponseData = {
+  sessionToken: string;
+  predictions: PlaceAutocompleteResult[];
+};
+
 export function useAddressAutocomplete(searchQuery: string, enabled = true) {
   const { fetchClient } = useFetchClient();
-  return useQuery<PlaceAutocompleteResponseData, TranslatedError>({
+  return useQuery<PlacesAutocompleteResponseData, TranslatedError>({
     queryKey: ["address-autocomplete", searchQuery],
     queryFn: () => {
       const params = new URLSearchParams({
