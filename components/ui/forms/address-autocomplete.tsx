@@ -1,6 +1,5 @@
 "use client";
 
-import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { Check, ChevronsUpDown, MapPin } from "lucide-react";
 import * as React from "react";
 
@@ -18,7 +17,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/overlays/popover";
-import { useAddressAutocomplete } from "@/features/address/hooks/useAddressAutocomplete";
+import {
+  PlaceAutocompleteResult,
+  useAddressAutocomplete,
+} from "@/features/address/hooks/useAddressAutocomplete";
 import { useAddressDetails } from "@/features/address/hooks/useAddressDetails";
 import type { AddressDetails } from "@/types/address";
 import { cn } from "@/utils/cn";
@@ -146,19 +148,19 @@ export function AddressAutocomplete({
               <CommandGroup>
                 {predictions.map((prediction) => (
                   <CommandItem
-                    key={prediction.place_id}
-                    value={prediction.place_id}
-                    onSelect={() => handleSelectPrediction(prediction.place_id)}
+                    key={prediction.placeId}
+                    value={prediction.placeId}
+                    onSelect={() => handleSelectPrediction(prediction.placeId)}
                     className="cursor-pointer"
                   >
                     <MapPin className="mr-2 h-4 w-4 opacity-50" />
                     <div className="flex flex-col">
                       <span className="font-medium">
-                        {prediction.structured_formatting?.main_text}
+                        {prediction?.mainText}
                       </span>
-                      {prediction.structured_formatting?.secondary_text && (
+                      {prediction?.secondaryText && (
                         <span className="text-muted-foreground text-xs">
-                          {prediction.structured_formatting.secondary_text}
+                          {prediction.secondaryText}
                         </span>
                       )}
                     </div>

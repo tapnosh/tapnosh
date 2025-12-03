@@ -1,8 +1,14 @@
-import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { useQuery } from "@tanstack/react-query";
 
 import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
+
+export type PlaceAutocompleteResult = {
+  description: string;
+  mainText?: string;
+  secondaryText?: string;
+  placeId: string;
+};
 
 export type PlacesAutocompleteResponseData = {
   sessionToken: string;
