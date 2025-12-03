@@ -166,7 +166,6 @@ export const fetchAddressDetails = (placeId: string, apiKey: string) =>
           getComponent(PlaceType2.postal_town) ||
           getComponent(PlaceType2.administrative_area_level_2),
         state: getComponent(PlaceType2.administrative_area_level_1),
-        stateCode: result?.utc_offset?.toString() ?? "1",
         country: getComponent(PlaceType2.country),
         countryCode: getShortComponent(PlaceType2.country),
         postalCode: getComponent(PlaceType2.postal_code),

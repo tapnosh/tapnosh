@@ -19,7 +19,6 @@ export interface RestaurantMapItem {
     street: string;
     city: string;
     state: string;
-    stateCode: string;
     country: string;
     countryCode: string;
     postalCode: string;
