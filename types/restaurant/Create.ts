@@ -14,7 +14,6 @@ export const AddressSchema = z.object({
   street: z.string().min(1, "Street is required"),
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
-  stateCode: z.string().min(1, "State code is required"),
   country: z.string().min(1, "Country is required"),
   countryCode: z.string().min(1, "Country code is required"),
   postalCode: z.string().min(1, "Postal code is required"),
