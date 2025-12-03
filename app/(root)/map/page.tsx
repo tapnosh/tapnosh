@@ -12,18 +12,12 @@ import { useGeolocation } from "@/features/map/hooks/useGeolocation";
 import { MapFiltersDrawer } from "@/features/map/map-filters-drawer";
 import { RestaurantDetailsDialog } from "@/features/map/restaurant-details-drawer";
 import { MapFilterState } from "@/features/map/types";
-import { calculateDistance } from "@/features/map/utils/distance";
 import { usePublicRestaurantsQuery } from "@/hooks/api/restaurant/usePublicRestaurants";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { cn } from "@/utils/cn";
 
 export default function MapPage() {
   const { openNotification } = useNotification();
-  const {
-    data: restaurants,
-    isLoading: isLoadingRestaurants,
-    error: restaurantsError,
-  } = usePublicRestaurantsQuery();
 
   const [selectedRestaurant, setSelectedRestaurant] =
     useState<Restaurant | null>(null);
@@ -43,6 +37,16 @@ export default function MapPage() {
     watch: false, // Don't continuously track - only on demand
     enableHighAccuracy: true,
     maximumAge: 0,
+  });
+
+  const {
+    data: restaurants,
+    isLoading: isLoadingRestaurants,
+    error: restaurantsError,
+  } = usePublicRestaurantsQuery({
+    lat: userLocation?.lat,
+    lng: userLocation?.lng,
+    radiusKm: filters.distance ?? undefined,
   });
 
   // Request location on page load
@@ -82,7 +86,7 @@ export default function MapPage() {
     getCurrentPosition();
   };
 
-  // Filter restaurants based on selected categories and distance
+  // Filter restaurants based on selected categories (distance is handled by backend)
   const filteredRestaurants = useMemo(() => {
     if (!restaurants) return [];
     return restaurants.filter((restaurant) => {
@@ -98,22 +102,9 @@ export default function MapPage() {
         }
       }
 
-      // Filter by distance
-      if (filters.distance !== null && userLocation && restaurant.address) {
-        const distance = calculateDistance(
-          userLocation.lat,
-          userLocation.lng,
-          restaurant.address.lat,
-          restaurant.address.lng,
-        );
-        if (distance > filters.distance) {
-          return false;
-        }
-      }
-
       return true;
     });
-  }, [restaurants, filters, userLocation]);
+  }, [restaurants, filters.cuisines]);
 
   return (
     <div className="w-full flex-1">
