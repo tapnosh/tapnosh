@@ -5,7 +5,7 @@ import { MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useMemo, unstable_ViewTransition as ViewTransition } from "react";
+import { useMemo, ViewTransition } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";

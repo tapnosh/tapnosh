@@ -87,7 +87,6 @@ export function CodeScanner({
       {isCameraAllowed && (
         <Scanner
           styles={{
-            finderBorder: 0,
             container: {
               borderRadius: "2rem",
               flex: 1,
