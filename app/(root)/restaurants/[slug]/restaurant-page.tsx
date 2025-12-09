@@ -6,11 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import {
-  unstable_ViewTransition as ViewTransition,
-  useEffect,
-  useState,
-} from "react";
+import { ViewTransition, useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { ShareButton } from "@/components/ui/forms/share-button";

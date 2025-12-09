@@ -108,169 +108,167 @@ export async function GET(request: NextRequest) {
     const restaurantImageUrl = restaurant.images?.[0]?.url;
 
     return new ImageResponse(
-      (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            position: "relative",
-            backgroundColor: primaryColor.hex(),
-            fontFamily: "GT Ultra",
-          }}
-        >
-          {/* Background - Restaurant image with blend mode */}
-          {restaurantImageUrl && (
-            <div
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          position: "relative",
+          backgroundColor: primaryColor.hex(),
+          fontFamily: "GT Ultra",
+        }}
+      >
+        {/* Background - Restaurant image with blend mode */}
+        {restaurantImageUrl && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              display: "flex",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={restaurantImageUrl}
+              alt={restaurant.name}
+              width="1200"
+              height="630"
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
                 width: "100%",
                 height: "100%",
+                objectFit: "cover",
+                opacity: 0.05,
+                mixBlendMode: "overlay",
+              }}
+            />
+          </div>
+        )}
+
+        {/* Content */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "stretch",
+            justifyContent: "space-between",
+            width: "100%",
+            padding: "32px",
+            position: "relative",
+          }}
+        >
+          {/* Left side - Text content */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              flex: 1,
+              paddingRight: dishImageUrl ? "60px" : "0",
+            }}
+          >
+            {/* Food types */}
+            {foodTypeNames.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  marginTop: "16px",
+                  marginBottom: "8px",
+                }}
+              >
+                {foodTypeNames.map((foodType, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      display: "flex",
+                      padding: "6px 14px",
+                      backgroundColor: primaryColor.hex(),
+                      color: foregroundColor.hex(),
+                      borderRadius: "8px",
+                      fontSize: "20px",
+                      fontWeight: 300,
+                    }}
+                  >
+                    {foodType}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Dish name */}
+            <h1
+              style={{
+                fontSize: "56px",
+                fontWeight: "bold",
+                lineHeight: 1,
+                marginBottom: "0",
+                marginTop: 0,
+                color: foregroundColor.hex(),
+              }}
+            >
+              {dishName}
+            </h1>
+
+            {/* Price */}
+            {description && (
+              <p
+                style={{
+                  display: "flex",
+                  fontSize: "32px",
+                  fontWeight: 300,
+                  color: foregroundColor.hex(),
+                }}
+              >
+                {description}
+              </p>
+            )}
+
+            {/* Price */}
+            {price && (
+              <div
+                style={{
+                  display: "flex",
+                  fontSize: "64px",
+                  fontWeight: 900,
+                  color: foregroundColor.hex(),
+                }}
+              >
+                {price}
+              </div>
+            )}
+          </div>
+
+          {/* Right side - Dish Image */}
+          {dishImageUrl && (
+            <div
+              style={{
                 display: "flex",
+                width: "566px",
+                height: "566px",
+                borderRadius: "16px",
+                overflow: "hidden",
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={restaurantImageUrl}
-                alt={restaurant.name}
-                width="1200"
-                height="630"
+                src={dishImageUrl}
+                alt={dishName}
+                width="500"
+                height="500"
                 style={{
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
-                  opacity: 0.05,
-                  mixBlendMode: "overlay",
                 }}
               />
             </div>
           )}
-
-          {/* Content */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "stretch",
-              justifyContent: "space-between",
-              width: "100%",
-              padding: "32px",
-              position: "relative",
-            }}
-          >
-            {/* Left side - Text content */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                flex: 1,
-                paddingRight: dishImageUrl ? "60px" : "0",
-              }}
-            >
-              {/* Food types */}
-              {foodTypeNames.length > 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "8px",
-                    marginTop: "16px",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {foodTypeNames.map((foodType, index) => (
-                    <span
-                      key={index}
-                      style={{
-                        display: "flex",
-                        padding: "6px 14px",
-                        backgroundColor: primaryColor.hex(),
-                        color: foregroundColor.hex(),
-                        borderRadius: "8px",
-                        fontSize: "20px",
-                        fontWeight: 300,
-                      }}
-                    >
-                      {foodType}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Dish name */}
-              <h1
-                style={{
-                  fontSize: "56px",
-                  fontWeight: "bold",
-                  lineHeight: 1,
-                  marginBottom: "0",
-                  marginTop: 0,
-                  color: foregroundColor.hex(),
-                }}
-              >
-                {dishName}
-              </h1>
-
-              {/* Price */}
-              {description && (
-                <p
-                  style={{
-                    display: "flex",
-                    fontSize: "32px",
-                    fontWeight: 300,
-                    color: foregroundColor.hex(),
-                  }}
-                >
-                  {description}
-                </p>
-              )}
-
-              {/* Price */}
-              {price && (
-                <div
-                  style={{
-                    display: "flex",
-                    fontSize: "64px",
-                    fontWeight: 900,
-                    color: foregroundColor.hex(),
-                  }}
-                >
-                  {price}
-                </div>
-              )}
-            </div>
-
-            {/* Right side - Dish Image */}
-            {dishImageUrl && (
-              <div
-                style={{
-                  display: "flex",
-                  width: "566px",
-                  height: "566px",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={dishImageUrl}
-                  alt={dishName}
-                  width="500"
-                  height="500"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-            )}
-          </div>
         </div>
-      ),
+      </div>,
       {
         width: 1200,
         height: 630,
