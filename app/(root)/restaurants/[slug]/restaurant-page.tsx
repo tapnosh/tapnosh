@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ViewTransition, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { ShareButton } from "@/components/ui/forms/share-button";
@@ -276,17 +276,13 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
           ))}
         </div>
 
-        <ViewTransition name={`title-${restaurant.id}`}>
-          <h1 className="mb-4 text-5xl font-bold tracking-tight drop-shadow-sm md:text-7xl">
-            {restaurant.name}
-          </h1>
-        </ViewTransition>
+        <h1 className="mb-4 text-5xl font-bold tracking-tight drop-shadow-sm md:text-7xl">
+          {restaurant.name}
+        </h1>
 
-        <ViewTransition name={`description-${restaurant.id}`}>
-          <p className="text-primary-foreground/90 mb-6 max-w-3xl drop-shadow-sm sm:text-lg">
-            {restaurant.description}
-          </p>
-        </ViewTransition>
+        <p className="text-primary-foreground/90 mb-6 max-w-3xl drop-shadow-sm sm:text-lg">
+          {restaurant.description}
+        </p>
 
         {/* Address and Contact Info */}
         {(restaurant.address || restaurant.phoneNumber) && (

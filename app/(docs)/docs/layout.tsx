@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Head from "next/head";
 import { Head as NextraHead } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Footer, Layout, Navbar } from "nextra-theme-docs";
@@ -53,18 +52,17 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang="en" dir="ltr">
-      <Head>
-        <link rel="icon" href="/favicon.svg" sizes="any" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </Head>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <NextraHead
         color={{
           hue: { dark: 28, light: 357 },
           saturation: { dark: 100, light: 18 },
           lightness: { dark: 92, light: 40 },
         }}
-      />
+      >
+        <link rel="icon" href="/favicon.svg" sizes="any" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      </NextraHead>
       <body className={`antialiased`}>
         <Layout
           navbar={navbar}
