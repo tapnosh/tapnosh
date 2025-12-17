@@ -165,18 +165,20 @@ export function NoshBar() {
   useLayoutEffect(() => {
     if (contentRef.current) {
       const newHeight = contentRef.current.offsetHeight;
-      setContentHeight(newHeight);
-      setStartContentHeight(newHeight);
+      if (newHeight !== contentHeight) {
+        setContentHeight(newHeight);
+      }
+      if (newHeight !== startContentHeight) {
+        setStartContentHeight(newHeight);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isBarExpanded,
     activeTab,
     isOrderListExpanded,
     cartItems,
     orderItems,
-    contentRef,
-    setContentHeight,
-    setStartContentHeight,
     notifications,
   ]);
 

@@ -53,7 +53,6 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
     const [error] = await tryCatch(mutateAsync(data));
 
     if (error) {
-      console.error("Error creating restaurant:", error);
       openNotification(
         <BasicNotificationBody
           title="Error"

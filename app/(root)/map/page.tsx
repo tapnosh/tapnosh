@@ -43,11 +43,18 @@ export default function MapPage() {
     data: restaurants,
     isLoading: isLoadingRestaurants,
     error: restaurantsError,
-  } = usePublicRestaurantsQuery({
-    lat: userLocation?.lat,
-    lng: userLocation?.lng,
-    radiusKm: filters.distance ?? undefined,
-  });
+  } = usePublicRestaurantsQuery(
+    // Only pass location params when all three are available
+    userLocation?.lat !== undefined &&
+      userLocation?.lng !== undefined &&
+      filters.distance !== null
+      ? {
+          lat: userLocation.lat,
+          lng: userLocation.lng,
+          radiusKm: filters.distance,
+        }
+      : {},
+  );
 
   // Request location on page load
   useEffect(() => {
@@ -156,6 +163,7 @@ export default function MapPage() {
         restaurant={selectedRestaurant}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        userLocation={userLocation}
       />
       <MapFiltersDrawer
         open={isFilterDrawerOpen}
