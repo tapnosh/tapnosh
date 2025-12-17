@@ -29,7 +29,7 @@ const navbar = (
     logo={
       <span className="font-display-median text-2xl font-black">tapnosh</span>
     }
-    logoLink="/docs"
+    logoLink="/"
     projectLink="https://github.com/tapnosh/tapnosh"
   />
 );
