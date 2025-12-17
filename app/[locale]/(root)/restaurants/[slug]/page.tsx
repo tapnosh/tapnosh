@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
 import { generateRestaurant } from "@/features/menu/lib/generateRestaurantSchema";
@@ -55,8 +56,9 @@ export async function generateMetadata({
     };
   }
 
+  const t = await getTranslations("categories");
   const restaurantCategories =
-    restaurant.categories?.map((cat) => cat.name).join(", ") || "Restaurant";
+    restaurant.categories?.map((cat) => t(cat.name)).join(", ") || "Restaurant";
 
   const ogImageUrl = `${baseUrl}/api/og/restaurant?restaurant=${encodeURIComponent(restaurant.slug ?? "")}`;
 

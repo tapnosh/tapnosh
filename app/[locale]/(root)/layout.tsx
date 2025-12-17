@@ -2,8 +2,9 @@ import "@/assets/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { Head as NextraHead } from "nextra/components";
 
 import { LoadingBar } from "@/components/ui/feedback/loading-bar";
@@ -17,6 +18,7 @@ import { OrderProvider } from "@/context/OrderContext";
 import { ThemeColorProvider } from "@/context/ThemeContext";
 import { AppSidebar } from "@/features/navigation/app-sidebar";
 import { NoshBar } from "@/features/nosh-bar/nosh-bar";
+import { routing } from "@/i18n/routing";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 
@@ -152,12 +154,27 @@ export const viewport: Viewport = {
   ],
 };
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
-  const locale = await getLocale();
+  const { locale } = await params;
+
+  // Validate locale
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
+    notFound();
+  }
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const messages = await getMessages();
 
   return (

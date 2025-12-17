@@ -37,6 +37,6 @@ const withNextra = nextra({
   contentDirBasePath: "/docs",
 });
 
-const withNextIntl = createNextIntlPlugin("./translations/config.ts");
+const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 export default withNextIntl(withNextra(nextConfig));

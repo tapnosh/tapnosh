@@ -29,27 +29,60 @@ const navbar = (
     logo={
       <span className="font-display-median text-2xl font-black">tapnosh</span>
     }
+    logoLink="/"
     projectLink="https://github.com/tapnosh/tapnosh"
   />
 );
+
 const footer = <Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>;
 
-export default async function RootLayout({
+export default async function DocsLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   // Get pageMap and filter out all app routes, keeping only content from /content directory
   const fullPageMap = await getPageMap();
-  const pageMap = fullPageMap.filter((item) => {
-    // Only include items that are from the docs content directory
-    // Exclude any route-based pages like my-restaurants, restaurants, about, etc.
-    if ("name" in item) {
-      const excludedRoutes = ["restaurants", "my-restaurants", "about"];
-      return !excludedRoutes.includes(item.name);
-    }
-    return true;
-  });
+
+  // Recursively filter out any items with dynamic segments like [locale]
+  const filterDynamicRoutes = (
+    items: typeof fullPageMap,
+  ): typeof fullPageMap => {
+    return items.filter((item) => {
+      // Exclude items with dynamic segments (square brackets)
+      if (
+        "name" in item &&
+        (item.name.includes("[") || item.name.includes("]"))
+      ) {
+        return false;
+      }
+      if (
+        "route" in item &&
+        (item.route.includes("[") || item.route.includes("]"))
+      ) {
+        return false;
+      }
+      // Exclude specific app routes
+      if ("name" in item) {
+        const excludedRoutes = [
+          "restaurants",
+          "my-restaurants",
+          "about",
+          "api",
+        ];
+        if (excludedRoutes.includes(item.name)) {
+          return false;
+        }
+      }
+      // Recursively filter children
+      if ("children" in item && Array.isArray(item.children)) {
+        item.children = filterDynamicRoutes(item.children);
+      }
+      return true;
+    });
+  };
+
+  const pageMap = filterDynamicRoutes(fullPageMap);
 
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning>

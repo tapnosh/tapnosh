@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 
+import { locales } from "@/i18n/routing";
 import { sitemapLogger } from "@/lib/logger/app";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
@@ -21,40 +22,44 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const sitemap: MetadataRoute.Sitemap = [];
 
-  // Static pages
+  // Static pages for each locale
   sitemapLogger.info("Building static pages sitemap");
-  sitemap.push(
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/map`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/restaurants`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/docs`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.5,
-    },
-  );
+
+  for (const locale of locales) {
+    sitemap.push(
+      {
+        url: `${baseUrl}/${locale}`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 1,
+      },
+      {
+        url: `${baseUrl}/${locale}/about`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/${locale}/map`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/${locale}/restaurants`,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.9,
+      },
+      {
+        url: `${baseUrl}/${locale}/docs`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.5,
+      },
+    );
+  }
+
   sitemapLogger.info({ count: sitemap.length }, "Generated static pages");
 
   // Restaurants
@@ -78,16 +83,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         );
 
         if (Array.isArray(restaurants)) {
-          restaurants.forEach((restaurant: Restaurant) => {
-            sitemap.push({
-              url: `${baseUrl}/restaurants/${restaurant.slug}`,
-              lastModified: restaurant.updatedAt
-                ? new Date(restaurant.updatedAt)
-                : new Date(),
-              changeFrequency: "daily",
-              priority: 0.8,
+          for (const locale of locales) {
+            restaurants.forEach((restaurant: Restaurant) => {
+              sitemap.push({
+                url: `${baseUrl}/${locale}/restaurants/${restaurant.slug}`,
+                lastModified: restaurant.updatedAt
+                  ? new Date(restaurant.updatedAt)
+                  : new Date(),
+                changeFrequency: "daily",
+                priority: 0.8,
+              });
             });
-          });
+          }
           sitemapLogger.info(
             { count: sitemap.length },
             "Generated restaurant URLs",
