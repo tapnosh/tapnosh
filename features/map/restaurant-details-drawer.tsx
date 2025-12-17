@@ -14,6 +14,7 @@ import {
   DrawerFooter,
 } from "@/components/ui/overlays/drawer";
 import { getAccessibleVariant } from "@/context/ThemeContext";
+import { DistanceBadge } from "@/features/map/distance-badge";
 import { navigateToLocation } from "@/features/map/utils/navigation";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
@@ -24,12 +25,14 @@ interface RestaurantDetailsDialogProps {
   restaurant: Restaurant | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  userLocation?: { lat: number; lng: number } | null;
 }
 
 export function RestaurantDetailsDialog({
   restaurant,
   open,
   onOpenChange,
+  userLocation,
 }: RestaurantDetailsDialogProps) {
   const isMobile = useIsMobile();
   const t = useTranslations("categories");
@@ -126,6 +129,22 @@ export function RestaurantDetailsDialog({
                     <span>{restaurant.address.formattedAddress}</span>
                   </div>
                 )}
+                {userLocation &&
+                  restaurant.address?.lat &&
+                  restaurant.address?.lng && (
+                    <div className="flex items-center gap-2">
+                      <Navigation className="size-4 shrink-0" />
+                      <span>Distance from you</span>
+                      <DistanceBadge
+                        userLocation={userLocation}
+                        targetLocation={{
+                          lat: restaurant.address.lat,
+                          lng: restaurant.address.lng,
+                        }}
+                        foregroundColor={foregroundColor}
+                      />
+                    </div>
+                  )}
                 {restaurant.phoneNumber && (
                   <div className="flex items-center gap-2">
                     <Phone className="size-4 shrink-0" />
