@@ -20,7 +20,7 @@ import { Loader2, Plus } from "lucide-react";
 import React, { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
-import { RestaurantHeader } from "@/app/(root)/restaurants/[slug]/restaurant-page";
+import { RestaurantHeader } from "@/app/[locale]/(root)/restaurants/[slug]/restaurant-page";
 import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
 import { Button } from "@/components/ui/forms/button";
 import { Form } from "@/components/ui/forms/form";

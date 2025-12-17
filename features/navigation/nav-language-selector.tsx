@@ -1,7 +1,8 @@
 "use client";
 
 import { Check, ChevronDown, Globe } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 import {
   SidebarGroup,
@@ -14,10 +15,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/navigation/dropdown-menu";
-import { getUserLocale, setUserLocale } from "@/services/locale";
+import { locales, type Locale } from "@/i18n/routing";
 
 type Language = {
-  code: "pl" | "en";
+  code: Locale;
   name: string;
   flag: string;
 };
@@ -27,32 +28,23 @@ const languages: Language[] = [
   { code: "pl", name: "Polski", flag: "🇵🇱" },
 ] as const;
 
-// Get the initial language asynchronously
-const getInitialLanguage = async (): Promise<Language> => {
-  const localeCode = await getUserLocale();
-  return languages.find((lang) => lang.code === localeCode) || languages[0];
-};
-
 export function LanguageSelector() {
-  // Use a loading state while fetching the initial language
-  const [loading, setLoading] = useState(true);
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(
-    languages[0],
-  );
+  const locale = useLocale() as Locale;
+  const router = useRouter();
+  const pathname = usePathname();
 
-  useLayoutEffect(() => {
-    const initializeLanguage = async () => {
-      const initialLanguage = await getInitialLanguage();
-      setCurrentLanguage(initialLanguage);
-      setLoading(false);
-    };
-
-    initializeLanguage();
-  }, []);
+  const currentLanguage =
+    languages.find((lang) => lang.code === locale) || languages[0];
 
   const handleLanguageChange = (language: Language) => {
-    setCurrentLanguage(language);
-    setUserLocale(language.code);
+    // Replace the current locale in the pathname with the new one
+    const segments = pathname.split("/");
+    // The locale is the first segment after the leading slash
+    if (locales.includes(segments[1] as Locale)) {
+      segments[1] = language.code;
+    }
+    const newPathname = segments.join("/");
+    router.push(newPathname);
   };
 
   return (
@@ -62,7 +54,7 @@ export function LanguageSelector() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton>
               <Globe className="h-4 w-4" />
-              <span>{loading ? "Loading..." : currentLanguage.name}</span>
+              <span>{currentLanguage.name}</span>
               <ChevronDown className="h-3 w-3 opacity-50" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>

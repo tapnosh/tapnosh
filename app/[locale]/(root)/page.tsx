@@ -1,9 +1,9 @@
 import { Users, ChefHat, Utensils } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { Button } from "@/components/ui/forms/button";
 import { RestaurantList } from "@/features/restaurant/restaurant-list";
+import { Link } from "@/i18n/routing";
 
 export const metadata: Metadata = {
   title: "Discover Amazing Restaurants Near You",

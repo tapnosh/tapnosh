@@ -1,9 +1,13 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { Head as NextraHead } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import "@/assets/styles/globals.css";
 import "nextra-theme-docs/style.css";
+
+import { routing } from "@/i18n/routing";
 
 export const metadata: Metadata = {
   title: "Documentation | tapnosh.",
@@ -34,11 +38,27 @@ const navbar = (
 );
 const footer = <Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>;
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+
+  // Validate locale
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
+    notFound();
+  }
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   // Get pageMap and filter out all app routes, keeping only content from /content directory
   const fullPageMap = await getPageMap();
   const pageMap = fullPageMap.filter((item) => {
@@ -52,7 +72,7 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
+    <html lang={locale} dir="ltr" suppressHydrationWarning>
       <NextraHead
         color={{
           hue: { dark: 28, light: 357 },

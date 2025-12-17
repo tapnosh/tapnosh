@@ -1,16 +1,36 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import createMiddleware from "next-intl/middleware";
+
+import { routing } from "@/i18n/routing";
+
+const intlMiddleware = createMiddleware(routing);
 
 const isProtectedRoute = createRouteMatcher([
-  "/restaurants/add",
-  "/restaurants/(.*)/edit",
-  "/restaurants/(.*)/delete",
-  "/restaurants/(.*)/reviews/add",
-  "/restaurants/(.*)/reviews/(.*)/edit",
-  "/restaurants/(.*)/reviews/(.*)/delete",
+  "/:locale/restaurants/add",
+  "/:locale/restaurants/(.*)/edit",
+  "/:locale/restaurants/(.*)/delete",
+  "/:locale/restaurants/(.*)/reviews/add",
+  "/:locale/restaurants/(.*)/reviews/(.*)/edit",
+  "/:locale/restaurants/(.*)/reviews/(.*)/delete",
+]);
+
+const isPublicRoute = createRouteMatcher([
+  "/api/(.*)",
+  "/sitemap.xml",
+  "/robots.txt",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect();
+  // Skip intl middleware for API routes and static files
+  if (isPublicRoute(req)) {
+    return;
+  }
+
+  if (isProtectedRoute(req)) {
+    await auth.protect();
+  }
+
+  return intlMiddleware(req);
 });
 
 export const config = {
