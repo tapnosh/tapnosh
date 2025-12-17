@@ -2,7 +2,6 @@ import "@/assets/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Head from "next/head";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { Head as NextraHead } from "nextra/components";
@@ -163,22 +162,21 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider>
-      <html lang={locale} dir="ltr">
-        <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-          />
-          <link rel="icon" href="/favicon.svg" sizes="any" />
-          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        </Head>
+      <html lang={locale} dir="ltr" suppressHydrationWarning>
         <NextraHead
           color={{
             hue: { dark: 28, light: 357 },
             saturation: { dark: 100, light: 18 },
             lightness: { dark: 92, light: 40 },
           }}
-        />
+        >
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          />
+          <link rel="icon" href="/favicon.svg" sizes="any" />
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        </NextraHead>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
