@@ -1,13 +1,9 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
 import { Head as NextraHead } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import "@/assets/styles/globals.css";
 import "nextra-theme-docs/style.css";
-
-import { routing } from "@/i18n/routing";
 
 export const metadata: Metadata = {
   title: "Documentation | tapnosh.",
@@ -28,39 +24,22 @@ export const metadata: Metadata = {
   },
 };
 
+const navbar = (
+  <Navbar
+    logo={
+      <span className="font-display-median text-2xl font-black">tapnosh</span>
+    }
+    logoLink="/docs"
+    projectLink="https://github.com/tapnosh/tapnosh"
+  />
+);
 const footer = <Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>;
-
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
-}
 
 export default async function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
 }>) {
-  const { locale } = await params;
-
-  // Validate locale
-  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
-    notFound();
-  }
-
-  // Enable static rendering
-  setRequestLocale(locale);
-
-  const navbar = (
-    <Navbar
-      logo={
-        <span className="font-display-median text-2xl font-black">tapnosh</span>
-      }
-      logoLink={`/${locale}/docs`}
-      projectLink="https://github.com/tapnosh/tapnosh"
-    />
-  );
-
   // Get pageMap and filter out all app routes, keeping only content from /content directory
   const fullPageMap = await getPageMap();
   const pageMap = fullPageMap.filter((item) => {
@@ -74,7 +53,7 @@ export default async function RootLayout({
   });
 
   return (
-    <html lang={locale} dir="ltr" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <NextraHead
         color={{
           hue: { dark: 28, light: 357 },
@@ -93,10 +72,6 @@ export default async function RootLayout({
           footer={footer}
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           search={<></>}
-          i18n={[
-            { locale: "en", name: "English" },
-            { locale: "pl", name: "Polski" },
-          ]}
         >
           {children}
         </Layout>

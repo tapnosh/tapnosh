@@ -148,10 +148,61 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error?.message) : children;
 
-  if (!body) {
+  // Extract error messages from nested object errors
+  const getErrorMessages = (err: typeof error): string[] => {
+    if (!err) return [];
+
+    // If it's a simple error with a message
+    if (typeof err.message === "string" && err.message) {
+      return [err.message];
+    }
+
+    // If it's a nested object error (like address validation)
+    const messages: string[] = [];
+    const errorObj = err as Record<string, unknown>;
+
+    for (const key in errorObj) {
+      if (key === "ref" || key === "type") continue;
+
+      const nestedError = errorObj[key];
+      if (
+        nestedError &&
+        typeof nestedError === "object" &&
+        "message" in nestedError &&
+        typeof nestedError.message === "string"
+      ) {
+        messages.push(nestedError.message);
+      }
+    }
+
+    return messages;
+  };
+
+  const errorMessages = getErrorMessages(error);
+  const body = errorMessages.length > 0 ? errorMessages : children;
+
+  if (!body || (Array.isArray(body) && body.length === 0)) {
     return null;
+  }
+
+  // Render multiple error messages
+  if (Array.isArray(body) && body.length > 0) {
+    return (
+      <div
+        ref={ref}
+        id={formMessageId}
+        className={cn(
+          "text-destructive space-y-1 text-sm font-medium",
+          className,
+        )}
+        {...props}
+      >
+        {body.map((msg, index) => (
+          <p key={index}>{msg}</p>
+        ))}
+      </div>
+    );
   }
 
   return (

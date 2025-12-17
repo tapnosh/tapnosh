@@ -19,16 +19,28 @@ const isPublicRoute = createRouteMatcher([
   "/api/(.*)",
   "/sitemap.xml",
   "/robots.txt",
+  "/docs",
+  "/docs/(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  const pathname = req.nextUrl.pathname;
+
+  // Redirect /:locale/docs to /docs (docs are served without locale prefix)
+  const docsWithLocaleMatch = pathname.match(/^\/([a-z]{2})\/docs(\/.*)?$/i);
+  if (docsWithLocaleMatch) {
+    const restOfPath = docsWithLocaleMatch[2] || "";
+    const newUrl = new URL(`/docs${restOfPath}`, req.url);
+    newUrl.search = req.nextUrl.search;
+    return NextResponse.redirect(newUrl);
+  }
+
   // Skip intl middleware for API routes and static files
   if (isPublicRoute(req)) {
     return;
   }
 
   // Check if the first path segment looks like an invalid locale
-  const pathname = req.nextUrl.pathname;
   const segments = pathname.split("/").filter(Boolean);
   const firstSegment = segments[0];
 
