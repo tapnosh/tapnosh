@@ -3,7 +3,7 @@
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { ViewTransition, useState } from "react";
+import { useState } from "react";
 
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { Featured } from "@/features/menu/featured";
@@ -33,17 +33,13 @@ export default function Order() {
           />
         </div>
 
-        <ViewTransition name={`title-${restaurant}`}>
-          <h1>
-            Restaurant {restaurant} - {table}
-          </h1>
-        </ViewTransition>
-        <ViewTransition name={`description-${restaurant}`}>
-          <h5 className="text-primary-foreground">
-            Talerzyki śródziemnomorskie 🌊 Na talerzu Francja, Hiszpania oraz
-            Włochy, w kieliszku cały świat
-          </h5>
-        </ViewTransition>
+        <h1>
+          Restaurant {restaurant} - {table}
+        </h1>
+        <h5 className="text-primary-foreground">
+          Talerzyki śródziemnomorskie 🌊 Na talerzu Francja, Hiszpania oraz
+          Włochy, w kieliszku cały świat
+        </h5>
       </section>
       <section className="section pb-2 lg:pb-4">
         <h3>Chef Picks</h3>

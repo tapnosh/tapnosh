@@ -5,7 +5,7 @@ import { MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useMemo, ViewTransition } from "react";
+import { useMemo } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
@@ -135,16 +135,12 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
 
       {/* Content */}
       <div className="relative z-10 flex flex-1 flex-col">
-        <ViewTransition name={`title-${restaurant.id}`}>
-          <h3 className="mb-3 text-3xl leading-8 font-bold md:text-4xl">
-            {restaurant.name}
-          </h3>
-        </ViewTransition>
+        <h3 className="mb-3 text-3xl leading-8 font-bold md:text-4xl">
+          {restaurant.name}
+        </h3>
 
         {restaurant.description && (
-          <ViewTransition name={`description-${restaurant.id}`}>
-            <p className="mb-4 text-sm opacity-90">{restaurant.description}</p>
-          </ViewTransition>
+          <p className="mb-4 text-sm opacity-90">{restaurant.description}</p>
         )}
         <div className="flex-1" />
 
