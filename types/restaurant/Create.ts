@@ -44,31 +44,34 @@ export const RestaurantFormSchema = z.object({
     .min(1, "At least one cuisine must be selected")
     .max(5, "You can select up to 5 cuisines"),
   // Contact information
-  phoneNumber: z.string().optional(),
+  phoneNumber: z.string().nullish(),
   facebookUrl: z
     .string()
     .url("Please enter a valid URL")
-    .optional()
+    .nullish()
     .or(z.literal("")),
   instagramUrl: z
     .string()
     .url("Please enter a valid URL")
-    .optional()
+    .nullish()
     .or(z.literal("")),
   reservationUrl: z
     .string()
     .url("Please enter a valid URL")
-    .optional()
+    .nullish()
     .or(z.literal("")),
   website: z
     .string()
     .url("Please enter a valid URL")
-    .optional()
+    .nullish()
     .or(z.literal("")),
   // Price range
   priceRange: z.enum(["low", "mid", "high"], {
     required_error: "Price range is required",
   }),
+  // Operating hours
+  openFrom: z.string().min(1, "Opening time is required"),
+  openUntil: z.string().min(1, "Closing time is required"),
 });
 
 export type RestaurantFormData = z.infer<typeof RestaurantFormSchema>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Minus, Plus, ShoppingBasket, X } from "lucide-react";
+import { Minus, Plus, ShoppingBasket, TimerOff, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -15,6 +15,7 @@ import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
 
+import { DisableMenuItemModal } from "./disable-menu-item-modal";
 import { getAllergenIcon, getFoodTypeIcon } from "./utils/icons";
 
 export const MenuItemModal = ({
@@ -23,16 +24,23 @@ export const MenuItemModal = ({
   menuItem,
   canBeAddedToTab = false,
   restaurantSlug,
+  restaurantId,
   isAvailable = true,
+  showDisableOption = false,
+  onDisableSuccess,
 }: {
   open: boolean;
   setOpen: Dispatch<boolean>;
   menuItem?: MenuItem;
   canBeAddedToTab?: boolean;
   restaurantSlug?: string;
+  restaurantId?: string;
   isAvailable?: boolean;
+  showDisableOption?: boolean;
+  onDisableSuccess?: () => void;
 }) => {
   const [amount, setAmount] = useState<number | string>(1);
+  const [disableModalOpen, setDisableModalOpen] = useState(false);
   const { openNotification } = useNotification();
   const { addItem } = useOrder();
 
@@ -82,6 +90,12 @@ export const MenuItemModal = ({
     );
   };
 
+  const handleDisableSuccess = () => {
+    setDisableModalOpen(false);
+    setOpen(false);
+    onDisableSuccess?.();
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -121,6 +135,17 @@ export const MenuItemModal = ({
               className="sticky top-4 right-4 bottom-4 left-4 z-50 mx-auto flex max-w-[calc(100vw-2rem)] flex-col items-stretch overflow-clip border shadow-[0px_0px_0.5rem_rgba(0,0,0,0.15)] sm:max-w-xl"
             >
               <div className="absolute top-3 right-3 z-10 flex gap-2">
+                {showDisableOption && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setDisableModalOpen(true)}
+                    className="hover:bg-destructive/20 hover:text-destructive text-muted-foreground rounded-full bg-white/80 backdrop-blur-sm transition-colors dark:bg-black/50"
+                    title="Disable menu item"
+                  >
+                    <TimerOff className="size-5" />
+                  </Button>
+                )}
                 {restaurantSlug && shareUrl && (
                   <ShareButton
                     url={shareUrl}
@@ -304,6 +329,13 @@ export const MenuItemModal = ({
           </RemoveScroll>
         </>
       )}
+      <DisableMenuItemModal
+        open={disableModalOpen}
+        onOpenChange={setDisableModalOpen}
+        menuItem={menuItem}
+        restaurantId={restaurantId || ""}
+        onSuccess={handleDisableSuccess}
+      />
     </AnimatePresence>
   );
 };

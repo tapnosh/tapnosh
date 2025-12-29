@@ -83,8 +83,10 @@ const getRestaurantSubItems = (restaurantId: string) => [
 ];
 
 export function NavManagement() {
-  const { data: restaurants, isLoading } = useRestaurantsQuery();
   const { isSignedIn } = useSession();
+  const { data: restaurants, isLoading } = useRestaurantsQuery({
+    enabled: isSignedIn,
+  });
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
