@@ -24,6 +24,8 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { findDishById } from "@/utils/dish-id";
 import { deleteUrlParam, setUrlParam } from "@/utils/url-state";
 
+import { revalidateRestaurantPage } from "./actions";
+
 // TODO Calculate it in backend with timezone support
 function isWithinServingTime(timeFrom: string, timeTo: string): boolean {
   const now = new Date();
@@ -48,10 +50,12 @@ function MenuInteractive({
   schema,
   restaurantSlug,
   restaurantId,
+  refetch,
 }: {
   schema?: Builder;
   restaurantSlug: string;
   restaurantId: string;
+  refetch: () => void;
 }) {
   const { isMaintainer } = useIsRestaurantMaintainer({ restaurantId });
   const searchParams = useSearchParams();
@@ -231,6 +235,7 @@ function MenuInteractive({
         restaurantSlug={restaurantSlug}
         restaurantId={restaurantId}
         showDisableOption={isMaintainer}
+        onDisableSuccess={() => refetch()}
       />
     </>
   );
@@ -356,6 +361,10 @@ export function RestaurantPage({
   restaurant: Restaurant;
   schema?: Builder;
 }) {
+  const handleRefresh = async () => {
+    await revalidateRestaurantPage(restaurant.slug || "");
+  };
+
   return (
     <>
       <RestaurantHeader restaurant={restaurant} />
@@ -368,6 +377,7 @@ export function RestaurantPage({
           schema={schema}
           restaurantSlug={restaurant.slug || ""}
           restaurantId={restaurant.id}
+          refetch={handleRefresh}
         />
       </Suspense>
     </>
