@@ -51,13 +51,22 @@ export function LoadingBar() {
 
   useEffect(() => {
     // Complete loading when pathname changes
-    if (isLoading && pathname === targetPath) {
+    // Check if pathname matches targetPath (accounting for locale prefixes)
+    const pathMatches =
+      isLoading &&
+      targetPath &&
+      (pathname === targetPath ||
+        pathname.endsWith(targetPath) ||
+        targetPath.endsWith(pathname));
+
+    if (pathMatches) {
       setProgress(100);
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setIsLoading(false);
         setProgress(0);
         setTargetPath("");
       }, 300);
+      return () => clearTimeout(timeout);
     }
   }, [pathname, targetPath, isLoading]);
 

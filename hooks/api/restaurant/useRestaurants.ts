@@ -4,16 +4,23 @@ import { useFetchClient } from "@/hooks/api/useFetchClient";
 import { TranslatedError } from "@/types/api/Error";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
-export function useRestaurantsQuery(): ReturnType<
-  typeof useQuery<Restaurant[], TranslatedError>
->;
+type UseRestaurantsQueryParams = {
+  id?: string;
+  enabled?: boolean;
+};
 
-export function useRestaurantsQuery(
-  id?: string,
-): ReturnType<typeof useQuery<Restaurant, TranslatedError>>;
+export function useRestaurantsQuery(params?: {
+  enabled?: boolean;
+}): ReturnType<typeof useQuery<Restaurant[], TranslatedError>>;
 
-export function useRestaurantsQuery(id?: string) {
+export function useRestaurantsQuery(params: {
+  id: string;
+  enabled?: boolean;
+}): ReturnType<typeof useQuery<Restaurant, TranslatedError>>;
+
+export function useRestaurantsQuery(params?: UseRestaurantsQueryParams) {
   const { fetchClient } = useFetchClient();
+  const { id, enabled = true } = params ?? {};
 
   return useQuery<Restaurant[] | Restaurant, TranslatedError>({
     queryKey: ["restaurants", id],
@@ -21,5 +28,6 @@ export function useRestaurantsQuery(id?: string) {
       fetchClient<Restaurant[] | Restaurant>(
         id ? `restaurants/${id}` : "restaurants",
       ),
+    enabled,
   });
 }

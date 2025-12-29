@@ -17,6 +17,7 @@ import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
+import { useIsRestaurantMaintainer } from "@/hooks/api/restaurant/useIsRestaurantMaintainer";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";
@@ -46,10 +47,13 @@ function isWithinServingTime(timeFrom: string, timeTo: string): boolean {
 function MenuInteractive({
   schema,
   restaurantSlug,
+  restaurantId,
 }: {
   schema?: Builder;
   restaurantSlug: string;
+  restaurantId: string;
 }) {
+  const { isMaintainer } = useIsRestaurantMaintainer({ restaurantId });
   const searchParams = useSearchParams();
   const dishId = searchParams.get("dish");
 
@@ -225,6 +229,8 @@ function MenuInteractive({
         }}
         canBeAddedToTab={false}
         restaurantSlug={restaurantSlug}
+        restaurantId={restaurantId}
+        showDisableOption={isMaintainer}
       />
     </>
   );
@@ -361,6 +367,7 @@ export function RestaurantPage({
         <MenuInteractive
           schema={schema}
           restaurantSlug={restaurant.slug || ""}
+          restaurantId={restaurant.id}
         />
       </Suspense>
     </>

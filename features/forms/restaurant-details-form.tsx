@@ -7,6 +7,7 @@ import {
   Phone,
   Calendar,
   DollarSign,
+  Clock,
 } from "lucide-react";
 import { type UseFormReturn } from "react-hook-form";
 
@@ -211,6 +212,43 @@ export function RestaurantDetailsForm({
             )}
           />
 
+          {/* OPERATING HOURS */}
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="openFrom"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Open From</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Clock className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
+                      <Input type="time" className="pl-9" {...field} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="openUntil"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Open Until</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Clock className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
+                      <Input type="time" className="pl-9" {...field} />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           {/* CONTACT INFORMATION */}
 
           {/* PHONE NUMBER */}
@@ -227,6 +265,7 @@ export function RestaurantDetailsForm({
                       placeholder="+48 555 123 123"
                       className="pl-9"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </div>
                 </FormControl>
@@ -249,6 +288,7 @@ export function RestaurantDetailsForm({
                       placeholder="https://facebook.com/restaurant"
                       className="pl-9"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </div>
                 </FormControl>
@@ -271,6 +311,7 @@ export function RestaurantDetailsForm({
                       placeholder="https://instagram.com/restaurant"
                       className="pl-9"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </div>
                 </FormControl>
@@ -293,6 +334,7 @@ export function RestaurantDetailsForm({
                       placeholder="https://opentable.com/restaurant"
                       className="pl-9"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </div>
                 </FormControl>
