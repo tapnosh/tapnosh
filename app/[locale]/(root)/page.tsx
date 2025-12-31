@@ -146,8 +146,8 @@ export default function RestaurantLanding() {
               </div>
               <h3 className="text-xl font-semibold">Community Driven</h3>
               <p className="text-muted-foreground">
-                Join a community of food enthusiasts sharing honest reviews and
-                discovering hidden culinary gems together.
+                Join a community of food enthusiasts and explore new restaurants
+                near you.
               </p>
             </div>
           </div>
