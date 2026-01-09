@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Odkryj niesamowite restauracje w pobliżu",
+    "description": "Dołącz do tapnosh, aby odkrywać najlepsze doświadczenia kulinarne w Twoim mieście. Właściciele restauracji mogą zaprezentować swoje lokale i łączyć się z miłośnikami jedzenia. Przeglądaj setki restauracji ze szczegółowymi menu, zdjęciami i autentycznymi recenzjami.",
+    "ogDescription": "Dołącz do tapnosh, aby odkrywać najlepsze doświadczenia kulinarne w Twoim mieście. Właściciele restauracji mogą zaprezentować swoje lokale i łączyć się z miłośnikami jedzenia."
+  },
+  "hero": {
+    "title": "Odkryj niesamowite restauracje w pobliżu",
+    "subtitle": "Dołącz do naszej platformy, aby odkrywać najlepsze doświadczenia kulinarne w Twoim mieście. Właściciele restauracji mogą prezentować swoje lokale i łączyć się z miłośnikami jedzenia.",
+    "cta": {
+      "listYourRestaurant": "Dodaj swoją restaurację",
+      "browseRestaurants": "Przeglądaj restauracje"
+    }
+  },
+  "why": {
+    "title": "Dlaczego tapnosh?",
+    "subtitle": "Niezależnie od tego, czy jesteś miłośnikiem jedzenia, czy właścicielem restauracji, zapewniamy narzędzia i społeczność, aby ulepszyć Twoje doświadczenia kulinarne.",
+    "cards": {
+      "discover": {
+        "title": "Odkrywaj wspaniałe jedzenie",
+        "text": "Przeglądaj setki restauracji ze szczegółowymi menu, zdjęciami i autentycznymi recenzjami od innych gości."
+      },
+      "owners": {
+        "title": "Dla właścicieli restauracji",
+        "text": "Zaprezentuj swoją restaurację pięknymi zdjęciami, zarządzaj menu i łącz się z klientami w Twojej okolicy."
+      },
+      "community": {
+        "title": "Napędzane społecznością",
+        "text": "Dołącz do społeczności entuzjastów jedzenia, którzy dzielą się szczerymi recenzjami i razem odkrywają ukryte perełki kulinarne."
+      }
+    }
+  },
+  "featured": {
+    "title": "Wyróżnione restauracje",
+    "subtitle": "Poznaj niektóre z niesamowitych restauracji już na naszej platformie"
+  }
+}

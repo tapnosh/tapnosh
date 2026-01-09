@@ -1,0 +1,11 @@
+{
+  "filters": {
+    "title": "Filtruj restauracje",
+    "description": "Znajdź restauracje w pobliżu według kategorii i odległości.",
+    "cuisinesLabel": "Kuchnie",
+    "cuisinesDescription": "Uwzględnij restauracje z tymi kuchniami",
+    "applyFilters": "Zastosuj filtry",
+    "reset": "Resetuj",
+    "cancel": "Anuluj"
+  }
+}

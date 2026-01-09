@@ -1,0 +1,8 @@
+{
+  "myRestaurants": {
+    "title": "My Restaurants",
+    "description": "Manage your restaurants on tapnosh. View analytics, update menus, and oversee your restaurant listings all in one place.",
+    "ogDescription": "Manage your restaurants on tapnosh. View analytics, update menus, and oversee your restaurant listings.",
+    "pageContent": "This is my restaurants page"
+  }
+}

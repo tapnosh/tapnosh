@@ -1,0 +1,76 @@
+{
+  "page": {
+    "title": "Kreator menu",
+    "description": "Twórz i dostosowuj menu restauracji za pomocą intuicyjnego kreatora typu przeciągnij i upuść. Twórz piękne, zorganizowane menu dla swoich klientów."
+  },
+  "elements": {
+    "paragraph": "Akapit",
+    "text": "Tekst",
+    "heading": "Nagłówek",
+    "image": "Obraz",
+    "selectType": "Wybierz typ elementu"
+  },
+  "menu": {
+    "title": "Menu",
+    "group": {
+      "name": "Nazwa grupy",
+      "namePlaceholder": "Nazwa grupy",
+      "servedFrom": "Serwowane od:",
+      "to": "do",
+      "noNameProvided": "Nie podano nazwy grupy",
+      "servedFromTo": "Serwowane od {from} do {to}"
+    },
+    "item": {
+      "name": "Nazwa pozycji",
+      "namePlaceholder": "Jedzenie",
+      "description": "Opis",
+      "descriptionPlaceholder": "Opis",
+      "price": "Cena",
+      "allergens": "Alergeny",
+      "allergensPlaceholder": "Wybierz alergeny...",
+      "allergensSearch": "Szukaj kategorii...",
+      "foodTypes": "Typy żywności",
+      "foodTypesPlaceholder": "Wybierz typy żywności...",
+      "foodTypesSearch": "Szukaj kategorii...",
+      "itemImage": "Zdjęcie pozycji",
+      "dragDropImages": "Przeciągnij i upuść obrazy tutaj",
+      "dropImagesHere": "Upuść obrazy tutaj",
+      "orBrowse": "lub kliknij, aby przeglądać pliki obrazów (JPG, PNG, SVG itp.)",
+      "chooseFiles": "Wybierz pliki",
+      "clearAll": "Wyczyść wszystko",
+      "addMore": "Dodaj więcej",
+      "invalidImageFile": "nie jest prawidłowym plikiem obrazu",
+      "cannotAddMore": "Nie można dodać więcej niż {limit} obrazów"
+    },
+    "preview": {
+      "exitPreview": "Wyjdź z trybu podglądu",
+      "enterPreview": "Włącz tryb podglądu",
+      "noMenu": "Brak menu dla tej restauracji."
+    },
+    "display": {
+      "title": "Menu",
+      "all": "Wszystkie",
+      "filters": "Filtry",
+      "clearAll": "Wyczyść wszystko",
+      "filterTitle": "Filtruj pozycje menu",
+      "filterSubtitle": "Dostosuj filtry, aby znaleźć dokładnie to, czego szukasz.",
+      "priceRange": "Zakres cenowy",
+      "foodTypes": "Typy żywności",
+      "excludeAllergens": "Wyklucz alergeny",
+      "applyFilters": "Zastosuj filtry",
+      "reset": "Resetuj",
+      "cancel": "Anuluj"
+    },
+    "status": {
+      "categoriesSelected": "Wybrano {count} kategorii"
+    }
+  },
+  "actions": {
+    "addElement": "Dodaj element",
+    "addMenuItem": "Dodaj pozycję menu",
+    "addMenuGroup": "Dodaj grupę menu",
+    "save": "Zapisz",
+    "saveMenu": "Zapisz menu",
+    "delete": "Usuń"
+  }
+}

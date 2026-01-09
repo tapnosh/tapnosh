@@ -1,0 +1,53 @@
+{
+  "actions": {
+    "share": "Udostępnij",
+    "viewMenu": "Zobacz menu",
+    "copyLink": "Kopiuj link",
+    "download": "Pobierz",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "close": "Zamknij",
+    "filters": "Filtry"
+  },
+  "toast": {
+    "success": "Sukces",
+    "themeCreated": "Motyw utworzony pomyślnie",
+    "linkCopied": "Skopiowano!",
+    "linkCopiedDescription": "Link skopiowany do schowka",
+    "error": "Błąd",
+    "failedToCopyLink": "Nie udało się skopiować linku",
+    "unexpectedError": "Wystąpił nieoczekiwany błąd",
+    "pageUpdated": "Strona restauracji zaktualizowana pomyślnie!",
+    "restaurantUpdated": "Restauracja zaktualizowana pomyślnie!",
+    "restaurantCreated": "Restauracja utworzona pomyślnie!",
+    "restaurantDeleted": "Restauracja usunięta pomyślnie!",
+    "restaurantsLoadError": "Nie udało się załadować restauracji. Spróbuj ponownie później."
+  },
+  "labels": {
+    "priceRange": "Zakres cenowy",
+    "required": "Wymagane",
+    "all": "Wszystkie"
+  },
+  "priceRange": {
+    "budgetFriendly": "Budżetowe",
+    "moderate": "Średnie",
+    "fineDining": "Ekskluzywne"
+  },
+  "forms": {
+    "multiChipPlaceholder": "Wpisz aby dodać, zatwierdź enterem",
+    "multiChipAddMore": "Dodaj więcej...",
+    "searchCategories": "Szukaj kategorii...",
+    "loadingCategories": "Ładowanie kategorii...",
+    "failedToLoadCategories": "Nie udało się załadować kategorii",
+    "noCategoriesFound": "Nie znaleziono kategorii.",
+    "categoriesSelected": "Wybrano {count} kategorii",
+    "noResultsFound": "Nie znaleziono wyników",
+    "include": "Uwzględnij",
+    "exclude": "Wyklucz",
+    "selectCategories": "Wybierz kategorie..."
+  },
+  "footer": {
+    "description": "Łączymy miłośników jedzenia z niesamowitymi restauracjami w ich społeczności.",
+    "copyright": "Wszelkie prawa zastrzeżone."
+  }
+}

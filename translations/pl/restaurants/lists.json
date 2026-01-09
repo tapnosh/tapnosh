@@ -1,0 +1,14 @@
+{
+  "page": {
+    "title": "Restauracje",
+    "subtitle": "Przeglądaj restauracje wspierające aplikację tapnosh."
+  },
+  "labels": {
+    "priceRange": "Zakres cenowy"
+  },
+  "priceRanges": {
+    "budgetFriendly": "Budżetowe",
+    "moderate": "Średnie",
+    "fineDining": "Ekskluzywne"
+  }
+}

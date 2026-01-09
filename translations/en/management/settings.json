@@ -1,0 +1,35 @@
+{
+  "page": {
+    "title": "Settings",
+    "description": "Manage your restaurant settings and preferences"
+  },
+  "deleteRestaurant": {
+    "title": "Delete Restaurant",
+    "descriptionBefore": "This action cannot be undone. This will permanently delete the restaurant",
+    "descriptionAfter": "and remove all associated data.",
+    "warning": "Warning: This action is irreversible",
+    "warningDescription": "All menu items, categories, orders, and other data associated with this restaurant will be permanently deleted.",
+    "confirmationLabelBefore": "Type",
+    "confirmationLabelAfter": "to confirm",
+    "confirmationPlaceholder": "Enter \"{restaurantSlug}\" to confirm deletion",
+    "confirmationHelper": "Please type the restaurant slug exactly as shown above to confirm deletion.",
+    "slugMismatch": "The restaurant slug does not match"
+  },
+  "confirmDialog": {
+    "title": "Final Confirmation",
+    "descriptionBefore": "Are you absolutely sure you want to delete",
+    "descriptionAfter": "? This action cannot be undone.",
+    "permanentDeleteTitle": "This will permanently delete:",
+    "deleteItem1": "All menu items and categories",
+    "deleteItem2": "Restaurant images and branding",
+    "deleteItem3": "Customer orders and reviews",
+    "deleteItem4": "QR codes and public links",
+    "deleteItem5": "All other restaurant data",
+    "deleting": "Deleting...",
+    "confirmDelete": "Yes, Delete Forever"
+  },
+  "actions": {
+    "cancel": "Cancel",
+    "deleteRestaurant": "Delete Restaurant"
+  }
+}

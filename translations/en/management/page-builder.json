@@ -1,0 +1,76 @@
+{
+  "page": {
+    "title": "Menu Builder",
+    "description": "Build and customize your restaurant menu with our intuitive drag-and-drop menu builder. Create beautiful, organized menus for your customers."
+  },
+  "elements": {
+    "paragraph": "Paragraph",
+    "text": "Text",
+    "heading": "Heading",
+    "image": "Image",
+    "selectType": "Select element type"
+  },
+  "menu": {
+    "title": "Menu",
+    "group": {
+      "name": "Group name",
+      "namePlaceholder": "Group name",
+      "servedFrom": "Served from:",
+      "to": "to",
+      "noNameProvided": "No group name provided",
+      "servedFromTo": "Served from {from} to {to}"
+    },
+    "item": {
+      "name": "Item name",
+      "namePlaceholder": "Food",
+      "description": "Description",
+      "descriptionPlaceholder": "Description",
+      "price": "Price",
+      "allergens": "Allergens",
+      "allergensPlaceholder": "Select allergens...",
+      "allergensSearch": "Search categories...",
+      "foodTypes": "Food Types",
+      "foodTypesPlaceholder": "Select food types...",
+      "foodTypesSearch": "Search categories...",
+      "itemImage": "Item image",
+      "dragDropImages": "Drag & drop images here",
+      "dropImagesHere": "Drop images here",
+      "orBrowse": "or click to browse image files (JPG, PNG, SVG etc.)",
+      "chooseFiles": "Choose Files",
+      "clearAll": "Clear All",
+      "addMore": "Add more",
+      "invalidImageFile": "is not a valid image file",
+      "cannotAddMore": "Cannot add more than {limit} images"
+    },
+    "preview": {
+      "exitPreview": "Exit Preview Mode",
+      "enterPreview": "Enter Preview Mode",
+      "noMenu": "No menu available for this restaurant."
+    },
+    "display": {
+      "title": "Menu",
+      "all": "All",
+      "filters": "Filters",
+      "clearAll": "Clear all",
+      "filterTitle": "Filter Menu Items",
+      "filterSubtitle": "Adjust filters to find exactly what you're looking for.",
+      "priceRange": "Price Range",
+      "foodTypes": "Food Types",
+      "excludeAllergens": "Exclude Allergens",
+      "applyFilters": "Apply Filters",
+      "reset": "Reset",
+      "cancel": "Cancel"
+    },
+    "status": {
+      "categoriesSelected": "{count} categories selected"
+    }
+  },
+  "actions": {
+    "addElement": "Add element",
+    "addMenuItem": "Add Menu Item",
+    "addMenuGroup": "Add menu group",
+    "save": "Save",
+    "saveMenu": "Save Menu",
+    "delete": "Delete"
+  }
+}

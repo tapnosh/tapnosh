@@ -1,0 +1,14 @@
+{
+  "page": {
+    "title": "Restaurants",
+    "subtitle": "Explore restaurants supporting the tapnosh. app"
+  },
+  "labels": {
+    "priceRange": "Price Range"
+  },
+  "priceRanges": {
+    "budgetFriendly": "Budget-friendly",
+    "moderate": "Moderate",
+    "fineDining": "Fine dining"
+  }
+}
