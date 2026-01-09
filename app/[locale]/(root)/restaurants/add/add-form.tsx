@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
@@ -13,9 +14,14 @@ import {
   RestaurantFormData,
   RestaurantFormSchema,
 } from "@/types/restaurant/Create";
+import { ERROR_MESSAGES } from "@/utils/error-messages";
 import { tryCatch } from "@/utils/tryCatch";
 
 export function RestaurantFormCreate() {
+  const t = useTranslations("restaurants.form.errors");
+  const tActions = useTranslations("restaurants.form.fields.actions");
+  const tToast = useTranslations("common.toast");
+
   const router = useRouter();
   const { mutateAsync, isPending } = useRestaurantMutation();
   const { openNotification } = useNotification();
@@ -35,10 +41,17 @@ export function RestaurantFormCreate() {
     const [error, res] = await tryCatch(mutateAsync(data));
 
     if (error) {
+      // Tłumacz błąd z backendu
+      const errorMessage =
+        error instanceof Error ? error.message : tToast("unexpectedError");
+      const errorKey =
+        ERROR_MESSAGES[errorMessage as keyof typeof ERROR_MESSAGES];
+      const translatedError = errorKey ? t(errorKey) : errorMessage;
+
       openNotification(
         <BasicNotificationBody
-          title="Error"
-          description="An unexpected error occurred"
+          title={tToast("error")}
+          description={translatedError}
           variant="error"
         />,
       );
@@ -47,11 +60,12 @@ export function RestaurantFormCreate() {
 
     openNotification(
       <BasicNotificationBody
-        title="Success"
-        description="Restaurant created successfully!"
+        title={tToast("success")}
+        description={tToast("restaurantCreated")}
         variant="success"
       />,
     );
+
     form.reset();
     queryClient.refetchQueries();
     router.push(`/restaurants/${res.slug}`);
@@ -62,7 +76,7 @@ export function RestaurantFormCreate() {
       form={form}
       onSubmit={onSubmit}
       isPending={isPending}
-      submitLabel="Add Restaurant"
+      submitLabel={tActions("addRestaurant")}
     />
   );
 }
