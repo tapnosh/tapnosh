@@ -29,7 +29,7 @@
       "placeholder": "Select cuisines...",
       "helper": "Search and select cuisines that apply to this restaurant",
       "searchPlaceholder": "Search categories...",
-      "noResults": "No categories found." 
+      "noResults": "No categories found."
     },
     "priceRange": {
       "label": "Price Range",

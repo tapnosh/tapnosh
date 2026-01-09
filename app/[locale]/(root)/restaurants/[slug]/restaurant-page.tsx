@@ -57,8 +57,8 @@ function MenuInteractive({
   restaurantId: string;
   refetch: () => void;
 }) {
-  const { isMaintainer } = useIsRestaurantMaintainer({ restaurantId });
   const t = useTranslations("management.pageBuilder");
+  const { isMaintainer } = useIsRestaurantMaintainer({ restaurantId });
 
   const searchParams = useSearchParams();
   const dishId = searchParams.get("dish");
