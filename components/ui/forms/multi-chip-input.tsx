@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type React from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
@@ -16,6 +17,8 @@ export default function MultiChipInput({
   append: (value: string) => void;
   remove: (value: string) => void;
 } & React.ComponentProps<"input">) {
+  const t = useTranslations("common.forms");
+
   const handleAppend = (
     e:
       | React.KeyboardEvent<HTMLInputElement>
@@ -24,11 +27,9 @@ export default function MultiChipInput({
     const {
       currentTarget: { value },
     } = e;
-
     if (value.trim() === "" || fields.includes(value.trim())) {
       return;
     }
-
     append(value);
     e.currentTarget.value = "";
   };
@@ -78,8 +79,8 @@ export default function MultiChipInput({
               {...props}
               placeholder={
                 fields.length === 0
-                  ? "Type to add, submit with enter"
-                  : "Add more..."
+                  ? t("multiChipPlaceholder")
+                  : t("multiChipAddMore")
               }
               onKeyDown={handleKeyPress}
               onBlur={handleAppend}
