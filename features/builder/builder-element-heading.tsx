@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { useFormContext, useWatch } from "react-hook-form";
 
 import {
@@ -5,9 +8,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/forms/form";
 import { Textarea } from "@/components/ui/forms/textarea";
+import { TranslatedFormMessage } from "@/components/ui/forms/translated-form-message";
 import { useBuilder } from "@/context/BuilderContext";
 import { Builder, HeaderHeading } from "@/types/builder/BuilderSchema";
 
@@ -20,12 +23,14 @@ interface BuilderElementHeadingProps extends BuilderElementProps {
 export function BuilderElementHeading({
   elementKey,
 }: BuilderElementHeadingProps) {
+  const t = useTranslations("management.pageBuilder.elements");
+  const tPreview = useTranslations("management.pageBuilder.menu.preview");
   const { previewMode } = useBuilder();
   const { control } = useFormContext();
   const data = useWatch<Builder>({ name: elementKey }) as HeaderHeading;
 
   if (previewMode) {
-    return <h2>{data?.heading || "No description provided."}</h2>;
+    return <h2>{data?.heading || tPreview("noMenu")}</h2>;
   }
 
   return (
@@ -34,11 +39,11 @@ export function BuilderElementHeading({
       name={`${elementKey}.heading`}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Heading</FormLabel>
+          <FormLabel>{t("heading")}</FormLabel>
           <FormControl>
-            <Textarea placeholder="Text" {...field} />
+            <Textarea placeholder={t("text")} {...field} />
           </FormControl>
-          <FormMessage />
+          <TranslatedFormMessage />
         </FormItem>
       )}
     />

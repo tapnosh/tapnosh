@@ -28,7 +28,8 @@ export function MenuItemCard({
   onClick?: (item: MenuItem) => void;
 }) {
   const { formatCurrency } = useCurrency();
-  const t = useTranslations("categories");
+  const tCategories = useTranslations("categories");
+  const tMenu = useTranslations("restaurants.details");
 
   const imgSrc = useMemo(() => {
     return Array.isArray(item.image) ? item.image[0]?.url : item.image;
@@ -89,10 +90,10 @@ export function MenuItemCard({
                       <Badge
                         key={allergen.id}
                         variant="secondary"
-                        title={t(allergen.name)}
+                        title={tCategories(allergen.name)}
                       >
                         <AllergenIcon className="h-3.5 w-3.5" />
-                        <span>{t(allergen.name)}</span>
+                        <span>{tCategories(allergen.name)}</span>
                       </Badge>
                     );
                   })}
@@ -107,10 +108,10 @@ export function MenuItemCard({
                       <Badge
                         key={foodType.id}
                         variant="outline"
-                        title={t(foodType.name)}
+                        title={tCategories(foodType.name)}
                       >
                         <FoodTypeIcon className="h-3.5 w-3.5" />
-                        <span>{t(foodType.name)}</span>
+                        <span>{tCategories(foodType.name)}</span>
                       </Badge>
                     );
                   })}
@@ -135,7 +136,7 @@ export function MenuItemCard({
           </footer>
           {!isAvailable && (
             <div className="text-muted-foreground mt-2 text-sm italic">
-              This dish is not available for serving
+              {tMenu("notAvailable")}
             </div>
           )}
         </div>

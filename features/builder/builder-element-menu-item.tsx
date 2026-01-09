@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { useFormContext, useWatch } from "react-hook-form";
 
 import { CategoryMultiSelect } from "@/components/ui/forms/category-multiselect";
@@ -6,12 +9,12 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/forms/form";
 import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
 import { Input } from "@/components/ui/forms/input";
 import PriceInput from "@/components/ui/forms/price-input";
 import { Textarea } from "@/components/ui/forms/textarea";
+import { TranslatedFormMessage } from "@/components/ui/forms/translated-form-message";
 import { useBuilder } from "@/context/BuilderContext";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { Builder } from "@/types/builder/BuilderSchema";
@@ -29,6 +32,7 @@ interface BuilderElementMenuItemProps extends BuilderElementProps {
 function BuilderElementMenuItemBase({
   elementKey,
 }: BuilderElementMenuItemProps) {
+  const t = useTranslations("management.pageBuilder.menu.item");
   const data = useWatch<Builder>({ name: elementKey });
   const { control } = useFormContext<Builder>();
   const { previewMode } = useBuilder();
@@ -44,11 +48,11 @@ function BuilderElementMenuItemBase({
         name={`${elementKey}.name`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Item name</FormLabel>
+            <FormLabel>{t("name")}</FormLabel>
             <FormControl>
-              <Input placeholder="Food" {...field} />
+              <Input placeholder={t("namePlaceholder")} {...field} />
             </FormControl>
-            <FormMessage />
+            <TranslatedFormMessage />
           </FormItem>
         )}
       />
@@ -58,11 +62,11 @@ function BuilderElementMenuItemBase({
         name={`${elementKey}.description`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Description</FormLabel>
+            <FormLabel>{t("description")}</FormLabel>
             <FormControl>
-              <Textarea placeholder="Description" {...field} />
+              <Textarea placeholder={t("descriptionPlaceholder")} {...field} />
             </FormControl>
-            <FormMessage />
+            <TranslatedFormMessage />
           </FormItem>
         )}
       />
@@ -72,7 +76,7 @@ function BuilderElementMenuItemBase({
         name={`${elementKey}.price`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Price</FormLabel>
+            <FormLabel>{t("price")}</FormLabel>
             <FormControl>
               <PriceInput {...field} />
             </FormControl>
@@ -85,16 +89,16 @@ function BuilderElementMenuItemBase({
         name={`${elementKey}.allergens`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Allergens</FormLabel>
+            <FormLabel>{t("allergens")}</FormLabel>
             <FormControl>
               <CategoryMultiSelect
                 value={field.value || []}
                 onChange={field.onChange}
                 type="allergens"
-                placeholder="Select allergens..."
+                placeholder={t("allergensPlaceholder")}
               />
             </FormControl>
-            <FormMessage />
+            <TranslatedFormMessage />
           </FormItem>
         )}
       />
@@ -104,16 +108,16 @@ function BuilderElementMenuItemBase({
         name={`${elementKey}.food_types`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Food Types</FormLabel>
+            <FormLabel>{t("foodTypes")}</FormLabel>
             <FormControl>
               <CategoryMultiSelect
                 value={field.value || []}
                 onChange={field.onChange}
                 type="food_type"
-                placeholder="Select food types..."
+                placeholder={t("foodTypesPlaceholder")}
               />
             </FormControl>
-            <FormMessage />
+            <TranslatedFormMessage />
           </FormItem>
         )}
       />
@@ -124,10 +128,10 @@ function BuilderElementMenuItemBase({
         render={() => (
           <FormItem>
             <div className="space-y-2">
-              <FormLabel>Item image</FormLabel>
+              <FormLabel>{t("itemImage")}</FormLabel>
               <ImageUploadDropzone />
             </div>
-            <FormMessage />
+            <TranslatedFormMessage />
           </FormItem>
         )}
       />
