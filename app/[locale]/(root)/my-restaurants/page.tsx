@@ -1,32 +1,36 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "My Restaurants",
-  description:
-    "Manage your restaurants on tapnosh. View analytics, update menus, and oversee your restaurant listings all in one place.",
-  keywords: [
-    "my restaurants",
-    "restaurant management",
-    "restaurant dashboard",
-    "manage listings",
-    "restaurant owner",
-  ],
-  openGraph: {
-    title: "My Restaurants | tapnosh",
-    description:
-      "Manage your restaurants on tapnosh. View analytics, update menus, and oversee your restaurant listings.",
-    url: "https://tapnosh.com/my-restaurants",
-  },
-  twitter: {
-    title: "My Restaurants | tapnosh",
-    description:
-      "Manage your restaurants on tapnosh. View analytics, update menus, and oversee your restaurant listings.",
-  },
-  alternates: {
-    canonical: "https://tapnosh.com/my-restaurants",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("management.dashboard.myRestaurants");
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    keywords: [
+      "my restaurants",
+      "restaurant management",
+      "restaurant dashboard",
+      "manage listings",
+      "restaurant owner",
+    ],
+    openGraph: {
+      title: `${t("title")} | tapnosh`,
+      description: t("ogDescription"),
+      url: "https://tapnosh.com/my-restaurants",
+    },
+    twitter: {
+      title: `${t("title")} | tapnosh`,
+      description: t("ogDescription"),
+    },
+    alternates: {
+      canonical: "https://tapnosh.com/my-restaurants",
+    },
+  };
+}
 
 export default async function MyRestaurants() {
-  return <section className="section">This is my restaurants page</section>;
+  const t = await getTranslations("management.dashboard.myRestaurants");
+
+  return <section className="section">{t("pageContent")}</section>;
 }

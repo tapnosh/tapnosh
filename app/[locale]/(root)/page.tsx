@@ -1,31 +1,38 @@
+// CHANGED: Added generateMetadata for i18n translations
 import { Users, ChefHat, Utensils } from "lucide-react";
 import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/forms/button";
 import { RestaurantList } from "@/features/restaurant/restaurant-list";
 import { Link } from "@/i18n/routing";
 
-export const metadata: Metadata = {
-  title: "Discover Amazing Restaurants Near You",
-  description:
-    "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers. Browse hundreds of restaurants with detailed menus, photos, and authentic reviews.",
-  openGraph: {
-    title: "Discover Amazing Restaurants Near You | tapnosh",
-    description:
-      "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers.",
-    url: "https://tapnosh.com",
-  },
-  twitter: {
-    title: "Discover Amazing Restaurants Near You | tapnosh",
-    description:
-      "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers.",
-  },
-  alternates: {
-    canonical: "https://tapnosh.com",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("home.page");
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    openGraph: {
+      title: `${t("title")} | tapnosh`,
+      description: t("ogDescription"),
+      url: "https://tapnosh.com",
+    },
+    twitter: {
+      title: `${t("title")} | tapnosh`,
+      description: t("ogDescription"),
+    },
+    alternates: {
+      canonical: "https://tapnosh.com",
+    },
+  };
+}
 
 export default function RestaurantLanding() {
+  const t = useTranslations("home");
+  const tFooter = useTranslations("common.footer");
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -73,12 +80,10 @@ export default function RestaurantLanding() {
             <div className="space-y-6">
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                  Discover Amazing Restaurants Near You
+                  {t("hero.title")}
                 </h1>
                 <p className="text-primary-foreground/80 text-lg md:text-xl">
-                  Join our platform to explore the best dining experiences in
-                  your city. Restaurant owners can showcase their venues and
-                  connect with food lovers.
+                  {t("hero.subtitle")}
                 </p>
               </div>
               <div className="flex flex-col gap-4 sm:flex-row">
@@ -88,7 +93,10 @@ export default function RestaurantLanding() {
                   className="px-8 py-6 text-lg"
                   asChild
                 >
-                  <Link href="/restaurants/add"> List Your Restaurant</Link>
+                  <Link href="/restaurants/add">
+                    {" "}
+                    {t("hero.cta.listYourRestaurant")}{" "}
+                  </Link>
                 </Button>
                 <Button
                   variant="secondary"
@@ -96,7 +104,9 @@ export default function RestaurantLanding() {
                   className="px-8 py-6 text-lg"
                   asChild
                 >
-                  <Link href="/restaurants">Browse Restaurants</Link>
+                  <Link href="/restaurants">
+                    {t("hero.cta.browseRestaurants")}{" "}
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -109,11 +119,10 @@ export default function RestaurantLanding() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="mb-16 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Why tapnosh?
+              {t("why.title")}
             </h2>
             <p className="text-muted-foreground max-w-2xl text-xl">
-              Whether you&apos;re a food lover or restaurant owner, we provide
-              the tools and community to enhance your dining experience.
+              {t("why.subtitle")}
             </p>
           </div>
 
@@ -122,10 +131,11 @@ export default function RestaurantLanding() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-orange-100">
                 <Utensils className="h-8 w-8 text-orange-600" />
               </div>
-              <h3 className="text-xl font-semibold">Discover Great Food</h3>
+              <h3 className="text-xl font-semibold">
+                {t("why.cards.discover.title")}
+              </h3>
               <p className="text-muted-foreground">
-                Browse through hundreds of restaurants with detailed menus,
-                photos, and authentic reviews from fellow diners.
+                {t("why.cards.discover.text")}
               </p>
             </div>
 
@@ -133,10 +143,11 @@ export default function RestaurantLanding() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
                 <ChefHat className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold">For Restaurant Owners</h3>
+              <h3 className="text-xl font-semibold">
+                {t("why.cards.owners.title")}
+              </h3>
               <p className="text-muted-foreground">
-                Showcase your restaurant with beautiful photos, manage your
-                menu, and connect with customers in your area.
+                {t("why.cards.owners.text")}
               </p>
             </div>
 
@@ -144,10 +155,11 @@ export default function RestaurantLanding() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
                 <Users className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold">Community Driven</h3>
+              <h3 className="text-xl font-semibold">
+                {t("why.cards.community.title")}
+              </h3>
               <p className="text-muted-foreground">
-                Join a community of food enthusiasts and explore new restaurants
-                near you.
+                {t("why.cards.community.text")}
               </p>
             </div>
           </div>
@@ -159,10 +171,10 @@ export default function RestaurantLanding() {
         <div className="container mx-auto px-4 md:px-6">
           <div className="mb-12 space-y-4">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Featured Restaurants
+              {t("featured.title")}
             </h2>
             <p className="text-muted-foreground text-xl">
-              Explore some of the amazing restaurants already on our platform
+              {t("featured.subtitle")}
             </p>
           </div>
 
@@ -176,12 +188,11 @@ export default function RestaurantLanding() {
           <div className="max-w-xs gap-8">
             <h3 className="font-logo text-2xl font-semibold">tapnosh</h3>
             <p className="text-primary-foreground/80 text-sm">
-              Connecting food lovers with amazing restaurants in their
-              community.
+              {tFooter("description")}
             </p>
           </div>
           <div className="text-primary-foreground/80 mt-4 text-center text-sm">
-            &copy; {new Date().getFullYear()} tapnosh. All rights reserved.
+            &copy; {new Date().getFullYear()} tapnosh. {tFooter("copyright")}
           </div>
         </div>
       </footer>

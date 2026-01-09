@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { Card, CardContent } from "@/components/ui/data-display/card";
 import { authFetch } from "@/lib/auth/client";
@@ -6,18 +7,22 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 
 import { RestaurantFormEdit } from "./edit-form";
 
-export const metadata: Metadata = {
-  title: "Restaurant Details",
-  description:
-    "Edit your restaurant details, contact information, and basic settings. Keep your restaurant profile up to date for customers.",
-  keywords: [
-    "restaurant details",
-    "edit restaurant",
-    "restaurant settings",
-    "restaurant information",
-    "contact details",
-  ],
-};
+// CHANGED: Replaced static metadata with generateMetadata function to support i18n translations
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("restaurants.details.page");
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    keywords: [
+      "restaurant details",
+      "edit restaurant",
+      "restaurant settings",
+      "restaurant information",
+      "contact details",
+    ],
+  };
+}
 
 export default async function RestaurantEdit({
   params,
@@ -25,16 +30,15 @@ export default async function RestaurantEdit({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-
   const restaurant = await authFetch<Restaurant>(`restaurants/${id}`);
+  const t = await getTranslations("restaurants.details.page");
 
   return (
     <>
       <section className="section items-center">
         <h1>{restaurant.name}</h1>
-        <h6>Edit {restaurant.name} details.</h6>
+        <h6>{t("subtitle", { restaurantName: restaurant.name })}</h6>
       </section>
-
       <section className="section items-center pb-8">
         <Card>
           <CardContent>
