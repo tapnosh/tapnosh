@@ -2,6 +2,7 @@
 
 import { Download, QrCode, Loader2 } from "lucide-react";
 import NextImage from "next/image";
+import { useTranslations } from "next-intl";
 import QRCode from "qrcode";
 import { useState, useRef, useCallback, useEffect } from "react";
 
@@ -24,6 +25,9 @@ export function QRCodeGenerator({
   url?: string;
   isLoading?: boolean;
 }) {
+  const t = useTranslations("management.scannableMenu");
+  const tToast = useTranslations("common.toast");
+
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>();
   const [isGenerating, setIsGenerating] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -53,8 +57,8 @@ export function QRCodeGenerator({
     if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
-          description="An unexpected error occurred"
+          title={tToast("error")}
+          description={tToast("unexpectedError")}
           variant="error"
         />,
       );
@@ -64,7 +68,7 @@ export function QRCodeGenerator({
 
     setQrCodeDataUrl(qrDataUrl);
     setIsGenerating(false);
-  }, [url, openNotification]);
+  }, [url, openNotification, tToast]);
 
   useEffect(() => {
     if (url?.trim()) {
@@ -149,11 +153,9 @@ export function QRCodeGenerator({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <QrCode className="h-5 w-5" />
-            Scannable menu
+            {t("sections.scannableMenu")}
           </CardTitle>
-          <CardDescription>
-            Create QR codes with dark/light mode options
-          </CardDescription>
+          <CardDescription>{t("sections.description")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {(isGenerating || isLoading) && (
@@ -180,7 +182,7 @@ export function QRCodeGenerator({
 
               <Button onClick={downloadQRCode} size="lg">
                 <Download className="mr-2 h-4 w-4" />
-                Download QR Code
+                {t("actions.downloadQRCode")}
               </Button>
             </div>
           )}

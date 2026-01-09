@@ -3,6 +3,7 @@
 import { MapPin, Phone } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
@@ -16,15 +17,11 @@ import { MenuGroup } from "@/features/menu/menu-group";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
-import { useIsRestaurantMaintainer } from "@/hooks/api/restaurant/useIsRestaurantMaintainer";
-import { Link } from "@/i18n/routing";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { findDishById } from "@/utils/dish-id";
 import { deleteUrlParam, setUrlParam } from "@/utils/url-state";
-
-import { revalidateRestaurantPage } from "./actions";
 
 // TODO Calculate it in backend with timezone support
 function isWithinServingTime(timeFrom: string, timeTo: string): boolean {
@@ -49,15 +46,10 @@ function isWithinServingTime(timeFrom: string, timeTo: string): boolean {
 function MenuInteractive({
   schema,
   restaurantSlug,
-  restaurantId,
-  refetch,
 }: {
   schema?: Builder;
   restaurantSlug: string;
-  restaurantId: string;
-  refetch: () => void;
 }) {
-  const { isMaintainer } = useIsRestaurantMaintainer({ restaurantId });
   const t = useTranslations("management.pageBuilder");
 
   const searchParams = useSearchParams();
@@ -233,9 +225,6 @@ function MenuInteractive({
         }}
         canBeAddedToTab={false}
         restaurantSlug={restaurantSlug}
-        restaurantId={restaurantId}
-        showDisableOption={isMaintainer}
-        onDisableSuccess={() => refetch()}
       />
     </>
   );
@@ -243,15 +232,14 @@ function MenuInteractive({
 
 export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
   const t = useTranslations("categories");
-  const tActions = useTranslations("common.actions");
-  const tRestaurant = useTranslations("restaurants.details");
+  const tActions = useTranslations("restaurants.details");
 
   return (
     <header className="section section-primary -mb-8 -translate-y-16 overflow-clip">
       <ShareButton
         className="fixed top-4 right-4 z-100 rounded-md"
         url={`/restaurants/${restaurant.slug}`}
-        label={tActions("share")}
+        label="Share"
         size="default"
         variant="secondary"
       />
@@ -333,7 +321,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
                 rel="noopener noreferrer"
                 className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-8 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg sm:flex-none"
               >
-                {tRestaurant("makeReservation")}
+                {tActions("makeReservation")}
               </Link>
             )}
 
@@ -363,9 +351,6 @@ export function RestaurantPage({
   restaurant: Restaurant;
   schema?: Builder;
 }) {
-  const handleRefresh = async () => {
-    await revalidateRestaurantPage(restaurant.slug || "");
-  };
   const t = useTranslations("restaurants.details");
 
   return (
@@ -379,8 +364,6 @@ export function RestaurantPage({
         <MenuInteractive
           schema={schema}
           restaurantSlug={restaurant.slug || ""}
-          restaurantId={restaurant.id}
-          refetch={handleRefresh}
         />
       </Suspense>
     </>

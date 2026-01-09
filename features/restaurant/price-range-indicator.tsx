@@ -1,6 +1,7 @@
 "use client";
 
 import { DollarSign } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Tooltip,
@@ -12,22 +13,22 @@ import { cn } from "@/utils/cn";
 
 const PRICE_RANGE_CONFIG: Record<
   RestaurantPriceRange,
-  { label: string; count: number; description: string }
+  { label: string; count: number; translationKey: string }
 > = {
   [RestaurantPriceRange.LOW]: {
     label: "$",
     count: 1,
-    description: "Budget-friendly",
+    translationKey: "budgetFriendly",
   },
   [RestaurantPriceRange.MID]: {
     label: "$$",
     count: 2,
-    description: "Moderate",
+    translationKey: "moderate",
   },
   [RestaurantPriceRange.HIGH]: {
     label: "$$$",
     count: 3,
-    description: "Fine dining",
+    translationKey: "fineDining",
   },
 };
 
@@ -36,7 +37,14 @@ export function PriceRangeIndicator({
 }: {
   priceRange: RestaurantPriceRange;
 }) {
+  const t = useTranslations("common.priceRange");
+  const tLabels = useTranslations("common.labels");
+
   const config = PRICE_RANGE_CONFIG[priceRange];
+
+  if (!config) {
+    return null; // Zabezpieczenie przed undefined
+  }
 
   return (
     <Tooltip>
@@ -56,7 +64,7 @@ export function PriceRangeIndicator({
       </TooltipTrigger>
       <TooltipContent>
         <p>
-          <strong>Price Range:</strong> {config.description}
+          <strong>{tLabels("priceRange")}:</strong> {t(config.translationKey)}
         </p>
       </TooltipContent>
     </Tooltip>

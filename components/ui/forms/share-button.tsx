@@ -1,6 +1,7 @@
 "use client";
 
 import { Share2, Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/forms/button";
@@ -21,13 +22,16 @@ interface ShareButtonProps {
 
 export function ShareButton({
   url,
-  title = "Check this out!",
+  title,
   text,
   className,
   variant = "ghost",
   size = "icon",
   label,
 }: ShareButtonProps) {
+  const t = useTranslations("common.actions");
+  const tToast = useTranslations("common.toast");
+
   const { openNotification } = useNotification();
   const [copied, setCopied] = useState(false);
 
@@ -43,7 +47,7 @@ export function ShareButton({
         };
 
         // Only add title if provided
-        if (title && title !== "Check this out!") {
+        if (title) {
           shareData.title = title;
         }
 
@@ -72,8 +76,8 @@ export function ShareButton({
       setCopied(true);
       openNotification(
         <BasicNotificationBody
-          title="Copied!"
-          description="Link copied to clipboard"
+          title={tToast("linkCopied")}
+          description={tToast("linkCopiedDescription")}
           variant="info"
         />,
       );
@@ -82,8 +86,8 @@ export function ShareButton({
       console.error("Failed to copy:", error);
       openNotification(
         <BasicNotificationBody
-          title="Error"
-          description="Failed to copy link"
+          title={tToast("error")}
+          description={tToast("failedToCopyLink")}
           variant="error"
         />,
       );
@@ -96,7 +100,7 @@ export function ShareButton({
       size={size}
       onClick={handleShare}
       className={cn(className)}
-      title="Share"
+      title={t("share")}
     >
       {copied ? (
         <Check className="h-4 w-4 text-green-500" />

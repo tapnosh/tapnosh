@@ -2,6 +2,7 @@
 
 import { useSession } from "@clerk/nextjs";
 import { ChevronRight, type LucideIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   Collapsible,
@@ -41,9 +42,11 @@ export function NavMain({
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
 
+  const tSections = useTranslations("navigation.sections");
+
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>My nosh.</SidebarGroupLabel>
+      <SidebarGroupLabel>{tSections("myNosh")}</SidebarGroupLabel>
       <SidebarMenu>
         {items
           .filter((item) => (item.isAuth ? isSignedIn : true))
