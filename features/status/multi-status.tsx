@@ -1,7 +1,6 @@
 "use client";
 
 import { PlusCircle } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
 import {
@@ -12,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/data-display/card";
 import { Button } from "@/components/ui/forms/button";
+import { Link } from "@/i18n/routing";
 
 import MultiStatusList from "./multi-status-list";
 

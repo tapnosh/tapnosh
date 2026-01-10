@@ -3,7 +3,6 @@
 import { MapPin, Phone } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Suspense, useEffect, useState } from "react";
@@ -18,6 +17,7 @@ import { MenuItemCard } from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { useIsRestaurantMaintainer } from "@/hooks/api/restaurant/useIsRestaurantMaintainer";
+import { Link } from "@/i18n/routing";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
 import { Restaurant } from "@/types/restaurant/Restaurant";

@@ -3,7 +3,6 @@
 import Color from "color";
 import { MapPin, Phone } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
@@ -11,6 +10,7 @@ import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { ShareButton } from "@/components/ui/forms/share-button";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
+import { Link } from "@/i18n/routing";
 import { RestaurantCategory } from "@/types/category/Category";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
