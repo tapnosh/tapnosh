@@ -1,7 +1,6 @@
 "use client";
 
 import { Minus, Plus, Trash2 } from "lucide-react";
-import Link from "next/link";
 
 import {
   Card,
@@ -13,6 +12,7 @@ import { Button } from "@/components/ui/forms/button";
 import { Input } from "@/components/ui/forms/input";
 import { useOrder } from "@/context/OrderContext";
 import { useCurrency } from "@/hooks/useCurrency";
+import { Link } from "@/i18n/routing";
 
 export default function ConfirmOrder() {
   const { items } = useOrder();

@@ -4,7 +4,6 @@ import { useSession } from "@clerk/nextjs";
 import {
   ChevronRight,
   CirclePlus,
-  PanelsTopLeft,
   Store,
   QrCode,
   FileText,
@@ -12,8 +11,6 @@ import {
   type LucideIcon,
   Settings,
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useCallback, useState } from "react";
 
 import {
@@ -35,6 +32,7 @@ import {
   useSidebar,
 } from "@/components/ui/layout/sidebar";
 import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
+import { Link, usePathname } from "@/i18n/routing";
 
 type MyRestaurantsSidebarItem = {
   title: string;
@@ -47,11 +45,6 @@ type MyRestaurantsSidebarItem = {
 };
 
 const staticItems = [
-  {
-    title: "Overview",
-    url: "/my-restaurants",
-    icon: PanelsTopLeft,
-  },
   {
     title: "Create Restaurant",
     url: "/restaurants/add",

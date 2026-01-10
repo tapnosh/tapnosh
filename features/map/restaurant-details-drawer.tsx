@@ -3,7 +3,6 @@
 import Color from "color";
 import { MapPin, Navigation, Phone, Utensils } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/data-display/badge";
@@ -19,6 +18,7 @@ import { navigateToLocation } from "@/features/map/utils/navigation";
 import { MenuItemCard } from "@/features/menu/menu-item";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Link } from "@/i18n/routing";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
 interface RestaurantDetailsDialogProps {

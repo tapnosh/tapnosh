@@ -8,7 +8,6 @@ import {
   Send,
   Utensils,
 } from "lucide-react";
-import Link from "next/link";
 import * as React from "react";
 
 import {
@@ -23,6 +22,7 @@ import {
 import { LanguageSelector } from "@/features/navigation/nav-language-selector";
 import { NavMain } from "@/features/navigation/nav-main";
 import { NavUser } from "@/features/navigation/nav-user";
+import { Link } from "@/i18n/routing";
 
 import { NavManagement } from "./nav-management";
 

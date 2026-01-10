@@ -2,8 +2,6 @@
 
 import { useSession } from "@clerk/nextjs";
 import { ChevronRight, type LucideIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import {
   Collapsible,
@@ -22,6 +20,7 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/components/ui/layout/sidebar";
+import { Link, usePathname } from "@/i18n/routing";
 
 export function NavMain({
   items,
