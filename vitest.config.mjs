@@ -13,6 +13,12 @@ export default defineConfig({
     environment: "happy-dom",
     setupFiles: ["./vitest.setup.ts"],
     globals: true,
+    server: {
+      deps: {
+        // https://github.com/vercel/next.js/issues/77200
+        inline: ["next-intl"],
+      },
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html"],
