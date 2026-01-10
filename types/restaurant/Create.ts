@@ -69,9 +69,37 @@ export const RestaurantFormSchema = z.object({
   priceRange: z.enum(["low", "mid", "high"], {
     required_error: "Price range is required",
   }),
-  // Operating hours
-  openFrom: z.string().min(1, "Opening time is required"),
-  openUntil: z.string().min(1, "Closing time is required"),
+  // Operating hours per day
+  operatingHours: z.object({
+    monday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+    tuesday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+    wednesday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+    thursday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+    friday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+    saturday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+    sunday: z.object({
+      openFrom: z.string().min(1, "Opening time is required"),
+      openUntil: z.string().min(1, "Closing time is required"),
+    }),
+  }),
 });
 
 export type RestaurantFormData = z.infer<typeof RestaurantFormSchema>;

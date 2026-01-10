@@ -49,5 +49,14 @@
   "footer": {
     "description": "Łączymy miłośników jedzenia z niesamowitymi restauracjami w ich społeczności.",
     "copyright": "Wszelkie prawa zastrzeżone."
+  },
+  "days": {
+    "monday": "Poniedziałek",
+    "tuesday": "Wtorek",
+    "wednesday": "Środa",
+    "thursday": "Czwartek",
+    "friday": "Piątek",
+    "saturday": "Sobota",
+    "sunday": "Niedziela"
   }
 }

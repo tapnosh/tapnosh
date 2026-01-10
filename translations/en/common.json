@@ -49,5 +49,14 @@
   "footer": {
     "description": "Connecting food lovers with amazing restaurants in their community.",
     "copyright": "All rights reserved."
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
   }
 }

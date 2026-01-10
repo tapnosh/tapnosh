@@ -36,6 +36,7 @@ export function RestaurantDetailsDialog({
 }: RestaurantDetailsDialogProps) {
   const isMobile = useIsMobile();
   const t = useTranslations("categories");
+  const tDrawer = useTranslations("map.restaurantDrawer");
 
   if (!restaurant) return null;
 
@@ -127,24 +128,20 @@ export function RestaurantDetailsDialog({
                     <div className="flex items-start gap-2">
                       <MapPin className="mt-0.5 size-4 shrink-0" />
                       <span>{restaurant.address.formattedAddress}</span>
+                      {userLocation &&
+                        restaurant.address?.lat &&
+                        restaurant.address?.lng && (
+                          <DistanceBadge
+                            userLocation={userLocation}
+                            targetLocation={{
+                              lat: restaurant.address.lat,
+                              lng: restaurant.address.lng,
+                            }}
+                            foregroundColor={foregroundColor}
+                          />
+                        )}
                     </div>
                   )}
-                  {userLocation &&
-                    restaurant.address?.lat &&
-                    restaurant.address?.lng && (
-                      <div className="flex items-center gap-2">
-                        <Navigation className="size-4 shrink-0" />
-                        <span>Distance from you</span>
-                        <DistanceBadge
-                          userLocation={userLocation}
-                          targetLocation={{
-                            lat: restaurant.address.lat,
-                            lng: restaurant.address.lng,
-                          }}
-                          foregroundColor={foregroundColor}
-                        />
-                      </div>
-                    )}
                   {restaurant.phoneNumber && (
                     <div className="flex items-center gap-2">
                       <Phone className="size-4 shrink-0" />
@@ -167,7 +164,9 @@ export function RestaurantDetailsDialog({
             {/* Menu Items */}
             {menuItems.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Menu Items</h3>
+                <h3 className="text-lg font-semibold">
+                  {tDrawer("menuItems")}
+                </h3>
                 <div className="grid gap-4">
                   {restaurant.menu?.menu.map((group) => (
                     <div key={group.name} className="space-y-3">
@@ -199,7 +198,7 @@ export function RestaurantDetailsDialog({
 
             {menuItems.length === 0 && (
               <div className="text-muted-foreground py-8 text-center">
-                No menu items available
+                {tDrawer("noMenuItems")}
               </div>
             )}
           </div>
@@ -214,12 +213,12 @@ export function RestaurantDetailsDialog({
               disabled={!restaurant.address?.lat || !restaurant.address?.lng}
             >
               <Navigation className="mr-2 h-4 w-4" />
-              Navigate To
+              {tDrawer("navigateTo")}
             </Button>
             <Button className="flex-1" asChild>
               <Link href={`/restaurants/${restaurant.slug}`}>
                 <Utensils className="mr-2 h-4 w-4" />
-                Open Restaurant
+                {tDrawer("openRestaurant")}
               </Link>
             </Button>
           </div>

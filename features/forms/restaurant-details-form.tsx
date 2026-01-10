@@ -7,7 +7,6 @@ import {
   Phone,
   Calendar,
   DollarSign,
-  Clock,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { type UseFormReturn } from "react-hook-form";
@@ -55,6 +54,17 @@ export function RestaurantDetailsForm({
   const tFields = useTranslations("restaurants.form.fields.fields");
   const tActions = useTranslations("restaurants.form.fields.actions");
   const tPriceRange = useTranslations("common.priceRange");
+  const tDays = useTranslations("common.days");
+
+  const days = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday",
+  ] as const;
 
   return (
     <Form {...form}>
@@ -231,40 +241,73 @@ export function RestaurantDetailsForm({
           />
 
           {/* OPERATING HOURS */}
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="openFrom"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Open From</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Clock className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
-                      <Input type="time" className="pl-9" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="openUntil"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Open Until</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Clock className="text-muted-foreground absolute top-2.5 left-3 h-4 w-4" />
-                      <Input type="time" className="pl-9" {...field} />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <div className="space-y-4">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className="p-2 text-left font-medium"></th>
+                    {days.map((day) => (
+                      <th key={day} className="p-2 text-center font-medium">
+                        {tDays(day)}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="p-2 font-medium whitespace-nowrap">
+                      {tFields("openingHours.openFrom")}
+                    </td>
+                    {days.map((day) => (
+                      <td key={day} className="p-2">
+                        <FormField
+                          control={form.control}
+                          name={`operatingHours.${day}.openFrom`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  type="time"
+                                  className="min-w-[100px]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="p-2 font-medium whitespace-nowrap">
+                      {tFields("openingHours.openUntil")}
+                    </td>
+                    {days.map((day) => (
+                      <td key={day} className="p-2">
+                        <FormField
+                          control={form.control}
+                          name={`operatingHours.${day}.openUntil`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input
+                                  type="time"
+                                  className="min-w-[100px]"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* CONTACT INFORMATION */}

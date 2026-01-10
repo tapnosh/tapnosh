@@ -11,6 +11,21 @@ export enum RestaurantPriceRange {
   HIGH = "high",
 }
 
+export interface OperatingHoursDay {
+  openFrom: string;
+  openUntil: string;
+}
+
+export interface OperatingHours {
+  monday: OperatingHoursDay;
+  tuesday: OperatingHoursDay;
+  wednesday: OperatingHoursDay;
+  thursday: OperatingHoursDay;
+  friday: OperatingHoursDay;
+  saturday: OperatingHoursDay;
+  sunday: OperatingHoursDay;
+}
+
 export interface Restaurant {
   id: string;
   slug: string;
@@ -39,5 +54,6 @@ export interface Restaurant {
   instagramUrl?: string;
   reservationUrl?: string;
   priceRange: RestaurantPriceRange;
+  operatingHours?: OperatingHours;
   menu?: Builder;
 }
