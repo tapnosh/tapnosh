@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, ChevronsUpDown, MapPin } from "lucide-react";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
@@ -38,12 +39,14 @@ interface AddressAutocompleteProps {
 export function AddressAutocomplete({
   value,
   onSelect,
-  placeholder = "Search for an address...",
+  placeholder,
   className,
   disabled = false,
   debounceMs = 300,
   "aria-invalid": ariaInvalid,
 }: AddressAutocompleteProps) {
+  const t = useTranslations("restaurants.form.fields.fields.address");
+
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [debouncedQuery, setDebouncedQuery] = React.useState("");
@@ -94,7 +97,7 @@ export function AddressAutocomplete({
   const loading = isLoadingPredictions || isLoadingDetails;
   const error = autocompleteError?.message || detailsError?.message || null;
 
-  const displayValue = value?.formattedAddress || "Select an address...";
+  const displayValue = value?.formattedAddress || t("selectAddress");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -117,7 +120,7 @@ export function AddressAutocomplete({
       <PopoverContent className="w-full p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder={placeholder}
+            placeholder={placeholder || t("searchPlaceholder")}
             value={searchQuery}
             onValueChange={setSearchQuery}
             className="h-9"
@@ -125,7 +128,7 @@ export function AddressAutocomplete({
           <CommandList>
             {loading && (
               <div className="text-muted-foreground p-3 text-center text-sm">
-                Loading...
+                {t("loading")}
               </div>
             )}
             {error && (
@@ -135,14 +138,14 @@ export function AddressAutocomplete({
             )}
             {!loading && !error && searchQuery.length < 3 && (
               <div className="text-muted-foreground p-3 text-center text-sm">
-                Type at least 3 characters to search
+                {t("typeAtLeast3")}
               </div>
             )}
             {!loading &&
               !error &&
               searchQuery.length >= 3 &&
               predictions.length === 0 && (
-                <CommandEmpty>No addresses found.</CommandEmpty>
+                <CommandEmpty>{t("noAddressesFound")}</CommandEmpty>
               )}
             {!loading && !error && predictions.length > 0 && (
               <CommandGroup>

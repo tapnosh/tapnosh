@@ -1,0 +1,11 @@
+{
+  "filters": {
+    "title": "Filter Restaurants",
+    "description": "Find restaurants near you by category and distance.",
+    "cuisinesLabel": "Cuisines",
+    "cuisinesDescription": "Include restaurants with these cuisines",
+    "applyFilters": "Apply Filters",
+    "reset": "Reset",
+    "cancel": "Cancel"
+  }
+}

@@ -2,6 +2,7 @@
 
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { BadgeCheck, ChevronsUpDown, LogIn, LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 
 import {
@@ -31,6 +32,8 @@ export function NavUser() {
 
   const { isMobile } = useSidebar();
 
+  const tNavItems = useTranslations("navigation.items");
+
   const userEmail = useMemo(
     () => user?.primaryEmailAddress?.emailAddress ?? "",
     [user],
@@ -54,7 +57,7 @@ export function NavUser() {
         <SignInButton>
           <SidebarMenuButton size="lg">
             <LogIn />
-            Sign in
+            {tNavItems("signIn")}
           </SidebarMenuButton>
         </SignInButton>
       </div>
@@ -113,14 +116,14 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
-                Account
+                {tNavItems("account")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <SignOutButton>
               <DropdownMenuItem>
                 <LogOut />
-                Log out
+                {tNavItems("logOut")}
               </DropdownMenuItem>
             </SignOutButton>
           </DropdownMenuContent>

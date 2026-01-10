@@ -45,7 +45,9 @@ function RestaurantBadges({
           backgroundColor: foregroundColor,
         }}
       >
-        <PriceRangeIndicator priceRange={priceRange} />
+        {priceRange != null ? (
+          <PriceRangeIndicator priceRange={priceRange} />
+        ) : null}
       </Badge>
       {categories?.map(({ id, name }) => (
         <Badge
@@ -65,6 +67,7 @@ function RestaurantBadges({
 
 export function RestaurantCard({ restaurant }: RestaurantCardProps) {
   const t = useTranslations("categories");
+  const tActions = useTranslations("common.actions");
 
   const { backgroundColor, foregroundColor } = useMemo(() => {
     const bgColor = new Color(restaurant.theme.color);
@@ -175,7 +178,9 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             color: backgroundColor,
           }}
         >
-          <Link href={`/restaurants/${restaurant.slug}`}>View Menu</Link>
+          <Link href={`/restaurants/${restaurant.slug}`}>
+            {tActions("viewMenu")}
+          </Link>
         </Button>
       </div>
     </div>

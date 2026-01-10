@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Discover Amazing Restaurants Near You",
+    "description": "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers. Browse hundreds of restaurants with detailed menus, photos, and authentic reviews.",
+    "ogDescription": "Join tapnosh to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers."
+  },
+  "hero": {
+    "title": "Discover Amazing Restaurants Near You",
+    "subtitle": "Join our platform to explore the best dining experiences in your city. Restaurant owners can showcase their venues and connect with food lovers.",
+    "cta": {
+      "listYourRestaurant": "List Your Restaurant",
+      "browseRestaurants": "Browse Restaurants"
+    }
+  },
+  "why": {
+    "title": "Why tapnosh?",
+    "subtitle": "Whether you're a food lover or restaurant owner, we provide the tools and community to enhance your dining experience.",
+    "cards": {
+      "discover": {
+        "title": "Discover Great Food",
+        "text": "Browse through hundreds of restaurants with detailed menus, photos, and authentic reviews from fellow diners."
+      },
+      "owners": {
+        "title": "For Restaurant Owners",
+        "text": "Showcase your restaurant with beautiful photos, manage your menu, and connect with customers in your area."
+      },
+      "community": {
+        "title": "Community Driven",
+        "text": "Join a community of food enthusiasts sharing honest reviews and discovering hidden culinary gems together."
+      }
+    }
+  },
+  "featured": {
+    "title": "Featured Restaurants",
+    "subtitle": "Explore some of the amazing restaurants already on our platform"
+  }
+}

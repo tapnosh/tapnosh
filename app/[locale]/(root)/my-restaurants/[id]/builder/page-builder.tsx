@@ -17,6 +17,7 @@ import {
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
@@ -51,6 +52,7 @@ const PageElementMap = {
 } as const;
 
 const PreviewModeSwitcher = () => {
+  const t = useTranslations("management.pageBuilder.menu.preview");
   const { previewMode, togglePreviewMode } = useBuilder();
 
   return (
@@ -63,12 +65,15 @@ const PreviewModeSwitcher = () => {
       type="button"
       className="mb-4"
     >
-      {previewMode ? "Exit Preview Mode" : "Enter Preview Mode"}
+      {previewMode ? t("exitPreview") : t("enterPreview")}
     </Button>
   );
 };
 
 function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
+  const t = useTranslations("management.pageBuilder");
+  const tToast = useTranslations("common.toast");
+
   const { setColor } = useThemeColor();
   const { openNotification } = useNotification();
   const { data: menu, refetch } = useMenusQuery({
@@ -171,11 +176,9 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
     if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
+          title={tToast("error")}
           description={
-            error instanceof Error
-              ? error.message
-              : "An unexpected error occurred"
+            error instanceof Error ? error.message : tToast("unexpectedError")
           }
           variant="error"
         />,
@@ -185,8 +188,8 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
 
     openNotification(
       <BasicNotificationBody
-        title="Success"
-        description="Restaurant page updated successfully!"
+        title={tToast("success")}
+        description={tToast("pageUpdated")}
         variant="success"
       />,
     );
@@ -231,12 +234,12 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
                           variant="ghost"
                           className="border-foreground/20 h-32 w-full border border-dashed"
                         >
-                          <Plus /> Add element
+                          <Plus /> {t("actions.addElement")}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuLabel>
-                          Select element type
+                          {t("elements.selectType")}
                         </DropdownMenuLabel>
                         <DropdownMenuItem
                           onClick={() =>
@@ -247,7 +250,7 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
                             })
                           }
                         >
-                          Text
+                          {t("elements.text")}
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           onClick={() =>
@@ -258,7 +261,7 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
                             })
                           }
                         >
-                          Heading
+                          {t("elements.heading")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -269,7 +272,7 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
           </section>
 
           <section className="section @container space-y-2">
-            <h2>Menu</h2>
+            <h2>{t("menu.title")}</h2>
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -299,7 +302,7 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
                       className="border-foreground/20 h-32 w-full border border-dashed"
                       onClick={addGroup}
                     >
-                      <Plus /> Add menu group
+                      <Plus /> {t("actions.addMenuGroup")}
                     </Button>
                   )}
                 </div>
@@ -310,7 +313,7 @@ function PageBuilderFields({ restaurant }: { restaurant: Restaurant }) {
             <PreviewModeSwitcher />
             <Button disabled={isSubmitting} type="submit">
               {isSubmitting && <Loader2 className="animate-spin" />}
-              Save Menu
+              {t("actions.saveMenu")}
             </Button>
           </section>
         </form>

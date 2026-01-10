@@ -8,6 +8,7 @@ import {
   Send,
   Utensils,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import * as React from "react";
 
 import {
@@ -27,45 +28,47 @@ import { Link } from "@/i18n/routing";
 import { NavManagement } from "./nav-management";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const tNavItems = useTranslations("navigation.items");
+
   const data = React.useMemo(
     () => ({
       navMain: [
         {
-          title: "Home",
+          title: tNavItems("home"),
           url: "/",
           icon: Home,
           isActive: true,
         },
         {
-          title: "Restaurants",
+          title: tNavItems("restaurants"),
           url: "/restaurants",
           icon: Utensils,
         },
         {
-          title: "Map",
+          title: tNavItems("map"),
           url: "/map",
           icon: MapIcon,
         },
         {
-          title: "Documentation",
+          title: tNavItems("documentation"),
           url: "/docs",
           icon: BookOpen,
         },
       ],
       navSecondary: [
         {
-          title: "Support",
+          title: tNavItems("support"),
           url: "/support",
           icon: LifeBuoy,
         },
         {
-          title: "Contact Us",
+          title: tNavItems("contactUs"),
           url: "/contact",
           icon: Send,
         },
       ],
     }),
-    [],
+    [tNavItems],
   );
 
   return (

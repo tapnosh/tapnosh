@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "myNosh": "My nosh.",
+    "management": "Management"
+  },
+
+  "items": {
+    "home": "Home",
+    "restaurants": "Restaurants",
+    "map": "Map",
+    "documentation": "Documentation",
+
+    "overview": "Overview",
+    "createRestaurant": "Create Restaurant",
+
+    "scannableMenu": "Scannable Menu",
+    "details": "Details",
+    "pageBuilder": "Page Builder",
+    "settings": "Settings",
+
+    "account": "Account",
+    "signIn": "Sign in",
+    "logOut": "Log out",
+
+    "support": "Support",
+    "contactUs": "Contact Us"
+  },
+  "language": {
+    "polish": "Polski",
+    "english": "English"
+  }
+}

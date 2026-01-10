@@ -1,0 +1,94 @@
+{
+  "page": {
+    "addTitle": "Add new Restaurant",
+    "addYourRestaurant": "Add Your Restaurant",
+    "addDescription": "Join tapnosh by adding your restaurant to our platform. Showcase your venue, manage your menu, and connect with food lovers in your area.",
+    "addOgDescription": "Join tapnosh by adding your restaurant to our platform. Showcase your venue and connect with food lovers.",
+    "subtitle": {
+      "before": "Add a new restaurant to the",
+      "brand": "tapnosh.",
+      "after": "app"
+    }
+  },
+  "sections": {
+    "generalInformation": "General Information",
+    "mediaStyling": "Restaurants Theme",
+    "locationContact": "Location & Contact"
+  },
+  "fields": {
+    "restaurantName": {
+      "label": "Restaurant Name",
+      "placeholder": "Enter restaurant name"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Describe your restaurant..."
+    },
+    "cuisines": {
+      "label": "Cuisines",
+      "placeholder": "Select cuisines...",
+      "helper": "Search and select cuisines that apply to this restaurant",
+      "searchPlaceholder": "Search categories...",
+      "noResults": "No categories found."
+    },
+    "priceRange": {
+      "label": "Price Range",
+      "placeholder": "Select a price range",
+      "helper": "Select the typical price range for this restaurant"
+    },
+    "restaurantImages": {
+      "label": "Restaurant Images",
+      "dragDrop": "Drag & drop images here",
+      "orBrowse": "or click to browse image files (JPG, PNG, SVG etc.)",
+      "chooseFiles": "Choose Files",
+      "clearAll": "Clear All",
+      "addMore": "Add more"
+    },
+    "theme": {
+      "label": "Theme",
+      "placeholder": "Pick a color",
+      "createTheme": "Create this theme color"
+    },
+    "address": {
+      "label": "Address",
+      "helper": "Search and select your restaurant's address",
+      "searchPlaceholder": "Search for an address...",
+      "selectAddress": "Select an address...",
+      "loading": "Loading...",
+      "typeAtLeast3": "Type at least 3 characters to search",
+      "noAddressesFound": "No addresses found."
+    },
+    "openingHours": {
+      "openFrom": "Open From",
+      "openUntil": "Open Until"
+    },
+    "phoneNumber": {
+      "label": "Phone Number",
+      "placeholder": "+48 555 123 123"
+    },
+    "facebook": {
+      "label": "Facebook",
+      "placeholder": "https://facebook.com/restaurant"
+    },
+    "instagram": {
+      "label": "Instagram",
+      "placeholder": "https://instagram.com/restaurant"
+    },
+    "reservationLink": {
+      "label": "Reservation Link",
+      "placeholder": "https://opentable.com/restaurant"
+    }
+  },
+  "status:": {
+    "cuisinesSelected": "{count} categories selected"
+  },
+  "actions": {
+    "resetForm": "Reset Form",
+    "addRestaurant": "Add Restaurant",
+    "updateRestaurant": "Update Restaurant",
+    "updateDetails": "Update Details",
+    "saveChanges": "Save Changes",
+    "cancel": "Cancel",
+    "processing": "Processing..."
+  }
+}

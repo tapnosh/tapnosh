@@ -1,5 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/data-display/badge";
@@ -30,6 +31,7 @@ export function BadgeFilter({
   translateItem: (id: string) => string;
   showSearch?: boolean;
 }) {
+  const t = useTranslations("common.forms");
   const [parent] = useAutoAnimate();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -51,7 +53,7 @@ export function BadgeFilter({
 
   const sortedItems = [...selectedItemsFiltered, ...unselectedItemsFiltered];
 
-  const modeText = mode === "exclude" ? "Exclude" : "Include";
+  const modeText = mode === "exclude" ? t("exclude") : t("include");
 
   return (
     <div className="space-y-3">
@@ -66,22 +68,24 @@ export function BadgeFilter({
           <p className="text-muted-foreground mt-1 text-sm">{description}</p>
         )}
       </div>
+
       {/* Search Bar */}
       {showSearch && (
         <div className="relative">
           <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <Input
             type="text"
-            placeholder="Search categories..."
+            placeholder={t("searchCategories")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
           />
         </div>
       )}
+
       <div ref={parent} className="flex flex-wrap gap-2">
         {sortedItems.length === 0 ? (
-          <p className="text-muted-foreground text-sm">No results found</p>
+          <p className="text-muted-foreground text-sm">{t("noResultsFound")}</p>
         ) : (
           sortedItems.map((item) => {
             const isSelected = selectedItems.includes(item.id);

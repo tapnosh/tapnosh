@@ -8,6 +8,7 @@ import {
   Paintbrush,
   Palette,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
 
@@ -37,6 +38,8 @@ export function ThemePicker({
   onChange?: (theme: RestaurantTheme) => void;
   "aria-invalid"?: boolean;
 }) {
+  const tToast = useTranslations("common.toast");
+
   const { name } = useFormField();
   const value = useWatch({ name });
   const { openNotification } = useNotification();
@@ -72,7 +75,7 @@ export function ThemePicker({
     if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
+          title={tToast("error")}
           description={(error as unknown as TranslatedError).message}
           variant="error"
         />,
@@ -84,8 +87,8 @@ export function ThemePicker({
     handleThemeChange(res);
     openNotification(
       <BasicNotificationBody
-        title="Success"
-        description="Theme created successfully"
+        title={tToast("success")}
+        description={tToast("themeCreated")}
         variant="success"
       />,
     );
@@ -151,6 +154,8 @@ export function ColorPicker({
   isValidColor: boolean;
   "aria-invalid"?: boolean;
 }) {
+  const t = useTranslations("restaurants.form.fields.fields.theme");
+
   const canBeCreated = useMemo(
     () => !themes.find(({ color }) => color === background) && isValidColor,
     [background, isValidColor, themes],
@@ -186,7 +191,7 @@ export function ColorPicker({
               <Paintbrush className="h-4 w-4" />
             )}
             <div className="flex-1 truncate">
-              {background ? background : "Pick a color"}
+              {background ? background : t("placeholder")}
             </div>
           </div>
         </Button>
@@ -234,7 +239,7 @@ export function ColorPicker({
               ) : (
                 <CirclePlus />
               )}
-              Create this theme color
+              {t("createTheme")}
             </Button>
           </div>
         )}

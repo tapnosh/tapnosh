@@ -1,3 +1,5 @@
+"use client";
+
 import {
   closestCenter,
   DndContext,
@@ -13,6 +15,7 @@ import {
 } from "@dnd-kit/sortable";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
@@ -22,9 +25,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/forms/form";
 import { Input } from "@/components/ui/forms/input";
+import { TranslatedFormMessage } from "@/components/ui/forms/translated-form-message";
 import { useBuilder } from "@/context/BuilderContext";
 import { MenuGroup } from "@/features/menu/menu-group";
 import { Builder, BuilderMenuItem } from "@/types/builder/BuilderSchema";
@@ -41,6 +44,7 @@ function BuilderElementMenuGroupFields({
 }: {
   groupKey: `menu.${number}`;
 }) {
+  const t = useTranslations("management.pageBuilder.menu.group");
   const { control } = useFormContext<Builder>();
   const { previewMode } = useBuilder();
   const data = useWatch<Builder>({ name: groupKey });
@@ -60,16 +64,16 @@ function BuilderElementMenuGroupFields({
         name={`${groupKey}.name`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Group name</FormLabel>
+            <FormLabel>{t("name")}</FormLabel>
             <FormControl>
-              <Input placeholder="Group name" {...field} />
+              <Input placeholder={t("namePlaceholder")} {...field} />
             </FormControl>
-            <FormMessage />
+            <TranslatedFormMessage />
           </FormItem>
         )}
       />
       <div className="mb-4 flex flex-wrap items-center gap-4">
-        <span className="text-sm text-gray-600">Served from:</span>
+        <span className="text-sm text-gray-600">{t("servedFrom")}</span>
         <FormField
           control={control}
           name={`${groupKey}.timeFrom`}
@@ -78,11 +82,11 @@ function BuilderElementMenuGroupFields({
               <FormControl>
                 <Input type="time" className="w-32" {...field} />
               </FormControl>
-              <FormMessage />
+              <TranslatedFormMessage />
             </FormItem>
           )}
         />
-        <span className="text-sm text-gray-600">to</span>
+        <span className="text-sm text-gray-600">{t("to")}</span>
 
         <FormField
           control={control}
@@ -92,7 +96,7 @@ function BuilderElementMenuGroupFields({
               <FormControl>
                 <Input type="time" className="w-32" {...field} />
               </FormControl>
-              <FormMessage />
+              <TranslatedFormMessage />
             </FormItem>
           )}
         />
@@ -104,6 +108,7 @@ function BuilderElementMenuGroupFields({
 export function BuilderElementMenuGroup({
   elementKey: groupKey,
 }: BuilderElementMenuGroupProps) {
+  const t = useTranslations("management.pageBuilder.actions");
   const elementKey = useMemo(() => `${groupKey}.items` as const, [groupKey]);
   const { control } = useFormContext<Builder>();
   const { previewMode } = useBuilder();
@@ -179,7 +184,7 @@ export function BuilderElementMenuGroup({
                 onClick={() => handleAdd()}
                 className="h-full min-h-60 border border-dashed border-gray-300"
               >
-                <Plus className="mr-1 h-4 w-4" /> Add Menu Item
+                <Plus className="mr-1 h-4 w-4" /> {t("addMenuItem")}
               </Button>
             )}
           </div>

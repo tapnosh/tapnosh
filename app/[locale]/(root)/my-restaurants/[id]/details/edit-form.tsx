@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -16,6 +17,9 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { tryCatch } from "@/utils/tryCatch";
 
 export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
+  const t = useTranslations("restaurants.form.fields.actions");
+  const tToast = useTranslations("common.toast");
+
   const { mutateAsync, isPending } = useRestaurantMutation("PUT");
   const { openNotification } = useNotification();
 
@@ -55,11 +59,9 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
     if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
+          title={tToast("error")}
           description={
-            error instanceof Error
-              ? error.message
-              : "An unexpected error occurred"
+            error instanceof Error ? error.message : tToast("unexpectedError")
           }
           variant="error"
         />,
@@ -69,8 +71,8 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
 
     openNotification(
       <BasicNotificationBody
-        title="Success"
-        description="Restaurant created successfully!"
+        title={tToast("success")}
+        description={tToast("restaurantUpdated")}
         variant="success"
       />,
     );
@@ -82,7 +84,7 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
       form={form}
       onSubmit={onSubmit}
       isPending={isPending}
-      submitLabel="Update Details"
+      submitLabel={t("updateDetails")}
     />
   );
 }

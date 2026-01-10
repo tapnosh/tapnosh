@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Crosshair, Loader2, SlidersHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
 import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
@@ -17,6 +18,9 @@ import { Restaurant } from "@/types/restaurant/Restaurant";
 import { cn } from "@/utils/cn";
 
 export default function MapPage() {
+  const tActions = useTranslations("common.actions");
+  const tToast = useTranslations("common.toast");
+
   const { openNotification } = useNotification();
 
   const [selectedRestaurant, setSelectedRestaurant] =
@@ -67,7 +71,7 @@ export default function MapPage() {
     if (locationError) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
+          title={tToast("error")}
           description={locationError}
           variant="error"
         />,
@@ -76,13 +80,13 @@ export default function MapPage() {
     if (restaurantsError) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
-          description="Failed to load restaurants. Please try again later."
+          title={tToast("error")}
+          description={tToast("restaurantsLoadError")}
           variant="error"
         />,
       );
     }
-  }, [locationError, restaurantsError, openNotification]);
+  }, [locationError, restaurantsError, openNotification, tToast]);
 
   const handleMarkerClick = (restaurant: Restaurant) => {
     setSelectedRestaurant(restaurant);
@@ -146,7 +150,7 @@ export default function MapPage() {
           className="shadow-lg"
           variant="default"
         >
-          Filters
+          {tActions("filters")}
           <SlidersHorizontal />
         </Button>
         <Button

@@ -1,0 +1,19 @@
+{
+  "page": {
+    "title": "Scannable menu",
+    "subtitle": "Generate scannable codes for your menu"
+  },
+  "sections": {
+    "scannableMenu": "Scannable menu",
+    "description": "Create QR codes with dark/light mode options"
+  },
+  "preview": {
+    "title": "QR Code Preview",
+    "description": "Preview of your generated QR code",
+    "placeholder": "QR Code will appear here",
+    "preview": "Preview"
+  },
+  "actions": {
+    "downloadQRCode": "Download QR Code"
+  }
+}

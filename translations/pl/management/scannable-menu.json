@@ -1,0 +1,19 @@
+{
+  "page": {
+    "title": "Menu skanowalne",
+    "subtitle": "Generuj skanowalne kody dla swojego menu"
+  },
+  "sections": {
+    "scannableMenu": "Menu skanowalne",
+    "description": "Twórz kody QR z opcjami trybu ciemnego/jasnego"
+  },
+  "preview": {
+    "title": "Podgląd kodu QR",
+    "description": "Podgląd wygenerowanego kodu QR",
+    "placeholder": "Kod QR pojawi się tutaj",
+    "preview": "Podgląd"
+  },
+  "actions": {
+    "downloadQRCode": "Pobierz kod QR"
+  }
+}

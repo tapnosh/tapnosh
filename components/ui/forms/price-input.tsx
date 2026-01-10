@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { type ControllerRenderProps, useFormContext } from "react-hook-form";
 
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/forms/select";
 import { useCurrency } from "@/hooks/useCurrency";
 import { cn } from "@/utils/cn";
+import { ERROR_MESSAGES } from "@/utils/error-messages";
 
 import { useFormField } from "./form";
 
@@ -22,9 +24,9 @@ export default function PriceInput({
 }: {
   className?: string;
 } & ControllerRenderProps) {
+  const t = useTranslations("restaurants.form.errors");
   const { error } = useFormField();
   const { setValue } = useFormContext();
-
   const { formatCurrency } = useCurrency();
 
   const currencies = [
@@ -44,6 +46,16 @@ export default function PriceInput({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [props.value.currency],
   );
+
+  // Funkcja tłumacząca komunikaty błędów
+  const translateError = (message: string): string => {
+    const errorKey = ERROR_MESSAGES[message as keyof typeof ERROR_MESSAGES];
+    if (errorKey) {
+      return t(errorKey);
+    }
+    console.warn(`Missing translation for error: "${message}"`);
+    return message;
+  };
 
   return (
     <div className={cn("space-y-2", className)}>
@@ -99,7 +111,6 @@ export default function PriceInput({
           {formatCurrency(props.value.amount, props.value.currency)}
         </p>
       )}
-
       {error && (
         <>
           {Object.values(
@@ -109,7 +120,7 @@ export default function PriceInput({
               key={index}
               className={cn("text-destructive text-sm font-medium")}
             >
-              {message}
+              {translateError(message)}
             </p>
           ))}
         </>

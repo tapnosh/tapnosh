@@ -1,0 +1,53 @@
+{
+  "actions": {
+    "share": "Share",
+    "viewMenu": "View Menu",
+    "copyLink": "Copy link",
+    "download": "Download",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "filters": "Filters"
+  },
+  "toast": {
+    "success": "Success",
+    "themeCreated": "Theme created successfully",
+    "linkCopied": "Copied!",
+    "linkCopiedDescription": "Link copied to clipboard",
+    "error": "Error",
+    "failedToCopyLink": "Failed to copy link",
+    "unexpectedError": "An unexpected error occurred",
+    "pageUpdated": "Restaurant page updated successfully!",
+    "restaurantUpdated": "Restaurant updated successfully!",
+    "restaurantCreated": "Restaurant created successfully!",
+    "restaurantDeleted": "Restaurant deleted successfully!",
+    "restaurantsLoadError": "Failed to load restaurants. Please try again later."
+  },
+  "labels": {
+    "priceRange": "Price Range",
+    "required": "Required",
+    "all": "All"
+  },
+  "priceRange": {
+    "budgetFriendly": "Budget-friendly",
+    "moderate": "Moderate",
+    "fineDining": "Fine dining"
+  },
+  "forms": {
+    "multiChipPlaceholder": "Type to add, submit with enter",
+    "multiChipAddMore": "Add more...",
+    "searchCategories": "Search categories...",
+    "loadingCategories": "Loading categories...",
+    "failedToLoadCategories": "Failed to load categories",
+    "noCategoriesFound": "No categories found.",
+    "categoriesSelected": "{count} categories selected",
+    "noResultsFound": "No results found",
+    "include": "Include",
+    "exclude": "Exclude",
+    "selectCategories": "Select categories..."
+  },
+  "footer": {
+    "description": "Connecting food lovers with amazing restaurants in their community.",
+    "copyright": "All rights reserved."
+  }
+}

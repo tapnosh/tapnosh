@@ -36,18 +36,20 @@ function FilterActions({
   onApply: () => void;
   onReset: () => void;
 }) {
+  const t = useTranslations("map.filters");
+
   return (
     <>
       <div className="flex w-full gap-2">
         <Button onClick={onApply} className="flex-1">
-          Apply Filters
+          {t("applyFilters")}
         </Button>
         <Button variant="outline" onClick={onReset} className="flex-1">
-          Reset
+          {t("reset")}
         </Button>
       </div>
       <DrawerClose asChild>
-        <Button variant="ghost">Cancel</Button>
+        <Button variant="ghost">{t("cancel")}</Button>
       </DrawerClose>
     </>
   );
@@ -61,7 +63,9 @@ export function MapFiltersDrawer({
   userLocation,
 }: MapFiltersDrawerProps) {
   const isMobile = useIsMobile();
-  const t = useTranslations("categories");
+  const tCategories = useTranslations("categories");
+  const tFilters = useTranslations("map.filters");
+
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>(
     filters?.cuisines || [],
   );
@@ -103,12 +107,9 @@ export function MapFiltersDrawer({
     >
       <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-3xl md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
         <DrawerHeader>
-          <DrawerTitle>Filter Restaurants</DrawerTitle>
-          <DrawerDescription>
-            Find restaurants near you by category and distance.
-          </DrawerDescription>
+          <DrawerTitle>{tFilters("title")}</DrawerTitle>
+          <DrawerDescription>{tFilters("description")}</DrawerDescription>
         </DrawerHeader>
-
         <div className="space-y-6 overflow-y-auto px-4 pb-4">
           <DistanceFilter
             maxDistance={100}
@@ -116,19 +117,17 @@ export function MapFiltersDrawer({
             onChange={setDistance}
             disabled={!userLocation}
           />
-
           <BadgeFilter
-            label="Cuisines"
-            description="Include restaurants with these cuisines"
+            label={tFilters("cuisinesLabel")}
+            description={tFilters("cuisinesDescription")}
             items={cuisines}
             selectedItems={selectedCuisines}
             onToggle={(item) => toggleItem(item, setSelectedCuisines)}
             mode="include"
-            translateItem={t}
+            translateItem={tCategories}
             showSearch
           />
         </div>
-
         <DrawerFooter>
           <FilterActions onApply={handleApply} onReset={handleReset} />
         </DrawerFooter>

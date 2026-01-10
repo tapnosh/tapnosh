@@ -1,0 +1,35 @@
+{
+  "page": {
+    "title": "Ustawienia",
+    "description": "Zarządzaj ustawieniami i preferencjami restauracji"
+  },
+  "deleteRestaurant": {
+    "title": "Usuń restaurację",
+    "descriptionBefore": "Ta akcja nie może zostać cofnięta. Spowoduje to trwałe usunięcie restauracji",
+    "descriptionAfter": "i usunięcie wszystkich powiązanych danych.",
+    "warning": "Ostrzeżenie: Ta akcja jest nieodwracalna",
+    "warningDescription": "Wszystkie pozycje menu, kategorie, zamówienia i inne dane powiązane z tą restauracją zostaną trwale usunięte.",
+    "confirmationLabelBefore": "Wpisz",
+    "confirmationLabelAfter": "aby potwierdzić",
+    "confirmationPlaceholder": "Wpisz \"{restaurantSlug}\", aby potwierdzić usunięcie",
+    "confirmationHelper": "Proszę wpisać slug restauracji dokładnie tak, jak pokazano powyżej, aby potwierdzić usunięcie.",
+    "slugMismatch": "Slug restauracji nie pasuje"
+  },
+  "confirmDialog": {
+    "title": "Ostateczne potwierdzenie",
+    "descriptionBefore": "Czy na pewno chcesz usunąć",
+    "descriptionAfter": "? Tej akcji nie można cofnąć.",
+    "permanentDeleteTitle": "Spowoduje to trwałe usunięcie:",
+    "deleteItem1": "Wszystkich pozycji menu i kategorii",
+    "deleteItem2": "Zdjęć restauracji i brandingu",
+    "deleteItem3": "Zamówień i recenzji klientów",
+    "deleteItem4": "Kodów QR i publicznych linków",
+    "deleteItem5": "Wszystkich innych danych restauracji",
+    "deleting": "Usuwanie...",
+    "confirmDelete": "Tak, usuń na zawsze"
+  },
+  "actions": {
+    "cancel": "Anuluj",
+    "deleteRestaurant": "Usuń restaurację"
+  }
+}

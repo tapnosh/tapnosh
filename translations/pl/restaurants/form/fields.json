@@ -1,0 +1,94 @@
+{
+  "page": {
+    "addTitle": "Dodaj nową restaurację",
+    "addYourRestaurant": "Dodaj swoją restaurację",
+    "addDescription": "Dołącz do tapnosh dodając swoją restaurację do naszej platformy. Zaprezentuj swój lokal, zarządzaj menu i łącz się z miłośnikami jedzenia w Twojej okolicy.",
+    "addOgDescription": "Dołącz do tapnosh dodając swoją restaurację do naszej platformy. Zaprezentuj swój lokal i łącz się z miłośnikami jedzenia.",
+    "subtitle": {
+      "before": "Dodaj nową restaurację do aplikacji",
+      "brand": "tapnosh.",
+      "after": ""
+    }
+  },
+  "sections": {
+    "generalInformation": "Informacje ogólne",
+    "mediaStyling": "Motyw restauracji",
+    "locationContact": "Lokalizacja i kontakt"
+  },
+  "fields": {
+    "restaurantName": {
+      "label": "Nazwa restauracji",
+      "placeholder": "Wpisz nazwę restauracji"
+    },
+    "description": {
+      "label": "Opis",
+      "placeholder": "Opisz swoją restaurację..."
+    },
+    "cuisines": {
+      "label": "Kuchnie",
+      "placeholder": "Wybierz kuchnie...",
+      "helper": "Wyszukaj i wybierz kuchnie, które pasują do tej restauracji",
+      "searchPlaceholder": "Szukaj kategorii...",
+      "noResults": "Nie znaleziono kategorii."
+    },
+    "priceRange": {
+      "label": "Zakres cenowy",
+      "placeholder": "Wybierz zakres cenowy",
+      "helper": "Wybierz typowy zakres cenowy dla tej restauracji"
+    },
+    "restaurantImages": {
+      "label": "Zdjęcia restauracji",
+      "dragDrop": "Przeciągnij i upuść obrazy tutaj",
+      "orBrowse": "lub kliknij, aby przeglądać pliki obrazów (JPG, PNG, SVG itp.)",
+      "chooseFiles": "Wybierz pliki",
+      "clearAll": "Wyczyść wszystko",
+      "addMore": "Dodaj więcej"
+    },
+    "theme": {
+      "label": "Motyw",
+      "placeholder": "Wybierz kolor",
+      "createTheme": "Utwórz ten kolor motywu"
+    },
+    "address": {
+      "label": "Adres",
+      "helper": "Wyszukaj i wybierz adres swojej restauracji",
+      "searchPlaceholder": "Wyszukaj adres...",
+      "selectAddress": "Wybierz adres...",
+      "loading": "Ładowanie...",
+      "typeAtLeast3": "Wpisz co najmniej 3 znaki, aby wyszukać",
+      "noAddressesFound": "Nie znaleziono adresów."
+    },
+    "openingHours": {
+      "openFrom": "Otwarte od",
+      "openUntil": "Otwarte do"
+    },
+    "phoneNumber": {
+      "label": "Numer telefonu",
+      "placeholder": "+48 555 123 123"
+    },
+    "facebook": {
+      "label": "Facebook",
+      "placeholder": "https://facebook.com/restauracja"
+    },
+    "instagram": {
+      "label": "Instagram",
+      "placeholder": "https://instagram.com/restauracja"
+    },
+    "reservationLink": {
+      "label": "Link do rezerwacji",
+      "placeholder": "https://opentable.com/restauracja"
+    }
+  },
+  "status:": {
+    "cuisinesSelected": "Wybrano {count} kategorii"
+  },
+  "actions": {
+    "resetForm": "Resetuj formularz",
+    "addRestaurant": "Dodaj restaurację",
+    "updateRestaurant": "Aktualizuj restaurację",
+    "updateDetails": "Aktualizuj szczegóły",
+    "saveChanges": "Zapisz zmiany",
+    "cancel": "Anuluj",
+    "processing": "Przetwarzanie..."
+  }
+}

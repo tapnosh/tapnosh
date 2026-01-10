@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 
 import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
@@ -16,6 +17,8 @@ export function RestaurantFormDelete({
 }: {
   restaurant: Restaurant;
 }) {
+  const tToast = useTranslations("common.toast");
+
   const router = useRouter();
   const { mutateAsync, isPending } = useRestaurantMutation("DELETE");
   const { openNotification } = useNotification();
@@ -32,11 +35,9 @@ export function RestaurantFormDelete({
     if (error) {
       openNotification(
         <BasicNotificationBody
-          title="Error"
+          title={tToast("error")}
           description={
-            error instanceof Error
-              ? error.message
-              : "An unexpected error occurred"
+            error instanceof Error ? error.message : tToast("unexpectedError")
           }
           variant="error"
         />,
@@ -46,11 +47,12 @@ export function RestaurantFormDelete({
 
     openNotification(
       <BasicNotificationBody
-        title="Success"
-        description="Restaurant deleted successfully!"
+        title={tToast("success")}
+        description={tToast("restaurantDeleted")}
         variant="warning"
       />,
     );
+
     queryClient.refetchQueries();
     router.push("/my-restaurants");
   };

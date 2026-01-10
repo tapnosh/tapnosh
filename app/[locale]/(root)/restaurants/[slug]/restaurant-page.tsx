@@ -57,7 +57,9 @@ function MenuInteractive({
   restaurantId: string;
   refetch: () => void;
 }) {
+  const t = useTranslations("management.pageBuilder");
   const { isMaintainer } = useIsRestaurantMaintainer({ restaurantId });
+
   const searchParams = useSearchParams();
   const dishId = searchParams.get("dish");
 
@@ -124,9 +126,7 @@ function MenuInteractive({
   if (!schema) {
     return (
       <section className="section">
-        <p className="text-muted-foreground">
-          No menu available for this restaurant.
-        </p>
+        <p className="text-muted-foreground">{t("menu.preview.noMenu")}</p>
       </section>
     );
   }
@@ -178,7 +178,7 @@ function MenuInteractive({
 
       {schema.menu && (
         <section className="section @container">
-          <h2>Menu</h2>
+          <h2>{t("menu.title")}</h2>
           <FiltersBar
             groups={schema.menu}
             selectedGroup={selectedGroup}
@@ -243,13 +243,15 @@ function MenuInteractive({
 
 export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
   const t = useTranslations("categories");
+  const tActions = useTranslations("common.actions");
+  const tRestaurant = useTranslations("restaurants.details");
 
   return (
     <header className="section section-primary -mb-8 -translate-y-16 overflow-clip">
       <ShareButton
         className="fixed top-4 right-4 z-100 rounded-md"
         url={`/restaurants/${restaurant.slug}`}
-        label="Share"
+        label={tActions("share")}
         size="default"
         variant="secondary"
       />
@@ -331,7 +333,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
                 rel="noopener noreferrer"
                 className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-8 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg sm:flex-none"
               >
-                Make Reservation
+                {tRestaurant("makeReservation")}
               </Link>
             )}
 
@@ -364,13 +366,14 @@ export function RestaurantPage({
   const handleRefresh = async () => {
     await revalidateRestaurantPage(restaurant.slug || "");
   };
+  const t = useTranslations("restaurants.details");
 
   return (
     <>
       <RestaurantHeader restaurant={restaurant} />
       <Suspense
         fallback={
-          <div className="flex justify-center p-8">Loading menu...</div>
+          <div className="flex justify-center p-8">{t("loadingMenu")}</div>
         }
       >
         <MenuInteractive

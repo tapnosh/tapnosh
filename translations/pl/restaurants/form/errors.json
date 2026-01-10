@@ -1,0 +1,63 @@
+{
+  "required": {
+    "generic": "To pole jest wymagane",
+    "restaurantName": "Nazwa restauracji jest wymagana",
+    "description": "Opis jest wymagany",
+    "cuisines": "Należy wybrać co najmniej jedną kuchnię",
+    "priceRange": "Zakres cenowy jest wymagany",
+    "address": "Adres jest wymagany",
+    "street": "Ulica jest wymagana",
+    "city": "Miasto jest wymagane",
+    "country": "Kraj jest wymagany",
+    "countryCode": "Kod kraju jest wymagany",
+    "streetNumber": "Numer ulicy jest wymagany",
+    "state": "Stan jest wymagany",
+    "postalCode": "Kod pocztowy jest wymagany",
+    "phoneNumber": "Numer telefonu jest wymagany",
+    "restaurantImages": "Należy dodać co najmniej jedno zdjęcie",
+    "menuGroupName": "Nazwa grupy menu jest wymagana",
+    "itemName": "Nazwa jest wymagana",
+    "timeFrom": "Czas rozpoczęcia jest wymagany",
+    "timeTo": "Czas zakończenia jest wymagany",
+    "theme": "Kolor motywu jest wymagany",
+    "price": "Kwota musi być podana"
+  },
+  "invalid": {
+    "restaurantName": "Nazwa restauracji musi być poprawna",
+    "description": "Opis musi być poprawny",
+    "phoneNumber": "Proszę podać poprawny numer telefonu",
+    "email": "Proszę podać poprawny adres email",
+    "url": "Proszę podać poprawny URL",
+    "facebook": "Proszę podać poprawny URL",
+    "instagram": "Proszę podać poprawny URL",
+    "reservationLink": "Proszę podać poprawny URL",
+    "theme": "ID motywu musi mieć poprawny format UUID",
+    "streetNumber": "Proszę podać poprawny numer ulicy",
+    "state": "Proszę wybrać poprawny stan",
+    "postalCode": "Proszę podać poprawny kod pocztowy",
+    "price": "Kwota musi być liczbą dodatnią",
+    "colorFormat": "Nieprawidłowy format koloru. Musi być 7-znakowym kodem hex (np. #RRGGBB)."
+  },
+  "minLength": {
+    "restaurantName": "Nazwa restauracji musi mieć co najmniej 3 znaki",
+    "description": "Opis musi mieć co najmniej 10 znaków"
+  },
+  "maxLength": {
+    "name": "Nazwa może mieć maksymalnie 100 znaków",
+    "restaurantName": "Nazwa może mieć maksymalnie 100 znaków",
+    "description": "Opis może mieć maksymalnie 250 znaków",
+    "itemName": "Nazwa może mieć maksymalnie 100 znaków",
+    "itemDescription": "Ciąg może zawierać maksymalnie 200 znaków"
+  },
+  "maxItems": {
+    "cuisines": "Możesz wybrać maksymalnie 5 kuchni",
+    "restaurantImages": "Możesz przesłać maksymalnie 5 obrazów",
+    "allergens": "Tablica może zawierać maksymalnie 10 elementów",
+    "menuItemImage": "Dozwolony jest tylko jeden obraz"
+  },
+  "permissionDenied": {
+    "title": "Brak uprawnień.",
+    "description": "Nie masz uprawnień do dostępu do tego zasobu"
+  },
+  "tryAgain": "Spróbuj ponownie"
+}

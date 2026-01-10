@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Button } from "@/components/ui/forms/button";
 
 export default function Error({
@@ -8,14 +10,13 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations("restaurants.form.errors");
+
   return (
     <section className="section mt-16 flex flex-col items-start justify-center">
-      <h1>Permission denied.</h1>
-      <p className="mb-4">
-        You don&apos;t have permission to access this resource
-      </p>
-
-      <Button onClick={() => reset()}>Try again</Button>
+      <h1>{t("permissionDenied.title")}</h1>
+      <p className="mb-4">{t("permissionDenied.description")}</p>
+      <Button onClick={() => reset()}>{t("tryAgain")}</Button>
     </section>
   );
 }

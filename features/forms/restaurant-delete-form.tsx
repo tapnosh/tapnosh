@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2, Trash2, AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { type UseFormReturn } from "react-hook-form";
 
@@ -19,9 +20,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/forms/form";
 import { Input } from "@/components/ui/forms/input";
+import { TranslatedFormMessage } from "@/components/ui/forms/translated-form-message";
 import {
   Dialog,
   DialogContent,
@@ -50,6 +51,10 @@ export function RestaurantDeleteForm({
   restaurantName,
   restaurantSlug,
 }: RestaurantDeleteFormProps) {
+  const t = useTranslations("management.settings.deleteRestaurant");
+  const tActions = useTranslations("management.settings.actions");
+  const tDialog = useTranslations("management.settings.confirmDialog");
+
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [formData, setFormData] = useState<RestaurantDeleteFormData | null>(
     null,
@@ -59,7 +64,7 @@ export function RestaurantDeleteForm({
     if (data.confirmationSlug !== restaurantSlug) {
       form.setError("confirmationSlug", {
         type: "manual",
-        message: "The restaurant slug does not match",
+        message: t("slugMismatch"),
       });
       return;
     }
@@ -88,16 +93,14 @@ export function RestaurantDeleteForm({
         <CardHeader>
           <CardTitle className="text-destructive flex items-center gap-2">
             <Trash2 className="h-5 w-5" />
-            Delete Restaurant
+            {t("title")}
           </CardTitle>
           <CardDescription>
-            This action cannot be undone. This will permanently delete the
-            restaurant
+            {t("descriptionBefore")}{" "}
             <span className="text-foreground font-semibold">
-              {" "}
               &quot;{restaurantName}&quot;
             </span>{" "}
-            and remove all associated data.
+            {t("descriptionAfter")}
           </CardDescription>
         </CardHeader>
 
@@ -112,12 +115,10 @@ export function RestaurantDeleteForm({
                   <AlertTriangle className="text-destructive mt-0.5 h-5 w-5 flex-shrink-0" />
                   <div className="space-y-2">
                     <p className="text-destructive text-sm font-medium">
-                      Warning: This action is irreversible
+                      {t("warning")}
                     </p>
                     <p className="text-muted-foreground text-sm">
-                      All menu items, categories, orders, and other data
-                      associated with this restaurant will be permanently
-                      deleted.
+                      {t("warningDescription")}
                     </p>
                   </div>
                 </div>
@@ -129,24 +130,23 @@ export function RestaurantDeleteForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Type{" "}
+                      {t("confirmationLabelBefore")}{" "}
                       <code className="bg-muted rounded px-1 py-0.5 text-sm">
                         {restaurantSlug}
                       </code>{" "}
-                      to confirm
+                      {t("confirmationLabelAfter")}
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={`Enter "${restaurantSlug}" to confirm deletion`}
+                        placeholder={t("confirmationPlaceholder", {
+                          restaurantSlug,
+                        })}
                         {...field}
                         autoComplete="off"
                       />
                     </FormControl>
-                    <FormDescription>
-                      Please type the restaurant slug exactly as shown above to
-                      confirm deletion.
-                    </FormDescription>
-                    <FormMessage />
+                    <FormDescription>{t("confirmationHelper")}</FormDescription>
+                    <TranslatedFormMessage />
                   </FormItem>
                 )}
               />
@@ -158,7 +158,7 @@ export function RestaurantDeleteForm({
                   onClick={handleCancel}
                   disabled={isPending}
                 >
-                  Cancel
+                  {tActions("cancel")}
                 </Button>
                 <Button
                   type="submit"
@@ -169,7 +169,7 @@ export function RestaurantDeleteForm({
                   }
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Delete Restaurant
+                  {tActions("deleteRestaurant")}
                 </Button>
               </DialogFooter>
             </form>
@@ -183,28 +183,27 @@ export function RestaurantDeleteForm({
           <DialogHeader>
             <DialogTitle className="text-destructive flex items-center gap-2">
               <AlertTriangle className="h-5 w-5" />
-              Final Confirmation
+              {tDialog("title")}
             </DialogTitle>
             <DialogDescription>
-              Are you absolutely sure you want to delete
+              {tDialog("descriptionBefore")}{" "}
               <span className="text-foreground font-semibold">
-                {" "}
                 &quot;{restaurantName}&quot;
-              </span>
-              ? This action cannot be undone.
+              </span>{" "}
+              {tDialog("descriptionAfter")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="bg-destructive/10 border-destructive/20 rounded-md border p-4">
             <p className="text-destructive text-sm font-medium">
-              This will permanently delete:
+              {tDialog("permanentDeleteTitle")}
             </p>
             <ul className="text-muted-foreground mt-2 list-inside list-disc space-y-1 text-sm">
-              <li>All menu items and categories</li>
-              <li>Restaurant images and branding</li>
-              <li>Customer orders and reviews</li>
-              <li>QR codes and public links</li>
-              <li>All other restaurant data</li>
+              <li>{tDialog("deleteItem1")}</li>
+              <li>{tDialog("deleteItem2")}</li>
+              <li>{tDialog("deleteItem3")}</li>
+              <li>{tDialog("deleteItem4")}</li>
+              <li>{tDialog("deleteItem5")}</li>
             </ul>
           </div>
 
@@ -215,7 +214,7 @@ export function RestaurantDeleteForm({
               onClick={() => setShowConfirmDialog(false)}
               disabled={isPending}
             >
-              Cancel
+              {tActions("cancel")}
             </Button>
             <Button
               type="button"
@@ -226,12 +225,12 @@ export function RestaurantDeleteForm({
               {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
+                  {tDialog("deleting")}
                 </>
               ) : (
                 <>
                   <Trash2 className="mr-2 h-4 w-4" />
-                  Yes, Delete Forever
+                  {tDialog("confirmDelete")}
                 </>
               )}
             </Button>

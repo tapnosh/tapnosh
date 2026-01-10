@@ -1,6 +1,7 @@
 "use client";
 
 import { Settings2Icon, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/forms/button";
@@ -33,6 +34,7 @@ export function FiltersBar({
   filters,
   onFiltersChange,
 }: FiltersBarProps) {
+  const t = useTranslations("management.pageBuilder.menu.display");
   const [open, setOpen] = useState(false);
 
   // Extract all items from groups
@@ -118,7 +120,7 @@ export function FiltersBar({
             value="all"
             className="data-[state=active]:!bg-primary data-[state=active]:text-primary-foreground px-4"
           >
-            All
+            {t("all")}
           </TabsTrigger>
           {groups.map((group, index) => (
             <TabsTrigger
@@ -135,11 +137,11 @@ export function FiltersBar({
       <div className="flex gap-2">
         <Button onClick={() => setOpen(true)}>
           <Settings2Icon />
-          Filters
+          {t("filters")}
         </Button>
         <Button variant="outline" onClick={handleClearAll}>
           <X />
-          Clear all
+          {t("clearAll")}
         </Button>
       </div>
 

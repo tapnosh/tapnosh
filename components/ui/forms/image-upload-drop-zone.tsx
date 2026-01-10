@@ -2,6 +2,7 @@
 
 import { Upload, X, GripVertical, Plus } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type React from "react";
 import { useState, useRef, useCallback } from "react";
 import { useFieldArray } from "react-hook-form";
@@ -47,6 +48,8 @@ export default function ImageUploadDropzone({
 }: {
   limit?: number;
 }) {
+  const t = useTranslations("management.pageBuilder.menu.item");
+
   const [isDragOver, setIsDragOver] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -72,7 +75,7 @@ export default function ImageUploadDropzone({
 
       if (invalidFiles.length > 0) {
         setErrors(
-          invalidFiles.map((name) => `${name} is not a valid image file`),
+          invalidFiles.map((name) => `${name} ${t("invalidImageFile")}`),
         );
         setTimeout(() => setErrors([]), 5000);
       }
@@ -81,7 +84,7 @@ export default function ImageUploadDropzone({
 
       // Check limit
       if (files.length + validFiles.length > limit) {
-        setErrors([`Cannot add more than ${limit} images`]);
+        setErrors([t("cannotAddMore", { limit })]);
         setTimeout(() => setErrors([]), 5000);
         return;
       }
@@ -90,7 +93,7 @@ export default function ImageUploadDropzone({
         validFiles.map((file) => ({ file, url: URL.createObjectURL(file) })),
       );
     },
-    [limit, files.length, append],
+    [limit, files.length, append, t],
   );
 
   const handleDrop = useCallback(
@@ -234,7 +237,7 @@ export default function ImageUploadDropzone({
               onClick={() => replace([])}
             >
               <X />
-              Clear All
+              {t("clearAll")}
             </Button>
             {files.length < limit && (
               <Button
@@ -244,7 +247,7 @@ export default function ImageUploadDropzone({
                 onClick={() => fileInputRef.current?.click()}
               >
                 <Plus />
-                Add more
+                {t("addMore")}
               </Button>
             )}
           </div>
@@ -378,16 +381,14 @@ export default function ImageUploadDropzone({
             </div>
             <div className="space-y-2">
               <p className="text-lg font-medium">
-                {isDragOver ? "Drop images here" : "Drag & drop images here"}
+                {isDragOver ? t("dropImagesHere") : t("dragDropImages")}
               </p>
-              <p className="text-muted-foreground text-sm">
-                or click to browse image files (JPG, PNG, SVG etc.)
-              </p>
+              <p className="text-muted-foreground text-sm">{t("orBrowse")}</p>
             </div>
             <Button variant="outline" className="mt-4" asChild>
               <span>
                 <Plus className="mr-2 h-4 w-4" />
-                Choose Files
+                {t("chooseFiles")}
               </span>
             </Button>
           </CardContent>

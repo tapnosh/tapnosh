@@ -1,0 +1,11 @@
+{
+  "page": {
+    "title": "Szczegóły restauracji",
+    "subtitle": "Edytuj szczegóły {restaurantName}.",
+    "description": "Edytuj szczegóły restauracji, dane kontaktowe i podstawowe ustawienia. Utrzymuj profil restauracji aktualny dla klientów."
+  },
+  "share": "Udostępnij",
+  "makeReservation": "Zarezerwuj stolik",
+  "loadingMenu": "Ładowanie menu...",
+  "notAvailable": "To danie nie jest obecnie dostępne"
+}

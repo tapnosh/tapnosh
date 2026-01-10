@@ -11,6 +11,7 @@ import {
   type LucideIcon,
   Settings,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
 import {
@@ -44,6 +45,7 @@ type MyRestaurantsSidebarItem = {
   }[];
 };
 
+/*
 const staticItems = [
   {
     title: "Create Restaurant",
@@ -74,8 +76,11 @@ const getRestaurantSubItems = (restaurantId: string) => [
     icon: Settings,
   },
 ];
+*/
 
 export function NavManagement() {
+  const t = useTranslations("navigation.items");
+  const tSections = useTranslations("navigation.sections");
   const { isSignedIn } = useSession();
   const { data: restaurants, isLoading } = useRestaurantsQuery({
     enabled: isSignedIn,
@@ -83,6 +88,37 @@ export function NavManagement() {
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
+
+  const staticItems = [
+    {
+      title: t("createRestaurant"),
+      url: "/restaurants/add",
+      icon: CirclePlus,
+    },
+  ];
+
+  const getRestaurantSubItems = (restaurantId: string) => [
+    {
+      title: t("scannableMenu"),
+      url: `/my-restaurants/${restaurantId}/scannable-menu`,
+      icon: QrCode,
+    },
+    {
+      title: t("details"),
+      url: `/my-restaurants/${restaurantId}/details`,
+      icon: FileText,
+    },
+    {
+      title: t("pageBuilder"),
+      url: `/my-restaurants/${restaurantId}/builder`,
+      icon: Palette,
+    },
+    {
+      title: t("settings"),
+      url: `/my-restaurants/${restaurantId}/settings`,
+      icon: Settings,
+    },
+  ];
 
   const allItems: MyRestaurantsSidebarItem[] = [
     ...staticItems,
@@ -111,7 +147,7 @@ export function NavManagement() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Management</SidebarGroupLabel>
+      <SidebarGroupLabel>{tSections("management")}</SidebarGroupLabel>
       <SidebarMenu>
         {isLoading ? (
           <>

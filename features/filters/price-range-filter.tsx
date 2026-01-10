@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import { Label } from "@/components/ui/forms/label";
 import { Slider } from "@/components/ui/forms/slider";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -15,12 +19,13 @@ export function PriceRangeFilter({
   value,
   onChange,
 }: PriceRangeFilterProps) {
+  const t = useTranslations("common.labels");
   const { formatCurrency } = useCurrency();
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label className="text-base font-semibold">Price Range</Label>
+        <Label className="text-base font-semibold">{t("priceRange")}</Label>
         <span className="text-muted-foreground text-sm">
           {formatCurrency(value[0])} - {formatCurrency(value[1])}
         </span>

@@ -45,7 +45,8 @@ export function FiltersDrawer({
   onApply,
 }: FiltersDrawerProps) {
   const isMobile = useIsMobile();
-  const t = useTranslations("categories");
+  const tCategories = useTranslations("categories");
+  const tDisplay = useTranslations("management.pageBuilder.menu.display");
 
   const [priceRange, setPriceRange] = useState<[number, number]>(
     filters?.priceRange || [minPrice, maxPrice],
@@ -89,12 +90,9 @@ export function FiltersDrawer({
     >
       <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-3xl md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
         <DrawerHeader>
-          <DrawerTitle>Filter Menu Items</DrawerTitle>
-          <DrawerDescription>
-            Adjust filters to find exactly what you&apos;re looking for.
-          </DrawerDescription>
+          <DrawerTitle>{tDisplay("filterTitle")}</DrawerTitle>
+          <DrawerDescription>{tDisplay("filterSubtitle")}</DrawerDescription>
         </DrawerHeader>
-
         <div className="space-y-6 px-4 pb-4">
           <PriceRangeFilter
             minPrice={minPrice}
@@ -102,26 +100,23 @@ export function FiltersDrawer({
             value={priceRange}
             onChange={setPriceRange}
           />
-
           <BadgeFilter
-            label="Food Types"
+            label={tDisplay("foodTypes")}
             mode="include"
             items={foodTypes}
             selectedItems={selectedFoodTypes}
             onToggle={(item) => toggleItem(item, setSelectedFoodTypes)}
-            translateItem={t}
+            translateItem={tCategories}
           />
-
           <BadgeFilter
-            label="Exclude Allergens"
+            label={tDisplay("excludeAllergens")}
             mode="exclude"
             items={allergens}
             selectedItems={selectedAllergens}
             onToggle={(item) => toggleItem(item, setSelectedAllergens)}
-            translateItem={t}
+            translateItem={tCategories}
           />
         </div>
-
         <DrawerFooter>
           <FilterActions onApply={handleApply} onReset={handleReset} />
         </DrawerFooter>

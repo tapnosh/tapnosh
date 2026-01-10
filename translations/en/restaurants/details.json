@@ -1,0 +1,11 @@
+{
+  "page": {
+    "title": "Restaurant Details",
+    "subtitle": "Edit {restaurantName} details.",
+    "description": "Edit your restaurant details, contact information, and basic settings. Keep your restaurant profile up to date for customers."
+  },
+  "share": "Share",
+  "makeReservation": "Make Reservation",
+  "loadingMenu": "Loading menu...",
+  "notAvailable": "This dish is not available for serving"
+}

@@ -1,0 +1,8 @@
+{
+  "myRestaurants": {
+    "title": "Moje restauracje",
+    "description": "Zarządzaj swoimi restauracjami w tapnosh. Przeglądaj statystyki, aktualizuj menu i nadzoruj swoje wpisy restauracji w jednym miejscu.",
+    "ogDescription": "Zarządzaj swoimi restauracjami w tapnosh. Przeglądaj statystyki, aktualizuj menu i nadzoruj swoje wpisy restauracji.",
+    "pageContent": "To jest strona moich restauracji"
+  }
+}

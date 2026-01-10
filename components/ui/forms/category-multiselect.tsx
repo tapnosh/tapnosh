@@ -37,7 +37,7 @@ interface CategoryMultiSelectProps {
 export function CategoryMultiSelect({
   value = [],
   onChange,
-  placeholder = "Select categories...",
+  placeholder,
   className,
   disabled = false,
   type,
@@ -45,7 +45,11 @@ export function CategoryMultiSelect({
 }: CategoryMultiSelectProps) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
-  const t = useTranslations("categories");
+  const tCategories = useTranslations("categories");
+  const tForms = useTranslations("common.forms");
+
+  // Fallback for placeholder if not added
+  const finalPlaceholder = placeholder || tForms("selectCategories");
 
   const getCategoryIcon = (categoryName: string, categoryType?: string) => {
     if (categoryType === "allergens") {
@@ -73,9 +77,9 @@ export function CategoryMultiSelect({
     if (!searchQuery) return categories;
     const query = searchQuery.toLowerCase();
     return categories.filter((cat) =>
-      t(cat.name).toLowerCase().includes(query),
+      tCategories(cat.name).toLowerCase().includes(query),
     );
-  }, [categories, searchQuery, t]);
+  }, [categories, searchQuery, tCategories]);
 
   const handleToggleCategory = (category: RestaurantCategory) => {
     const isSelected = value.some((v) => v.id === category.id);
@@ -96,13 +100,13 @@ export function CategoryMultiSelect({
 
   const displayValue = React.useMemo(() => {
     if (selectedCategories.length === 0) {
-      return placeholder;
+      return finalPlaceholder;
     }
     if (selectedCategories.length < 5) {
-      return selectedCategories.map((cat) => t(cat.name)).join(", ");
+      return selectedCategories.map((cat) => tCategories(cat.name)).join(", ");
     }
-    return `${selectedCategories.length} categories selected`;
-  }, [selectedCategories, placeholder, t]);
+    return tForms("categoriesSelected", { count: selectedCategories.length });
+  }, [selectedCategories, finalPlaceholder, tCategories, tForms]);
 
   return (
     <div className="space-y-2">
@@ -130,7 +134,7 @@ export function CategoryMultiSelect({
         <PopoverContent className="w-full p-0" align="start">
           <Command shouldFilter={false}>
             <CommandInput
-              placeholder="Search categories..."
+              placeholder={tForms("searchCategories")}
               value={searchQuery}
               onValueChange={setSearchQuery}
               className="h-9"
@@ -139,18 +143,18 @@ export function CategoryMultiSelect({
               {isLoadingCategories && (
                 <div className="text-muted-foreground flex items-center justify-center gap-2 p-3 text-sm">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Loading categories...
+                  {tForms("loadingCategories")}
                 </div>
               )}
               {categoriesError && (
                 <div className="text-destructive p-3 text-center text-sm">
-                  Failed to load categories
+                  {tForms("failedToLoadCategories")}
                 </div>
               )}
               {!isLoadingCategories &&
                 !categoriesError &&
                 filteredCategories.length === 0 && (
-                  <CommandEmpty>No categories found.</CommandEmpty>
+                  <CommandEmpty>{tForms("noCategoriesFound")}</CommandEmpty>
                 )}
               {!isLoadingCategories &&
                 !categoriesError &&
@@ -171,7 +175,7 @@ export function CategoryMultiSelect({
                           <div className="flex items-center gap-2">
                             {Icon && <Icon className="h-4 w-4" />}
                             <span className="font-medium">
-                              {t(category.name)}
+                              {tCategories(category.name)}
                             </span>
                           </div>
                           {isSelected && <Check className="ml-auto h-4 w-4" />}
@@ -197,7 +201,7 @@ export function CategoryMultiSelect({
                 className="flex items-center gap-0.5"
               >
                 {Icon && <Icon className="h-4 w-4" />}
-                <span>{t(category.name)}</span>
+                <span>{tCategories(category.name)}</span>
                 <button
                   type="button"
                   onClick={(e) => handleRemoveCategory(category.id, e)}
