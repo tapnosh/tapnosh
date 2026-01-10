@@ -7,5 +7,12 @@
     "applyFilters": "Zastosuj filtry",
     "reset": "Resetuj",
     "cancel": "Anuluj"
+  },
+  "restaurantDrawer": {
+    "distanceFromYou": "Odległość od Ciebie",
+    "menuItems": "Pozycje menu",
+    "noMenuItems": "Brak dostępnych pozycji menu",
+    "navigateTo": "Nawiguj do",
+    "openRestaurant": "Otwórz restaurację"
   }
 }

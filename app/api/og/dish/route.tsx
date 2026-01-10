@@ -8,6 +8,7 @@ import { getTranslations } from "next-intl/server";
 
 import { fetchMenu } from "@/features/menu/fetchMenu";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
+import { defaultLocale, type Locale, locales } from "@/i18n/routing";
 import { findDishById } from "@/utils/dish-id";
 
 function getAccessibleVariant(
@@ -34,6 +35,12 @@ export async function GET(request: NextRequest) {
     // Get restaurant ID and dish ID from query params
     const restaurantSlug = searchParams.get("restaurant");
     const dishId = searchParams.get("dish");
+
+    // Get locale from query params, fallback to default
+    const localeParam = searchParams.get("locale");
+    const locale: Locale = locales.includes(localeParam as Locale)
+      ? (localeParam as Locale)
+      : defaultLocale;
 
     // Load GT Ultra fonts
     const fontBoldData = await readFile(
@@ -83,7 +90,7 @@ export async function GET(request: NextRequest) {
     const dish = result.item;
 
     // Get food type names from translations
-    const t = await getTranslations("categories");
+    const t = await getTranslations({ locale, namespace: "categories" });
     const foodTypeNames: string[] = [];
     if (dish.food_types && dish.food_types.length > 0) {
       dish.food_types.forEach(({ name }) => {

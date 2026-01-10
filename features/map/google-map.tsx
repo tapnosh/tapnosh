@@ -169,7 +169,7 @@ export function RestaurantMap({
           }}
         >
           <div className="max-w-xs p-2">
-            <h3 className="mb-1 text-xl font-semibold">
+            <h3 className="mb-1 text-xl font-semibold text-black">
               {hoveredRestaurant.name}
             </h3>
             {hoveredRestaurant.description && (

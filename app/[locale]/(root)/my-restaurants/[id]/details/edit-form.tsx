@@ -16,6 +16,16 @@ import {
 import { Restaurant } from "@/types/restaurant/Restaurant";
 import { tryCatch } from "@/utils/tryCatch";
 
+const DEFAULT_OPERATING_HOURS = {
+  monday: { openFrom: "09:00", openUntil: "22:00" },
+  tuesday: { openFrom: "09:00", openUntil: "22:00" },
+  wednesday: { openFrom: "09:00", openUntil: "22:00" },
+  thursday: { openFrom: "09:00", openUntil: "22:00" },
+  friday: { openFrom: "09:00", openUntil: "22:00" },
+  saturday: { openFrom: "09:00", openUntil: "22:00" },
+  sunday: { openFrom: "09:00", openUntil: "22:00" },
+};
+
 export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
   const t = useTranslations("restaurants.form.fields.actions");
   const tToast = useTranslations("common.toast");
@@ -31,6 +41,7 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
       theme_id: "",
       images: [],
       categories: [],
+      operatingHours: DEFAULT_OPERATING_HOURS,
     },
   });
 
@@ -49,6 +60,7 @@ export function RestaurantFormEdit({ restaurant }: { restaurant: Restaurant }) {
         instagramUrl: restaurant.instagramUrl,
         reservationUrl: restaurant.reservationUrl,
         priceRange: restaurant.priceRange,
+        operatingHours: restaurant.operatingHours || DEFAULT_OPERATING_HOURS,
       });
     }
   }, [restaurant, form]);
