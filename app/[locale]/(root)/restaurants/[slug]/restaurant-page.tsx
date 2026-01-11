@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Phone } from "lucide-react";
+import { Clock, MapPin, Phone } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -20,31 +20,17 @@ import { useIsRestaurantMaintainer } from "@/hooks/api/restaurant/useIsRestauran
 import { Link } from "@/i18n/routing";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
-import { Restaurant } from "@/types/restaurant/Restaurant";
+import { OperatingHours, Restaurant } from "@/types/restaurant/Restaurant";
 import { findDishById } from "@/utils/dish-id";
+import {
+  getTodayOperatingHours,
+  isDayClosed,
+  isTodayClosed,
+  isWithinOperatingHours,
+} from "@/utils/operating-hours";
 import { deleteUrlParam, setUrlParam } from "@/utils/url-state";
 
 import { revalidateRestaurantPage } from "./actions";
-
-// TODO Calculate it in backend with timezone support
-function isWithinServingTime(timeFrom: string, timeTo: string): boolean {
-  const now = new Date();
-  const currentTime = now.getHours() * 60 + now.getMinutes(); // Current time in minutes
-
-  // Parse timeFrom and timeTo (expecting format like "HH:MM")
-  const [fromHours, fromMinutes] = timeFrom.split(":").map(Number);
-  const [toHours, toMinutes] = timeTo.split(":").map(Number);
-
-  const fromTime = fromHours * 60 + fromMinutes;
-  const toTime = toHours * 60 + toMinutes;
-
-  // Handle cases where serving time spans midnight
-  if (toTime < fromTime) {
-    return currentTime >= fromTime || currentTime <= toTime;
-  }
-
-  return currentTime >= fromTime && currentTime <= toTime;
-}
 
 function MenuInteractive({
   schema,
@@ -198,7 +184,7 @@ function MenuInteractive({
               // Only render group if it has items after filtering
               if (filteredItems.length === 0) return null;
 
-              const isAvailable = isWithinServingTime(
+              const isAvailable = isWithinOperatingHours(
                 group.timeFrom,
                 group.timeTo,
               );
@@ -246,6 +232,15 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
   const tActions = useTranslations("common.actions");
   const tRestaurant = useTranslations("restaurants.details");
 
+  // Check if today is closed
+  const todayClosed = isTodayClosed(restaurant.operatingHours);
+  // Check if restaurant is currently open
+  const todayHours = getTodayOperatingHours(restaurant.operatingHours);
+  const isOpen =
+    todayHours && !todayClosed
+      ? isWithinOperatingHours(todayHours.openFrom, todayHours.openUntil)
+      : false;
+
   return (
     <header className="section section-primary -mb-8 -translate-y-16 overflow-clip">
       <ShareButton
@@ -275,6 +270,18 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
 
       <div className="relative z-10 flex flex-col pt-16">
         <div className="mb-4 flex flex-wrap items-center gap-2">
+          {restaurant.operatingHours && (
+            <Badge
+              variant={isOpen ? "green" : "destructive"}
+              className="font-bold"
+            >
+              {todayClosed
+                ? tRestaurant("openingHours.closed")
+                : isOpen
+                  ? tRestaurant("openingHours.openNow")
+                  : tRestaurant("openingHours.closedNow")}
+            </Badge>
+          )}
           <Badge variant="secondary">
             <PriceRangeIndicator priceRange={restaurant.priceRange} />
           </Badge>
@@ -356,6 +363,80 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
   );
 }
 
+const DAY_KEYS: (keyof OperatingHours)[] = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+
+// Maps JavaScript's getDay() (0=Sunday, 1=Monday, ...) to our DAY_KEYS array
+const JS_DAY_TO_KEY: (keyof OperatingHours)[] = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];
+
+function RestaurantFooter({ restaurant }: { restaurant: Restaurant }) {
+  const t = useTranslations("restaurants.details.openingHours");
+  const tDays = useTranslations("common.days");
+
+  if (!restaurant.operatingHours) return null;
+
+  const todayKey = JS_DAY_TO_KEY[new Date().getDay()];
+
+  return (
+    <footer className="section mt-auto">
+      <div className="mx-auto">
+        <h3 className="mb-6 flex items-center gap-2 text-xl font-semibold">
+          <Clock className="size-5" />
+          {t("title")}
+        </h3>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-7">
+          {DAY_KEYS.map((day) => {
+            const hours = restaurant.operatingHours?.[day];
+            const isToday = day === todayKey;
+            const isClosed = isDayClosed(hours);
+
+            return (
+              <div
+                key={day}
+                className={`rounded-lg p-3 ${
+                  isToday ? "bg-primary/10 ring-primary ring-2" : "bg-muted/50"
+                }`}
+              >
+                <p
+                  className={`text-sm font-medium ${
+                    isToday ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {tDays(day)}
+                </p>
+                {hours && !isClosed ? (
+                  <p className="mt-1 text-sm font-semibold">
+                    {hours.openFrom} - {hours.openUntil}
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground mt-1 text-sm">
+                    {t("closed")}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 export function RestaurantPage({
   restaurant,
   schema,
@@ -383,6 +464,7 @@ export function RestaurantPage({
           refetch={handleRefresh}
         />
       </Suspense>
+      <RestaurantFooter restaurant={restaurant} />
     </>
   );
 }

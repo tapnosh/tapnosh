@@ -9,6 +9,7 @@ import {
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { OperatingHoursDisplay } from "@/features/restaurant/operating-hours-display";
 import { Restaurant } from "@/types/restaurant/Restaurant";
 
 interface RestaurantMapProps {
@@ -186,6 +187,13 @@ export function RestaurantMap({
                 {hoveredRestaurant.address.postalCode}
               </p>
             )}
+            <OperatingHoursDisplay
+              operatingHours={hoveredRestaurant.operatingHours}
+              className="mt-2 text-xs text-gray-600"
+              showIcon={false}
+              openClassName="font-medium text-green-600"
+              closedClassName="font-medium text-red-600"
+            />
             {hoveredRestaurant.categories &&
               hoveredRestaurant.categories.length > 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">

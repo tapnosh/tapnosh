@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { Badge } from "@/components/ui/data-display/badge";
 import { Button } from "@/components/ui/forms/button";
 import { ShareButton } from "@/components/ui/forms/share-button";
+import { OperatingHoursDisplay } from "@/features/restaurant/operating-hours-display";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { Link } from "@/i18n/routing";
 import { RestaurantCategory } from "@/types/category/Category";
@@ -150,14 +151,14 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         <div className="mb-4 flex flex-col gap-2">
           {restaurant?.address?.formattedAddress && (
             <div className="flex items-start gap-2 text-sm opacity-90">
-              <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
               <span>{restaurant.address.formattedAddress}</span>
             </div>
           )}
 
           {restaurant?.phoneNumber && (
             <div className="flex items-center gap-2 text-sm opacity-90">
-              <Phone className="h-4 w-4 flex-shrink-0" />
+              <Phone className="h-4 w-4 shrink-0" />
               <a
                 href={`tel:${restaurant.phoneNumber}`}
                 className="transition-opacity hover:opacity-70"
@@ -166,6 +167,11 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
               </a>
             </div>
           )}
+
+          <OperatingHoursDisplay
+            operatingHours={restaurant.operatingHours}
+            className="flex items-center gap-2 text-sm opacity-90"
+          />
         </div>
 
         {/* CTA Button at bottom */}

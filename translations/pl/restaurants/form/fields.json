@@ -59,8 +59,10 @@
       "noAddressesFound": "Nie znaleziono adresów."
     },
     "openingHours": {
+      "open": "Otwarte",
       "openFrom": "Otwarte od",
-      "openUntil": "Otwarte do"
+      "openUntil": "Otwarte do",
+      "closed": "Zamknięte"
     },
     "phoneNumber": {
       "label": "Numer telefonu",

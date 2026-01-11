@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Crosshair, Loader2, SlidersHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { BasicNotificationBody } from "@/components/ui/feedback/basic-notification";
 import { Button } from "@/components/ui/forms/button";
@@ -66,9 +66,19 @@ export default function MapPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Track which errors we've already shown to prevent infinite loops
+  const shownErrorsRef = useRef<{
+    location: string | null;
+    restaurants: boolean;
+  }>({
+    location: null,
+    restaurants: false,
+  });
+
   // Show notifications for location errors
   useEffect(() => {
-    if (locationError) {
+    if (locationError && shownErrorsRef.current.location !== locationError) {
+      shownErrorsRef.current.location = locationError;
       openNotification(
         <BasicNotificationBody
           title={tToast("error")}
@@ -77,7 +87,8 @@ export default function MapPage() {
         />,
       );
     }
-    if (restaurantsError) {
+    if (restaurantsError && !shownErrorsRef.current.restaurants) {
+      shownErrorsRef.current.restaurants = true;
       openNotification(
         <BasicNotificationBody
           title={tToast("error")}
@@ -85,6 +96,10 @@ export default function MapPage() {
           variant="error"
         />,
       );
+    }
+    // Reset restaurant error tracking when error clears
+    if (!restaurantsError) {
+      shownErrorsRef.current.restaurants = false;
     }
   }, [locationError, restaurantsError, openNotification, tToast]);
 

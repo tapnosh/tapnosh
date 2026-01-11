@@ -13,6 +13,8 @@
     "menuItems": "Menu Items",
     "noMenuItems": "No menu items available",
     "navigateTo": "Navigate To",
-    "openRestaurant": "Open Restaurant"
+    "openRestaurant": "Open Restaurant",
+    "openToday": "Open today",
+    "closed": "Closed"
   }
 }
