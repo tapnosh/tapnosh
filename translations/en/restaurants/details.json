@@ -7,5 +7,12 @@
   "share": "Share",
   "makeReservation": "Make Reservation",
   "loadingMenu": "Loading menu...",
-  "notAvailable": "This dish is not available for serving"
+  "notAvailable": "This dish is not available for serving",
+  "openingHours": {
+    "title": "Opening Hours",
+    "closed": "Closed",
+    "open": "Open",
+    "closedNow": "Closed now",
+    "openNow": "Open now"
+  }
 }

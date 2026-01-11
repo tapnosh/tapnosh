@@ -21,10 +21,10 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/forms/form";
 import ImageUploadDropzone from "@/components/ui/forms/image-upload-drop-zone";
 import { Input } from "@/components/ui/forms/input";
+import { OperatingHoursInput } from "@/components/ui/forms/operating-hours-input";
 import {
   Select,
   SelectContent,
@@ -54,17 +54,6 @@ export function RestaurantDetailsForm({
   const tFields = useTranslations("restaurants.form.fields.fields");
   const tActions = useTranslations("restaurants.form.fields.actions");
   const tPriceRange = useTranslations("common.priceRange");
-  const tDays = useTranslations("common.days");
-
-  const days = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ] as const;
 
   return (
     <Form {...form}>
@@ -241,74 +230,7 @@ export function RestaurantDetailsForm({
           />
 
           {/* OPERATING HOURS */}
-          <div className="space-y-4">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr>
-                    <th className="p-2 text-left font-medium"></th>
-                    {days.map((day) => (
-                      <th key={day} className="p-2 text-center font-medium">
-                        {tDays(day)}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="p-2 font-medium whitespace-nowrap">
-                      {tFields("openingHours.openFrom")}
-                    </td>
-                    {days.map((day) => (
-                      <td key={day} className="p-2">
-                        <FormField
-                          control={form.control}
-                          name={`operatingHours.${day}.openFrom`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="time"
-                                  className="min-w-[100px]"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <td className="p-2 font-medium whitespace-nowrap">
-                      {tFields("openingHours.openUntil")}
-                    </td>
-                    {days.map((day) => (
-                      <td key={day} className="p-2">
-                        <FormField
-                          control={form.control}
-                          name={`operatingHours.${day}.openUntil`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="time"
-                                  className="min-w-[100px]"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <OperatingHoursInput form={form} />
 
           {/* CONTACT INFORMATION */}
 

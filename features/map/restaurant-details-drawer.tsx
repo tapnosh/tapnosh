@@ -16,6 +16,7 @@ import { getAccessibleVariant } from "@/context/ThemeContext";
 import { DistanceBadge } from "@/features/map/distance-badge";
 import { navigateToLocation } from "@/features/map/utils/navigation";
 import { MenuItemCard } from "@/features/menu/menu-item";
+import { OperatingHoursDisplay } from "@/features/restaurant/operating-hours-display";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Link } from "@/i18n/routing";
@@ -154,6 +155,11 @@ export function RestaurantDetailsDialog({
                       </a>
                     </div>
                   )}
+                  <OperatingHoursDisplay
+                    operatingHours={restaurant.operatingHours}
+                    className="flex items-center gap-2"
+                    iconClassName="size-4 shrink-0"
+                  />
                 </div>
               )}
             </div>

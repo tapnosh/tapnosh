@@ -7,5 +7,12 @@
   "share": "Udostępnij",
   "makeReservation": "Zarezerwuj stolik",
   "loadingMenu": "Ładowanie menu...",
-  "notAvailable": "To danie nie jest obecnie dostępne"
+  "notAvailable": "To danie nie jest obecnie dostępne",
+  "openingHours": {
+    "title": "Godziny otwarcia",
+    "closed": "Zamknięte",
+    "open": "Otwarte",
+    "closedNow": "Teraz zamknięte",
+    "openNow": "Teraz otwarte"
+  }
 }

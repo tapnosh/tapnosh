@@ -5,9 +5,36 @@ import { fetchMenu } from "@/features/menu/fetchMenu";
 import { generateRestaurant } from "@/features/menu/lib/generateRestaurantSchema";
 import { fetchRestaurant } from "@/features/restaurant/fetchRestaurant";
 import { ThemeSetter } from "@/features/theme/theme-setter";
-import { Restaurant as RestaurantType } from "@/types/restaurant/Restaurant";
+import {
+  OperatingHours,
+  Restaurant as RestaurantType,
+} from "@/types/restaurant/Restaurant";
+import { isDayClosed } from "@/utils/operating-hours";
 
 import { RestaurantPage } from "./restaurant-page";
+
+const DAY_ORDER: (keyof OperatingHours)[] = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+
+function formatOpeningHours(operatingHours?: OperatingHours): string {
+  if (!operatingHours) return "";
+
+  return DAY_ORDER.map((day) => {
+    const hours = operatingHours[day];
+    const dayAbbrev = day.charAt(0).toUpperCase() + day.slice(1, 3);
+    if (!hours || isDayClosed(hours)) {
+      return `${dayAbbrev}: Closed`;
+    }
+    return `${dayAbbrev}: ${hours.openFrom}-${hours.openUntil}`;
+  }).join(", ");
+}
 
 export async function generateStaticParams() {
   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -62,9 +89,14 @@ export async function generateMetadata({
 
   const ogImageUrl = `${baseUrl}/api/og/restaurant?restaurant=${encodeURIComponent(restaurant.slug ?? "")}`;
 
+  const openingHoursText = formatOpeningHours(restaurant.operatingHours);
+  const openingHoursSuffix = openingHoursText
+    ? ` Hours: ${openingHoursText}`
+    : "";
+
   return {
     title: `${restaurant.name} - ${restaurantCategories}`,
-    description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}. Discover their menu and dining experience on tapnosh.`,
+    description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}.${openingHoursSuffix} Discover their menu and dining experience on tapnosh.`,
     keywords: [
       restaurant.name,
       ...(restaurant.categories?.map((cat) => cat.name) || []),
@@ -73,11 +105,12 @@ export async function generateMetadata({
       "dining",
       "food",
       restaurant?.address.formattedAddress || "",
+      "opening hours",
       "tapnosh",
     ].filter(Boolean),
     openGraph: {
       title: `${restaurant.name} | tapnosh`,
-      description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}. Discover their menu and dining experience on tapnosh.`,
+      description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}.${openingHoursSuffix} Discover their menu and dining experience on tapnosh.`,
       url: `${baseUrl}/restaurants/${restaurant.slug}`,
       type: "website",
       images: [
@@ -92,7 +125,7 @@ export async function generateMetadata({
     },
     twitter: {
       title: `${restaurant.name} | tapnosh`,
-      description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}. Discover their menu and dining experience.`,
+      description: `${restaurant.description} Located at ${restaurant?.address?.formattedAddress || "your area"}.${openingHoursSuffix} Discover their menu and dining experience.`,
       images: [ogImageUrl.toString()],
     },
     alternates: {
