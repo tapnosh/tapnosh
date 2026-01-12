@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, MapPin, Phone } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -432,10 +432,7 @@ function RestaurantFooter({ restaurant }: { restaurant: Restaurant }) {
   return (
     <footer className="section mt-auto">
       <div className="mx-auto">
-        <h3 className="mb-6 flex items-center gap-2 text-xl font-semibold">
-          <Clock className="size-5" />
-          {t("title")}
-        </h3>
+        <h2 className="mt-6 mb-4">{t("title")}</h2>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-7">
           {DAY_KEYS.map((day) => {
             const hours = restaurant.operatingHours?.[day];

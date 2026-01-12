@@ -11,7 +11,9 @@ export async function fetchMenu(
   }
 
   const [error, response] = await tryCatch(
-    fetch(new URL(`public_api/restaurants/${restaurantId}/menu`, baseUrl)),
+    fetch(new URL(`public_api/restaurants/${restaurantId}/menu`, baseUrl), {
+      cache: "no-store",
+    }),
   );
 
   if (error || !response || !response.ok) {
