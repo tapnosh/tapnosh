@@ -232,7 +232,7 @@
 }
 
 @theme {
-  --font-display: "GT Ultra", "sans-serif";
-  --font-display-fine: "GT Ultra Fine sans-serif";
-  --font-display-median: "GT Ultra Median", "sans-serif";
+  --font-display: "GT Ultra", sans-serif;
+  --font-display-fine: "GT Ultra Fine", sans-serif;
+  --font-display-median: "GT Ultra Median", sans-serif;
 }

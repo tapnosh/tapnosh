@@ -12,6 +12,7 @@ export async function fetchRestaurant(
   try {
     const response = await fetch(
       new URL(`public_api/restaurants/${slug}`, baseUrl),
+      { cache: "no-store" },
     );
 
     if (!response.ok) {
