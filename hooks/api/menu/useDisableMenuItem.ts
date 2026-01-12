@@ -27,7 +27,7 @@ export const useDisableMenuItem = () => {
   >({
     mutationFn: async (data) => {
       const response = await fetchClient<DisableMenuItemResponse>(
-        "/restaurants/menu/disable-item",
+        `/restaurants/${data.restaurantId}/menu/disable-item`,
         {
           method: "POST",
           body: JSON.stringify({
