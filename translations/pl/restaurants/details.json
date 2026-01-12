@@ -8,11 +8,45 @@
   "makeReservation": "Zarezerwuj stolik",
   "loadingMenu": "Ładowanie menu...",
   "notAvailable": "To danie nie jest obecnie dostępne",
+  "itemDisabled": "Ta pozycja jest obecnie niedostępna",
+  "notServedNow": "Nie serwowane o tej porze",
   "openingHours": {
     "title": "Godziny otwarcia",
     "closed": "Zamknięte",
     "open": "Otwarte",
     "closedNow": "Teraz zamknięte",
     "openNow": "Teraz otwarte"
+  },
+  "disableMenuItem": {
+    "title": "Dostosuj dostępność pozycji",
+    "description": "Zarządzaj dostępnością \"{itemName}\".",
+    "durations": {
+      "label": "Wyłącz na",
+      "1h": "1 godzinę",
+      "2h": "2 godziny",
+      "3h": "3 godziny",
+      "endOfDay": "Do końca dnia",
+      "endOfWeek": "Do końca tygodnia",
+      "custom": "Własny zakres dat"
+    },
+    "customRange": {
+      "startDateTime": "Data i godzina rozpoczęcia",
+      "endDateTime": "Data i godzina zakończenia",
+      "pickDate": "Wybierz datę",
+      "preview": "Pozycja będzie wyłączona od {startDate} o {startTime} do {endDate} o {endTime}"
+    },
+    "actions": {
+      "cancel": "Anuluj",
+      "confirm": "Potwierdź",
+      "enableItem": "Włącz pozycję",
+      "disableItem": "Wyłącz pozycję"
+    },
+    "notifications": {
+      "successTitle": "Pozycja wyłączona",
+      "successDescriptionTimed": "\"{itemName}\" zostało wyłączone do {date}",
+      "enableSuccessTitle": "Pozycja włączona",
+      "enableSuccessDescription": "\"{itemName}\" jest teraz dostępne",
+      "errorTitle": "Nie udało się zaktualizować pozycji"
+    }
   }
 }

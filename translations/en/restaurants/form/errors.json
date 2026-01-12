@@ -31,7 +31,7 @@
     "facebook": "Please enter a valid URL",
     "instagram": "Please enter a valid URL",
     "reservationLink": "Please enter a valid URL",
-    "theme": "Theme ID must be a valid UUID format",
+    "theme": "Theme color is required",
     "streetNumber": "Please enter a valid street number",
     "state": "Please select a valid state",
     "postalCode": "Please enter a valid postal code",

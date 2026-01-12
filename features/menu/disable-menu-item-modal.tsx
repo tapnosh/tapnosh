@@ -2,6 +2,7 @@
 
 import { addDays, addHours, endOfDay, endOfWeek, format } from "date-fns";
 import { CalendarIcon, Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Calendar } from "@/components/ui/calendar";
@@ -35,6 +36,8 @@ type DisableDuration =
   | "end-of-week"
   | "custom";
 
+type AvailabilityAction = "enable" | "disable";
+
 interface DisableMenuItemModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -50,9 +53,12 @@ export function DisableMenuItemModal({
   restaurantId,
   onSuccess,
 }: DisableMenuItemModalProps) {
+  const t = useTranslations("restaurants.details.disableMenuItem");
   const { openNotification } = useNotification();
   const { mutate: disableMenuItem, isPending } = useDisableMenuItem();
 
+  const [selectedAction, setSelectedAction] =
+    useState<AvailabilityAction | null>(null);
   const [selectedDuration, setSelectedDuration] =
     useState<DisableDuration | null>(null);
   const [customStartDate, setCustomStartDate] = useState<Date | undefined>(
@@ -65,12 +71,12 @@ export function DisableMenuItemModal({
   const [customEndTime, setCustomEndTime] = useState("23:59");
 
   const presetOptions: { value: DisableDuration; label: string }[] = [
-    { value: "1h", label: "1 hour" },
-    { value: "2h", label: "2 hours" },
-    { value: "3h", label: "3 hours" },
-    { value: "end-of-day", label: "Till end of the day" },
-    { value: "end-of-week", label: "Till end of the week" },
-    { value: "custom", label: "Custom date range" },
+    { value: "1h", label: t("durations.1h") },
+    { value: "2h", label: t("durations.2h") },
+    { value: "3h", label: t("durations.3h") },
+    { value: "end-of-day", label: t("durations.endOfDay") },
+    { value: "end-of-week", label: t("durations.endOfWeek") },
+    { value: "custom", label: t("durations.custom") },
   ];
 
   const getDisableUntilDate = (): Date | null => {
@@ -101,8 +107,12 @@ export function DisableMenuItemModal({
   };
 
   const handleConfirm = () => {
+    if (!menuItem || !selectedAction) return;
+
+    const isEnable = selectedAction === "enable";
     const disableUntil = getDisableUntilDate();
-    if (!disableUntil || !menuItem) return;
+
+    if (!isEnable && !disableUntil) return;
 
     const disabledFrom =
       selectedDuration === "custom" && customStartDate
@@ -118,15 +128,28 @@ export function DisableMenuItemModal({
       {
         menuItemId: menuItem.id,
         restaurantId,
-        disabledFrom,
-        disabledUntil: disableUntil,
+        disabledFrom: isEnable ? null : disabledFrom,
+        disabledUntil: isEnable ? null : disableUntil!,
       },
       {
         onSuccess: () => {
           openNotification(
             <BasicNotificationBody
-              title="Item disabled"
-              description={`"${menuItem.name}" has been disabled until ${format(disableUntil, "PPP 'at' p")}`}
+              title={
+                isEnable
+                  ? t("notifications.enableSuccessTitle")
+                  : t("notifications.successTitle")
+              }
+              description={
+                isEnable
+                  ? t("notifications.enableSuccessDescription", {
+                      itemName: menuItem.name,
+                    })
+                  : t("notifications.successDescriptionTimed", {
+                      itemName: menuItem.name,
+                      date: format(disableUntil!, "PPP 'at' p"),
+                    })
+              }
               variant="success"
             />,
           );
@@ -137,7 +160,7 @@ export function DisableMenuItemModal({
         onError: (error) => {
           openNotification(
             <BasicNotificationBody
-              title="Failed to disable item"
+              title={t("notifications.errorTitle")}
               description={error.message || "An error occurred"}
               variant="error"
             />,
@@ -148,6 +171,7 @@ export function DisableMenuItemModal({
   };
 
   const resetState = () => {
+    setSelectedAction(null);
     setSelectedDuration(null);
     setCustomStartDate(new Date());
     setCustomEndDate(addDays(new Date(), 1));
@@ -164,39 +188,61 @@ export function DisableMenuItemModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Disable Menu Item</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Choose how long to disable &quot;{menuItem?.name}&quot;. The item
-            will not be available for ordering during this time.
+            {t("description", { itemName: menuItem?.name ?? "" })}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col gap-3 py-4">
-          {/* Preset Options */}
+        <div className="flex flex-col gap-4 py-4">
+          {/* Enable/Disable Action Selection */}
           <div className="grid grid-cols-2 gap-2">
-            {presetOptions.map((option) => (
-              <Button
-                key={option.value}
-                variant={
-                  selectedDuration === option.value ? "default" : "outline"
-                }
-                className={cn(
-                  "justify-start",
-                  option.value === "custom" && "col-span-2",
-                )}
-                onClick={() => setSelectedDuration(option.value)}
-              >
-                {option.label}
-              </Button>
-            ))}
+            <Button
+              variant={selectedAction === "enable" ? "default" : "outline"}
+              className="justify-start"
+              onClick={() => {
+                setSelectedAction("enable");
+                setSelectedDuration(null);
+              }}
+            >
+              {t("actions.enableItem")}
+            </Button>
+            <Button
+              variant={selectedAction === "disable" ? "default" : "outline"}
+              className="justify-start"
+              onClick={() => setSelectedAction("disable")}
+            >
+              {t("actions.disableItem")}
+            </Button>
           </div>
 
+          {/* Disable Duration Options */}
+          {selectedAction === "disable" && (
+            <div className="flex flex-col gap-3">
+              <Label>{t("durations.label")}</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {presetOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    variant={
+                      selectedDuration === option.value ? "default" : "outline"
+                    }
+                    className={cn("justify-start")}
+                    onClick={() => setSelectedDuration(option.value)}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Custom Date Range */}
-          {selectedDuration === "custom" && (
+          {selectedAction === "disable" && selectedDuration === "custom" && (
             <div className="space-y-4 rounded-lg border p-4">
               {/* Start Date/Time */}
               <div className="space-y-2">
-                <Label>Start Date & Time</Label>
+                <Label>{t("customRange.startDateTime")}</Label>
                 <div className="flex flex-wrap gap-2">
                   <Popover>
                     <PopoverTrigger asChild>
@@ -211,7 +257,7 @@ export function DisableMenuItemModal({
                         {customStartDate ? (
                           format(customStartDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{t("customRange.pickDate")}</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -238,7 +284,7 @@ export function DisableMenuItemModal({
 
               {/* End Date/Time */}
               <div className="space-y-2">
-                <Label>End Date & Time</Label>
+                <Label>{t("customRange.endDateTime")}</Label>
                 <div className="flex flex-wrap gap-2">
                   <Popover>
                     <PopoverTrigger asChild>
@@ -253,7 +299,7 @@ export function DisableMenuItemModal({
                         {customEndDate ? (
                           format(customEndDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span>{t("customRange.pickDate")}</span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -284,14 +330,12 @@ export function DisableMenuItemModal({
               {customStartDate && customEndDate && (
                 <div className="bg-muted rounded-md p-3 text-sm">
                   <p className="text-muted-foreground">
-                    Item will be disabled from{" "}
-                    <span className="text-foreground font-medium">
-                      {format(customStartDate, "PPP")} at {customStartTime}
-                    </span>{" "}
-                    until{" "}
-                    <span className="text-foreground font-medium">
-                      {format(customEndDate, "PPP")} at {customEndTime}
-                    </span>
+                    {t("customRange.preview", {
+                      startDate: format(customStartDate, "PPP"),
+                      startTime: customStartTime,
+                      endDate: format(customEndDate, "PPP"),
+                      endTime: customEndTime,
+                    })}
                   </p>
                 </div>
               )}
@@ -301,15 +345,19 @@ export function DisableMenuItemModal({
 
         <DialogFooter className="gap-2">
           <Button variant="outline" onClick={handleCancel} disabled={isPending}>
-            Cancel
+            {t("actions.cancel")}
           </Button>
           <Button
-            variant="destructive"
+            variant={selectedAction === "enable" ? "default" : "destructive"}
             onClick={handleConfirm}
-            disabled={!selectedDuration || isPending}
+            disabled={
+              !selectedAction ||
+              (selectedAction === "disable" && !selectedDuration) ||
+              isPending
+            }
             isLoading={isPending}
           >
-            Disable Item
+            {t("actions.confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

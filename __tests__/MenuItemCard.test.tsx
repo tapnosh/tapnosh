@@ -5,8 +5,8 @@ import { describe, expect, it, vi } from "vitest";
 
 // Import after mocks
 import { MenuItemCard } from "@/features/menu/menu-item";
-import { MenuItem } from "@/types/menu/Menu";
 import messages from "@/translations/en";
+import { MenuItem } from "@/types/menu/Menu";
 
 // Mock useCurrency hook
 vi.mock("@/hooks/useCurrency", () => ({
@@ -113,13 +113,17 @@ describe("MenuItemCard", () => {
 
   describe("Basic Rendering", () => {
     it("should render item name", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+      );
 
       expect(screen.getByText("Margherita Pizza")).toBeInTheDocument();
     });
 
     it("should render item description", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+      );
 
       expect(
         screen.getByText("Classic Italian pizza with tomato and mozzarella"),
@@ -127,13 +131,17 @@ describe("MenuItemCard", () => {
     });
 
     it("should render formatted price", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+      );
 
       expect(screen.getByText("USD 15.99")).toBeInTheDocument();
     });
 
     it("should render item image when provided as string", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+      );
 
       const image = screen.getByTestId("menu-item-image");
       expect(image).toHaveAttribute("data-src", "/pizza.jpg");
@@ -142,7 +150,10 @@ describe("MenuItemCard", () => {
 
     it("should render item image when provided as array", () => {
       renderWithIntl(
-        <MenuItemCard item={mockMenuItemWithImageArray} isAvailable={true} />,
+        <MenuItemCard
+          item={mockMenuItemWithImageArray}
+          availabilityStatus="available"
+        />,
       );
 
       const image = screen.getByTestId("menu-item-image");
@@ -152,7 +163,10 @@ describe("MenuItemCard", () => {
     it("should not render image when not provided", () => {
       const itemWithoutImage = { ...mockMenuItem, image: undefined };
       renderWithIntl(
-        <MenuItemCard item={itemWithoutImage as MenuItem} isAvailable={true} />,
+        <MenuItemCard
+          item={itemWithoutImage as MenuItem}
+          availabilityStatus="available"
+        />,
       );
 
       expect(screen.queryByTestId("menu-item-image")).not.toBeInTheDocument();
@@ -160,51 +174,135 @@ describe("MenuItemCard", () => {
   });
 
   describe("Availability", () => {
-    it("should show unavailable message when not available", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={false} />);
+    describe("available status", () => {
+      it("should not show any unavailable message when available", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+        );
 
-      expect(
-        screen.getByText("This dish is not available for serving"),
-      ).toBeInTheDocument();
+        expect(
+          screen.queryByText("Not served at this time"),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("This item is currently unavailable"),
+        ).not.toBeInTheDocument();
+      });
+
+      it("should show add to cart button when available and callback provided", () => {
+        renderWithIntl(
+          <MenuItemCard
+            item={mockMenuItem}
+            availabilityStatus="available"
+            onAddToCart={vi.fn()}
+          />,
+        );
+
+        expect(screen.getByTestId("plus-icon")).toBeInTheDocument();
+      });
+
+      it("should render at full opacity when available", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+        );
+
+        const card = screen.getByRole("button");
+        expect(card).toHaveStyle({ opacity: 1 });
+      });
     });
 
-    it("should not show unavailable message when available", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+    describe("not-served status", () => {
+      it("should show not served message when status is not-served", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} availabilityStatus="not-served" />,
+        );
 
-      expect(
-        screen.queryByText("This dish is not available for serving"),
-      ).not.toBeInTheDocument();
+        expect(screen.getByText("Not served at this time")).toBeInTheDocument();
+      });
+
+      it("should not show add to cart button when not-served", () => {
+        renderWithIntl(
+          <MenuItemCard
+            item={mockMenuItem}
+            availabilityStatus="not-served"
+            onAddToCart={vi.fn()}
+          />,
+        );
+
+        expect(screen.queryByTestId("plus-icon")).not.toBeInTheDocument();
+      });
+
+      it("should render at reduced opacity when not-served", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} availabilityStatus="not-served" />,
+        );
+
+        const card = screen.getByRole("button");
+        expect(card).toHaveStyle({ opacity: 0.5 });
+      });
     });
 
-    it("should show add to cart button when available and callback provided", () => {
-      renderWithIntl(
-        <MenuItemCard
-          item={mockMenuItem}
-          isAvailable={true}
-          onAddToCart={vi.fn()}
-        />,
-      );
+    describe("disabled status", () => {
+      it("should show disabled message when status is disabled", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} availabilityStatus="disabled" />,
+        );
 
-      expect(screen.getByTestId("plus-icon")).toBeInTheDocument();
+        expect(
+          screen.getByText("This item is currently unavailable"),
+        ).toBeInTheDocument();
+      });
+
+      it("should not show add to cart button when disabled", () => {
+        renderWithIntl(
+          <MenuItemCard
+            item={mockMenuItem}
+            availabilityStatus="disabled"
+            onAddToCart={vi.fn()}
+          />,
+        );
+
+        expect(screen.queryByTestId("plus-icon")).not.toBeInTheDocument();
+      });
+
+      it("should render at reduced opacity when disabled", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} availabilityStatus="disabled" />,
+        );
+
+        const card = screen.getByRole("button");
+        expect(card).toHaveStyle({ opacity: 0.5 });
+      });
     });
 
-    it("should not show add to cart button when not available", () => {
-      renderWithIntl(
-        <MenuItemCard
-          item={mockMenuItem}
-          isAvailable={false}
-          onAddToCart={vi.fn()}
-        />,
-      );
+    describe("default status", () => {
+      it("should default to available when no status provided", () => {
+        renderWithIntl(<MenuItemCard item={mockMenuItem} />);
 
-      expect(screen.queryByTestId("plus-icon")).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Not served at this time"),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("This item is currently unavailable"),
+        ).not.toBeInTheDocument();
+      });
+
+      it("should show add to cart button with default status when callback provided", () => {
+        renderWithIntl(
+          <MenuItemCard item={mockMenuItem} onAddToCart={vi.fn()} />,
+        );
+
+        expect(screen.getByTestId("plus-icon")).toBeInTheDocument();
+      });
     });
   });
 
   describe("Allergens and Food Types", () => {
     it("should render allergen badges", () => {
       renderWithIntl(
-        <MenuItemCard item={mockMenuItemWithAllergens} isAvailable={true} />,
+        <MenuItemCard
+          item={mockMenuItemWithAllergens}
+          availabilityStatus="available"
+        />,
       );
 
       expect(screen.getByText("Gluten")).toBeInTheDocument();
@@ -213,7 +311,10 @@ describe("MenuItemCard", () => {
 
     it("should render food type badges", () => {
       renderWithIntl(
-        <MenuItemCard item={mockMenuItemWithFoodTypes} isAvailable={true} />,
+        <MenuItemCard
+          item={mockMenuItemWithFoodTypes}
+          availabilityStatus="available"
+        />,
       );
 
       expect(screen.getByText("Vegetarian")).toBeInTheDocument();
@@ -221,13 +322,17 @@ describe("MenuItemCard", () => {
     });
 
     it("should not render allergen section when empty", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+      );
 
       expect(screen.queryByTestId("allergen-icon")).not.toBeInTheDocument();
     });
 
     it("should not render food types section when empty", () => {
-      renderWithIntl(<MenuItemCard item={mockMenuItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={mockMenuItem} availabilityStatus="available" />,
+      );
 
       expect(screen.queryByTestId("food-type-icon")).not.toBeInTheDocument();
     });
@@ -239,7 +344,7 @@ describe("MenuItemCard", () => {
       renderWithIntl(
         <MenuItemCard
           item={mockMenuItem}
-          isAvailable={true}
+          availabilityStatus="available"
           onClick={handleClick}
         />,
       );
@@ -255,7 +360,7 @@ describe("MenuItemCard", () => {
       renderWithIntl(
         <MenuItemCard
           item={mockMenuItem}
-          isAvailable={true}
+          availabilityStatus="available"
           onAddToCart={handleAddToCart}
           onClick={handleClick}
         />,
@@ -273,7 +378,7 @@ describe("MenuItemCard", () => {
       renderWithIntl(
         <MenuItemCard
           item={mockMenuItem}
-          isAvailable={true}
+          availabilityStatus="available"
           onAddToCart={handleAddToCart}
           onClick={handleClick}
         />,
@@ -293,7 +398,9 @@ describe("MenuItemCard", () => {
         ...mockMenuItem,
         price: { amount: 12.5, currency: "EUR" },
       };
-      renderWithIntl(<MenuItemCard item={eurItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={eurItem} availabilityStatus="available" />,
+      );
 
       expect(screen.getByText("EUR 12.50")).toBeInTheDocument();
     });
@@ -303,7 +410,9 @@ describe("MenuItemCard", () => {
         ...mockMenuItem,
         price: { amount: 49.99, currency: "PLN" },
       };
-      renderWithIntl(<MenuItemCard item={plnItem} isAvailable={true} />);
+      renderWithIntl(
+        <MenuItemCard item={plnItem} availabilityStatus="available" />,
+      );
 
       expect(screen.getByText("PLN 49.99")).toBeInTheDocument();
     });

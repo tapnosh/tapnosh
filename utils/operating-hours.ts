@@ -81,3 +81,31 @@ export function isWithinOperatingHours(
 
   return currentTime >= fromTime && currentTime <= toTime;
 }
+
+/**
+ * Check if a menu item is currently disabled based on its disable properties
+ * @param item - Object with isDisabled, disabledFrom, and disabledUntil properties
+ * @returns true if the item is currently disabled
+ */
+export function isMenuItemDisabled(item: {
+  isDisabled?: boolean;
+  disabledFrom?: string;
+  disabledUntil?: string | null;
+}): boolean {
+  if (item.isDisabled !== true) return false;
+
+  const now = new Date();
+
+  // If disabledFrom is set, check if we're past the start time
+  if (item.disabledFrom) {
+    const from = new Date(item.disabledFrom);
+    if (now < from) return false; // Not yet disabled
+  }
+
+  // If disabledUntil is null/undefined, it's disabled indefinitely
+  if (!item.disabledUntil) return true;
+
+  // Check if we're still within the disabled period
+  const until = new Date(item.disabledUntil);
+  return now <= until;
+}

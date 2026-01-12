@@ -13,7 +13,10 @@ import { SocialMediaLink } from "@/components/ui/navigation/social-media-link";
 import { FiltersBar } from "@/features/filters/filters-bar";
 import { FilterState } from "@/features/filters/types";
 import { MenuGroup } from "@/features/menu/menu-group";
-import { MenuItemCard } from "@/features/menu/menu-item";
+import {
+  MenuItemCard,
+  ItemAvailabilityStatus,
+} from "@/features/menu/menu-item";
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { useIsRestaurantMaintainer } from "@/hooks/api/restaurant/useIsRestaurantMaintainer";
@@ -25,6 +28,7 @@ import { findDishById } from "@/utils/dish-id";
 import {
   getTodayOperatingHours,
   isDayClosed,
+  isMenuItemDisabled,
   isTodayClosed,
   isWithinOperatingHours,
 } from "@/utils/operating-hours";
@@ -50,6 +54,8 @@ function MenuInteractive({
   const dishId = searchParams.get("dish");
 
   const [menuItem, setMenuItem] = useState<MenuItem | undefined>();
+  const [menuItemAvailability, setMenuItemAvailability] =
+    useState<ItemAvailabilityStatus>("available");
   const [open, setOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [filters, setFilters] = useState<FilterState | undefined>();
@@ -58,7 +64,23 @@ function MenuInteractive({
     if (dishId && schema) {
       const result = findDishById(schema.menu, dishId);
       if (result) {
-        setMenuItem(result.item as MenuItem);
+        const item = result.item as MenuItem;
+        const group = schema.menu[result.groupIndex];
+
+        const isItemDisabled = isMenuItemDisabled(item);
+        const isWithinHours = isWithinOperatingHours(
+          group.timeFrom,
+          group.timeTo,
+        );
+
+        const status: ItemAvailabilityStatus = isItemDisabled
+          ? "disabled"
+          : !isWithinHours
+            ? "not-served"
+            : "available";
+
+        setMenuItem(item);
+        setMenuItemAvailability(status);
         setOpen(true);
       }
     } else {
@@ -66,8 +88,12 @@ function MenuInteractive({
     }
   }, [dishId, schema]);
 
-  const handleClick = (item: MenuItem) => {
+  const handleClick = (
+    item: MenuItem,
+    availabilityStatus: ItemAvailabilityStatus,
+  ) => {
     setMenuItem(item);
+    setMenuItemAvailability(availabilityStatus);
     setOpen(true);
     setUrlParam(searchParams, "dish", item.id);
   };
@@ -184,25 +210,35 @@ function MenuInteractive({
               // Only render group if it has items after filtering
               if (filteredItems.length === 0) return null;
 
-              const isAvailable = isWithinOperatingHours(
-                group.timeFrom,
-                group.timeTo,
-              );
-
               return (
                 <MenuGroup data={group} key={groupIndex}>
-                  {filteredItems.map(({ version, ...item }) =>
-                    version === "v1" ? (
+                  {filteredItems.map(({ version, ...item }) => {
+                    const isItemDisabled = isMenuItemDisabled(item);
+                    const isWithinHours = isWithinOperatingHours(
+                      group.timeFrom,
+                      group.timeTo,
+                    );
+
+                    const availabilityStatus: ItemAvailabilityStatus =
+                      isItemDisabled
+                        ? "disabled"
+                        : !isWithinHours
+                          ? "not-served"
+                          : "available";
+
+                    return version === "v1" ? (
                       <AnimatePresence key={item.id}>
                         <MenuItemCard
                           item={{ ...item, version }}
                           key={item.id}
-                          onClick={handleClick}
-                          isAvailable={isAvailable}
+                          onClick={(clickedItem) =>
+                            handleClick(clickedItem, availabilityStatus)
+                          }
+                          availabilityStatus={availabilityStatus}
                         />
                       </AnimatePresence>
-                    ) : null,
-                  )}
+                    ) : null;
+                  })}
                 </MenuGroup>
               );
             })}
@@ -221,6 +257,7 @@ function MenuInteractive({
         restaurantSlug={restaurantSlug}
         restaurantId={restaurantId}
         showDisableOption={isMaintainer}
+        availabilityStatus={menuItemAvailability}
         onDisableSuccess={() => refetch()}
       />
     </>

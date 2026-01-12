@@ -73,7 +73,7 @@ export default function Order() {
                 item={dish}
                 onClick={handleClick}
                 onAddToCart={handleClick}
-                isAvailable
+                availabilityStatus="available"
               />
             ))}
           </AnimatePresence>

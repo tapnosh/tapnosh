@@ -16,6 +16,7 @@ import { useCurrency } from "@/hooks/useCurrency";
 import { MenuItem } from "@/types/menu/Menu";
 
 import { DisableMenuItemModal } from "./disable-menu-item-modal";
+import { ItemAvailabilityStatus } from "./menu-item";
 import { getAllergenIcon, getFoodTypeIcon } from "./utils/icons";
 
 export const MenuItemModal = ({
@@ -25,7 +26,7 @@ export const MenuItemModal = ({
   canBeAddedToTab = false,
   restaurantSlug,
   restaurantId,
-  isAvailable = true,
+  availabilityStatus = "available",
   showDisableOption = false,
   onDisableSuccess,
 }: {
@@ -35,7 +36,7 @@ export const MenuItemModal = ({
   canBeAddedToTab?: boolean;
   restaurantSlug?: string;
   restaurantId?: string;
-  isAvailable?: boolean;
+  availabilityStatus?: ItemAvailabilityStatus;
   showDisableOption?: boolean;
   onDisableSuccess?: () => void;
 }) => {
@@ -47,6 +48,11 @@ export const MenuItemModal = ({
   const { formatCurrency } = useCurrency();
   const tCategories = useTranslations("categories");
   const tMenu = useTranslations("restaurants.details");
+
+  const isAvailable = useMemo(
+    () => availabilityStatus === "available",
+    [availabilityStatus],
+  );
 
   const shareUrl = useMemo(() => {
     if (!restaurantSlug || !menuItem) return "";
@@ -255,7 +261,9 @@ export const MenuItemModal = ({
                       duration: 0.3,
                     }}
                   >
-                    {tMenu("notAvailable")}
+                    {availabilityStatus === "disabled"
+                      ? tMenu("itemDisabled")
+                      : tMenu("notServedNow")}
                   </motion.div>
                 )}
                 <div className="pb-4">
