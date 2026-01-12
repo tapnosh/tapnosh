@@ -43,6 +43,9 @@ export const MenuItemSchema = z.object({
   confirmed: z.boolean().optional(),
   ingredients: z.array(z.string()).optional(),
   categories: z.array(z.string()).optional(),
+  isDisabled: z.boolean().optional(),
+  disabledFrom: z.string().optional(),
+  disabledUntil: z.string().nullable().optional(),
 });
 
 export type MenuItem = z.infer<typeof MenuItemSchema>;

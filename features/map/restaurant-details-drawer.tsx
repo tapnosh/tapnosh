@@ -192,7 +192,7 @@ export function RestaurantDetailsDialog({
                             key={item.id}
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             item={item as unknown as any}
-                            isAvailable
+                            availabilityStatus="available"
                           />
                         ))}
                       </div>

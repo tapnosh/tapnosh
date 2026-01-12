@@ -8,11 +8,45 @@
   "makeReservation": "Make Reservation",
   "loadingMenu": "Loading menu...",
   "notAvailable": "This dish is not available for serving",
+  "itemDisabled": "This item is currently unavailable",
+  "notServedNow": "Not served at this time",
   "openingHours": {
     "title": "Opening Hours",
     "closed": "Closed",
     "open": "Open",
     "closedNow": "Closed now",
     "openNow": "Open now"
+  },
+  "disableMenuItem": {
+    "title": "Adjust Item Availability",
+    "description": "Manage the availability of \"{itemName}\".",
+    "durations": {
+      "label": "Disable for",
+      "1h": "1 hour",
+      "2h": "2 hours",
+      "3h": "3 hours",
+      "endOfDay": "Till end of the day",
+      "endOfWeek": "Till end of the week",
+      "custom": "Custom date range"
+    },
+    "customRange": {
+      "startDateTime": "Start Date & Time",
+      "endDateTime": "End Date & Time",
+      "pickDate": "Pick a date",
+      "preview": "Item will be disabled from {startDate} at {startTime} until {endDate} at {endTime}"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "enableItem": "Enable item",
+      "disableItem": "Disable item"
+    },
+    "notifications": {
+      "successTitle": "Item disabled",
+      "successDescriptionTimed": "\"{itemName}\" has been disabled until {date}",
+      "enableSuccessTitle": "Item enabled",
+      "enableSuccessDescription": "\"{itemName}\" is now available",
+      "errorTitle": "Failed to update item"
+    }
   }
 }

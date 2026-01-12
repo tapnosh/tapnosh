@@ -15,21 +15,25 @@ import { getAllergenIcon, getFoodTypeIcon } from "./utils/icons";
 
 const MotionButton = motion.create(Button);
 
+export type ItemAvailabilityStatus = "available" | "disabled" | "not-served";
+
 // Menu Item Card Component
 export function MenuItemCard({
   item,
-  isAvailable,
+  availabilityStatus = "available",
   onAddToCart,
   onClick,
 }: {
   item: MenuItem;
-  isAvailable: boolean;
+  availabilityStatus?: ItemAvailabilityStatus;
   onAddToCart?: (item: MenuItem) => void;
   onClick?: (item: MenuItem) => void;
 }) {
   const { formatCurrency } = useCurrency();
   const tCategories = useTranslations("categories");
   const tMenu = useTranslations("restaurants.details");
+
+  const isAvailable = availabilityStatus === "available";
 
   const imgSrc = useMemo(() => {
     return Array.isArray(item.image) ? item.image[0]?.url : item.image;
@@ -136,7 +140,9 @@ export function MenuItemCard({
           </footer>
           {!isAvailable && (
             <div className="text-muted-foreground mt-2 text-sm italic">
-              {tMenu("notAvailable")}
+              {availabilityStatus === "disabled"
+                ? tMenu("itemDisabled")
+                : tMenu("notServedNow")}
             </div>
           )}
         </div>

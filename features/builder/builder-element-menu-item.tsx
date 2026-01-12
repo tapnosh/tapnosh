@@ -38,7 +38,9 @@ function BuilderElementMenuItemBase({
   const { previewMode } = useBuilder();
 
   if (previewMode) {
-    return <MenuItemCard item={data as MenuItem} isAvailable />;
+    return (
+      <MenuItemCard item={data as MenuItem} availabilityStatus="available" />
+    );
   }
 
   return (

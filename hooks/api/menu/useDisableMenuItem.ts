@@ -7,8 +7,8 @@ import { MenuItem } from "@/types/menu/Menu";
 export interface DisableMenuItemData {
   menuItemId: string;
   restaurantId: string;
-  disabledFrom: Date;
-  disabledUntil: Date;
+  disabledFrom: Date | null;
+  disabledUntil?: Date | null;
 }
 
 export interface DisableMenuItemResponse {
@@ -33,8 +33,8 @@ export const useDisableMenuItem = () => {
           body: JSON.stringify({
             menuItemId: data.menuItemId,
             restaurantId: data.restaurantId,
-            disabledFrom: data.disabledFrom.toISOString(),
-            disabledUntil: data.disabledUntil.toISOString(),
+            disabledFrom: data.disabledFrom?.toISOString() ?? null,
+            disabledUntil: data.disabledUntil?.toISOString() ?? null,
           }),
         },
       );

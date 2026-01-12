@@ -31,7 +31,7 @@
     "facebook": "Proszę podać poprawny URL",
     "instagram": "Proszę podać poprawny URL",
     "reservationLink": "Proszę podać poprawny URL",
-    "theme": "ID motywu musi mieć poprawny format UUID",
+    "theme": "Kolor motywu jest wymagany",
     "streetNumber": "Proszę podać poprawny numer ulicy",
     "state": "Proszę wybrać poprawny stan",
     "postalCode": "Proszę podać poprawny kod pocztowy",
