@@ -109,7 +109,7 @@ export function FiltersBar({
   };
 
   return (
-    <div className="mt-4 mb-12 flex flex-wrap items-center justify-between gap-3">
+    <div className="mt-4 mb-8 flex flex-wrap items-center justify-between gap-3">
       <Tabs
         className="overflow-auto"
         value={selectedGroup || "all"}

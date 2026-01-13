@@ -32,7 +32,7 @@
     @apply font-display text-xl font-bold sm:text-2xl lg:text-3xl xl:text-4xl;
   }
   h4 {
-    @apply font-display text-lg font-medium sm:text-xl lg:text-2xl xl:text-3xl;
+    @apply font-display text-lg font-bold sm:text-xl lg:text-2xl xl:text-3xl;
   }
   h5 {
     @apply font-display text-lg font-light sm:text-xl lg:text-2xl xl:text-3xl;

@@ -10,5 +10,11 @@
     "budgetFriendly": "Budget-friendly",
     "moderate": "Moderate",
     "fineDining": "Fine dining"
+  },
+  "errors": {
+    "loadFailed": "Failed to load restaurants. Please try again later."
+  },
+  "empty": {
+    "noRestaurants": "No restaurants found."
   }
 }
