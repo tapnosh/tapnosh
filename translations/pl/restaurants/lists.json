@@ -10,5 +10,11 @@
     "budgetFriendly": "Budżetowe",
     "moderate": "Średnie",
     "fineDining": "Ekskluzywne"
+  },
+  "errors": {
+    "loadFailed": "Nie udało się załadować restauracji. Spróbuj ponownie później."
+  },
+  "empty": {
+    "noRestaurants": "Nie znaleziono restauracji."
   }
 }

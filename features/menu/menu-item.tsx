@@ -71,10 +71,12 @@ export function MenuItemCard({
         )}
         <div className="flex flex-1 flex-col">
           <header className="flex items-start justify-between gap-1 pb-1">
-            <span className="font-display-median text-lg leading-5 sm:leading-6 lg:text-2xl">
+            <span
+              className={`font-display-median text-lg leading-5 sm:leading-6 lg:text-2xl ${!isAvailable ? "line-through" : ""}`}
+            >
               {item.name}
             </span>
-            <div className="mt-1 flex items-center gap-1">
+            <div className="flex items-center gap-1">
               <span className="font-display-median text-lg leading-5 font-semibold lg:text-xl">
                 {formatCurrency(item.price.amount, item.price.currency)}
               </span>

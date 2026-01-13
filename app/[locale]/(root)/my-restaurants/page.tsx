@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
+import { MyRestaurantsList } from "./my-restaurants-list";
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("management.dashboard.myRestaurants");
 
@@ -32,5 +34,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MyRestaurants() {
   const t = await getTranslations("management.dashboard.myRestaurants");
 
-  return <section className="section">{t("pageContent")}</section>;
+  return (
+    <section className="section">
+      <h1>{t("title")}</h1>
+      <MyRestaurantsList />
+    </section>
+  );
 }

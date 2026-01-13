@@ -92,7 +92,7 @@ export function isMenuItemDisabled(item: {
   disabledFrom?: string;
   disabledUntil?: string | null;
 }): boolean {
-  if (item.isDisabled !== true) return false;
+  if (!item.disabledFrom) return false;
 
   const now = new Date();
 

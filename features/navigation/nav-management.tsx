@@ -91,6 +91,11 @@ export function NavManagement() {
 
   const staticItems = [
     {
+      title: t("overview"),
+      url: "/my-restaurants",
+      icon: Store,
+    },
+    {
       title: t("createRestaurant"),
       url: "/restaurants/add",
       icon: CirclePlus,

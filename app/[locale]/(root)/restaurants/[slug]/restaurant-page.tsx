@@ -20,6 +20,7 @@ import {
 import { MenuItemModal } from "@/features/menu/menu-item-modal";
 import { PriceRangeIndicator } from "@/features/restaurant/price-range-indicator";
 import { useIsRestaurantMaintainer } from "@/hooks/api/restaurant/useIsRestaurantMaintainer";
+import { useIsWithinOperatingHours } from "@/hooks/useIsWithinOperatingHours";
 import { Link } from "@/i18n/routing";
 import { Builder } from "@/types/builder/BuilderSchema";
 import { MenuItem } from "@/types/menu/Menu";
@@ -271,12 +272,12 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
 
   // Check if today is closed
   const todayClosed = isTodayClosed(restaurant.operatingHours);
-  // Check if restaurant is currently open
+  // Check if restaurant is currently open (rechecks every minute)
   const todayHours = getTodayOperatingHours(restaurant.operatingHours);
-  const isOpen =
-    todayHours && !todayClosed
-      ? isWithinOperatingHours(todayHours.openFrom, todayHours.openUntil)
-      : false;
+  const isOpen = useIsWithinOperatingHours(
+    todayClosed ? undefined : todayHours?.openFrom,
+    todayClosed ? undefined : todayHours?.openUntil,
+  );
 
   return (
     <header className="section section-primary -mb-8 -translate-y-16 overflow-clip">
@@ -347,7 +348,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
             {restaurant.address && (
               <div className="flex items-start gap-2">
                 <MapPin className="mt-1 size-4.5 shrink-0" />
-                <span className="text-base">
+                <span className="text-sm sm:text-base">
                   {restaurant.address.formattedAddress}
                 </span>
               </div>
@@ -357,7 +358,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
                 <Phone className="size-4.5 shrink-0" />
                 <a
                   href={`tel:${restaurant.phoneNumber}`}
-                  className="hover:text-primary-foreground text-base transition-colors"
+                  className="hover:text-primary-foreground text-sm transition-colors sm:text-base"
                 >
                   {restaurant.phoneNumber}
                 </a>
@@ -375,7 +376,7 @@ export function RestaurantHeader({ restaurant }: { restaurant: Restaurant }) {
                 href={restaurant.reservationUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-8 font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg sm:flex-none"
+                className="bg-primary-foreground text-primary hover:bg-primary-foreground/80 inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-8 text-sm font-semibold backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:shadow-lg sm:flex-none sm:text-base"
               >
                 {tRestaurant("makeReservation")}
               </Link>

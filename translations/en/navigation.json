@@ -10,12 +10,12 @@
     "map": "Map",
     "documentation": "Documentation",
 
-    "overview": "Overview",
+    "overview": "My restaurants",
     "createRestaurant": "Create Restaurant",
 
     "scannableMenu": "Scannable Menu",
     "details": "Details",
-    "pageBuilder": "Page Builder",
+    "pageBuilder": "Menu Builder",
     "settings": "Settings",
 
     "account": "Account",

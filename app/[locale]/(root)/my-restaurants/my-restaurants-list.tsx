@@ -1,9 +1,11 @@
-import { getTranslations } from "next-intl/server";
+"use client";
+
+import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { RestaurantCard } from "@/features/restaurant/restaurant-card";
-import { authFetch } from "@/lib/auth/client";
+import { useRestaurantsQuery } from "@/hooks/api/restaurant/useRestaurants";
 import { Restaurant } from "@/types/restaurant/Restaurant";
-import { tryCatch } from "@/utils/tryCatch";
 
 const sortByUpdatedAtDesc = (a: Restaurant, b: Restaurant) => {
   const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
@@ -11,20 +13,21 @@ const sortByUpdatedAtDesc = (a: Restaurant, b: Restaurant) => {
   return dateB - dateA;
 };
 
-export async function RestaurantList() {
-  const t = await getTranslations("restaurants.lists");
+export function MyRestaurantsList() {
+  const t = useTranslations("restaurants.lists");
+  const { data: restaurants, isLoading, isError } = useRestaurantsQuery();
 
-  const [error, restaurants] = await tryCatch(
-    authFetch<Restaurant[]>("public_api/restaurants", {
-      cache: "no-store",
-    }),
-  );
-
-  if (error) {
+  if (isLoading) {
     return (
-      <div className="text-destructive py-8 text-center">
-        {t("errors.loadFailed")}
+      <div className="flex justify-center py-8">
+        <Loader2 className="text-muted-foreground h-8 w-8 animate-spin" />
       </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-destructive py-8">{t("errors.loadFailed")}</div>
     );
   }
 
@@ -32,7 +35,7 @@ export async function RestaurantList() {
 
   if (sortedRestaurants.length === 0) {
     return (
-      <div className="text-muted-foreground py-8 text-center">
+      <div className="text-muted-foreground py-8">
         {t("empty.noRestaurants")}
       </div>
     );
