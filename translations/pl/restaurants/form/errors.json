@@ -23,6 +23,7 @@
     "price": "Kwota musi być podana"
   },
   "invalid": {
+    "address": "Wybrany adres jest niepełny. Proszę wybrać inny adres z kompletnymi danymi.",
     "restaurantName": "Nazwa restauracji musi być poprawna",
     "description": "Opis musi być poprawny",
     "phoneNumber": "Proszę podać poprawny numer telefonu",

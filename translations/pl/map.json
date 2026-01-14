@@ -6,13 +6,18 @@
     "cuisinesDescription": "Uwzględnij restauracje z tymi typami kuchni.",
     "applyFilters": "Zastosuj filtry",
     "reset": "Resetuj",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "distance": {
+      "label": "Odległość ode mnie",
+      "anyDistance": "Dowolna odległość",
+      "enableLocation": "Włącz lokalizację, aby filtrować według odległości"
+    }
   },
   "restaurantDrawer": {
     "distanceFromYou": "Odległość od Ciebie",
     "menuItems": "Pozycje menu",
     "noMenuItems": "Brak dostępnych pozycji menu",
-    "navigateTo": "Nawiguj do",
+    "navigateTo": "Nawiguj",
     "openRestaurant": "Pokaż restaurację",
     "openToday": "Otwarte dzisiaj",
     "closed": "Zamknięte"

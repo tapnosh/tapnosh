@@ -8,18 +8,54 @@ const RestaurantCategorySchema = z.object({
   description: z.string(),
 });
 
-export const AddressSchema = z.object({
-  formattedAddress: z.string().min(1, "Address is required"),
-  streetNumber: z.string().min(1, "Street number is required"),
-  street: z.string().min(1, "Street is required"),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  country: z.string().min(1, "Country is required"),
-  countryCode: z.string().min(1, "Country code is required"),
-  postalCode: z.string().min(1, "Postal code is required"),
-  lat: z.number(),
-  lng: z.number(),
-});
+export const AddressSchema = z
+  .object({
+    formattedAddress: z.string(),
+    streetNumber: z.string(),
+    street: z.string(),
+    city: z.string(),
+    state: z.string(),
+    country: z.string(),
+    countryCode: z.string(),
+    postalCode: z.string(),
+    lat: z.number(),
+    lng: z.number(),
+  })
+  .superRefine((data, ctx) => {
+    // Check if address is completely empty (not selected at all)
+    if (!data.formattedAddress || data.formattedAddress.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Address is required",
+        path: [],
+      });
+      return;
+    }
+
+    // Check if any required field is missing (incomplete address)
+    const requiredFields = [
+      "streetNumber",
+      "street",
+      "city",
+      "state",
+      "country",
+      "countryCode",
+      "postalCode",
+    ] as const;
+
+    const missingFields = requiredFields.filter(
+      (field) => !data[field] || data[field].trim() === "",
+    );
+
+    if (missingFields.length > 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Invalid address selected. Please select a different address with complete details.",
+        path: [],
+      });
+    }
+  });
 
 export const RestaurantFormSchema = z.object({
   id: z.string().uuid().optional(),

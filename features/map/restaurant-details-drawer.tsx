@@ -63,7 +63,7 @@ export function RestaurantDetailsDialog({
       <DrawerContent className="top-auto right-0 bottom-0 left-0 h-[85vh] w-full rounded-t-3xl md:top-0 md:right-0 md:left-auto md:mt-0 md:h-screen md:w-[500px] md:rounded-none">
         <article className="overflow-y-auto">
           <div
-            className="relative overflow-clip rounded-b-3xl pt-4"
+            className="pointer-events-none relative overflow-clip rounded-b-3xl pt-4"
             style={{ backgroundColor: restaurant.theme.color }}
           >
             {restaurant.images[0].url && (
@@ -170,23 +170,19 @@ export function RestaurantDetailsDialog({
             {/* Menu Items */}
             {menuItems.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">
-                  {tDrawer("menuItems")}
-                </h3>
+                <h3 className="mb-4">{tDrawer("menuItems")}</h3>
                 <div className="grid gap-4">
                   {restaurant.menu?.menu.map((group) => (
                     <div key={group.name} className="space-y-3">
                       <div className="flex items-baseline justify-between border-b pb-2">
-                        <h4 className="text-base font-semibold">
-                          {group.name}
-                        </h4>
+                        <h4>{group.name}</h4>
                         {group.timeFrom && group.timeTo && (
                           <span className="text-muted-foreground text-xs">
                             {group.timeFrom} - {group.timeTo}
                           </span>
                         )}
                       </div>
-                      <div className="space-y-4">
+                      <div className="space-y-4 pb-4">
                         {group.items.map((item) => (
                           <MenuItemCard
                             key={item.id}

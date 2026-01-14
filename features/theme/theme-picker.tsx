@@ -1,13 +1,7 @@
 "use client";
 
 import { useThrottle } from "@uidotdev/usehooks";
-import {
-  Check,
-  CirclePlus,
-  Loader2Icon,
-  Paintbrush,
-  Palette,
-} from "lucide-react";
+import { Check, Loader2Icon, Paintbrush, Palette } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { useWatch } from "react-hook-form";
@@ -167,14 +161,17 @@ export function ColorPicker({
 
   return (
     <Popover
-      onOpenChange={(open) =>
-        !open && canBeCreated && theme && onThemeChange(theme)
-      }
+      onOpenChange={(open) => {
+        if (!open && canBeCreated && background) {
+          onCreate(background);
+        }
+      }}
     >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           aria-invalid={ariaInvalid}
+          disabled={isPending}
           className={cn(
             "hover:bg-background/75 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 w-[220px] justify-start text-left font-normal",
             !background && "text-muted-foreground",
@@ -182,11 +179,13 @@ export function ColorPicker({
           )}
         >
           <div className="flex w-full items-center gap-2">
-            {background ? (
+            {isPending ? (
+              <Loader2Icon className="h-4 w-4 animate-spin" />
+            ) : background ? (
               <div
                 className="h-4 w-4 rounded !bg-cover !bg-center transition-all"
                 style={{ background }}
-              ></div>
+              />
             ) : (
               <Paintbrush className="h-4 w-4" />
             )}
@@ -227,22 +226,6 @@ export function ColorPicker({
             ))}
           </TabsContent>
         </Tabs>
-        {canBeCreated && (
-          <div className="mt-4 flex w-full max-w-sm items-center gap-2">
-            <Button
-              className="relative w-full shrink-0 cursor-pointer rounded-md"
-              onClick={() => background && onCreate(background)}
-              disabled={isPending}
-            >
-              {isPending ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                <CirclePlus />
-              )}
-              {t("createTheme")}
-            </Button>
-          </div>
-        )}
       </PopoverContent>
     </Popover>
   );

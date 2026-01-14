@@ -23,6 +23,7 @@
     "price": "Amount must be provided"
   },
   "invalid": {
+    "address": "Invalid address selected. Please select a different address with complete details.",
     "restaurantName": "Restaurant name must be valid",
     "description": "Description must be valid",
     "phoneNumber": "Please enter a valid phone number",
