@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/forms/button";
 import { Label } from "@/components/ui/forms/label";
@@ -19,15 +20,18 @@ export function DistanceFilter({
   onChange,
   disabled,
 }: DistanceFilterProps) {
+  const t = useTranslations("map.filters.distance");
   const currentValue = value ?? maxDistance;
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label className="text-base font-semibold">Distance from me</Label>
+        <Label className="text-base font-semibold">{t("label")}</Label>
         <div className="flex items-center gap-2">
           <span className="text-muted-foreground text-sm">
-            {value === null ? "Any distance" : `${currentValue.toFixed(1)} km`}
+            {value === null
+              ? t("anyDistance")
+              : `${currentValue.toFixed(1)} km`}
           </span>
           {value !== null && !disabled && (
             <Button
@@ -50,9 +54,7 @@ export function DistanceFilter({
         disabled={disabled}
       />
       {disabled && (
-        <p className="text-muted-foreground text-xs">
-          Enable location to filter by distance
-        </p>
+        <p className="text-muted-foreground text-xs">{t("enableLocation")}</p>
       )}
     </div>
   );

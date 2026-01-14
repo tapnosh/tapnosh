@@ -16,6 +16,8 @@ export const ERROR_MESSAGES = {
 
   // Create.ts (Restaurant) - Address
   "Address is required": "required.address",
+  "Invalid address selected. Please select a different address with complete details.":
+    "invalid.address",
   "Street number is required": "required.streetNumber",
   "Street is required": "required.street",
   "City is required": "required.city",

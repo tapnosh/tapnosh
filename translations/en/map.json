@@ -6,7 +6,12 @@
     "cuisinesDescription": "Include restaurants with these cuisines",
     "applyFilters": "Apply Filters",
     "reset": "Reset",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "distance": {
+      "label": "Distance from me",
+      "anyDistance": "Any distance",
+      "enableLocation": "Enable location to filter by distance"
+    }
   },
   "restaurantDrawer": {
     "distanceFromYou": "Distance from you",

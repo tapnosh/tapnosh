@@ -35,9 +35,13 @@ export default async function MyRestaurants() {
   const t = await getTranslations("management.dashboard.myRestaurants");
 
   return (
-    <section className="section">
-      <h1>{t("title")}</h1>
-      <MyRestaurantsList />
-    </section>
+    <>
+      <section className="section items-center">
+        <h1>{t("title")}</h1>
+      </section>
+      <section className="section items-center pb-8">
+        <MyRestaurantsList />
+      </section>
+    </>
   );
 }
