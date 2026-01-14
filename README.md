@@ -1,7 +1,3 @@
-Oto zaktualizowana dokumentacja. Wprowadziłem zmiany w sekcjach **Przegląd Technologiczny** oraz **Setup**, aby wyraźnie zaznaczyć, że **Bun** jest preferowanym narzędziem w tym projekcie (ze względu na obecność `bun.lock` oraz konfigurację `lint-staged`).
-
----
-
 # Dokumentacja Deweloperska Projektu "Tapnosh"
 
 Niniejszy dokument zawiera kluczowe informacje dotyczące uruchomienia, architektury oraz procesów deweloperskich projektu inżynierskiego.
