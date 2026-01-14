@@ -193,13 +193,24 @@ Projekt jest hostowany na platformie **Vercel**.
 
 ## 6. CI/CD (GitHub Actions)
 
-Proces CI jest zdefiniowany w `.github/workflows`.
+Projekt wykorzystuje GitHub Actions do zapewnienia jakości kodu (Quality Gate). Pipeline o nazwie `Lint, Format & Test` jest w pełni oparty na środowisku **Bun**.
 
-**Zasada działania:**
+**Polityka Branchowania i Merge'owania:**
 
-1. Uruchamia się przy `push` do `main` oraz `pull_request`.
-2. Ustawia środowisko Node.js v22.
-3. Instaluje zależności i próbuje zbudować projekt (`npm run build`).
-4. Jeśli build się nie powiedzie, zmiany nie mogą zostać zmergowane.
+* Pipeline uruchamia się automatycznie dla każdego **Pull Requesta** (do gałęzi `main` i `develop`) oraz w **Merge Queue (`merge_group`)**.
+* **Blokada Merge:** Zmergowanie kodu jest technicznie zablokowane, dopóki wszystkie kroki pipeline'u nie zakończą się sukcesem.
 
-> Uwaga: Mimo że lokalnie preferujemy Buna, obecna konfiguracja CI w GitHub Actions korzysta z `npm` do instalacji i budowania projektu w środowisku runnera.
+**Przebieg Pipeline'u:**
+Workflow wykonuje następujące kroki w środowisku `ubuntu-latest`:
+
+1. **Checkout:** Pobranie kodu repozytorium.
+2. **Setup Bun:** Konfiguracja środowiska Bun (wersja `latest`).
+3. **Install dependencies:** Instalacja zależności z flagą `--frozen-lockfile` (gwarancja identycznych wersji pakietów).
+4. **Run ESLint:** Statyczna analiza kodu (`bun run lint`).
+5. **Check Prettier:** Weryfikacja formatowania kodu (`bun run format:check`).
+6. **TypeScript Check:** Sprawdzenie poprawności typów (`bun run type-check`).
+7. **Run Tests:** Uruchomienie testów jednostkowych (`bun run test`).
+
+Współbieżnie wykonywany jest build aplikacji i jej deployment poprzez serwis Vercel.
+
+Jeśli którykolwiek z tych kroków zawiedzie, build zostanie oznaczony jako *failed*, a merge zablokowany.
