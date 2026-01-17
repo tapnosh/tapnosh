@@ -59,9 +59,10 @@ export const metadata: Metadata = {
   category: "Food & Dining",
   classification: "Restaurant Discovery Platform",
   alternates: {
-    canonical: "https://tapnosh.com",
+    canonical: "https://www.tapnosh.com/en",
     languages: {
-      "en-US": "https://tapnosh.com",
+      en: "https://www.tapnosh.com/en",
+      pl: "https://www.tapnosh.com/pl",
     },
   },
   openGraph: {
@@ -95,10 +96,6 @@ export const metadata: Metadata = {
         alt: "tapnosh - Discover Amazing Restaurants",
       },
     ],
-  },
-  verification: {
-    google: "your-google-verification-code",
-    yandex: "your-yandex-verification-code",
   },
   icons: {
     icon: [
