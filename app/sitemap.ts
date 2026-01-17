@@ -51,12 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "daily",
         priority: 0.9,
       },
-      {
-        url: `${baseUrl}/${locale}/docs`,
-        lastModified: new Date(),
-        changeFrequency: "weekly",
-        priority: 0.5,
-      },
+      // Note: /docs is excluded from sitemap as it's disallowed in robots.txt
     );
   }
 

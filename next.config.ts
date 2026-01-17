@@ -27,6 +27,30 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        // Apply to all pages except /api and /docs
+        source: "/:path((?!api|docs).*)",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "index, follow",
+          },
+        ],
+      },
+      {
+        // Root path
+        source: "/",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "index, follow",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 const withNextra = nextra({
